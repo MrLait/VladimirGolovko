@@ -37,10 +37,9 @@ namespace TicketManagement.DataAccess.Repositories.ADO
             SqlParameter[] parameters = GetAddParameter(entity).ToArray();
 
             string tableName = entity.GetType().Name;
-
             string strCol = string.Join(", ", parameters.Select(x => x.ParameterName).ToList());
             var strParam = string.Join(", ", parameters.Select(x => "@" + x.ParameterName).ToList());
-            var sqlExpressionInsert = "INSERT INTO [" + tableName + "] (" + strCol +") VALUES (" + strParam + ")";
+            var sqlExpressionInsert = "INSERT INTO [" + tableName + "] (" + strCol + ") VALUES (" + strParam + ")";
 
             using (SqlConnection sqlConnection = new SqlConnection(DbConString))
             {
@@ -67,7 +66,29 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public void Delete(int byId)
         {
-            throw new NotImplementedException();
+            if (byId == 0)
+            {
+                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+            }
+
+            string tableName = new T().GetType().Name;
+            string sqlExpressionInsert = "DELETE FROM " + tableName + " WHERE Id = " + byId;
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection))
+                {
+                    try
+                    {
+                        sqlConnection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionInsert, sqlEx);
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -79,7 +100,36 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public T GetByID(int byId)
         {
-            throw new NotImplementedException();
+            if (byId == 0)
+            {
+                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+            }
+
+            string tableName = new T().GetType().Name;
+            string storedProcedure = "Get" + tableName + "ById";
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) }))
+                {
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                    try
+                    {
+                        DataSet ds = new DataSet();
+                        sqlDataAdapter.Fill(ds);
+                        return ds.Tables[0].ToEnumerable<T>().ToList().SingleOrDefault();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>
