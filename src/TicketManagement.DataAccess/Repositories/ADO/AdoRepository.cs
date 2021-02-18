@@ -155,9 +155,40 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         }
 
         /// <inheritdoc/>
-        public T Update(T entity)
+        public void Update(T entity)
         {
-            throw new NotImplementedException();
+            if (Equals(entity, default(T)))
+            {
+                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+            }
+
+            SqlParameter[] parameters = GetAddParameter(entity).ToArray();
+
+            string tableName = entity.GetType().Name;
+            string setStr = string.Join(", ", parameters.Select(x => $"{x.ParameterName} = @{x.ParameterName}").ToList());
+
+            var sqlExpressionInsert = $"UPDATE [{tableName}] SET {setStr} WHERE Id = {entity.Id}";
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection))
+                {
+                    try
+                    {
+                        for (int i = 0; i < parameters.Length; i++)
+                        {
+                            sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
+                        }
+
+                        sqlConnection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionInsert, sqlEx);
+                    }
+                }
+            }
         }
 
         private List<SqlParameter> GetAddParameter(object obj)

@@ -27,8 +27,7 @@ namespace TicketManagement.DataAccess.Interfaces
         /// Modify an existing object.
         /// </summary>
         /// <param name="entity">Object with parameters to be changed.</param>
-        /// <returns>Returns changed object.</returns>
-        T Update(T entity);
+        void Update(T entity);
 
         /// <summary>
         /// Method to get all objects from database table.
