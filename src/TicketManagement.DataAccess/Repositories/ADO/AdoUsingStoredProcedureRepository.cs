@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.Exstension;
@@ -133,7 +134,37 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public override void Update(T entity)
         {
-            throw new NotImplementedException();
+            if (Equals(entity, default(T)))
+            {
+                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+            }
+
+            string tableName = new T().GetType().Name;
+            string storedProcedure = "Update" + tableName;
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection))
+                {
+                    sqlCommand.Parameters.AddRange(GetUpdateParameter(entity).ToArray());
+
+                    SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
+                    DataSet ds = new DataSet();
+
+                    try
+                    {
+                        adpt.Fill(ds);
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Class Name and Table name must be same for this method. See inner exception", sqlEx);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -163,6 +194,23 @@ namespace TicketManagement.DataAccess.Repositories.ADO
             SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection);
             sqlCommand.Parameters.AddRange(sqlParamArr);
             return sqlCommand;
+        }
+
+        /// <summary>
+        /// Private method for get property from objects and add their to list for sqlParameters.
+        /// </summary>
+        /// <param name="obj">Object to get propertes.</param>
+        /// <returns>returns list of sqlParameters.</returns>
+        private List<SqlParameter> GetUpdateParameter(object obj)
+        {
+            PropertyInfo[] fields = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var sqlParams = new List<SqlParameter>();
+            foreach (var f in fields)
+            {
+                sqlParams.Add(new SqlParameter(f.Name, f.GetValue(obj, null)));
+            }
+
+            return sqlParams;
         }
     }
 }

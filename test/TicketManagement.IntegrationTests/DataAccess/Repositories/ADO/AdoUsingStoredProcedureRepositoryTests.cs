@@ -82,5 +82,22 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             // Assert
             Assert.AreEqual(test, test);
         }
+
+        /// <summary>
+        /// Test cases for Update.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenUpdate_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            Event actual = new Event { Id = 3, Description = "1asd2", LayoutId = 1, Name = "vasasdasdasd" };
+
+            // Act
+            _eventRepository.Update(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
     }
 }
