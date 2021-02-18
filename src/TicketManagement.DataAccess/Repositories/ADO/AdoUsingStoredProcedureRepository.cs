@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.DataAccess.Repositories.Exstension;
 
 namespace TicketManagement.DataAccess.Repositories.ADO
 {
@@ -46,7 +47,27 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public override IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            string tableName = new T().GetType().Name;
+            string storedProcedure = "GetAll" + tableName;
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection))
+                {
+                    SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
+
+                    try
+                    {
+                        DataSet ds = new DataSet();
+                        adpt.Fill(ds);
+                        return ds.Tables[0].ToEnumerable<T>();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in stored procedure. See inner exception for more detail exception." + storedProcedure, sqlEx);
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>

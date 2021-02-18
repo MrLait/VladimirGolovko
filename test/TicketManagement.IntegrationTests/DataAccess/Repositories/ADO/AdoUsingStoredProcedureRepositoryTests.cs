@@ -52,5 +52,20 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             // Assert
             Assert.AreEqual(actualName, actualName);
         }
+
+        /// <summary>
+        /// Test cases for GetAll.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenGetAll_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            // Act
+            var test = _eventRepository.GetAll();
+
+            // Assert
+            Assert.AreEqual(test, test);
+        }
     }
 }
