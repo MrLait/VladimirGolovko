@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.Exstension;
@@ -31,7 +30,7 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public void Add(T entity)
         {
-            if (object.Equals(entity, default(T)))
+            if (Equals(entity, default(T)))
             {
                 throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
             }
@@ -97,7 +96,29 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            string strCol = string.Join(", ", poroperyNames);
+            string tableName = new T().GetType().Name;
+            string sqlExpressionSelect = $"SELECT {strCol} FROM " + tableName;
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection))
+                {
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                    try
+                    {
+                        DataSet ds = new DataSet();
+                        sqlDataAdapter.Fill(ds);
+                        return ds.Tables[0].ToEnumerable<T>();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionSelect, sqlEx);
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>
