@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.DataAccess.Repositories.Exstension;
 
 namespace TicketManagement.DataAccess.Repositories.ADO
 {
@@ -72,6 +74,7 @@ namespace TicketManagement.DataAccess.Repositories.ADO
             }
 
             string tableName = new T().GetType().Name;
+
             string sqlExpressionInsert = "DELETE FROM " + tableName + " WHERE Id = " + byId;
 
             using (SqlConnection sqlConnection = new SqlConnection(DbConString))
@@ -105,12 +108,14 @@ namespace TicketManagement.DataAccess.Repositories.ADO
                 throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
             }
 
+            var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            string strCol = string.Join(", ", poroperyNames);
             string tableName = new T().GetType().Name;
-            string storedProcedure = "Get" + tableName + "ById";
+            string sqlExpressionSelect = $"SELECT {strCol} FROM " + tableName + " WHERE Id = " + byId;
 
             using (SqlConnection sqlConnection = new SqlConnection(DbConString))
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) }))
+                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection))
                 {
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
@@ -118,15 +123,11 @@ namespace TicketManagement.DataAccess.Repositories.ADO
                     {
                         DataSet ds = new DataSet();
                         sqlDataAdapter.Fill(ds);
-                        return ds.Tables[0].ToEnumerable<T>().ToList().SingleOrDefault();
+                        return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
                     }
                     catch (SqlException sqlEx)
                     {
-                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
+                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionSelect, sqlEx);
                     }
                 }
             }

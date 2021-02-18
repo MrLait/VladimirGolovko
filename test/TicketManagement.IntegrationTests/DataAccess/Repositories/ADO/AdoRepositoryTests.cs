@@ -53,5 +53,16 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             // Assert
             Assert.AreEqual(actualId, actualId);
         }
+
+        [TestCase(1)]
+        public void GivenGetById_WhenCorrectId_ThenOutIsDeletedObject(int actualId)
+        {
+            // Arrage
+            // Act
+            var test = _venueRepository.GetByID(actualId);
+
+            // Assert
+            Assert.AreEqual(test, test);
+        }
     }
 }
