@@ -32,7 +32,7 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         }
 
         /// <inheritdoc/>
-        public override void Insert(T entity)
+        public override void Create(T entity)
         {
             throw new NotImplementedException();
         }

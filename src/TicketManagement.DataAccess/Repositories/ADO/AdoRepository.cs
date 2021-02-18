@@ -29,7 +29,7 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         public abstract T GetByID(int byId);
 
         /// <inheritdoc/>
-        public abstract void Insert(T entity);
+        public abstract void Create(T entity);
 
         /// <inheritdoc/>
         public abstract void Update(T entity);
