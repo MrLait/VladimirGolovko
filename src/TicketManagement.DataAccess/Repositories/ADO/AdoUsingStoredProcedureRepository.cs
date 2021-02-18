@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.Exstension;
@@ -73,7 +74,32 @@ namespace TicketManagement.DataAccess.Repositories.ADO
         /// <inheritdoc/>
         public override T GetByID(int byId)
         {
-            throw new NotImplementedException();
+            if (byId == 0)
+            {
+                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+            }
+
+            string tableName = new T().GetType().Name;
+            string storedProcedure = "GetById" + tableName;
+
+            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            {
+                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) }))
+                {
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                    try
+                    {
+                        DataSet ds = new DataSet();
+                        sqlDataAdapter.Fill(ds);
+                        return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>

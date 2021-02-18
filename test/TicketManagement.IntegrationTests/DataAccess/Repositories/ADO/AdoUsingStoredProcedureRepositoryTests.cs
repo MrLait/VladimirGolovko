@@ -67,5 +67,20 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             // Assert
             Assert.AreEqual(test, test);
         }
+
+        /// <summary>
+        /// Test cases for GetById.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenGetById_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            // Act
+            var test = _eventRepository.GetByID(2);
+
+            // Assert
+            Assert.AreEqual(test, test);
+        }
     }
 }
