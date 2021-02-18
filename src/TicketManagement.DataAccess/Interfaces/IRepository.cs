@@ -15,7 +15,7 @@ namespace TicketManagement.DataAccess.Interfaces
         /// Add object to database.
         /// </summary>
         /// <param name="entity">Object to add in database.</param>
-        void Add(T entity);
+        void Insert(T entity);
 
         /// <summary>
         /// Delete object from table by Id.

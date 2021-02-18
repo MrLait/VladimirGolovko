@@ -10,12 +10,12 @@ using TicketManagement.DataAccess.Repositories.ADO;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
 {
     [TestFixture]
-    internal class AdoRepositoryTests : DatabaseConnectionBase
+    internal class AdoUsingParametersRepositoryTests : DatabaseConnectionBase
     {
         /// <summary>
         /// Field with group repository.
         /// </summary>
-        private AdoRepository<Venue> _venueRepository;
+        private AdoUsingParametersRepository<Venue> _venueRepository;
 
         /// <summary>
         /// Initialize repository.
@@ -23,7 +23,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         [SetUp]
         public void Init()
         {
-            _venueRepository = new AdoRepository<Venue>(DbConnString);
+            _venueRepository = new AdoUsingParametersRepository<Venue>(DbConnString);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             Venue actual = new Venue { Address = "Addr1 asd", Description = "Desc1 sd", Phone = "375123" };
 
             // Act
-            _venueRepository.Add(actual);
+            _venueRepository.Insert(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);
