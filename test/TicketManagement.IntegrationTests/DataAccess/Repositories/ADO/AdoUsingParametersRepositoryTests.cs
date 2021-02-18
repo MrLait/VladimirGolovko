@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.ADO;
 
@@ -37,7 +32,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
             Venue actual = new Venue { Address = "Addr1 asd", Description = "Desc1 sd", Phone = "375123" };
 
             // Act
-            _venueRepository.Insert(actual);
+            _venueRepository.Create(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);

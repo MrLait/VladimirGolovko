@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.Exstension;
 
 namespace TicketManagement.DataAccess.Repositories.ADO
 {
-    internal class AdoUsingParametersRepository<T> : AdoRepository<T>, IUsingParametersRepository<T>
+    public class AdoUsingParametersRepository<T> : AdoRepository<T>, IUsingParametersRepository<T>
         where T : IEntity, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoUsingParametersRepository{T}"/> class.
         /// </summary>
         /// <param name="dbConString">Database connection string.</param>
-        protected AdoUsingParametersRepository(string dbConString)
+        public AdoUsingParametersRepository(string dbConString)
             : base(dbConString)
         {
         }
@@ -183,28 +182,6 @@ namespace TicketManagement.DataAccess.Repositories.ADO
                     }
                 }
             }
-        }
-
-        private List<SqlParameter> GetAddParameter(object obj)
-        {
-            PropertyInfo[] fields = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var sqlParams = new List<SqlParameter>();
-            foreach (var f in fields)
-            {
-                if (f.GetCustomAttributes(false).Length != 0)
-                {
-                    if (f.GetCustomAttributesData()[0].AttributeType.Name != "KeyAttribute")
-                    {
-                        sqlParams.Add(new SqlParameter(f.Name, f.GetValue(obj, null)));
-                    }
-                }
-                else
-                {
-                    sqlParams.Add(new SqlParameter(f.Name, f.GetValue(obj, null)));
-                }
-            }
-
-            return sqlParams;
         }
     }
 }
