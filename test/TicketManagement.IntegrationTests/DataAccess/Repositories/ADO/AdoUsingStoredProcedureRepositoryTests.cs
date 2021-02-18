@@ -22,7 +22,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         }
 
         /// <summary>
-        /// Test cases for Add.
+        /// Test cases for Create.
         /// </summary>
         /// <param name="actualName">Name parameter.</param>
         [TestCase("NameGroup")]
@@ -33,6 +33,21 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
 
             // Act
             _eventRepository.Create(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
+
+        /// <summary>
+        /// Test cases for Delete.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenDelete_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            // Act
+            _eventRepository.Delete(1);
 
             // Assert
             Assert.AreEqual(actualName, actualName);

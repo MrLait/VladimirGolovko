@@ -29,7 +29,6 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         public void GivenAdd_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            Venue actual = new Venue { Address = "Addr1 asd", Description = "Desc1 sd", Phone = "375123" };
 
             // Act
             _venueRepository.Create(actual);
