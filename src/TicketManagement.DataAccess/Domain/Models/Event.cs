@@ -4,7 +4,7 @@ using TicketManagement.DataAccess.Domain.Interfaces;
 
 namespace TicketManagement.DataAccess.Domain.Models
 {
-    [Table("Venue")]
+    [Table("Event")]
     public class Event : IEntity
     {
         [Key]
@@ -14,6 +14,7 @@ namespace TicketManagement.DataAccess.Domain.Models
 
         public string Description { get; set; }
 
+        [ForeignKey("LayoutId")]
         public int LayoutId { get; set; }
     }
 }
