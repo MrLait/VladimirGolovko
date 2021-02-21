@@ -4,10 +4,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using TicketManagement.DataAccess.Domain.Interfaces;
+using TicketManagement.DataAccess.Exstension;
 using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.DataAccess.Repositories.Exstension;
 
-namespace TicketManagement.DataAccess.Repositories.ADO
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
     public class AdoUsingParametersRepository<T> : AdoRepository<T>, IUsingParametersRepository<T>
         where T : IEntity, new()

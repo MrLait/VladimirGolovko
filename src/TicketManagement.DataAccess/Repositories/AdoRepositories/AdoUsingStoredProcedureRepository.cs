@@ -5,10 +5,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using TicketManagement.DataAccess.Domain.Interfaces;
+using TicketManagement.DataAccess.Exstension;
 using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.DataAccess.Repositories.Exstension;
 
-namespace TicketManagement.DataAccess.Repositories.ADO
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
     public class AdoUsingStoredProcedureRepository<T> : AdoRepository<T>, IUsingStoredProcedureRepository<T>
         where T : IEntity, new()

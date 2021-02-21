@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.ADO;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
 {

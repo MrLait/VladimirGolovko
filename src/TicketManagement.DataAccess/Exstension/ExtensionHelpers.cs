@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
-namespace TicketManagement.DataAccess.Repositories.Exstension
+namespace TicketManagement.DataAccess.Exstension
 {
     public static class ExtensionHelpers
     {

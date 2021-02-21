@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using TicketManagement.DataAccess.Interfaces;
 
-namespace TicketManagement.DataAccess.Repositories.ADO
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
     public abstract class AdoRepository<T> : IRepository<T>
     {
