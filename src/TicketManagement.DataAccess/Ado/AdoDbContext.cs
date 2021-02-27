@@ -1,7 +1,6 @@
 ﻿using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
-using TicketManagement.DataAccess.Repositories.ModelsRepository;
 
 namespace TicketManagement.DataAccess.Ado
 {
@@ -10,12 +9,12 @@ namespace TicketManagement.DataAccess.Ado
         private readonly string _connectionString;
 
         private AdoUsingParametersRepository<Area> _areaRepository;
-        private EventAreaRepository _eventAreaRepository;
-        private EventRepository _eventRepository;
-        private EventSeatRepository _eventSeatRepository;
-        private LayoutRepository _layoutRepository;
-        private SeatRepository _seatRepository;
-        private VenueRepository _venueRepository;
+        private AdoUsingParametersRepository<EventArea> _eventAreaRepository;
+        private AdoUsingStoredProcedureRepository<Event> _eventRepository;
+        private AdoUsingParametersRepository<EventSeat> _eventSeatRepository;
+        private AdoUsingParametersRepository<Layout> _layoutRepository;
+        private AdoUsingParametersRepository<Seat> _seatRepository;
+        private AdoUsingParametersRepository<Venue> _venueRepository;
 
         public AdoDbContext(string connectionString)
         {
@@ -24,16 +23,16 @@ namespace TicketManagement.DataAccess.Ado
 
         public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(_connectionString);
 
-        public IRepository<Event> Events => _eventRepository ??= new EventRepository(_connectionString);
+        public IRepository<Event> Events => _eventRepository ??= new AdoUsingStoredProcedureRepository<Event>(_connectionString);
 
-        public IRepository<EventArea> EventAreas => _eventAreaRepository ??= new EventAreaRepository(_connectionString);
+        public IRepository<EventArea> EventAreas => _eventAreaRepository ??= new AdoUsingParametersRepository<EventArea>(_connectionString);
 
-        public IRepository<EventSeat> EventSeats => _eventSeatRepository ??= new EventSeatRepository(_connectionString);
+        public IRepository<EventSeat> EventSeats => _eventSeatRepository ??= new AdoUsingParametersRepository<EventSeat>(_connectionString);
 
-        public IRepository<Layout> Layouts => _layoutRepository ??= new LayoutRepository(_connectionString);
+        public IRepository<Layout> Layouts => _layoutRepository ??= new AdoUsingParametersRepository<Layout>(_connectionString);
 
-        public IRepository<Seat> Seats => _seatRepository ??= new SeatRepository(_connectionString);
+        public IRepository<Seat> Seats => _seatRepository ??= new AdoUsingParametersRepository<Seat>(_connectionString);
 
-        public IRepository<Venue> Venues => _venueRepository ??= new VenueRepository(_connectionString);
+        public IRepository<Venue> Venues => _venueRepository ??= new AdoUsingParametersRepository<Venue>(_connectionString);
     }
 }
