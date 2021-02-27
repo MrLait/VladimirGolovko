@@ -5,7 +5,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
 {
     [TestFixture]
-    public class AdoUsingStoredProcedureRepositoryTests : DatabaseConnectionBase
+    public class AdoUsingStoredProcedureRepositoryTests
     {
         /// <summary>
         /// Field with group repository.
@@ -18,7 +18,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         [SetUp]
         public void Init()
         {
-            _eventRepository = new AdoUsingStoredProcedureRepository<Event>(DbConnString);
+            _eventRepository = new AdoUsingStoredProcedureRepository<Event>(new DatabaseConnectionBase("TicketManagement.Database").DbConnString);
         }
 
         /// <summary>

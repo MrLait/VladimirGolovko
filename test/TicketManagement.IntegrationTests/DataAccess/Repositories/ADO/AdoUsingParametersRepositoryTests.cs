@@ -1,11 +1,14 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.IO;
+using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
+using TicketManagement.IntegrationTests.Services;
 
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
 {
     [TestFixture]
-    internal class AdoUsingParametersRepositoryTests : DatabaseConnectionBase
+    internal class AdoUsingParametersRepositoryTests
     {
         /// <summary>
         /// Field with group repository.
@@ -15,10 +18,41 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         /// <summary>
         /// Initialize repository.
         /// </summary>
-        [SetUp]
+        [OneTimeSetUp]
         public void Init()
         {
-            _venueRepository = new AdoUsingParametersRepository<Venue>(DbConnString);
+            string sqlConnectionString = new DatabaseConnectionBase("TicketManagement.Database").DbConnString;
+            string databaseSnapshotName = "TicketManagement_Database";
+            string databaseName = "TicketManagement.Database";
+            string snapshotsDirectoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Snapshots"));
+
+            DatabaseHelper databaseHelper = new DatabaseHelper();
+            databaseHelper.CreateSnapshot(databaseSnapshotName, databaseName, snapshotsDirectoryPath, sqlConnectionString);
+
+            _venueRepository = new AdoUsingParametersRepository<Venue>(sqlConnectionString);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string databaseName = "TicketManagement.Database";
+            string masterSqlConnectionString = new DatabaseConnectionBase("master").DbConnString;
+
+            DatabaseHelper databaseHelper = new DatabaseHelper();
+            databaseHelper.SetOfflineWithRollBack(databaseName, masterSqlConnectionString);
+            databaseHelper.SetOnlineWithRollBack(databaseName, masterSqlConnectionString);
+
+            string sqlConnectionString = new DatabaseConnectionBase("TicketManagement_Database").DbConnString;
+            string databaseSnapshotName = "TicketManagement_Database";
+
+            databaseHelper.RestorDatabaseSnapshot(databaseName, databaseSnapshotName, sqlConnectionString);
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            DatabaseHelper databaseHelper = new DatabaseHelper();
+            databaseHelper.DropDatabase("TicketManagement_Database", new DatabaseConnectionBase("master").DbConnString);
         }
 
         /// <summary>
@@ -29,7 +63,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.ADO
         public void GivenAdd_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            Venue actual = new Venue { Address = "Addr1 asd", Description = "Desc1 sd", Phone = "375123" };
+            Venue actual = new Venue { Address = "Addr1 asd new", Description = "Desc1 sd", Phone = "375123" };
 
             // Act
             _venueRepository.Create(actual);

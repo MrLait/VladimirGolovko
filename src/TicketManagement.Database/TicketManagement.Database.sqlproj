@@ -63,6 +63,7 @@
     <Folder Include="PostDeploy" />
     <Folder Include="StoredProcedure" />
     <Folder Include="StoredProcedure\Event" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ForeignKeys\FK_Venue_Layout.sql" />
@@ -88,5 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeploy\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\create_db_snapshot.sql" />
   </ItemGroup>
 </Project>
