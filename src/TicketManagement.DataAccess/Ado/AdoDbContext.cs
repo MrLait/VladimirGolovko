@@ -1,14 +1,15 @@
 ﻿using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.DataAccess.Repositories.ModelsRepository;
 
 namespace TicketManagement.DataAccess.Ado
 {
-    public class AdoUnitOfWork : IUnitOfWork
+    public class AdoDbContext : IDbContext
     {
         private readonly string _connectionString;
 
-        private AreaRepository _areaRepository;
+        private AdoUsingParametersRepository<Area> _areaRepository;
         private EventAreaRepository _eventAreaRepository;
         private EventRepository _eventRepository;
         private EventSeatRepository _eventSeatRepository;
@@ -16,12 +17,12 @@ namespace TicketManagement.DataAccess.Ado
         private SeatRepository _seatRepository;
         private VenueRepository _venueRepository;
 
-        public AdoUnitOfWork(string connectionString)
+        public AdoDbContext(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public IRepository<Area> Areas => _areaRepository ??= new AreaRepository(_connectionString);
+        public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(_connectionString);
 
         public IRepository<Event> Events => _eventRepository ??= new EventRepository(_connectionString);
 

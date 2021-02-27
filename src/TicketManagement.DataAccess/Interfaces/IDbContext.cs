@@ -3,7 +3,7 @@ using TicketManagement.DataAccess.Domain.Models;
 
 namespace TicketManagement.DataAccess.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IDbContext
     {
         IRepository<Area> Areas { get; }
 
