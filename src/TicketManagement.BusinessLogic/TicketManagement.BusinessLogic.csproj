@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="Infrastructure\" />
+    <ProjectReference Include="..\TicketManagement.DataAccess\TicketManagement.DataAccess.csproj" />
+
+  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+    <_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
+  </AssemblyAttribute>
+
   </ItemGroup>
 
 </Project>

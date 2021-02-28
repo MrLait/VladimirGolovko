@@ -1,6 +1,8 @@
 ﻿--- Venue
 insert into dbo.Venue
-values ('First venue', 'First venue address', '123 45 678 90 12')
+values ('Luzhniki Stadium', 'st. Luzhniki, 24, Moscow, Russia, 119048', '+7 495 780−08−08')
+insert into dbo.Venue
+values ('Gomel Regional Drama Theater', 'pl. Lenin 1, Gomel 246050', '+375232757763')
 
 --- Layout
 insert into dbo.Layout
