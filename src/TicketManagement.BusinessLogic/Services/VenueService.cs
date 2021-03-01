@@ -9,14 +9,12 @@ using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    internal class VenueService : IVenueService
+    internal class VenueService : AbstractService, IVenueService
     {
         public VenueService(IDbContext dbContext)
+            : base(dbContext)
         {
-            DbContext = dbContext;
         }
-
-        public IDbContext DbContext { get; set; }
 
         public VenueDto GetVenue(int? id)
         {

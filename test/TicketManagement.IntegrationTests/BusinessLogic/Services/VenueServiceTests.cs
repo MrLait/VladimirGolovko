@@ -17,6 +17,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         /// Field with group repository.
         /// </summary>
         private VenueService _venueRepository;
+        private LayoutService _layoutService;
 
         /// <summary>
         /// Initialize repository.
@@ -33,6 +34,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             databaseHelper.CreateSnapshot(databaseSnapshotName, databaseName, snapshotsDirectoryPath, sqlConnectionString);
 
             _venueRepository = new VenueService(new AdoDbContext(sqlConnectionString));
+            _layoutService = new LayoutService(new AdoDbContext(sqlConnectionString));
         }
 
         [TearDown]
@@ -66,10 +68,27 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         public void GivenCreate_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Theater", Phone = "375123" };
+            VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Thea21ter", Phone = "375123" };
 
             // Act
             _venueRepository.CreateVenue(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
+
+        /// <summary>
+        /// Test cases for Add.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenCreateLayout_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            LayoutDto actual = new LayoutDto { Description = "Layo2ut for concerts.", VenueId = 1 };
+
+            // Act
+            _layoutService.CreateLayout(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);
