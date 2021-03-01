@@ -4,8 +4,6 @@ using NUnit.Framework;
 using TicketManagement.BusinessLogic.DTO;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.IntegrationTests.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.Services
@@ -18,6 +16,8 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         /// </summary>
         private VenueService _venueRepository;
         private LayoutService _layoutService;
+        private AreaService _areaService;
+        private SeatService _seatService;
 
         /// <summary>
         /// Initialize repository.
@@ -35,6 +35,8 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
 
             _venueRepository = new VenueService(new AdoDbContext(sqlConnectionString));
             _layoutService = new LayoutService(new AdoDbContext(sqlConnectionString));
+            _areaService = new AreaService(new AdoDbContext(sqlConnectionString));
+            _seatService = new SeatService(new AdoDbContext(sqlConnectionString));
         }
 
         [TearDown]
@@ -71,7 +73,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Thea21ter", Phone = "375123" };
 
             // Act
-            _venueRepository.CreateVenue(actual);
+            _venueRepository.Create(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);
@@ -88,7 +90,41 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             LayoutDto actual = new LayoutDto { Description = "Layo2ut for concerts.", VenueId = 1 };
 
             // Act
-            _layoutService.CreateLayout(actual);
+            _layoutService.Create(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
+
+        /// <summary>
+        /// Test cases for Add.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenCreateArea_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            AreaDto actual = new AreaDto { LayoutId = 1, Description = "Second sector of first layout.", CoordX = 1, CoordY = 1 };
+
+            // Act
+            _areaService.Create(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
+
+        /// <summary>
+        /// Test cases for Add.
+        /// </summary>
+        /// <param name="actualName">Name parameter.</param>
+        [TestCase("NameGroup")]
+        public void GivenCreateSeat_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            SeatDto actual = new SeatDto { AreaId = 1, Row = 3, Number = 1 };
+
+            // Act
+            _seatService.Create(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);
