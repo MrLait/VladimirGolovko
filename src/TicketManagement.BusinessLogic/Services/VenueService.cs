@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TicketManagement.BusinessLogic.DTO;
+using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.BusinessLogic.Services
@@ -21,7 +23,7 @@ namespace TicketManagement.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<VenueDto> GetVenue()
+        public IEnumerable<VenueDto> GetVenues()
         {
             throw new NotImplementedException();
         }
@@ -29,18 +31,17 @@ namespace TicketManagement.BusinessLogic.Services
         public void CreateVenue(VenueDto venueDto)
         {
             var allVenues = DbContext.Venues.GetAll().ToList();
+            var isVenueContain = allVenues.Select(x => x.Description.Contains(venueDto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
 
-            if (allVenues != null)
+            if (isVenueContain)
             {
-                var isContain = allVenues.Select(x => x.Description.Contains(venueDto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
-
-                if (isContain)
-                {
-                    return;
-                }
+                throw new ValidationException($"The Venue with this description: {venueDto.Description} - already exists.");
             }
-
-            throw new NotImplementedException();
+            else
+            {
+                Venue venue = new Venue { Description = venueDto.Description, Address = venueDto.Address, Phone = venueDto.Phone };
+                DbContext.Venues.Create(venue);
+            }
         }
     }
 }

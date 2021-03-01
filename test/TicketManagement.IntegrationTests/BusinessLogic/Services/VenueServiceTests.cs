@@ -66,7 +66,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         public void GivenCreate_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Theater1", Phone = "375123" };
+            VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Theater", Phone = "375123" };
 
             // Act
             _venueRepository.CreateVenue(actual);

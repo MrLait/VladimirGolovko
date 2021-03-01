@@ -9,6 +9,6 @@ namespace TicketManagement.BusinessLogic.Interfaces
 
         VenueDto GetVenue(int? id);
 
-        IEnumerable<VenueDto> GetVenue();
+        IEnumerable<VenueDto> GetVenues();
     }
 }
