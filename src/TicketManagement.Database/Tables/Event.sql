@@ -3,5 +3,6 @@
 	[Id] int primary key identity,
 	[Name] nvarchar(120) NOT NULL,
 	[Description] nvarchar(max) NOT NULL,
-	[LayoutId] int NOT NULL,
+	[LayoutId] int NOT NULL, 
+    [DateTime] DATETIME NOT NULL,
 )

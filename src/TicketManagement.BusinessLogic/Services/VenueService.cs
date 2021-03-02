@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using TicketManagement.BusinessLogic.DTO;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {

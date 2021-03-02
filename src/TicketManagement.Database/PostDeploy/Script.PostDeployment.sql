@@ -50,3 +50,9 @@ values
 (10, 2, 1), (10, 2, 2), (10, 2, 3),
 (11, 1, 1), (11, 1, 2), (11, 1, 3),
 (11, 2, 1), (11, 2, 2), (11, 2, 3)
+
+----- Event
+insert into dbo.Event
+values
+('Footbal match', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00'),
+('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00')

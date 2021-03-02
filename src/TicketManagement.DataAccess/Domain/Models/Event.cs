@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TicketManagement.DataAccess.Domain.Interfaces;
 
@@ -16,5 +17,7 @@ namespace TicketManagement.DataAccess.Domain.Models
 
         [ForeignKey("LayoutId")]
         public int LayoutId { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }

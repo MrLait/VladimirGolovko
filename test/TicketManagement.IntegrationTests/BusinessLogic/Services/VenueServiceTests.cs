@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.DTO;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
+using TicketManagement.Dto;
 using TicketManagement.IntegrationTests.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.Services
@@ -18,6 +18,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         private LayoutService _layoutService;
         private AreaService _areaService;
         private SeatService _seatService;
+        private EventService _eventService;
 
         /// <summary>
         /// Initialize repository.
@@ -37,6 +38,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             _layoutService = new LayoutService(new AdoDbContext(sqlConnectionString));
             _areaService = new AreaService(new AdoDbContext(sqlConnectionString));
             _seatService = new SeatService(new AdoDbContext(sqlConnectionString));
+            _eventService = new EventService(new AdoDbContext(sqlConnectionString));
         }
 
         [TearDown]
@@ -125,6 +127,19 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
 
             // Act
             _seatService.Create(actual);
+
+            // Assert
+            Assert.AreEqual(actualName, actualName);
+        }
+
+        [TestCase("NameGroup")]
+        public void GivenCreateEvent_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        {
+            // Arrage
+            EventDto actual = new EventDto { LayoutId = 1, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 4, 1) };
+
+            // Act
+            _eventService.Create(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);

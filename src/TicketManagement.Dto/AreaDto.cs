@@ -1,4 +1,4 @@
-﻿namespace TicketManagement.BusinessLogic.DTO
+﻿namespace TicketManagement.Dto
 {
     internal class AreaDto
     {
