@@ -12,12 +12,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
     public class AdoUsingParametersRepository<T> : AdoRepository<T>, IUsingParametersRepository<T>
         where T : IEntity, new()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AdoUsingParametersRepository{T}"/> class.
-        /// </summary>
-        /// <param name="dbConString">Database connection string.</param>
-        public AdoUsingParametersRepository(string dbConString)
-            : base(dbConString)
+        public AdoUsingParametersRepository(string сonnectionString)
+            : base(сonnectionString)
         {
         }
 
@@ -26,7 +22,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+                throw new ArgumentException($"Can not add null object: {typeof(T).Name} !");
             }
 
             SqlParameter[] parameters = GetAddParameter(entity).ToArray();
@@ -34,55 +30,56 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             string tableName = entity.GetType().Name;
             string strCol = string.Join(", ", parameters.Select(x => x.ParameterName).ToList());
             var strParam = string.Join(", ", parameters.Select(x => "@" + x.ParameterName).ToList());
-            var sqlExpressionInsert = "INSERT INTO [" + tableName + "] (" + strCol + ") VALUES (" + strParam + ")";
+            var sqlExpressionInsert = $"INSERT INTO [{tableName}] ({strCol}) VALUES ({strParam})";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection);
+
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection))
+                for (int i = 0; i < parameters.Length; i++)
                 {
-                    try
-                    {
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
-                        }
-
-                        sqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionInsert, sqlEx);
-                    }
+                    sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
                 }
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
 
         /// <inheritdoc/>
-        public override void Delete(int byId)
+        public override void Delete(T entity)
         {
-            if (byId == 0)
+            if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+                throw new ArgumentException($"Can not delete null object: {entity}!");
+            }
+
+            var entityId = entity.Id;
+
+            if (entityId == 0)
+            {
+                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entityId}!");
             }
 
             string tableName = new T().GetType().Name;
-            string sqlExpressionInsert = "DELETE FROM " + tableName + " WHERE Id = " + byId;
+            string sqlExpressionInsert = $"DELETE FROM {tableName} WHERE Id = {entityId}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection);
+
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection))
-                {
-                    try
-                    {
-                        sqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionInsert, sqlEx);
-                    }
-                }
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
 
@@ -92,25 +89,21 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
             string strCol = string.Join(", ", poroperyNames);
             string tableName = new T().GetType().Name;
-            string sqlExpressionSelect = $"SELECT {strCol} FROM " + tableName;
+            string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection))
-                {
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-
-                    try
-                    {
-                        DataSet ds = new DataSet();
-                        sqlDataAdapter.Fill(ds);
-                        return ds.Tables[0].ToEnumerable<T>();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionSelect, sqlEx);
-                    }
-                }
+                DataSet ds = new DataSet();
+                sqlDataAdapter.Fill(ds);
+                return ds.Tables[0].ToEnumerable<T>();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
             }
         }
 
@@ -119,31 +112,27 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (byId == 0)
             {
-                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+                throw new ArgumentException($"byId shouldn't be equal {byId}");
             }
 
             var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
             string strCol = string.Join(", ", poroperyNames);
             string tableName = new T().GetType().Name;
-            string sqlExpressionSelect = $"SELECT {strCol} FROM " + tableName + " WHERE Id = " + byId;
+            string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName} WHERE Id = {byId}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection))
-                {
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-
-                    try
-                    {
-                        DataSet ds = new DataSet();
-                        sqlDataAdapter.Fill(ds);
-                        return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionSelect, sqlEx);
-                    }
-                }
+                DataSet ds = new DataSet();
+                sqlDataAdapter.Fill(ds);
+                return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
             }
         }
 
@@ -152,7 +141,14 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+                throw new ArgumentException($"{typeof(T).Name} object shouln't be null when saving to database");
+            }
+
+            var entityId = entity.Id;
+
+            if (entityId == 0)
+            {
+                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entityId}!");
             }
 
             SqlParameter[] parameters = GetAddParameter(entity).ToArray();
@@ -162,25 +158,21 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 
             var sqlExpressionInsert = $"UPDATE [{tableName}] SET {setStr} WHERE Id = {entity.Id}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection);
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection))
+                for (int i = 0; i < parameters.Length; i++)
                 {
-                    try
-                    {
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
-                        }
-
-                        sqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in sql expression: " + sqlExpressionInsert, sqlEx);
-                    }
+                    sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
                 }
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
     }

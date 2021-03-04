@@ -20,8 +20,8 @@ namespace TicketManagement.DataAccess.Interfaces
         /// <summary>
         /// Delete object from table by Id.
         /// </summary>
-        /// <param name="byId">Id oject.</param>
-        void Delete(int byId);
+        /// <param name="entity">Entity.</param>
+        void Delete(T entity);
 
         /// <summary>
         /// Modify an existing object.

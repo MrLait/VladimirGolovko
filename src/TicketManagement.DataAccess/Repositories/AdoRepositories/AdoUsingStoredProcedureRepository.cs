@@ -13,36 +13,39 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
     public class AdoUsingStoredProcedureRepository<T> : AdoRepository<T>, IUsingStoredProcedureRepository<T>
         where T : IEntity, new()
     {
-        public AdoUsingStoredProcedureRepository(string dbConString)
-            : base(dbConString)
+        public AdoUsingStoredProcedureRepository(string сonnectionString)
+            : base(сonnectionString)
         {
         }
 
         /// <inheritdoc/>
-        public override void Delete(int byId)
+        public override void Delete(T entity)
         {
-            if (byId == 0)
+            if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+                throw new ArgumentException($"Can not delete null object: {entity}!");
+            }
+
+            var entityId = entity.Id;
+
+            if (entityId == 0)
+            {
+                throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
             }
 
             string tableName = new T().GetType().Name;
-            string storedProcedure = "Delete" + tableName;
+            string storedProcedure = $"Delete{tableName}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", entityId) });
+            try
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) }))
-                {
-                    try
-                    {
-                        sqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
-                    }
-                }
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -50,25 +53,21 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         public override IEnumerable<T> GetAll()
         {
             string tableName = new T().GetType().Name;
-            string storedProcedure = "GetAll" + tableName;
+            string storedProcedure = $"GetAll{tableName}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection);
+            SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
+
+            try
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection))
-                {
-                    SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
-
-                    try
-                    {
-                        DataSet ds = new DataSet();
-                        adpt.Fill(ds);
-                        return ds.Tables[0].ToEnumerable<T>();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in stored procedure. See inner exception for more detail exception." + storedProcedure, sqlEx);
-                    }
-                }
+                DataSet ds = new DataSet();
+                adpt.Fill(ds);
+                return ds.Tables[0].ToEnumerable<T>();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -77,29 +76,25 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (byId == 0)
             {
-                throw new ArgumentNullException(paramName: "byId shouldn't be equal" + byId);
+                throw new ArgumentException($"byId shouldn't be equal {byId}");
             }
 
             string tableName = new T().GetType().Name;
-            string storedProcedure = "GetById" + tableName;
+            string storedProcedure = $"GetById{tableName}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) });
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+            try
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) }))
-                {
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-
-                    try
-                    {
-                        DataSet ds = new DataSet();
-                        sqlDataAdapter.Fill(ds);
-                        return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
-                    }
-                }
+                DataSet ds = new DataSet();
+                sqlDataAdapter.Fill(ds);
+                return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -108,26 +103,22 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+                throw new ArgumentException($"Can not add null object: {typeof(T).Name} !");
             }
 
-            var storedProcedure = "Create" + entity.GetType().Name;
+            var storedProcedure = $"Create{entity.GetType().Name}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection);
+            try
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection))
-                {
-                    try
-                    {
-                        sqlCommand.Parameters.AddRange(GetAddParameter(entity).ToArray());
-                        sqlConnection.Open();
-                        sqlCommand.ExecuteScalar();
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Some Error occured at database, if error in stored procedure: " + storedProcedure, sqlEx);
-                    }
-                }
+                sqlCommand.Parameters.AddRange(GetAddParameter(entity).ToArray());
+                sqlConnection.Open();
+                sqlCommand.ExecuteScalar();
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -136,34 +127,37 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentNullException(typeof(T).Name + "object shouln't be null when saving to database");
+                throw new ArgumentException($"{typeof(T).Name} object shouln't be null when saving to database");
+            }
+
+            var entityId = entity.Id;
+
+            if (entityId == 0)
+            {
+                throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
             }
 
             string tableName = new T().GetType().Name;
-            string storedProcedure = "Update" + tableName;
+            string storedProcedure = $"Update{tableName}";
 
-            using (SqlConnection sqlConnection = new SqlConnection(DbConString))
+            using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection);
+            sqlCommand.Parameters.AddRange(GetUpdateParameter(entity).ToArray());
+
+            SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
+            DataSet ds = new DataSet();
+
+            try
             {
-                using (SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection))
-                {
-                    sqlCommand.Parameters.AddRange(GetUpdateParameter(entity).ToArray());
-
-                    SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
-                    DataSet ds = new DataSet();
-
-                    try
-                    {
-                        adpt.Fill(ds);
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        throw new ArgumentException("Class Name and Table name must be same for this method. See inner exception", sqlEx);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-                }
+                adpt.Fill(ds);
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

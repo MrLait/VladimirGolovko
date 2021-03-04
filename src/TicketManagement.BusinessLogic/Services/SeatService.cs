@@ -15,7 +15,7 @@ namespace TicketManagement.BusinessLogic.Services
 
         public override void Create(SeatDto dto)
         {
-            var allSeatsByAreaId= DbContext.Seats.GetAll().Where(x => x.AreaId == dto.AreaId).ToList();
+            var allSeatsByAreaId = DbContext.Seats.GetAll().Where(x => x.AreaId == dto.AreaId).ToList();
             var isSeatContain = allSeatsByAreaId.Select(x => x.Number == dto.Row && x.Row == dto.Row).Where(z => z.Equals(true)).ElementAtOrDefault(0);
 
             if (isSeatContain)

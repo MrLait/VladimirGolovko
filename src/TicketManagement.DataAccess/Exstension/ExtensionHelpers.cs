@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace TicketManagement.DataAccess.Exstension
 {
-    public static class ExtensionHelpers
+    internal static class ExtensionHelpers
     {
         public static IEnumerable<T> ToEnumerable<T>(this DataTable table)
             where T : new()

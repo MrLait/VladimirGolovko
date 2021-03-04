@@ -5,6 +5,8 @@ namespace TicketManagement.DataAccess.Interfaces
 {
     public interface IDbContext
     {
+        string ConnectionString { get; }
+
         IRepository<Area> Areas { get; }
 
         IRepository<Event> Events { get; }

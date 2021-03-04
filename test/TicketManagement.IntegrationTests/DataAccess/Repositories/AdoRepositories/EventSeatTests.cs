@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicketManagement.UnitTests.DataAccess.Repositories.ADO
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
-    internal class AdoRepositoryTests : DatabaseConnectionBase
+    public class EventSeatTests
     {
     }
 }

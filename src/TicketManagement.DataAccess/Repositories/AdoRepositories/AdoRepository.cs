@@ -10,8 +10,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoRepository{T}"/> class.
         /// </summary>
-        /// <param name="dbConString">Connection string.</param>
-        protected AdoRepository(string dbConString) => DbConString = dbConString;
+        /// <param name="сonnectionString">Connection string.</param>
+        protected AdoRepository(string сonnectionString) => DbConString = сonnectionString;
 
         /// <summary>
         /// Connection string to database.
@@ -19,7 +19,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         protected string DbConString { get; private set; }
 
         /// <inheritdoc/>
-        public abstract void Delete(int byId);
+        public abstract void Delete(T entity);
 
         /// <inheritdoc/>
         public abstract IEnumerable<T> GetAll();

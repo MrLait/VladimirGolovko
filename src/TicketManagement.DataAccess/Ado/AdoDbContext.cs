@@ -6,8 +6,6 @@ namespace TicketManagement.DataAccess.Ado
 {
     public class AdoDbContext : IDbContext
     {
-        private readonly string _connectionString;
-
         private AdoUsingParametersRepository<Area> _areaRepository;
         private AdoUsingParametersRepository<EventArea> _eventAreaRepository;
         private AdoUsingStoredProcedureRepository<Event> _eventRepository;
@@ -18,21 +16,23 @@ namespace TicketManagement.DataAccess.Ado
 
         public AdoDbContext(string connectionString)
         {
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
-        public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(_connectionString);
+        public string ConnectionString { get; }
 
-        public IRepository<Event> Events => _eventRepository ??= new AdoUsingStoredProcedureRepository<Event>(_connectionString);
+        public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(ConnectionString);
 
-        public IRepository<EventArea> EventAreas => _eventAreaRepository ??= new AdoUsingParametersRepository<EventArea>(_connectionString);
+        public IRepository<Event> Events => _eventRepository ??= new AdoUsingStoredProcedureRepository<Event>(ConnectionString);
 
-        public IRepository<EventSeat> EventSeats => _eventSeatRepository ??= new AdoUsingParametersRepository<EventSeat>(_connectionString);
+        public IRepository<EventArea> EventAreas => _eventAreaRepository ??= new AdoUsingParametersRepository<EventArea>(ConnectionString);
 
-        public IRepository<Layout> Layouts => _layoutRepository ??= new AdoUsingParametersRepository<Layout>(_connectionString);
+        public IRepository<EventSeat> EventSeats => _eventSeatRepository ??= new AdoUsingParametersRepository<EventSeat>(ConnectionString);
 
-        public IRepository<Seat> Seats => _seatRepository ??= new AdoUsingParametersRepository<Seat>(_connectionString);
+        public IRepository<Layout> Layouts => _layoutRepository ??= new AdoUsingParametersRepository<Layout>(ConnectionString);
 
-        public IRepository<Venue> Venues => _venueRepository ??= new AdoUsingParametersRepository<Venue>(_connectionString);
+        public IRepository<Seat> Seats => _seatRepository ??= new AdoUsingParametersRepository<Seat>(ConnectionString);
+
+        public IRepository<Venue> Venues => _venueRepository ??= new AdoUsingParametersRepository<Venue>(ConnectionString);
     }
 }

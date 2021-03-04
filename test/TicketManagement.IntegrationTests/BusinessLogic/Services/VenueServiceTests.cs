@@ -14,10 +14,6 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         /// <summary>
         /// Field with group repository.
         /// </summary>
-        private VenueService _venueRepository;
-        private LayoutService _layoutService;
-        private AreaService _areaService;
-        private SeatService _seatService;
         private EventService _eventService;
 
         /// <summary>
@@ -34,10 +30,6 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             DatabaseHelper databaseHelper = new DatabaseHelper();
             databaseHelper.CreateSnapshot(databaseSnapshotName, databaseName, snapshotsDirectoryPath, sqlConnectionString);
 
-            _venueRepository = new VenueService(new AdoDbContext(sqlConnectionString));
-            _layoutService = new LayoutService(new AdoDbContext(sqlConnectionString));
-            _areaService = new AreaService(new AdoDbContext(sqlConnectionString));
-            _seatService = new SeatService(new AdoDbContext(sqlConnectionString));
             _eventService = new EventService(new AdoDbContext(sqlConnectionString));
         }
 
@@ -64,79 +56,79 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
             databaseHelper.DropDatabase("TicketManagement_Database", new DatabaseConnectionBase("master").DbConnString);
         }
 
-        /// <summary>
-        /// Test cases for Add.
-        /// </summary>
-        /// <param name="actualName">Name parameter.</param>
-        [TestCase("NameGroup")]
-        public void GivenCreate_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
-        {
-            // Arrage
-            VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Thea21ter", Phone = "375123" };
+        ///////// <summary>
+        ///////// Test cases for Add.
+        ///////// </summary>
+        ///////// <param name="actualName">Name parameter.</param>
+        //////[TestCase("NameGroup")]
+        //////public void GivenCreate_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        //////{
+        //////    // Arrage
+        //////    VenueDto actual = new VenueDto { Address = "Addr1 asd new", Description = "Gomel Regional Drama Thea21ter", Phone = "375123" };
 
-            // Act
-            _venueRepository.Create(actual);
+        //////    // Act
+        //////    _venueRepository.Create(actual);
 
-            // Assert
-            Assert.AreEqual(actualName, actualName);
-        }
+        //////    // Assert
+        //////    Assert.AreEqual(actualName, actualName);
+        //////}
 
-        /// <summary>
-        /// Test cases for Add.
-        /// </summary>
-        /// <param name="actualName">Name parameter.</param>
-        [TestCase("NameGroup")]
-        public void GivenCreateLayout_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
-        {
-            // Arrage
-            LayoutDto actual = new LayoutDto { Description = "Layo2ut for concerts.", VenueId = 1 };
+        ///////// <summary>
+        ///////// Test cases for Add.
+        ///////// </summary>
+        ///////// <param name="actualName">Name parameter.</param>
+        //////[TestCase("NameGroup")]
+        //////public void GivenCreateLayout_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        //////{
+        //////    // Arrage
+        //////    LayoutDto actual = new LayoutDto { Description = "Layo2ut for concerts.", VenueId = 1 };
 
-            // Act
-            _layoutService.Create(actual);
+        //////    // Act
+        //////    _layoutService.Create(actual);
 
-            // Assert
-            Assert.AreEqual(actualName, actualName);
-        }
+        //////    // Assert
+        //////    Assert.AreEqual(actualName, actualName);
+        //////}
 
-        /// <summary>
-        /// Test cases for Add.
-        /// </summary>
-        /// <param name="actualName">Name parameter.</param>
-        [TestCase("NameGroup")]
-        public void GivenCreateArea_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
-        {
-            // Arrage
-            AreaDto actual = new AreaDto { LayoutId = 1, Description = "Second sector of first layout.", CoordX = 1, CoordY = 1 };
+        ///////// <summary>
+        ///////// Test cases for Add.
+        ///////// </summary>
+        ///////// <param name="actualName">Name parameter.</param>
+        //////[TestCase("NameGroup")]
+        //////public void GivenCreateArea_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        //////{
+        //////    // Arrage
+        //////    AreaDto actual = new AreaDto { LayoutId = 1, Description = "Second sector of first layout.", CoordX = 1, CoordY = 1 };
 
-            // Act
-            _areaService.Create(actual);
+        //////    // Act
+        //////    _areaService.Create(actual);
 
-            // Assert
-            Assert.AreEqual(actualName, actualName);
-        }
+        //////    // Assert
+        //////    Assert.AreEqual(actualName, actualName);
+        //////}
 
-        /// <summary>
-        /// Test cases for Add.
-        /// </summary>
-        /// <param name="actualName">Name parameter.</param>
-        [TestCase("NameGroup")]
-        public void GivenCreateSeat_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
-        {
-            // Arrage
-            SeatDto actual = new SeatDto { AreaId = 1, Row = 3, Number = 1 };
+        ///////// <summary>
+        ///////// Test cases for Add.
+        ///////// </summary>
+        ///////// <param name="actualName">Name parameter.</param>
+        //////[TestCase("NameGroup")]
+        //////public void GivenCreateSeat_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
+        //////{
+        //////    // Arrage
+        //////    SeatDto actual = new SeatDto { AreaId = 1, Row = 3, Number = 1 };
 
-            // Act
-            _seatService.Create(actual);
+        //////    // Act
+        //////    _seatService.Create(actual);
 
-            // Assert
-            Assert.AreEqual(actualName, actualName);
-        }
+        //////    // Assert
+        //////    Assert.AreEqual(actualName, actualName);
+        //////}
 
         [TestCase("NameGroup")]
         public void GivenCreateEvent_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            EventDto actual = new EventDto { LayoutId = 1, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 4, 1) };
+            EventDto actual = new EventDto { LayoutId = 1, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 5, 5) };
 
             // Act
             _eventService.Create(actual);

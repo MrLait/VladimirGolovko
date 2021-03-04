@@ -13,5 +13,9 @@ namespace TicketManagement.Dto
         public int LayoutId { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public string AreaDescription { get; set; }
+
+        public string VenueDescription { get; set; }
     }
 }

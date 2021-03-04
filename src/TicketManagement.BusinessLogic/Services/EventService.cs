@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using TicketManagement.DataAccess.Domain.Models;
@@ -17,6 +18,7 @@ namespace TicketManagement.BusinessLogic.Services
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1481:Unused local variables should be removed", Justification = "<Ожидание>")]
         public override void Create(EventDto dto)
         {
+            /////utc
             bool isDataTimeValid = dto.DateTime > DateTime.Now;
 
             if (!isDataTimeValid)
@@ -26,17 +28,27 @@ namespace TicketManagement.BusinessLogic.Services
 
             var allEvents = DbContext.Events.GetAll().ToList();
             var isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0);
-          ////  var isEvenContainSeat = allEvents.Select(x => x.LayoutId = dto.LayoutId);
 
             if (isEventContainSameVenueInSameTime)
             {
-                throw new ValidationException($"The Layout {dto.LayoutId} for the Venue with this date time: {dto.DateTime} - already exists.");
+                throw new ValidationException($"Can not create the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
             }
-            else
+
+            var allSeats = DbContext.Seats.GetAll();
+            var allAreasInLayout = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
+            List<bool> isAreasEmpty = new List<bool>();
+            foreach (var item in allAreasInLayout)
             {
-                Event eventEntity = new Event { LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime };
-                DbContext.Events.Create(eventEntity);
+                isAreasEmpty.Add(allSeats.Where(x => x.AreaId == item.Id).Select(x => x.AreaId.ToString().Contains(item.Id.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0));
             }
+
+            if (isAreasEmpty.Contains(false))
+            {
+                throw new ValidationException($"Can not create the Event {dto.Description} because one of the Area has no seats.");
+            }
+
+            Event eventEntity = new Event { LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime };
+            DbContext.Events.Create(eventEntity);
         }
     }
 }

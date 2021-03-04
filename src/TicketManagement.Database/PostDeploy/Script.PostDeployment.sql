@@ -1,14 +1,18 @@
 ﻿--- Venue
 insert into dbo.Venue
-values ('Luzhniki Stadium', 'st. Luzhniki, 24, Moscow, Russia, 119048', '+7 495 780−08−08'),
-('Gomel Regional Drama Theater', 'pl. Lenin 1, Gomel 246050', '+375232757763')
+values 
+('Luzhniki Stadium', 'st. Luzhniki, 24, Moscow, Russia, 119048', '+7 495 780−08−08'),
+('Gomel Regional Drama Theater', 'pl. Lenin 1, Gomel 246050', '+375232757763'),
+('The circus', 'pl. Lenin 1, Brest 246050', '+375442757763')
 
 --- Layout
 insert into dbo.Layout
-values (1, 'Layout for football games. '),
+values 
+(1, 'Layout for football games.'),
 (1, 'Layout for concerts.'),
 (2, 'Layout for comedy performances.'),
-(2, 'Layout for detective performances.')
+(2, 'Layout for detective performances.'),
+(2, 'Layout to deleteTests.')
 
 --- Area
 insert into dbo.Area
@@ -23,7 +27,8 @@ values
 (2, 'Fifth sector of second layout.', 1, 5),
 (3, 'Parterre of first layout.', 1, 1),
 (3, 'Balcony of first layout.', 2, 1),
-(4, 'Parterre of second layout.', 2, 1)
+(4, 'Parterre of second layout.', 2, 1),
+(4, 'Area to test layout.', 2, 2)
 
 --- Seat
 insert into dbo.Seat
@@ -49,10 +54,12 @@ values
 (10, 1, 1), (10, 1, 2), (10, 1, 3),
 (10, 2, 1), (10, 2, 2), (10, 2, 3),
 (11, 1, 1), (11, 1, 2), (11, 1, 3),
-(11, 2, 1), (11, 2, 2), (11, 2, 3)
+(11, 2, 1), (11, 2, 2), (11, 2, 3),
+(11, 3, 3)
 
 ----- Event
 insert into dbo.Event
 values
 ('Footbal match', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00'),
-('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00')
+('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00'),
+('Event to test.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00')

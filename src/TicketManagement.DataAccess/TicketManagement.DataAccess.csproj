@@ -7,6 +7,11 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+	<_Parameter1>TicketManagement.UnitTests</_Parameter1>
+    </AssemblyAttribute>
+
   </ItemGroup>
 
 </Project>
