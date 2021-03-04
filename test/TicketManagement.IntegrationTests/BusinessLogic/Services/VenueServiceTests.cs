@@ -128,10 +128,12 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         public void GivenCreateEvent_WhenCorrectValue_ThenOutIsAddedObject(string actualName)
         {
             // Arrage
-            EventDto actual = new EventDto { LayoutId = 1, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 5, 5) };
+            EventDto actual = new EventDto { Id = 4, LayoutId = 1, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 5, 5), Price = 100, State = 0 };
 
             // Act
             _eventService.Create(actual);
+
+            _eventService.Delete(actual);
 
             // Assert
             Assert.AreEqual(actualName, actualName);

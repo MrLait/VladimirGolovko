@@ -17,5 +17,9 @@ namespace TicketManagement.Dto
         public string AreaDescription { get; set; }
 
         public string VenueDescription { get; set; }
+
+        public decimal Price { get; set; }
+
+        public int State { get; set; }
     }
 }
