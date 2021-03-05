@@ -28,5 +28,15 @@ namespace TicketManagement.BusinessLogic.Services
                 DbContext.Seats.Create(seat);
             }
         }
+
+        public override void Delete(SeatDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Update(SeatDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

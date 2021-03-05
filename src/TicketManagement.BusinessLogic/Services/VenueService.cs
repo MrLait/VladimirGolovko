@@ -28,5 +28,15 @@ namespace TicketManagement.BusinessLogic.Services
                 DbContext.Venues.Create(venue);
             }
         }
+
+        public override void Delete(VenueDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Update(VenueDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

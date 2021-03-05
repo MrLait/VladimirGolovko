@@ -31,12 +31,22 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
+        public override void Delete(LayoutDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
         public LayoutDto GetLayout(int? id)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<LayoutDto> GetLayouts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(LayoutDto dto)
         {
             throw new NotImplementedException();
         }

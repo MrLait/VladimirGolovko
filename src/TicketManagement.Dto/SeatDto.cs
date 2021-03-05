@@ -1,6 +1,8 @@
-﻿namespace TicketManagement.Dto
+﻿using TicketManagement.Dto.Interfaces;
+
+namespace TicketManagement.Dto
 {
-    internal class SeatDto
+    internal class SeatDto : IDtoEntity
     {
         public int Id { get; set; }
 

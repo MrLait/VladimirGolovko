@@ -1,8 +1,9 @@
 ﻿using System;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
-    internal class EventDto
+    internal class EventDto : IDtoEntity
     {
         public int Id { get; set; }
 

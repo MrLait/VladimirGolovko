@@ -28,5 +28,15 @@ namespace TicketManagement.BusinessLogic.Services
                 DbContext.Areas.Create(area);
             }
         }
+
+        public override void Delete(AreaDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Update(AreaDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
