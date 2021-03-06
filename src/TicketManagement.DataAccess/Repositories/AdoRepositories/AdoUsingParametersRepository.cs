@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
-    public class AdoUsingParametersRepository<T> : AdoRepository<T>, IUsingParametersRepository<T>
+    public class AdoUsingParametersRepository<T> : AdoRepository<T>
         where T : IEntity, new()
     {
         public AdoUsingParametersRepository(string сonnectionString)

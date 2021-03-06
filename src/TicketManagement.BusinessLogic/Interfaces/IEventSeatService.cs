@@ -2,7 +2,7 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    internal interface IEventSeatService
+    internal interface IEventSeatService : IService
     {
         void UpdateState(EventSeatDto dto);
     }

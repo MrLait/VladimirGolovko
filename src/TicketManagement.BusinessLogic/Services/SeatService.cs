@@ -1,19 +1,19 @@
 ﻿using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    internal class SeatService : AbstractService<SeatDto>
+    internal class SeatService : ISeatService
     {
-        public SeatService(IDbContext dbContext)
-            : base(dbContext)
-        {
-        }
+        public SeatService(IDbContext dbContext) => DbContext = dbContext;
 
-        public override void Create(SeatDto dto)
+        public IDbContext DbContext { get; private set; }
+
+        public void Create(SeatDto dto)
         {
             var allSeatsByAreaId = DbContext.Seats.GetAll().Where(x => x.AreaId == dto.AreaId).ToList();
             var isSeatContain = allSeatsByAreaId.Select(x => x.Number == dto.Row && x.Row == dto.Row).Where(z => z.Equals(true)).ElementAtOrDefault(0);
@@ -29,12 +29,12 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
-        public override void Delete(SeatDto dto)
+        public void Delete(SeatDto dto)
         {
             DbContext.Seats.Delete(new Seat { Id = dto.Id });
         }
 
-        public override void Update(SeatDto dto)
+        public void Update(SeatDto dto)
         {
             DbContext.Seats.Update(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });
         }

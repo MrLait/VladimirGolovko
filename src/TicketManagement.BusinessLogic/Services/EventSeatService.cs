@@ -8,7 +8,7 @@ namespace TicketManagement.BusinessLogic.Services
     {
         public EventSeatService(IDbContext dbContext) => DbContext = dbContext;
 
-        protected IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; private set; }
 
         public void UpdateState(EventSeatDto dto)
         {

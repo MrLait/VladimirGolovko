@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    internal class LayoutService : AbstractService<LayoutDto>
+    internal class LayoutService : ILayoutService
     {
-        public LayoutService(IDbContext dbContext)
-            : base(dbContext)
-        {
-        }
+        public LayoutService(IDbContext dbContext) => DbContext = dbContext;
 
-        public override void Create(LayoutDto dto)
+        public IDbContext DbContext { get; private set; }
+
+        public void Create(LayoutDto dto)
         {
             var allLayoutByVenueId = DbContext.Layouts.GetAll().Where(x => x.VenueId == dto.VenueId).ToList();
             var isLayoutContain = allLayoutByVenueId.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
@@ -31,12 +31,12 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
-        public override void Delete(LayoutDto dto)
+        public void Delete(LayoutDto dto)
         {
             DbContext.Layouts.Delete(new Layout { Id = dto.Id });
         }
 
-        public override void Update(LayoutDto dto)
+        public void Update(LayoutDto dto)
         {
             DbContext.Layouts.Update(new Layout { Id = dto.Id, VenueId = dto.VenueId, Description = dto.Description });
         }

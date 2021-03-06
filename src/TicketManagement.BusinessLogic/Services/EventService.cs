@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    internal class EventService : AbstractService<EventDto>
+    internal class EventService : IEventService
     {
-        public EventService(IDbContext dbContext)
-            : base(dbContext)
-        {
-        }
+        public EventService(IDbContext dbContext) => DbContext = dbContext;
 
-        public override void Create(EventDto dto)
+        public IDbContext DbContext { get; private set; }
+
+        public void Create(EventDto dto)
         {
             IEnumerable<Area> allAreasInLayout;
             List<Seat> allSeatsForAllAreas;
@@ -43,7 +43,7 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
-        public override void Delete(EventDto dto)
+        public void Delete(EventDto dto)
         {
             var eventId = dto.Id;
             if (eventId == 0)
@@ -63,7 +63,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Events.Delete(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
         }
 
-        public override void Update(EventDto dto)
+        public void Update(EventDto dto)
         {
             var eventId = dto.Id;
             if (eventId == 0)

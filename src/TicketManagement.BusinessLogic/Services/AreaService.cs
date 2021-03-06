@@ -1,19 +1,19 @@
 ﻿using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    internal class AreaService : AbstractService<AreaDto>
+    internal class AreaService : IAreaService
     {
-        public AreaService(IDbContext dbContext)
-            : base(dbContext)
-        {
-        }
+        public AreaService(IDbContext dbContext) => DbContext = dbContext;
 
-        public override void Create(AreaDto dto)
+        public IDbContext DbContext { get; private set; }
+
+        public void Create(AreaDto dto)
         {
             var allAreas = DbContext.Areas.GetAll().ToList();
             var isLayoutContain = allAreas.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
@@ -29,12 +29,12 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
-        public override void Delete(AreaDto dto)
+        public void Delete(AreaDto dto)
         {
             DbContext.Areas.Delete(new Area { Id = dto.Id });
         }
 
-        public override void Update(AreaDto dto)
+        public void Update(AreaDto dto)
         {
             DbContext.Areas.Update(new Area { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY });
         }
