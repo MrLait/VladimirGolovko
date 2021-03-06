@@ -31,12 +31,12 @@ namespace TicketManagement.BusinessLogic.Services
 
         public override void Delete(VenueDto dto)
         {
-            throw new System.NotImplementedException();
+            DbContext.Venues.Delete(new Venue { Id = dto.Id });
         }
 
         public override void Update(VenueDto dto)
         {
-            throw new System.NotImplementedException();
+            DbContext.Venues.Update(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
         }
     }
 }
