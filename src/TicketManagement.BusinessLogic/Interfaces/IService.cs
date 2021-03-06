@@ -2,7 +2,7 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    internal interface IService
+    public interface IService
     {
         IDbContext DbContext { get; }
     }

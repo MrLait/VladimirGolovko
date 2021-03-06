@@ -3,31 +3,31 @@ using Moq;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
 namespace TicketManagement.UnitTests.DataAccess
 {
     public class MockEntites
     {
-        public IEnumerable<Venue> Venues { get; set; }
+        public List<Venue> Venues { get; set; }
 
-        public IEnumerable<Layout> Layouts { get; set; }
+        public List<Layout> Layouts { get; set; }
 
-        public IEnumerable<Area> Areas { get; set; }
+        public List<Area> Areas { get; set; }
 
-        public IEnumerable<Seat> Seats { get; set; }
+        public List<Seat> Seats { get; set; }
 
-        public IEnumerable<Event> Events { get; set; }
+        public List<Event> Events { get; set; }
 
-        public Mock<IRepository<Venue>> VenueMock { get; set; }
+        public Mock<IDbContext> Mock { get; set; }
 
         [SetUp]
         public void InitialMock()
         {
             Venues = new List<Venue>
             {
-                new Venue { Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
-                new Venue { Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
+                new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
             };
 
             Layouts = new List<Layout>
@@ -126,10 +126,8 @@ namespace TicketManagement.UnitTests.DataAccess
             Events = new List<Event>
             {
             };
-            VenueMock = new Mock<IRepository<Venue>>();
-            VenueMock.Setup(x => x.GetAll()).Returns(Venues);
-            ////Mock = new Mock<IDbContext>();
-            ////Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
+            Mock = new Mock<IDbContext>();
+            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
             ////Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
             ////Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
             ////Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);

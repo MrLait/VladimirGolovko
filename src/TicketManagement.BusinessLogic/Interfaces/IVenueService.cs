@@ -2,12 +2,12 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    internal interface IVenueService : IService
+    public interface IVenueService : IService
     {
-        void Create(VenueDto dto);
+        public void Create(VenueDto dto);
 
-        void Delete(VenueDto dto);
+        public void Delete(VenueDto dto);
 
-        void Update(VenueDto dto);
+        public void Update(VenueDto dto);
     }
 }
