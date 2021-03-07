@@ -129,11 +129,12 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.Services
         {
             // Arrage
             EventDto actualOne = new EventDto { Id = 4, LayoutId = 1, Description = "asdasd", Name = "asd", DateTime = new DateTime(2021, 5, 5), Price = 100, State = 0 };
-            EventDto actualTwo = new EventDto { Id = 5, LayoutId = 2, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 5, 6), Price = 100, State = 0 };
+            ////EventDto actualTwo = new EventDto { Id = 5, LayoutId = 2, Description = "asd", Name = "asd", DateTime = new DateTime(2021, 5, 6), Price = 100, State = 0 };
 
             // Act
             _eventService.Create(actualOne);
-            _eventService.Create(actualTwo);
+            _eventService.Delete(actualOne);
+           //// _eventService.Create(actualTwo);
 
             // Assert
             Assert.AreEqual(actualName, actualName);

@@ -20,9 +20,28 @@ namespace TicketManagement.BusinessLogic.Services
             IEnumerable<Area> allAreasInLayout;
             List<Seat> allSeatsForAllAreas;
 
-            CheckThatEventNotCreatedInThePast(dto);
-            ChecThatEventNotCreatedInTheSameTimeFotVenue(dto);
-            CheckThatAreasContainSeats(dto, out allAreasInLayout, out allSeatsForAllAreas);
+            bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+
+            if (!isDataTimeValid)
+            {
+                throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be created in the past.");
+            }
+
+            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
+
+            if (isEventContainSameVenueInSameTime)
+            {
+                throw new ValidationException($"Can not create the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
+            }
+
+            var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
+
+            if (atLeastOneAreaContainsSeats)
+            {
+                throw new ValidationException($"Can not create the Event {dto.Description} because no one of the Area has no seats.");
+            }
+
+            GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out allAreasInLayout, out allSeatsForAllAreas);
 
             Event eventEntity = new Event { LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime };
             DbContext.Events.Create(eventEntity);
@@ -30,17 +49,6 @@ namespace TicketManagement.BusinessLogic.Services
             var incrementedEventId = DbContext.Events.GetAll().Last().Id;
 
             CreateEventAreasAndThenEventSeats(dto, allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
-        }
-
-        private void ChecThatEventNotCreatedInTheSameTimeFotVenue(EventDto dto)
-        {
-            List<Event> allEvents = DbContext.Events.GetAll().ToList();
-            bool isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0);
-
-            if (isEventContainSameVenueInSameTime)
-            {
-                throw new ValidationException($"Can not create the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
-            }
         }
 
         public void Delete(EventDto dto)
@@ -57,8 +65,6 @@ namespace TicketManagement.BusinessLogic.Services
             {
                 throw new ValidationException($"The event by id: {eventId} does not exist in the store.");
             }
-
-            DeleteEventSeatsAndThenEventAreas(eventId);
 
             DbContext.Events.Delete(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
         }
@@ -82,46 +88,80 @@ namespace TicketManagement.BusinessLogic.Services
 
             if (isLayoutChanged)
             {
-                DeleteEventSeatsAndThenEventAreas(curEvent.Id);
-                CheckThatAreasContainSeats(dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas);
-                CheckThatEventNotCreatedInThePast(dto);
-                ChecThatEventNotCreatedInTheSameTimeFotVenue(dto);
+                IEnumerable<Area> allAreasInLayout;
+                List<Seat> allSeatsForAllAreas;
+
+                var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
+                if (atLeastOneAreaContainsSeats)
+                {
+                    throw new ValidationException($"Can not create the Event {dto.Description} because no one of the Area has no seats.");
+                }
+
+                bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+                if (!isDataTimeValid)
+                {
+                    throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be created in the past.");
+                }
+
+                bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
+                if (isEventContainSameVenueInSameTime)
+                {
+                    throw new ValidationException($"Can not create the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
+                }
+
+                GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out allAreasInLayout, out allSeatsForAllAreas);
+
                 DbContext.Events.Update(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
                 CreateEventAreasAndThenEventSeats(dto, allAreasInLayout, allSeatsForAllAreas, dto.Id);
             }
-
-            DbContext.Events.Update(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
-        }
-
-        private static void CheckThatEventNotCreatedInThePast(EventDto dto)
-        {
-            bool isDataTimeValid = dto.DateTime > DateTime.Now;
-            if (!isDataTimeValid)
+            else
             {
-                throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be created in the past.");
+                DbContext.Events.Update(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
             }
         }
 
-        private void CheckThatAreasContainSeats(EventDto dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas)
+        private void GetAllAreasInLayoutAndAllSeatsForThisAreas(EventDto dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas)
         {
             var allSeats = DbContext.Seats.GetAll();
             allAreasInLayout = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
-            List<bool> isAreasContainSeats = new List<bool>();
             allSeatsForAllAreas = new List<Seat>();
             foreach (var item in allAreasInLayout)
             {
-                isAreasContainSeats.Add(allSeats.Where(x => x.AreaId == item.Id).Select(x => x.AreaId.ToString().Contains(item.Id.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0));
                 allSeatsForAllAreas.AddRange(allSeats.Where(x => x.AreaId == item.Id));
             }
+        }
 
-            if (isAreasContainSeats.Contains(false))
+        private bool CheckThatEventNotCreatedInTheSameTimeFotVenue(EventDto dto)
+        {
+            List<Event> allEvents = DbContext.Events.GetAll().ToList();
+            bool isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0);
+            return isEventContainSameVenueInSameTime;
+        }
+
+        private bool CheckThatEventNotCreatedInThePast(EventDto dto)
+        {
+            bool isDataTimeValid = dto.DateTime > DateTime.Now;
+            return isDataTimeValid;
+        }
+
+        private bool CheckThatAtLeastOneAreaContainsSeats(EventDto dto)
+        {
+            var allSeats = DbContext.Seats.GetAll();
+            IEnumerable<Area> allAreasInLayout = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
+            List<bool> isAreasContainSeats = new List<bool>();
+            foreach (var item in allAreasInLayout)
             {
-                throw new ValidationException($"Can not create the Event {dto.Description} because one of the Area has no seats.");
+                isAreasContainSeats.Add(allSeats.Where(x => x.AreaId == item.Id).Select(x => x.AreaId.ToString().Contains(item.Id.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0));
             }
+
+            var atLeastOneAreaContainsSeats = isAreasContainSeats.All(x => x.Equals(false));
+
+            return atLeastOneAreaContainsSeats;
         }
 
         private void CreateEventAreasAndThenEventSeats(EventDto dto, IEnumerable<Area> allAreasInLayout, List<Seat> allSeatsForAllAreas, int eventId)
         {
+            var lastEventAreaId = DbContext.EventAreas.GetAll().Last().Id;
             foreach (var item in allAreasInLayout)
             {
                 DbContext.EventAreas.Create(new EventArea { Description = item.Description, EventId = eventId, CoordX = item.CoordX, CoordY = item.CoordY, Price = dto.Price });
@@ -129,29 +169,7 @@ namespace TicketManagement.BusinessLogic.Services
 
             foreach (var item in allSeatsForAllAreas)
             {
-                DbContext.EventSeats.Create(new EventSeat { EventAreaId = item.AreaId, Number = item.Number, Row = item.Row, State = dto.State });
-            }
-        }
-
-        private void DeleteEventSeatsAndThenEventAreas(int eventId)
-        {
-            var allEventAreasForTheEvent = DbContext.EventAreas.GetAll().Where(x => x.EventId == eventId);
-
-            var allEventSeats = DbContext.EventSeats.GetAll().ToList();
-            List<EventSeat> allEventSeatsForTheEventArea = new List<EventSeat>();
-            foreach (var item in allEventAreasForTheEvent)
-            {
-                allEventSeatsForTheEventArea.AddRange(allEventSeats.Where(x => x.EventAreaId == item.Id));
-            }
-
-            foreach (var item in allEventSeatsForTheEventArea)
-            {
-                DbContext.EventSeats.Delete(item);
-            }
-
-            foreach (var item in allEventAreasForTheEvent)
-            {
-                DbContext.EventAreas.Delete(item);
+                DbContext.EventSeats.Create(new EventSeat { EventAreaId = item.AreaId + lastEventAreaId, Number = item.Number, Row = item.Row, State = dto.State });
             }
         }
     }

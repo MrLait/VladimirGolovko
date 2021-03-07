@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -196,7 +197,11 @@ namespace TicketManagement.UnitTests.DataAccess
 
             Events = new List<Event>
             {
+                new Event { Id = 1, Name = "Footbal match.", Description = "Netherlands - Russia", LayoutId = 1, DateTime = new DateTime(2021, 03, 01, 00, 00, 00) },
+                new Event { Id = 2, Name = "Football match.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(2021, 04, 01) },
+                new Event { Id = 3, Name = "Event to test.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(2021, 04, 01) },
             };
+
             Mock = new Mock<IDbContext>();
             Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
             Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
@@ -204,7 +209,7 @@ namespace TicketManagement.UnitTests.DataAccess
             Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
             Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
             Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
-            ////Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
         }
     }
 }
