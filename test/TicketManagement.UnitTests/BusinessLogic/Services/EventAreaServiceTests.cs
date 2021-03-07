@@ -55,11 +55,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => eventAreaService.UpdatePrice(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(null));
         }
 
         [Test]
@@ -69,10 +66,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 }));
         }
 
         [Test]
@@ -81,11 +75,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 });
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 }));
         }
 
         [Test]
@@ -95,10 +86,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
         }
     }
 }

@@ -45,10 +45,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var actual = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => actual.GetAll();
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
@@ -57,10 +54,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
             EventSeat eventSeat = new EventSeat { Id = repository.GetAll().ToList().Count + 1, EventAreaId = 2, Number = 2, Row = 2, State = 2 };
-            List<EventSeat> expected = new List<EventSeat>(_eventSeats);
+            List<EventSeat> expected = new List<EventSeat>(_eventSeats)
+            {
+                eventSeat,
+            };
 
             // Act
-            expected.Add(eventSeat);
             repository.Create(eventSeat);
             var actual = repository.GetAll();
 
@@ -75,10 +74,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Create(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
@@ -107,10 +103,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventSeat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
 
         [Test]
@@ -120,10 +113,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
@@ -134,10 +124,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventSeat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
 
         [Test]
@@ -166,10 +153,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
@@ -180,10 +164,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(eventSeat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
         }
 
         [Test]
@@ -234,10 +215,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(eventSeat.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
         }
 
         [Test]
@@ -248,10 +226,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(eventSeat.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
         }
 
         [Test]
@@ -262,10 +237,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(eventSeat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
         }
 
         [Test]
@@ -276,10 +248,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventSeat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
     }
 }

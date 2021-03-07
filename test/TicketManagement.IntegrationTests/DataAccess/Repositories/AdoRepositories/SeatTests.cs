@@ -45,10 +45,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var actual = new AdoUsingParametersRepository<Seat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => actual.GetAll();
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
@@ -57,10 +54,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
             Seat seat = new Seat { Id = repository.GetAll().ToList().Count + 1, Row = 2, AreaId = 2, Number = 2 };
-            List<Seat> expected = new List<Seat>(_seats);
+            List<Seat> expected = new List<Seat>(_seats)
+            {
+                seat,
+            };
 
             // Act
-            expected.Add(seat);
             repository.Create(seat);
             var actual = repository.GetAll();
 
@@ -75,10 +74,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Create(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
@@ -107,10 +103,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(seat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
 
         [Test]
@@ -120,10 +113,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
@@ -134,10 +124,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => repository.Delete(seat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
 
         [Test]
@@ -166,10 +153,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
@@ -180,10 +164,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(seat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(seat));
         }
 
         [Test]
@@ -227,10 +208,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(seat.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(seat.Id));
         }
 
         [Test]
@@ -241,10 +219,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(seat.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(seat.Id));
         }
 
         [Test]
@@ -255,10 +230,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(seat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(seat));
         }
 
         [Test]
@@ -269,10 +241,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(seat);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
     }
 }

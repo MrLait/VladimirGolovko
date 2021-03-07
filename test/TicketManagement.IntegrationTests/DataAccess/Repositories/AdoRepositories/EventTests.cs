@@ -45,10 +45,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var actual = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => actual.GetAll();
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
@@ -57,10 +54,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
             Event eventModel = new Event { Id = repository.GetAll().ToList().Count + 1, LayoutId = 2, DateTime = DateTime.Today, Description = "Created event", Name = "Test event" };
-            List<Event> expected = new List<Event>(_eventModels);
+            List<Event> expected = new List<Event>(_eventModels)
+            {
+                eventModel,
+            };
 
             // Act
-            expected.Add(eventModel);
             repository.Create(eventModel);
             var actual = repository.GetAll();
 
@@ -75,10 +74,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Create(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
@@ -107,10 +103,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventModel);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
 
         [Test]
@@ -120,10 +113,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
@@ -134,10 +124,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventModel);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
 
         [Test]
@@ -166,10 +153,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
@@ -180,10 +164,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(eventModel);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
         }
 
         [Test]
@@ -227,10 +208,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(eventModel.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
         }
 
         [Test]
@@ -241,10 +219,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(eventModel.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
         }
 
         [Test]
@@ -255,10 +230,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(eventModel);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
         }
 
         [Test]
@@ -269,10 +241,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(eventModel);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
     }
 }

@@ -17,9 +17,6 @@ namespace TicketManagement.BusinessLogic.Services
 
         public void Create(EventDto dto)
         {
-            IEnumerable<Area> allAreasInLayout;
-            List<Seat> allSeatsForAllAreas;
-
             if (dto == null)
             {
                 throw new ArgumentException($"Can not create null object: {dto}!");
@@ -46,7 +43,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException($"Can not create the Event {dto.Description} because no one of the Area has no seats.");
             }
 
-            GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out allAreasInLayout, out allSeatsForAllAreas);
+            GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas);
 
             Event eventEntity = new Event { LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime };
             DbContext.Events.Create(eventEntity);
@@ -109,9 +106,6 @@ namespace TicketManagement.BusinessLogic.Services
 
             if (isLayoutChanged)
             {
-                IEnumerable<Area> allAreasInLayout;
-                List<Seat> allSeatsForAllAreas;
-
                 var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
                 if (atLeastOneAreaContainsSeats)
                 {
@@ -124,7 +118,7 @@ namespace TicketManagement.BusinessLogic.Services
                     throw new ValidationException($"Can not Update the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
                 }
 
-                GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out allAreasInLayout, out allSeatsForAllAreas);
+                GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas);
 
                 DbContext.Events.Update(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
                 CreateEventAreasAndThenEventSeats(dto, allAreasInLayout, allSeatsForAllAreas, dto.Id);

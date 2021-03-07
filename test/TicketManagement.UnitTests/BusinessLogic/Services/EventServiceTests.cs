@@ -36,10 +36,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Create(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Create(null));
         }
 
         [Test]
@@ -60,11 +57,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Act
-            TestDelegate testAction = () => eventService.Create(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
@@ -85,11 +79,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Act
-            TestDelegate testAction = () => eventService.Create(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
@@ -111,11 +102,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Act
-            TestDelegate testAction = () => eventService.Create(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
@@ -152,10 +140,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Delete(null));
         }
 
         [Test]
@@ -165,10 +150,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Delete(new EventDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = 0 }));
         }
 
         [Test]
@@ -178,10 +160,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Delete(new EventDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = -1 }));
         }
 
         [Test]
@@ -190,11 +169,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => eventService.Delete(new EventDto { Id = Events.Last().Id + 1 });
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
@@ -241,10 +217,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Update(null));
         }
 
         [Test]
@@ -254,10 +227,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Update(new EventDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = 0 }));
         }
 
         [Test]
@@ -267,10 +237,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => eventService.Update(new EventDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = -1 }));
         }
 
         [Test]
@@ -329,11 +296,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             };
             Mock.Setup(x => x.Events.GetByID(layoutLast.Id)).Returns(layoutLast);
 
-            // Act
-            TestDelegate testAction = () => eventService.Update(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
 
         [Test]
@@ -356,11 +320,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Events.GetByID(firstEvent.Id)).Returns(firstEvent);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Act
-            TestDelegate testAction = () => eventService.Update(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
 
         [Test]
@@ -383,11 +344,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
             Mock.Setup(x => x.Events.GetByID(lastEvent.Id)).Returns(lastEvent);
 
-            // Act
-            TestDelegate testAction = () => eventService.Update(eventDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
     }
 }

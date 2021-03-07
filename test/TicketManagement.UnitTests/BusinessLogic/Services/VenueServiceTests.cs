@@ -34,11 +34,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => venueService.Create(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Create(null));
         }
 
         [Test]
@@ -49,11 +46,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
             Mock.Setup(x => x.Venues.Create(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
 
-            // Act
-            TestDelegate testAction = () => venueService.Create(venueDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => venueService.Create(venueDto));
         }
 
         [Test]
@@ -79,10 +73,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Delete(null));
         }
 
         [Test]
@@ -92,10 +83,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Delete(new VenueDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Delete(new VenueDto { Id = 0 }));
         }
 
         [Test]
@@ -105,10 +93,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Delete(new VenueDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Delete(new VenueDto { Id = -1 }));
         }
 
         [Test]
@@ -137,10 +122,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Update(null));
         }
 
         [Test]
@@ -150,10 +132,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Update(new VenueDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Update(new VenueDto { Id = 0 }));
         }
 
         [Test]
@@ -163,10 +142,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => venueService.Update(new VenueDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => venueService.Update(new VenueDto { Id = -1 }));
         }
     }
 }

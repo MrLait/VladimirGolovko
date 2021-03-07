@@ -44,11 +44,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var actual = new AdoUsingParametersRepository<Area>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
-            TestDelegate testAction = () => actual.GetAll();
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
@@ -57,10 +54,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
             Area area = new Area { Id = repository.GetAll().ToList().Count + 1, LayoutId = 2, Description = "Created Area", CoordX = 1, CoordY = 1 };
-            List<Area> expected = new List<Area>(_areas);
+            List<Area> expected = new List<Area>(_areas)
+            {
+                area,
+            };
 
             // Act
-            expected.Add(area);
             repository.Create(area);
             var actual = repository.GetAll();
 
@@ -74,11 +73,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
-            TestDelegate testAction = () => repository.Create(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>((TestDelegate)(() => repository.Create(null)));
         }
 
         [Test]
@@ -106,11 +102,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             Area area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
-            TestDelegate testAction = () => repository.Delete(area);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(area));
         }
 
         [Test]
@@ -119,11 +112,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
-            TestDelegate testAction = () => repository.Delete(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
@@ -134,10 +124,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act
-            TestDelegate testAction = () => repository.Delete(area);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(area));
         }
 
         [Test]
@@ -166,10 +153,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
@@ -180,10 +164,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(area);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(area));
         }
 
         [Test]
@@ -227,10 +208,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(area.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(area.Id));
         }
 
         [Test]
@@ -241,10 +219,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.GetByID(area.Id);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.GetByID(area.Id));
         }
 
         [Test]
@@ -255,10 +230,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Update(area);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Update(area));
         }
 
         [Test]
@@ -269,10 +241,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Act
-            TestDelegate testAction = () => repository.Delete(area);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => repository.Delete(area));
         }
     }
 }

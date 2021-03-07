@@ -35,10 +35,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Create(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Create(null));
         }
 
         [Test]
@@ -50,11 +47,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
             Mock.Setup(x => x.Areas.Create(It.IsAny<Area>())).Callback<Area>(v => Areas.Add(v));
 
-            // Act
-            TestDelegate testAction = () => areaService.Create(areaDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => areaService.Create(areaDto));
         }
 
         [Test]
@@ -80,10 +74,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Delete(null));
         }
 
         [Test]
@@ -93,10 +84,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Delete(new AreaDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = 0 }));
         }
 
         [Test]
@@ -106,10 +94,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Delete(new AreaDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = -1 }));
         }
 
         [Test]
@@ -138,10 +123,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Update(null));
         }
 
         [Test]
@@ -151,10 +133,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Update(new AreaDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = 0 }));
         }
 
         [Test]
@@ -164,10 +143,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => areaService.Update(new AreaDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = -1 }));
         }
 
         [Test]
@@ -179,11 +155,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
             Mock.Setup(x => x.Areas.Update(It.IsAny<Area>())).Callback<Area>(v => Areas.Add(v));
 
-            // Act
-            TestDelegate testAction = () => areaService.Update(areaDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => areaService.Update(areaDto));
         }
     }
 }

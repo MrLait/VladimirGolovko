@@ -34,11 +34,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => seatService.Create(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Create(null));
         }
 
         [Test]
@@ -50,11 +47,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Create(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 
-            // Act
-            TestDelegate testAction = () => seatService.Create(seatDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => seatService.Create(seatDto));
         }
 
         [Test]
@@ -79,11 +73,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => seatService.Delete(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Delete(null));
         }
 
         [Test]
@@ -92,11 +83,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => seatService.Delete(new SeatDto { Id = 0 });
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = 0 }));
         }
 
         [Test]
@@ -106,10 +94,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => seatService.Delete(new SeatDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = -1 }));
         }
 
         [Test]
@@ -138,10 +123,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => seatService.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Update(null));
         }
 
         [Test]
@@ -151,10 +133,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => seatService.Update(new SeatDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = 0 }));
         }
 
         [Test]
@@ -164,10 +143,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => seatService.Update(new SeatDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = -1 }));
         }
 
         [Test]
@@ -179,11 +155,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Update(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 
-            // Act
-            TestDelegate testAction = () => seatService.Update(seatDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => seatService.Update(seatDto));
         }
     }
 }

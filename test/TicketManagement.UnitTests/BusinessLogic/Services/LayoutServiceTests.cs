@@ -34,11 +34,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
-            TestDelegate testAction = () => layoutService.Create(null);
-
             // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Create(null));
         }
 
         [Test]
@@ -50,11 +47,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Create(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 
-            // Act
-            TestDelegate testAction = () => layoutService.Create(layoutDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => layoutService.Create(layoutDto));
         }
 
         [Test]
@@ -80,10 +74,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Delete(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Delete(null));
         }
 
         [Test]
@@ -93,10 +84,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Delete(new LayoutDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = 0 }));
         }
 
         [Test]
@@ -106,10 +94,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Delete(new LayoutDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = -1 }));
         }
 
         [Test]
@@ -138,10 +123,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Update(null);
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Update(null));
         }
 
         [Test]
@@ -151,10 +133,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Update(new LayoutDto { Id = 0 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = 0 }));
         }
 
         [Test]
@@ -164,10 +143,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            TestDelegate testAction = () => layoutService.Update(new LayoutDto { Id = -1 });
-
-            // Assert
-            Assert.Throws<ArgumentException>(testAction);
+            Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = -1 }));
         }
 
         [Test]
@@ -179,11 +155,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 
-            // Act
-            TestDelegate testAction = () => layoutService.Update(layoutDto);
-
             // Assert
-            Assert.Throws<ValidationException>(testAction);
+            Assert.Throws<ValidationException>(() => layoutService.Update(layoutDto));
         }
     }
 }
