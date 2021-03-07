@@ -56,7 +56,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
-            Seat seat = new Seat { Id = repository.GetAll().ToList().Count + 1, AreaId = 11, Number = 5, Row = 5 };
+            Seat seat = new Seat { Id = repository.GetAll().ToList().Count + 1, Row = 2, AreaId = 2, Number = 2 };
             List<Seat> expected = new List<Seat>(_seats);
 
             // Act
@@ -145,7 +145,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
-            var expected = new Seat { AreaId = 11, Number = 15, Row = 15 };
+            var expected = new Seat { Number = 2, AreaId = 2, Row = 2 };
 
             // Act
             var lastSeat = repository.GetAll().Last();
@@ -194,7 +194,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastSeat = repository.GetAll().Last();
-            Seat expectedSeat = new Seat { Id = lastSeat.Id, AreaId = lastSeat.AreaId, Number = lastSeat.Number, Row = lastSeat.Row };
+            Seat expectedSeat = new Seat { Id = lastSeat.Id, Row = lastSeat.Row, AreaId = lastSeat.AreaId, Number = lastSeat.Number };
 
             int actualId = expectedSeat.Id;
             var actual = repository.GetByID(actualId);
@@ -228,6 +228,48 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             TestDelegate testAction = () => repository.GetByID(seat.Id);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Seat seat = new Seat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.GetByID(seat.Id);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Seat seat = new Seat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Update(seat);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Seat seat = new Seat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Delete(seat);
 
             // Assert
             Assert.Throws<ArgumentException>(testAction);

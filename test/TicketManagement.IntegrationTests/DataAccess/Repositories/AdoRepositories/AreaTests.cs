@@ -232,5 +232,47 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Assert
             Assert.Throws<ArgumentException>(testAction);
         }
+
+        [Test]
+        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Area area = new Area { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.GetByID(area.Id);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Area area = new Area { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Update(area);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Area area = new Area { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Delete(area);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
     }
 }

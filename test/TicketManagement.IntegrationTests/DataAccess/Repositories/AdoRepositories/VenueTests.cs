@@ -229,5 +229,47 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Assert
             Assert.Throws<ArgumentException>(testAction);
         }
+
+        [Test]
+        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Venue venue = new Venue { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.GetByID(venue.Id);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Venue venue = new Venue { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Update(venue);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            Venue venue = new Venue { Id = -1 };
+            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Delete(venue);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
     }
 }

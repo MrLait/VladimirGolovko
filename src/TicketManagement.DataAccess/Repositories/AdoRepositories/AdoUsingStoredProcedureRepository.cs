@@ -28,7 +28,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 
             var entityId = entity.Id;
 
-            if (entityId == 0)
+            if (entityId <= 0)
             {
                 throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
             }
@@ -74,7 +74,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         /// <inheritdoc/>
         public override T GetByID(int byId)
         {
-            if (byId == 0)
+            if (byId <= 0)
             {
                 throw new ArgumentException($"byId shouldn't be equal {byId}");
             }
@@ -132,7 +132,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 
             var entityId = entity.Id;
 
-            if (entityId == 0)
+            if (entityId <= 0)
             {
                 throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
             }

@@ -239,5 +239,47 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Assert
             Assert.Throws<ArgumentException>(testAction);
         }
+
+        [Test]
+        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            EventSeat eventSeat = new EventSeat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.GetByID(eventSeat.Id);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            EventSeat eventSeat = new EventSeat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Update(eventSeat);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
+
+        [Test]
+        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        {
+            // Arrange
+            EventSeat eventSeat = new EventSeat { Id = -1 };
+            var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
+
+            // Act
+            TestDelegate testAction = () => repository.Delete(eventSeat);
+
+            // Assert
+            Assert.Throws<ArgumentException>(testAction);
+        }
     }
 }
