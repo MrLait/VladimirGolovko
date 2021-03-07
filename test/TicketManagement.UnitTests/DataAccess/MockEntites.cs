@@ -41,17 +41,18 @@ namespace TicketManagement.UnitTests.DataAccess
 
             Areas = new List<Area>
             {
-                new Area { LayoutId = 1,  Description = "First sector of first layout.", CoordX = 1, CoordY = 1 },
-                new Area { LayoutId = 1,  Description = "Second sector of first layout.", CoordX = 1, CoordY = 2 },
-                new Area { LayoutId = 1,  Description = "Third sector of first layout.", CoordX = 1, CoordY = 3 },
-                new Area { LayoutId = 1,  Description = "Fourth sector of first layout.", CoordX = 1, CoordY = 4 },
-                new Area { LayoutId = 2,  Description = "First sector of second layout.", CoordX = 1, CoordY = 1 },
-                new Area { LayoutId = 2,  Description = "Third sector of second layout.", CoordX = 1, CoordY = 3 },
-                new Area { LayoutId = 2,  Description = "Fourth sector of second layout.", CoordX = 1, CoordY = 4 },
-                new Area { LayoutId = 2,  Description = "Fifth sector of second layout.", CoordX = 1, CoordY = 5 },
-                new Area { LayoutId = 3,  Description = "Parterre of first layout.", CoordX = 1, CoordY = 1 },
-                new Area { LayoutId = 3,  Description = "Balcony of first layout.", CoordX = 2, CoordY = 1 },
-                new Area { LayoutId = 4,  Description = "Parterre of second layout.", CoordX = 2, CoordY = 1 },
+                new Area { Id = 1, LayoutId = 1,  Description = "First sector of first layout.", CoordX = 1, CoordY = 1 },
+                new Area { Id = 2, LayoutId = 1,  Description = "Second sector of first layout.", CoordX = 1, CoordY = 2 },
+                new Area { Id = 3, LayoutId = 1,  Description = "Third sector of first layout.", CoordX = 1, CoordY = 3 },
+                new Area { Id = 4, LayoutId = 1,  Description = "Fourth sector of first layout.", CoordX = 1, CoordY = 4 },
+                new Area { Id = 5, LayoutId = 2,  Description = "First sector of second layout.", CoordX = 1, CoordY = 1 },
+                new Area { Id = 6, LayoutId = 2,  Description = "Third sector of second layout.", CoordX = 1, CoordY = 3 },
+                new Area { Id = 7, LayoutId = 2,  Description = "Fourth sector of second layout.", CoordX = 1, CoordY = 4 },
+                new Area { Id = 8, LayoutId = 2,  Description = "Fifth sector of second layout.", CoordX = 1, CoordY = 5 },
+                new Area { Id = 9, LayoutId = 3,  Description = "Parterre of first layout.", CoordX = 1, CoordY = 1 },
+                new Area { Id = 10, LayoutId = 3,  Description = "Balcony of first layout.", CoordX = 2, CoordY = 1 },
+                new Area { Id = 11, LayoutId = 4,  Description = "Parterre of second layout.", CoordX = 2, CoordY = 1 },
+                new Area { Id = 12, LayoutId = 4,  Description = "Area to test layout.", CoordX = 2, CoordY = 2 },
             };
 
             Seats = new List<Seat>
@@ -132,7 +133,7 @@ namespace TicketManagement.UnitTests.DataAccess
             Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
             Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
             Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
-            ////Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
+            Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
             ////Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
             ////Mock.Setup(x => x.Events.GetAll()).Returns(Events);
         }
