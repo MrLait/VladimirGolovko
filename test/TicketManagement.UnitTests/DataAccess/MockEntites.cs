@@ -197,9 +197,9 @@ namespace TicketManagement.UnitTests.DataAccess
 
             Events = new List<Event>
             {
-                new Event { Id = 1, Name = "Footbal match.", Description = "Netherlands - Russia", LayoutId = 1, DateTime = new DateTime(2021, 03, 01, 00, 00, 00) },
-                new Event { Id = 2, Name = "Football match.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(2021, 04, 01) },
-                new Event { Id = 3, Name = "Event to test.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(2021, 04, 01) },
+                new Event { Id = 1, Name = "Footbal match.", Description = "Netherlands - Russia", LayoutId = 1, DateTime = new DateTime(3021, 03, 01, 00, 00, 00) },
+                new Event { Id = 2, Name = "Football match.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(3021, 04, 01) },
+                new Event { Id = 3, Name = "Event to test.", Description = "Netherlands - Belarus", LayoutId = 2, DateTime = new DateTime(3021, 04, 01) },
             };
 
             Mock = new Mock<IDbContext>();
