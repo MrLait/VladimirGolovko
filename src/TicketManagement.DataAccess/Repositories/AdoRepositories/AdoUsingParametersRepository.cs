@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Exstension;
-using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {

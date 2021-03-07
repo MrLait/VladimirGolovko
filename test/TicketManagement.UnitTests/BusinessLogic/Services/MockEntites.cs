@@ -5,7 +5,7 @@ using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 
-namespace TicketManagement.UnitTests.DataAccess
+namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
     public class MockEntites
     {

@@ -7,7 +7,6 @@ using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
-using TicketManagement.UnitTests.DataAccess;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
