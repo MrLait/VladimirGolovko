@@ -18,6 +18,8 @@ namespace TicketManagement.UnitTests.DataAccess
 
         public List<Event> Events { get; set; }
 
+        public List<EventArea> EventAreas { get; set; }
+
         public Mock<IDbContext> Mock { get; set; }
 
         [SetUp]
@@ -126,6 +128,18 @@ namespace TicketManagement.UnitTests.DataAccess
                 new Seat { Id = 67, AreaId = 11, Row = 3, Number = 3 },
             };
 
+            EventAreas = new List<EventArea>
+            {
+                new EventArea { Id = 1, EventId = 1, Description = "First sector of first layout.", CoordX = 1, CoordY = 1, Price = 100 },
+                new EventArea { Id = 2, EventId = 1, Description = "Second sector of first layout.", CoordX = 1, CoordY = 2, Price = 100 },
+                new EventArea { Id = 3, EventId = 1, Description = "Third sector of first layout.", CoordX = 1, CoordY = 3, Price = 100 },
+                new EventArea { Id = 4, EventId = 1, Description = "Fourth sector of first layout.", CoordX = 1, CoordY = 4, Price = 100 },
+                new EventArea { Id = 5, EventId = 2, Description = "First sector of second layout.", CoordX = 1, CoordY = 1, Price = 100 },
+                new EventArea { Id = 6, EventId = 2, Description = "Third sector of second layout.", CoordX = 1, CoordY = 3, Price = 100 },
+                new EventArea { Id = 7, EventId = 2, Description = "Fourth sector of second layout.", CoordX = 1, CoordY = 4, Price = 100 },
+                new EventArea { Id = 8, EventId = 2, Description = "Fifth sector of second layout.", CoordX = 1, CoordY = 5, Price = 100 },
+            };
+
             Events = new List<Event>
             {
             };
@@ -134,6 +148,7 @@ namespace TicketManagement.UnitTests.DataAccess
             Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
             Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
             Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
+            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
             ////Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
             ////Mock.Setup(x => x.Events.GetAll()).Returns(Events);
         }

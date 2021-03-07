@@ -2,7 +2,7 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    internal interface IEventAreaService : IService
+    public interface IEventAreaService : IService
     {
         void UpdatePrice(EventAreaDto dto);
     }
