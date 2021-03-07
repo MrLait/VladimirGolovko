@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventAreaServiceTests : MockEntites
     {
         [Test]
-        public void GivenUpdate_WhenEventAreaExist_ShouldReturnListWithUpdatedEventArea()
+        public void GivenUpdatePrice_WhenEventAreaExist_ShouldReturnListWithUpdatedEventArea()
         {
             // Arrange
             var eventAreaLast = EventAreas.Last();
@@ -52,7 +52,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenEventAreaEmpty_ShouldReturnArgumentException()
+        public void GivenUpdatePrice_WhenEventAreaEmpty_ShouldReturnArgumentException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
@@ -65,7 +65,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void GivenUpdatePrice_WhenIdEqualZero_ShouldReturnArgumentException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
@@ -78,7 +78,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void GivenUpdatePrice_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
@@ -91,7 +91,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenPriceLeesThanZero_ShouldReturnArgumentException()
+        public void GivenUpdatePrice_WhenPriceLeesThanZero_ShouldReturnArgumentException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);

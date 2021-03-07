@@ -20,6 +20,8 @@ namespace TicketManagement.UnitTests.DataAccess
 
         public List<EventArea> EventAreas { get; set; }
 
+        public List<EventSeat> EventSeats { get; set; }
+
         public Mock<IDbContext> Mock { get; set; }
 
         [SetUp]
@@ -140,6 +142,58 @@ namespace TicketManagement.UnitTests.DataAccess
                 new EventArea { Id = 8, EventId = 2, Description = "Fifth sector of second layout.", CoordX = 1, CoordY = 5, Price = 100 },
             };
 
+            EventSeats = new List<EventSeat>
+            {
+                new EventSeat { Id = 1, EventAreaId = 1, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 2, EventAreaId = 1, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 3, EventAreaId = 1, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 4, EventAreaId = 1, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 5, EventAreaId = 1, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 6, EventAreaId = 1, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 7, EventAreaId = 2, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 8, EventAreaId = 2, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 9, EventAreaId = 2, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 10, EventAreaId = 2, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 11, EventAreaId = 2, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 12, EventAreaId = 2, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 13, EventAreaId = 3, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 14, EventAreaId = 3, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 15, EventAreaId = 3, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 16, EventAreaId = 3, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 17, EventAreaId = 3, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 18, EventAreaId = 3, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 19, EventAreaId = 4, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 20, EventAreaId = 4, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 21, EventAreaId = 4, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 22, EventAreaId = 4, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 23, EventAreaId = 4, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 24, EventAreaId = 4, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 25, EventAreaId = 5, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 26, EventAreaId = 5, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 27, EventAreaId = 5, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 28, EventAreaId = 5, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 29, EventAreaId = 5, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 30, EventAreaId = 5, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 31, EventAreaId = 6, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 32, EventAreaId = 6, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 33, EventAreaId = 6, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 34, EventAreaId = 6, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 35, EventAreaId = 6, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 36, EventAreaId = 6, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 37, EventAreaId = 7, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 38, EventAreaId = 7, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 39, EventAreaId = 7, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 40, EventAreaId = 7, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 41, EventAreaId = 7, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 42, EventAreaId = 7, Row = 2, Number = 3, State = 0 },
+                new EventSeat { Id = 43, EventAreaId = 8, Row = 1, Number = 1, State = 0 },
+                new EventSeat { Id = 44, EventAreaId = 8, Row = 1, Number = 2, State = 0 },
+                new EventSeat { Id = 45, EventAreaId = 8, Row = 1, Number = 3, State = 0 },
+                new EventSeat { Id = 46, EventAreaId = 8, Row = 2, Number = 1, State = 0 },
+                new EventSeat { Id = 47, EventAreaId = 8, Row = 2, Number = 2, State = 0 },
+                new EventSeat { Id = 48, EventAreaId = 8, Row = 2, Number = 3, State = 0 },
+            };
+
             Events = new List<Event>
             {
             };
@@ -149,7 +203,7 @@ namespace TicketManagement.UnitTests.DataAccess
             Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
             Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
             Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
-            ////Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
+            Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
             ////Mock.Setup(x => x.Events.GetAll()).Returns(Events);
         }
     }
