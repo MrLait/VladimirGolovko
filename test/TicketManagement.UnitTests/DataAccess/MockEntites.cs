@@ -32,10 +32,11 @@ namespace TicketManagement.UnitTests.DataAccess
 
             Layouts = new List<Layout>
             {
-                new Layout { VenueId = 1, Description = "Layout for football games." },
-                new Layout { VenueId = 1, Description = "Layout for concerts." },
-                new Layout { VenueId = 2, Description = "Layout for comedy performances." },
-                new Layout { VenueId = 2, Description = "Layout for detective performances." },
+                new Layout { Id = 1, VenueId = 1, Description = "Layout for football games." },
+                new Layout { Id = 2, VenueId = 1, Description = "Layout for concerts." },
+                new Layout { Id = 3, VenueId = 2, Description = "Layout for comedy performances." },
+                new Layout { Id = 4, VenueId = 2, Description = "Layout for detective performances." },
+                new Layout { Id = 5, VenueId = 2, Description = "Layout to deleteTests." },
             };
 
             Areas = new List<Area>
@@ -130,7 +131,7 @@ namespace TicketManagement.UnitTests.DataAccess
             Mock = new Mock<IDbContext>();
             Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
             Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
-            ////Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
+            Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
             ////Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
             ////Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
             ////Mock.Setup(x => x.Events.GetAll()).Returns(Events);
