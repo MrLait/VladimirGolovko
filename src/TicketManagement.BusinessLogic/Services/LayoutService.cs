@@ -8,9 +8,9 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    public class LayoutService : ILayoutService
+    internal class LayoutService : ILayoutService
     {
-        public LayoutService(IDbContext dbContext) => DbContext = dbContext;
+        internal LayoutService(IDbContext dbContext) => DbContext = dbContext;
 
         public IDbContext DbContext { get; private set; }
 

@@ -8,9 +8,9 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    public class SeatService : ISeatService
+    internal class SeatService : ISeatService
     {
-        public SeatService(IDbContext dbContext) => DbContext = dbContext;
+        internal SeatService(IDbContext dbContext) => DbContext = dbContext;
 
         public IDbContext DbContext { get; private set; }
 

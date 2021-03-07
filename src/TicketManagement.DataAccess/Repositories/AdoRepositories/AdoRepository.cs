@@ -5,7 +5,7 @@ using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
-    public abstract class AdoRepository<T> : IRepository<T>
+    internal abstract class AdoRepository<T> : IRepository<T>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoRepository{T}"/> class.

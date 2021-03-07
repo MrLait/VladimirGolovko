@@ -23,7 +23,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
         public List<EventSeat> EventSeats { get; set; }
 
-        public Mock<IDbContext> Mock { get; set; }
+        internal Mock<IDbContext> Mock { get; set; }
 
         [SetUp]
         public void InitialMock()

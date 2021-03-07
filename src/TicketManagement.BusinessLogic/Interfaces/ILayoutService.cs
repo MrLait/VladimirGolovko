@@ -2,7 +2,7 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    public interface ILayoutService : IService
+    internal interface ILayoutService : IService
     {
         void Create(LayoutDto dto);
 

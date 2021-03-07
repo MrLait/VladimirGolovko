@@ -1,9 +1,8 @@
-﻿using System;
-using TicketManagement.DataAccess.Domain.Models;
+﻿using TicketManagement.DataAccess.Domain.Models;
 
 namespace TicketManagement.DataAccess.Interfaces
 {
-    public interface IDbContext
+    internal interface IDbContext
     {
         string ConnectionString { get; }
 

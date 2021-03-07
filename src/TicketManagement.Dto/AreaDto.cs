@@ -2,7 +2,7 @@
 
 namespace TicketManagement.Dto
 {
-    public class AreaDto : IDtoEntity
+    internal class AreaDto : IDtoEntity
     {
         public int Id { get; set; }
 

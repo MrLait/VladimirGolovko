@@ -9,7 +9,7 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    public class EventService : IEventService
+    internal class EventService : IEventService
     {
         public EventService(IDbContext dbContext) => DbContext = dbContext;
 

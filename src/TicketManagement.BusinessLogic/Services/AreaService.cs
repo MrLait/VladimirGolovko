@@ -8,9 +8,9 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Services
 {
-    public class AreaService : IAreaService
+    internal class AreaService : IAreaService
     {
-        public AreaService(IDbContext dbContext) => DbContext = dbContext;
+        internal AreaService(IDbContext dbContext) => DbContext = dbContext;
 
         public IDbContext DbContext { get; private set; }
 

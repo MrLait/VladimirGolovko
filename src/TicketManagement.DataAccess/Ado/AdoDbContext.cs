@@ -4,7 +4,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
 namespace TicketManagement.DataAccess.Ado
 {
-    public class AdoDbContext : IDbContext
+    internal class AdoDbContext : IDbContext
     {
         private AdoUsingParametersRepository<Area> _areaRepository;
         private AdoUsingParametersRepository<EventArea> _eventAreaRepository;

@@ -10,10 +10,10 @@ using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
-    public class AdoUsingStoredProcedureRepository<T> : AdoRepository<T>
+    internal class AdoUsingStoredProcedureRepository<T> : AdoRepository<T>
         where T : IEntity, new()
     {
-        public AdoUsingStoredProcedureRepository(string сonnectionString)
+        internal AdoUsingStoredProcedureRepository(string сonnectionString)
             : base(сonnectionString)
         {
         }

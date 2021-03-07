@@ -3,7 +3,7 @@ using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
-    public class EventDto : IDtoEntity
+    internal class EventDto : IDtoEntity
     {
         public int Id { get; set; }
 

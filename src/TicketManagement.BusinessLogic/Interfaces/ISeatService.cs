@@ -2,7 +2,7 @@
 
 namespace TicketManagement.BusinessLogic.Interfaces
 {
-    public interface ISeatService : IService
+    internal interface ISeatService : IService
     {
         void Create(SeatDto dto);
 
