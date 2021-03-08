@@ -1,16 +1,27 @@
-﻿using System;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.Dto;
-
-namespace TicketManagement.BusinessLogic.Services
+﻿namespace TicketManagement.BusinessLogic.Services
 {
+    using System;
+    using TicketManagement.BusinessLogic.Interfaces;
+    using TicketManagement.DataAccess.Interfaces;
+    using TicketManagement.Dto;
+
+    /// <summary>
+    /// Event seat service class.
+    /// </summary>
     internal class EventSeatService : IEventSeatService
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventSeatService"/> class.
+        /// </summary>
+        /// <param name="dbContext">Databese context.</param>
         internal EventSeatService(IDbContext dbContext) => DbContext = dbContext;
 
+        /// <summary>
+        /// Gets property database context.
+        /// </summary>
         public IDbContext DbContext { get; private set; }
 
+        /// <inheritdoc/>
         public void UpdateState(EventSeatDto dto)
         {
             if (dto == null)

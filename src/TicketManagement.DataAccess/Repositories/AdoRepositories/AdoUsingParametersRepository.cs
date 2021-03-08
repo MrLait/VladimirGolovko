@@ -1,16 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Exstension;
-
-namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using TicketManagement.DataAccess.Domain.Interfaces;
+    using TicketManagement.DataAccess.Exstension;
+
+    /// <summary>
+    /// Ado using parameters repository class.
+    /// </summary>
+    /// <typeparam name="T">Table model.</typeparam>
     internal class AdoUsingParametersRepository<T> : AdoRepository<T>
         where T : IEntity, new()
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdoUsingParametersRepository{T}"/> class.
+        /// </summary>
+        /// <param name="сonnectionString">Connection string to database.</param>
         internal AdoUsingParametersRepository(string сonnectionString)
             : base(сonnectionString)
         {

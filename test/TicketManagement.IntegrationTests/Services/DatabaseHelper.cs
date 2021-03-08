@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using Microsoft.Data.SqlClient;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using TicketManagement.IntegrationTests.Services.Interfaces;
-
-namespace TicketManagement.IntegrationTests.Services
+﻿namespace TicketManagement.IntegrationTests.Services
 {
+    using System;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.SqlServer.Management.Common;
+    using Microsoft.SqlServer.Management.Smo;
+    using TicketManagement.IntegrationTests.Services.Interfaces;
+
     internal class DatabaseHelper : IDatabaseHelper
     {
         public void CreateSnapshot(string snapshotName, string databaseName, string snapshotsDirectoryPath, string sqlConnectionString)
@@ -61,7 +60,7 @@ namespace TicketManagement.IntegrationTests.Services
             ExecuteScript(sqlConnectionString, script);
         }
 
-        private void ExecuteScript(string sqlConnectionString, string script)
+        private static void ExecuteScript(string sqlConnectionString, string script)
         {
             using SqlConnection sqlConnection = new SqlConnection(sqlConnectionString);
             ServerConnection serverConnection = null;

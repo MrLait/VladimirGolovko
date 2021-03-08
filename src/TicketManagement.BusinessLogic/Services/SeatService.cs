@@ -1,19 +1,30 @@
-﻿using System;
-using System.Linq;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.Dto;
-
-namespace TicketManagement.BusinessLogic.Services
+﻿namespace TicketManagement.BusinessLogic.Services
 {
+    using System;
+    using System.Linq;
+    using TicketManagement.BusinessLogic.Infrastructure;
+    using TicketManagement.BusinessLogic.Interfaces;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.DataAccess.Interfaces;
+    using TicketManagement.Dto;
+
+    /// <summary>
+    /// Seat service class.
+    /// </summary>
     internal class SeatService : ISeatService
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SeatService"/> class.
+        /// </summary>
+        /// <param name="dbContext">Databese context.</param>
         internal SeatService(IDbContext dbContext) => DbContext = dbContext;
 
+        /// <summary>
+        /// Gets property database context.
+        /// </summary>
         public IDbContext DbContext { get; private set; }
 
+        /// <inheritdoc/>
         public void Create(SeatDto dto)
         {
             if (dto == null)
@@ -32,6 +43,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Seats.Create(seat);
         }
 
+        /// <inheritdoc/>
         public void Delete(SeatDto dto)
         {
             if (dto == null)
@@ -47,6 +59,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Seats.Delete(new Seat { Id = dto.Id });
         }
 
+        /// <inheritdoc/>
         public void Update(SeatDto dto)
         {
             if (dto == null)

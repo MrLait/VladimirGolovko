@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using NUnit.Framework;
-using TicketManagement.IntegrationTests.Services;
-
-namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
+    using System;
+    using System.IO;
+    using NUnit.Framework;
+    using TicketManagement.IntegrationTests.Services;
+
     internal class AdoRepositoryTests
     {
         private const string _databaseName = "TicketManagement.Database";

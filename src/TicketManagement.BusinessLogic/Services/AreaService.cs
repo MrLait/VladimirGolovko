@@ -1,19 +1,30 @@
-﻿using System;
-using System.Linq;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.Dto;
-
-namespace TicketManagement.BusinessLogic.Services
+﻿namespace TicketManagement.BusinessLogic.Services
 {
+    using System;
+    using System.Linq;
+    using TicketManagement.BusinessLogic.Infrastructure;
+    using TicketManagement.BusinessLogic.Interfaces;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.DataAccess.Interfaces;
+    using TicketManagement.Dto;
+
+    /// <summary>
+    /// Area service class.
+    /// </summary>
     internal class AreaService : IAreaService
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AreaService"/> class.
+        /// </summary>
+        /// <param name="dbContext">Databese context.</param>
         internal AreaService(IDbContext dbContext) => DbContext = dbContext;
 
+        /// <summary>
+        /// Gets property database context.
+        /// </summary>
         public IDbContext DbContext { get; private set; }
 
+        /// <inheritdoc/>
         public void Create(AreaDto dto)
         {
             if (dto == null)
@@ -32,6 +43,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Areas.Create(area);
         }
 
+        /// <inheritdoc/>
         public void Delete(AreaDto dto)
         {
             if (dto == null)
@@ -47,6 +59,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Areas.Delete(new Area { Id = dto.Id });
         }
 
+        /// <inheritdoc/>
         public void Update(AreaDto dto)
         {
             if (dto == null)

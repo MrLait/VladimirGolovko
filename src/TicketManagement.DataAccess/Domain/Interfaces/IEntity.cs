@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TicketManagement.DataAccess.Domain.Interfaces
+﻿namespace TicketManagement.DataAccess.Domain.Interfaces
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// Entity interface with Id contract.
     /// </summary>
     public interface IEntity
     {
         /// <summary>
-        /// Id column in table.
+        /// Gets or sets id column in table.
         /// </summary>
         [Key]
         int Id { get; set; }

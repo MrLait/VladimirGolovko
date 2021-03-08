@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
-using NUnit.Framework;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
-
-namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
+    using System;
+    using System.Collections.Generic;
+    using FluentAssertions;
+    using NUnit.Framework;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+
     [TestFixture]
     internal class VenueTests : AdoRepositoryTests
     {

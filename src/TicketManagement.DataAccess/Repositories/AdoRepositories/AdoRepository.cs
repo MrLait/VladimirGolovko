@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Reflection;
-using TicketManagement.DataAccess.Interfaces;
-
-namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
+    using System.Collections.Generic;
+    using System.Data.SqlClient;
+    using System.Reflection;
+    using TicketManagement.DataAccess.Interfaces;
+
+    /// <summary>
+    /// Ado repositiry class.
+    /// </summary>
+    /// <typeparam name="T">Table model.</typeparam>
     internal abstract class AdoRepository<T> : IRepository<T>
     {
         /// <summary>
@@ -14,7 +18,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         protected AdoRepository(string сonnectionString) => DbConString = сonnectionString;
 
         /// <summary>
-        /// Connection string to database.
+        /// Gets connection string to database.
         /// </summary>
         protected string DbConString { get; private set; }
 

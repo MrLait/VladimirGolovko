@@ -1,18 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Exstension;
-using TicketManagement.DataAccess.Interfaces;
-
-namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Reflection;
+    using TicketManagement.DataAccess.Domain.Interfaces;
+    using TicketManagement.DataAccess.Exstension;
+
+    /// <summary>
+    /// Ado using stored procedure repository class.
+    /// </summary>
+    /// <typeparam name="T">Table model.</typeparam>
     internal class AdoUsingStoredProcedureRepository<T> : AdoRepository<T>
         where T : IEntity, new()
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdoUsingStoredProcedureRepository{T}"/> class.
+        /// </summary>
+        /// <param name="сonnectionString">Connection string to database.</param>
         internal AdoUsingStoredProcedureRepository(string сonnectionString)
             : base(сonnectionString)
         {

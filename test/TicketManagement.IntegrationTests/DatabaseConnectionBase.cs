@@ -2,6 +2,10 @@
 {
     public class DatabaseConnectionBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseConnectionBase"/> class.
+        /// </summary>
+        /// <param name="databaseName">Database name.</param>
         public DatabaseConnectionBase(string databaseName)
         {
             var dataSource = "Data Source=DESKTOP-CAMEADT;";
@@ -10,7 +14,7 @@
         }
 
         /// <summary>
-        /// Connection string to database.
+        /// Gets connection string to database.
         /// </summary>
         public string DbConnString { get; }
     }

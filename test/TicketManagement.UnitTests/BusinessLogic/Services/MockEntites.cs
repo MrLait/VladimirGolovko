@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Moq;
-using NUnit.Framework;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Interfaces;
-
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+﻿namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Moq;
+    using NUnit.Framework;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.DataAccess.Interfaces;
+
     public class MockEntites
     {
         public List<Venue> Venues { get; set; }

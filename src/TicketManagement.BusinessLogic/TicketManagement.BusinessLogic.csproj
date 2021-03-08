@@ -4,15 +4,24 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>e:\VS\GitHub\.NET-GSTU-Winter-2021\VladimirGolovko\src\TicketManagement.BusinessLogic\TicketManagement.BusinessLogic.xml</DocumentationFile>
+    <NoWarn>1701;1702</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TicketManagement.BusinessLogic.xml" />
+  </ItemGroup>
+
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-	<_Parameter1>TicketManagement.UnitTests</_Parameter1>
+      <_Parameter1>TicketManagement.UnitTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-	<_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
+      <_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

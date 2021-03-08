@@ -1,20 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.Dto;
-
-namespace TicketManagement.BusinessLogic.Services
+﻿namespace TicketManagement.BusinessLogic.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TicketManagement.BusinessLogic.Infrastructure;
+    using TicketManagement.BusinessLogic.Interfaces;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.DataAccess.Interfaces;
+    using TicketManagement.Dto;
+
+    /// <summary>
+    /// Event service class.
+    /// </summary>
     internal class EventService : IEventService
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventService"/> class.
+        /// </summary>
+        /// <param name="dbContext">Databese context.</param>
         public EventService(IDbContext dbContext) => DbContext = dbContext;
 
+        /// <summary>
+        /// Gets property database context.
+        /// </summary>
         public IDbContext DbContext { get; private set; }
 
+        /// <inheritdoc/>
         public void Create(EventDto dto)
         {
             if (dto == null)
@@ -53,6 +64,7 @@ namespace TicketManagement.BusinessLogic.Services
             CreateEventAreasAndThenEventSeats(dto, allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
         }
 
+        /// <inheritdoc/>
         public void Delete(EventDto dto)
         {
             if (dto == null)
@@ -76,6 +88,7 @@ namespace TicketManagement.BusinessLogic.Services
             DbContext.Events.Delete(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
         }
 
+        /// <inheritdoc/>
         public void Update(EventDto dto)
         {
             if (dto == null)

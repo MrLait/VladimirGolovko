@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.Dto;
-
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+﻿namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
+    using System;
+    using System.Linq;
+    using FluentAssertions;
+    using Moq;
+    using NUnit.Framework;
+    using TicketManagement.BusinessLogic.Infrastructure;
+    using TicketManagement.BusinessLogic.Services;
+    using TicketManagement.DataAccess.Domain.Models;
+    using TicketManagement.Dto;
+
     [TestFixture]
     public class AreaServiceTests : MockEntites
     {
@@ -61,7 +61,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutLast = Areas.Last();
 
             // Act
-            areaService.Delete(new AreaDto { Id = layoutLast.Id, LayoutId = layoutLast.LayoutId, Description = layoutLast.Description, CoordY= layoutLast.CoordY, CoordX=layoutLast.CoordX });
+            areaService.Delete(new AreaDto { Id = layoutLast.Id, LayoutId = layoutLast.LayoutId, Description = layoutLast.Description, CoordY = layoutLast.CoordY, CoordX = layoutLast.CoordX });
 
             // Assert
             expected.Should().NotBeEquivalentTo(Areas.Last());

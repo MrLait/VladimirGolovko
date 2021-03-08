@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace TicketManagement.DataAccess.Interfaces
+﻿namespace TicketManagement.DataAccess.Interfaces
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// CRUD operations repository interface.
+    /// </summary>
+    /// <typeparam name="T">Table model.</typeparam>
     public interface IRepository<T>
     {
         /// <summary>
