@@ -89,7 +89,4 @@
   <ItemGroup>
     <PostDeploy Include="PostDeploy\Script.PostDeployment.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="TicketManagement.Database.refactorlog" />
-  </ItemGroup>
 </Project>

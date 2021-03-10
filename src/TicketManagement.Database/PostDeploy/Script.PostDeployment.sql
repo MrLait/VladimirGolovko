@@ -1,7 +1,7 @@
 ﻿--- Venue
 insert into dbo.Venue
 values 
-('Luzhniki Stadium', 'st. Luzhniki, 24, Moscow, Russia, 119048', '+7 495 780−08−08'),
+('Luzhniki Stadium', 'st. Luzhniki, 24, Moscow, Russia, 119048', '+7 495 780-08-08'),
 ('Gomel Regional Drama Theater', 'pl. Lenin 1, Gomel 246050', '+375232757763'),
 ('The circus', 'pl. Lenin 1, Brest 246050', '+375442757763')
 
