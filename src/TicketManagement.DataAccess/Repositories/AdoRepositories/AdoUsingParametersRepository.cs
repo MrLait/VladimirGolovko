@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Linq;
-    using TicketManagement.DataAccess.Domain.Interfaces;
-    using TicketManagement.DataAccess.Exstension;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using TicketManagement.DataAccess.Domain.Interfaces;
+using TicketManagement.DataAccess.Exstension;
 
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+{
     /// <summary>
     /// Ado using parameters repository class.
     /// </summary>
@@ -18,9 +18,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoUsingParametersRepository{T}"/> class.
         /// </summary>
-        /// <param name="сonnectionString">Connection string to database.</param>
-        internal AdoUsingParametersRepository(string сonnectionString)
-            : base(сonnectionString)
+        /// <param name="connectionString">Connection string to database.</param>
+        internal AdoUsingParametersRepository(string connectionString)
+            : base(connectionString)
         {
         }
 
@@ -44,9 +44,9 @@
 
             try
             {
-                for (int i = 0; i < parameters.Length; i++)
+                foreach (var item in parameters)
                 {
-                    sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
+                    sqlCommand.Parameters.AddWithValue("@" + item.ParameterName, item.Value);
                 }
 
                 sqlConnection.Open();
@@ -54,7 +54,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
 
@@ -63,7 +63,7 @@
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentException($"Can not delete null object: {entity}!");
+                throw new ArgumentException($"Can not delete null object: {default(T)}!");
             }
 
             var entityId = entity.Id;
@@ -86,15 +86,15 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
 
         /// <inheritdoc/>
         public override IEnumerable<T> GetAll()
         {
-            var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
-            string strCol = string.Join(", ", poroperyNames);
+            var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            string strCol = string.Join(", ", poropertyNames);
             string tableName = new T().GetType().Name;
             string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName}";
 
@@ -110,7 +110,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
             }
         }
 
@@ -122,8 +122,8 @@
                 throw new ArgumentException($"byId shouldn't be equal {byId}");
             }
 
-            var poroperyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
-            string strCol = string.Join(", ", poroperyNames);
+            var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            string strCol = string.Join(", ", poropertyNames);
             string tableName = new T().GetType().Name;
             string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName} WHERE Id = {byId}";
 
@@ -139,7 +139,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {sqlExpressionSelect}, {sqlEx}");
             }
         }
 
@@ -148,7 +148,7 @@
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentException($"{typeof(T).Name} object shouln't be null when saving to database");
+                throw new ArgumentException($"{typeof(T).Name} object shouldn't be null when saving to database");
             }
 
             var entityId = entity.Id;
@@ -169,9 +169,9 @@
             using SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection);
             try
             {
-                for (int i = 0; i < parameters.Length; i++)
+                foreach (var item in parameters)
                 {
-                    sqlCommand.Parameters.AddWithValue("@" + parameters[i].ParameterName, parameters[i].Value);
+                    sqlCommand.Parameters.AddWithValue("@" + item.ParameterName, item.Value);
                 }
 
                 sqlConnection.Open();
@@ -179,7 +179,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {sqlExpressionInsert}, {sqlEx}");
             }
         }
     }

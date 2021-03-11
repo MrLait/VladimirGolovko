@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentAssertions;
-    using NUnit.Framework;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+{
     [TestFixture]
     internal class LayoutTests : AdoRepositoryTests
     {
@@ -17,9 +17,9 @@
         public void InitLayouts()
         {
             var layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
-            var coutAllLayouts = layoutRepository.GetAll().Last().Id;
+            var countAllLayouts = layoutRepository.GetAll().Last().Id;
 
-            for (int i = 1; i <= coutAllLayouts; i++)
+            for (int i = 1; i <= countAllLayouts; i++)
             {
                 _layouts.Add(layoutRepository.GetByID(i));
             }
@@ -164,7 +164,7 @@
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
             // Assert
-            Assert.Throws<ArgumentException>((TestDelegate)(() => repository.Update(layout)));
+            Assert.Throws<ArgumentException>(() => repository.Update(layout));
         }
 
         [Test]

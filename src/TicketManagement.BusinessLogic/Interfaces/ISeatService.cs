@@ -1,7 +1,7 @@
-﻿namespace TicketManagement.BusinessLogic.Interfaces
-{
-    using TicketManagement.Dto;
+﻿using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Interfaces
+{
     /// <summary>
     /// Seat service interface.
     /// </summary>

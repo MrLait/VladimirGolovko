@@ -1,17 +1,12 @@
-﻿namespace TicketManagement.DataAccess.Interfaces
-{
-    using TicketManagement.DataAccess.Domain.Models;
+﻿using TicketManagement.DataAccess.Domain.Models;
 
+namespace TicketManagement.DataAccess.Interfaces
+{
     /// <summary>
-    /// Databese context interface.
+    /// Database context interface.
     /// </summary>
     internal interface IDbContext
     {
-        /// <summary>
-        /// Gets database connection string.
-        /// </summary>
-        string ConnectionString { get; }
-
         /// <summary>
         /// Gets area table repository.
         /// </summary>

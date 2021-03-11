@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using System.Linq;
-    using TicketManagement.BusinessLogic.Infrastructure;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Venue service class.
     /// </summary>
@@ -16,7 +16,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="VenueService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         internal VenueService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
@@ -29,7 +29,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {dto}!");
+                throw new ArgumentException($"Can not create null object: {(VenueDto) null}!");
             }
 
             var allVenues = DbContext.Venues.GetAll().ToList();
@@ -39,11 +39,9 @@
             {
                 throw new ValidationException($"The Venue with this description: {dto.Description} - already exists.");
             }
-            else
-            {
-                Venue venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
-                DbContext.Venues.Create(venue);
-            }
+
+            Venue venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
+            DbContext.Venues.Create(venue);
         }
 
         /// <inheritdoc/>
@@ -51,7 +49,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {dto}!");
+                throw new ArgumentException($"Can not delete null object: {(VenueDto) null}!");
             }
 
             if (dto.Id <= 0)
@@ -67,7 +65,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {dto}!");
+                throw new ArgumentException($"Can not update null object: {(VenueDto) null}!");
             }
 
             if (dto.Id <= 0)

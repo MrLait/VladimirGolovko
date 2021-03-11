@@ -1,8 +1,8 @@
-﻿namespace TicketManagement.Dto
-{
-    using System;
-    using TicketManagement.Dto.Interfaces;
+﻿using System;
+using TicketManagement.Dto.Interfaces;
 
+namespace TicketManagement.Dto
+{
     /// <summary>
     /// Event data transfer object class.
     /// </summary>

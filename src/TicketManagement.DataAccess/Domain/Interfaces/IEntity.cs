@@ -1,7 +1,7 @@
-﻿namespace TicketManagement.DataAccess.Domain.Interfaces
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace TicketManagement.DataAccess.Domain.Interfaces
+{
     /// <summary>
     /// Entity interface with Id contract.
     /// </summary>

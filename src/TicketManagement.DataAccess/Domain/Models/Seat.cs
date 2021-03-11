@@ -1,9 +1,9 @@
-﻿namespace TicketManagement.DataAccess.Domain.Models
-{
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using TicketManagement.DataAccess.Domain.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TicketManagement.DataAccess.Domain.Interfaces;
 
+namespace TicketManagement.DataAccess.Domain.Models
+{
     /// <summary>
     /// Seat table.
     /// </summary>

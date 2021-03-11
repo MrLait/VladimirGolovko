@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentAssertions;
-    using NUnit.Framework;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+{
     [TestFixture]
     internal class SeatTests : AdoRepositoryTests
     {
@@ -17,9 +17,9 @@
         public void InitSeats()
         {
             var seatRepository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
-            var coutAllSeats = seatRepository.GetAll().Last().Id;
+            var countAllSeats = seatRepository.GetAll().Last().Id;
 
-            for (int i = 1; i <= coutAllSeats; i++)
+            for (int i = 1; i <= countAllSeats; i++)
             {
                 _seats.Add(seatRepository.GetByID(i));
             }

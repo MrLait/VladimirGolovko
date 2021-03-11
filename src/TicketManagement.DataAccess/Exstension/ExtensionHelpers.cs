@@ -1,10 +1,10 @@
-﻿namespace TicketManagement.DataAccess.Exstension
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
 
+namespace TicketManagement.DataAccess.Exstension
+{
     /// <summary>
     /// Helpers to convert models from DataTable to IEnumerable object using reflection.
     /// </summary>
@@ -19,7 +19,7 @@
         public static IEnumerable<T> ToEnumerable<T>(this DataTable table)
             where T : new()
         {
-            List<T> list = new List<T>();
+            var list = new List<T>();
 
             foreach (var row in table.AsEnumerable())
             {
@@ -28,7 +28,7 @@
                 foreach (var prop in obj.GetType().GetProperties())
                 {
                     PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
-                    propertyInfo.SetValue(obj, Convert.ChangeType(row[prop.Name], propertyInfo.PropertyType), null);
+                    propertyInfo?.SetValue(obj, Convert.ChangeType(row[prop.Name], propertyInfo.PropertyType), null);
                 }
 
                 list.Add(obj);

@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using System.Linq;
-    using TicketManagement.BusinessLogic.Infrastructure;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Seat service class.
     /// </summary>
@@ -16,20 +16,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SeatService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         internal SeatService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
         /// </summary>
-        public IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
         public void Create(SeatDto dto)
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {dto}!");
+                throw new ArgumentException($"Can not create null object: {(SeatDto) null}!");
             }
 
             bool isSeatContain = ChackThatSeatAlreadyCointainsForThisArea(dto);
@@ -48,7 +48,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {dto}!");
+                throw new ArgumentException($"Can not delete null object: {(SeatDto) null}!");
             }
 
             if (dto.Id <= 0)
@@ -64,7 +64,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {dto}!");
+                throw new ArgumentException($"Can not update null object: {(SeatDto) null}!");
             }
 
             if (dto.Id <= 0)

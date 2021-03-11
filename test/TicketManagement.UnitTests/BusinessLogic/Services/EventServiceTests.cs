@@ -1,15 +1,18 @@
-﻿namespace TicketManagement.UnitTests.BusinessLogic.Services
-{
-    using System;
-    using System.Linq;
-    using FluentAssertions;
-    using Moq;
-    using NUnit.Framework;
-    using TicketManagement.BusinessLogic.Infrastructure;
-    using TicketManagement.BusinessLogic.Services;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.Dto;
 
+namespace TicketManagement.UnitTests.BusinessLogic.Services
+{
+    /// <summary>
+    /// Event service tests.
+    /// </summary>
     [TestFixture]
     public class EventServiceTests : MockEntites
     {
@@ -238,6 +241,16 @@
 
             // Act
             Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = -1 }));
+        }
+
+        [Test]
+        public void GivenUpdate_WhenIdIsNotExist_ShouldReturnArgumentException()
+        {
+            // Arrange
+            var eventService = new EventService(Mock.Object);
+
+            // Act
+            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]

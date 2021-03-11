@@ -1,14 +1,14 @@
-﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Linq;
-    using System.Reflection;
-    using TicketManagement.DataAccess.Domain.Interfaces;
-    using TicketManagement.DataAccess.Exstension;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
+using TicketManagement.DataAccess.Domain.Interfaces;
+using TicketManagement.DataAccess.Exstension;
 
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+{
     /// <summary>
     /// Ado using stored procedure repository class.
     /// </summary>
@@ -19,9 +19,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoUsingStoredProcedureRepository{T}"/> class.
         /// </summary>
-        /// <param name="сonnectionString">Connection string to database.</param>
-        internal AdoUsingStoredProcedureRepository(string сonnectionString)
-            : base(сonnectionString)
+        /// <param name="connectionString">Connection string to database.</param>
+        internal AdoUsingStoredProcedureRepository(string connectionString)
+            : base(connectionString)
         {
         }
 
@@ -30,7 +30,7 @@
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentException($"Can not delete null object: {entity}!");
+                throw new ArgumentException($"Can not delete null object: {default(T)}!");
             }
 
             var entityId = entity.Id;
@@ -44,7 +44,7 @@
             string storedProcedure = $"Delete{tableName}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
-            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", entityId) });
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new[] { new SqlParameter("Id", entityId) });
             try
             {
                 sqlConnection.Open();
@@ -52,7 +52,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -74,7 +74,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -90,7 +90,7 @@
             string storedProcedure = $"GetById{tableName}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
-            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new SqlParameter[] { new SqlParameter("Id", byId) });
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new[] { new SqlParameter("Id", byId) });
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
             try
@@ -101,7 +101,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -125,7 +125,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -134,7 +134,7 @@
         {
             if (Equals(entity, default(T)))
             {
-                throw new ArgumentException($"{typeof(T).Name} object shouln't be null when saving to database");
+                throw new ArgumentException($"{typeof(T).Name} object shouldn't be null when saving to database");
             }
 
             var entityId = entity.Id;
@@ -160,11 +160,7 @@
             }
             catch (SqlException sqlEx)
             {
-                throw new ArgumentException($"Some Error occured at database, if error in sql expression: {storedProcedure}, {sqlEx}");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                throw new ArgumentException($"Some Error occurred at database, if error in sql expression: {storedProcedure}, {sqlEx}");
             }
         }
 
@@ -200,7 +196,7 @@
         /// <summary>
         /// Private method for get property from objects and add their to list for sqlParameters.
         /// </summary>
-        /// <param name="obj">Object to get propertes.</param>
+        /// <param name="obj">Object to get properties.</param>
         /// <returns>returns list of sqlParameters.</returns>
         private List<SqlParameter> GetUpdateParameter(object obj)
         {

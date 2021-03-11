@@ -1,7 +1,7 @@
-﻿namespace TicketManagement.DataAccess.Interfaces
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace TicketManagement.DataAccess.Interfaces
+{
     /// <summary>
     /// CRUD operations repository interface.
     /// </summary>

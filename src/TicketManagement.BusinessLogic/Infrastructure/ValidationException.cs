@@ -1,10 +1,10 @@
-﻿namespace TicketManagement.BusinessLogic.Infrastructure
-{
-    using System;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
+namespace TicketManagement.BusinessLogic.Infrastructure
+{
     /// <summary>
-    /// Validataion class.
+    /// Validation class.
     /// </summary>
     [Serializable]
     public class ValidationException : Exception

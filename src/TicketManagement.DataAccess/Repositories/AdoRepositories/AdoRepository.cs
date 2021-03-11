@@ -1,12 +1,12 @@
-﻿namespace TicketManagement.DataAccess.Repositories.AdoRepositories
-{
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Reflection;
-    using TicketManagement.DataAccess.Interfaces;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Reflection;
+using TicketManagement.DataAccess.Interfaces;
 
+namespace TicketManagement.DataAccess.Repositories.AdoRepositories
+{
     /// <summary>
-    /// Ado repositiry class.
+    /// Ado repository class.
     /// </summary>
     /// <typeparam name="T">Table model.</typeparam>
     internal abstract class AdoRepository<T> : IRepository<T>
@@ -14,13 +14,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoRepository{T}"/> class.
         /// </summary>
-        /// <param name="сonnectionString">Connection string.</param>
-        protected AdoRepository(string сonnectionString) => DbConString = сonnectionString;
+        /// <param name="connectionString">Connection string.</param>
+        protected AdoRepository(string connectionString) => DbConString = connectionString;
 
         /// <summary>
         /// Gets connection string to database.
         /// </summary>
-        protected string DbConString { get; private set; }
+        protected string DbConString { get; }
 
         /// <inheritdoc/>
         public abstract void Delete(T entity);

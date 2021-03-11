@@ -1,10 +1,10 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Event seat service class.
     /// </summary>
@@ -13,20 +13,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EventSeatService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         internal EventSeatService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
         /// </summary>
-        public IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
         public void UpdateState(EventSeatDto dto)
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {dto}!");
+                throw new ArgumentException($"Can not update null object: {(EventSeatDto) null}!");
             }
 
             if (dto.Id <= 0)

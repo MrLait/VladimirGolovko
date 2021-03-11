@@ -1,14 +1,17 @@
-﻿namespace TicketManagement.UnitTests.BusinessLogic.Services
-{
-    using System;
-    using System.Linq;
-    using FluentAssertions;
-    using Moq;
-    using NUnit.Framework;
-    using TicketManagement.BusinessLogic.Services;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.Dto;
 
+namespace TicketManagement.UnitTests.BusinessLogic.Services
+{
+    /// <summary>
+    /// Event area service tests.
+    /// </summary>
     [TestFixture]
     public class EventAreaServiceTests : MockEntites
     {

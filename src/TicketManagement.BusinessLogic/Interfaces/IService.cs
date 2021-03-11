@@ -1,7 +1,7 @@
-﻿namespace TicketManagement.BusinessLogic.Interfaces
-{
-    using TicketManagement.DataAccess.Interfaces;
+﻿using TicketManagement.DataAccess.Interfaces;
 
+namespace TicketManagement.BusinessLogic.Interfaces
+{
     /// <summary>
     /// Service interface with databese context.
     /// </summary>

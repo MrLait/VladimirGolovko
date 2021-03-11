@@ -1,14 +1,14 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using TicketManagement.BusinessLogic.Infrastructure;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Event service class.
     /// </summary>
@@ -17,20 +17,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EventService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         public EventService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
         /// </summary>
-        public IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
         public void Create(EventDto dto)
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {dto}!");
+                throw new ArgumentException($"Can not create null object: {(EventDto) null}!");
             }
 
             bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
@@ -69,7 +69,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {dto}!");
+                throw new ArgumentException($"Can not delete null object: {(EventDto) null}!");
             }
 
             var eventId = dto.Id;
@@ -93,7 +93,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not Update null object: {dto}!");
+                throw new ArgumentException($"Can not Update null object: {(EventDto) null}!");
             }
 
             var eventId = dto.Id;
@@ -103,20 +103,18 @@
             }
 
             var curEvent = DbContext.Events.GetByID(eventId);
-
             if (curEvent == null)
             {
-                throw new ValidationException($"The event by id: {eventId} does not exist in the store.");
+                throw new ArgumentException($"The event by id: {eventId} does not exist in the store.");
             }
 
-            bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
                 throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be Update in the past.");
             }
 
             var isLayoutChanged = dto.LayoutId != curEvent.LayoutId;
-
             if (isLayoutChanged)
             {
                 var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
@@ -125,7 +123,7 @@
                     throw new ValidationException($"Can not Update the Event {dto.Description} because no one of the Area has no seats.");
                 }
 
-                bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
+                var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
                 if (isEventContainSameVenueInSameTime)
                 {
                     throw new ValidationException($"Can not Update the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
@@ -156,7 +154,7 @@
         private bool CheckThatEventNotCreatedInTheSameTimeFotVenue(EventDto dto)
         {
             List<Event> allEvents = DbContext.Events.GetAll().ToList();
-            bool isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString()) && x.LayoutId == dto.LayoutId)
+            var isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString()) && x.LayoutId == dto.LayoutId)
                 .Where(z => z.Equals(true))
                 .ElementAtOrDefault(0);
             return isEventContainSameVenueInSameTime;

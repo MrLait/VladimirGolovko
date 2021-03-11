@@ -1,7 +1,7 @@
-﻿namespace TicketManagement.Dto
-{
-    using TicketManagement.Dto.Interfaces;
+﻿using TicketManagement.Dto.Interfaces;
 
+namespace TicketManagement.Dto
+{
     /// <summary>
     /// Layout data transfer object class.
     /// </summary>

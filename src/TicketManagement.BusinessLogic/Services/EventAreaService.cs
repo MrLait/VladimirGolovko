@@ -1,10 +1,10 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Event area service class.
     /// </summary>
@@ -13,20 +13,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EventAreaService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         internal EventAreaService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
         /// </summary>
-        public IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
         public void UpdatePrice(EventAreaDto dto)
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {dto}!");
+                throw new ArgumentException($"Can not update null object: {(EventAreaDto) null}!");
             }
 
             if (dto.Id <= 0)

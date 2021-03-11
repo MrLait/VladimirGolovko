@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentAssertions;
-    using NUnit.Framework;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+{
     [TestFixture]
     internal class AreaTests : AdoRepositoryTests
     {
@@ -17,9 +17,9 @@
         public void InitAreas()
         {
             var areaRepository = new AdoUsingParametersRepository<Area>(MainConnectionString);
-            var coutAllAreas = areaRepository.GetAll().Last().Id;
+            var countAllAreas = areaRepository.GetAll().Last().Id;
 
-            for (int i = 1; i <= coutAllAreas; i++)
+            for (int i = 1; i <= countAllAreas; i++)
             {
                 _areas.Add(areaRepository.GetByID(i));
             }
@@ -74,7 +74,7 @@
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
             // Assert
-            Assert.Throws<ArgumentException>((TestDelegate)(() => repository.Create(null)));
+            Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]

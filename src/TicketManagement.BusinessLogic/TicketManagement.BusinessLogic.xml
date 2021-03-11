@@ -6,7 +6,7 @@
     <members>
         <member name="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException">
             <summary>
-            Validataion class.
+            Validation class.
             </summary>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor">
@@ -197,7 +197,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.AreaService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.AreaService.DbContext">
             <summary>
@@ -222,7 +222,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventAreaService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.EventAreaService.DbContext">
             <summary>
@@ -241,7 +241,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventSeatService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.EventSeatService.DbContext">
             <summary>
@@ -260,7 +260,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.EventService.DbContext">
             <summary>
@@ -285,7 +285,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.LayoutService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.LayoutService.DbContext">
             <summary>
@@ -310,7 +310,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.SeatService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.SeatService.DbContext">
             <summary>
@@ -335,7 +335,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.VenueService"/> class.
             </summary>
-            <param name="dbContext">Databese context.</param>
+            <param name="dbContext">Database context.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.VenueService.DbContext">
             <summary>

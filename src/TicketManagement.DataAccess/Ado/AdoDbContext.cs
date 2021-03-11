@@ -1,9 +1,9 @@
-﻿namespace TicketManagement.DataAccess.Ado
-{
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+﻿using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
+namespace TicketManagement.DataAccess.Ado
+{
     /// <summary>
     /// Database context with tables.
     /// </summary>
@@ -20,49 +20,49 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoDbContext"/> class.
         /// </summary>
-        /// <param name="connectionString">Connectiom string to database.</param>
+        /// <param name="connectionString">Connection string to database.</param>
         public AdoDbContext(string connectionString)
         {
             ConnectionString = connectionString;
         }
 
         /// <summary>
-        /// Gets property connectiom string to database.
+        /// Gets property connection string to database.
         /// </summary>
         public string ConnectionString { get; }
 
         /// <summary>
-        /// Gets area table propery.
+        /// Gets area table property.
         /// </summary>
         public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(ConnectionString);
 
         /// <summary>
-        /// Gets event table propery.
+        /// Gets event table property.
         /// </summary>
         public IRepository<Event> Events => _eventRepository ??= new AdoUsingStoredProcedureRepository<Event>(ConnectionString);
 
         /// <summary>
-        /// Gets eventArea table propery.
+        /// Gets eventArea table property.
         /// </summary>
         public IRepository<EventArea> EventAreas => _eventAreaRepository ??= new AdoUsingParametersRepository<EventArea>(ConnectionString);
 
         /// <summary>
-        /// Gets eventSeat table propery.
+        /// Gets eventSeat table property.
         /// </summary>
         public IRepository<EventSeat> EventSeats => _eventSeatRepository ??= new AdoUsingParametersRepository<EventSeat>(ConnectionString);
 
         /// <summary>
-        /// Gets layout table propery.
+        /// Gets layout table property.
         /// </summary>
         public IRepository<Layout> Layouts => _layoutRepository ??= new AdoUsingParametersRepository<Layout>(ConnectionString);
 
         /// <summary>
-        /// Gets seat table propery.
+        /// Gets seat table property.
         /// </summary>
         public IRepository<Seat> Seats => _seatRepository ??= new AdoUsingParametersRepository<Seat>(ConnectionString);
 
         /// <summary>
-        /// Gets venue table propery.
+        /// Gets venue table property.
         /// </summary>
         public IRepository<Venue> Venues => _venueRepository ??= new AdoUsingParametersRepository<Venue>(ConnectionString);
     }

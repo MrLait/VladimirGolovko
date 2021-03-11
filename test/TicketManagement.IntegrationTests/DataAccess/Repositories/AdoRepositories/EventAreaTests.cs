@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentAssertions;
-    using NUnit.Framework;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Repositories.AdoRepositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+{
     [TestFixture]
     internal class EventAreaTests : AdoRepositoryTests
     {
@@ -17,9 +17,9 @@
         public void InitEventAreas()
         {
             var eventAreaRepository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
-            var coutAllEventAreas = eventAreaRepository.GetAll().Last().Id;
+            var countAllEventAreas = eventAreaRepository.GetAll().Last().Id;
 
-            for (int i = 1; i <= coutAllEventAreas; i++)
+            for (int i = 1; i <= countAllEventAreas; i++)
             {
                 _eventAreas.Add(eventAreaRepository.GetByID(i));
             }

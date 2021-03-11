@@ -1,13 +1,13 @@
-﻿namespace TicketManagement.BusinessLogic.Services
-{
-    using System;
-    using System.Linq;
-    using TicketManagement.BusinessLogic.Infrastructure;
-    using TicketManagement.BusinessLogic.Interfaces;
-    using TicketManagement.DataAccess.Domain.Models;
-    using TicketManagement.DataAccess.Interfaces;
-    using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
 
+namespace TicketManagement.BusinessLogic.Services
+{
     /// <summary>
     /// Area service class.
     /// </summary>
@@ -16,7 +16,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AreaService"/> class.
         /// </summary>
-        /// <param name="dbContext">Databese context.</param>
+        /// <param name="dbContext">Database context.</param>
         internal AreaService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
@@ -29,7 +29,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {dto}!");
+                throw new ArgumentException($"Can not create null object: {(AreaDto) null}!");
             }
 
             bool isLayoutContain = ChackThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
@@ -48,7 +48,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {dto}!");
+                throw new ArgumentException($"Can not delete null object: {(AreaDto) null}!");
             }
 
             if (dto.Id <= 0)
@@ -64,7 +64,7 @@
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {dto}!");
+                throw new ArgumentException($"Can not update null object: {(AreaDto) null}!");
             }
 
             if (dto.Id <= 0)

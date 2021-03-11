@@ -5,6 +5,9 @@
     /// </summary>
     public class DatabaseConnectionBase
     {
+        /// <summary>
+        /// Server name.
+        /// </summary>
         private const string _serverName = "DESKTOP-CAMEADT";
 
         /// <summary>
