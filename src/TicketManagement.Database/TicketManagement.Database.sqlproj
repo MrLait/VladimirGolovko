@@ -60,7 +60,9 @@
     <Folder Include="Properties" />
     <Folder Include="ForeignKeys" />
     <Folder Include="Tables" />
-    <Folder Include="Post" />
+    <Folder Include="PostDeploy" />
+    <Folder Include="StoredProcedure" />
+    <Folder Include="StoredProcedure\Event" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ForeignKeys\FK_Venue_Layout.sql" />
@@ -70,6 +72,11 @@
     <Build Include="ForeignKeys\FK_Layout_Event.sql" />
     <Build Include="ForeignKeys\FK_Event_EventArea.sql" />
     <Build Include="ForeignKeys\FK_Area_EventSeat.sql" />
+    <Build Include="StoredProcedure\Event\CreateEvent.sql" />
+    <Build Include="StoredProcedure\Event\DeleteEvent.sql" />
+    <Build Include="StoredProcedure\Event\UpdateEvent.sql" />
+    <Build Include="StoredProcedure\Event\GetAllEvent.sql" />
+    <Build Include="StoredProcedure\Event\GetByIdEvent.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Event.sql" />
@@ -80,9 +87,6 @@
     <Build Include="Tables\Venue.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="TicketManagement.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="Post\Script.PostDeployment.sql" />
+    <PostDeploy Include="PostDeploy\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

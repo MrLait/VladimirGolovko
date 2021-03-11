@@ -1,0 +1,355 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TicketManagement.BusinessLogic</name>
+    </assembly>
+    <members>
+        <member name="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException">
+            <summary>
+            Validation class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
+            </summary>
+            <param name="message">Validation message.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
+            </summary>
+            <param name="message">Validation message.</param>
+            <param name="innerException">Inner exceprion.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
+            </summary>
+            <param name="message">Validation message.</param>
+            <param name="prop">Property string.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
+            </summary>
+            <param name="info">Stores all the data needed to serialize or deserialize an object.</param>
+            <param name="context">Describes the source and destination of a given serialized stream, and provides an additional caller-defined context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Infrastructure.ValidationException.Property">
+            <summary>
+            Gets or sets property string.
+            </summary>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IAreaService">
+            <summary>
+            Area service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Create(TicketManagement.Dto.AreaDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Area data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Delete(TicketManagement.Dto.AreaDto)">
+            <summary>
+            Delete object in database.
+            </summary>
+            <param name="dto">Area data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Update(TicketManagement.Dto.AreaDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Area data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventAreaService">
+            <summary>
+            Event area service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.UpdatePrice(TicketManagement.Dto.EventAreaDto)">
+            <summary>
+            Update price object in database.
+            </summary>
+            <param name="dto">Event area data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventSeatService">
+            <summary>
+            Event seat service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.UpdateState(TicketManagement.Dto.EventSeatDto)">
+            <summary>
+            Update state object in database.
+            </summary>
+            <param name="dto">Event seat data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventService">
+            <summary>
+            Event service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Create(TicketManagement.Dto.EventDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Event data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Delete(TicketManagement.Dto.EventDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Event data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Update(TicketManagement.Dto.EventDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Event data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.ILayoutService">
+            <summary>
+            Layout service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Create(TicketManagement.Dto.LayoutDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Layout data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Delete(TicketManagement.Dto.LayoutDto)">
+            <summary>
+            Delete object in database.
+            </summary>
+            <param name="dto">Layout data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Update(TicketManagement.Dto.LayoutDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Layout data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.ISeatService">
+            <summary>
+            Seat service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Create(TicketManagement.Dto.SeatDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Seat data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Delete(TicketManagement.Dto.SeatDto)">
+            <summary>
+            Delete object in database.
+            </summary>
+            <param name="dto">Seat data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Update(TicketManagement.Dto.SeatDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Seat data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IService">
+            <summary>
+            Service interface with databese context.
+            </summary>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Interfaces.IVenueService">
+            <summary>
+            Venue service interface.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Create(TicketManagement.Dto.VenueDto)">
+            <summary>
+            Create object in database.
+            </summary>
+            <param name="dto">Venue data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Delete(TicketManagement.Dto.VenueDto)">
+            <summary>
+            Delete object in database.
+            </summary>
+            <param name="dto">Venue data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Update(TicketManagement.Dto.VenueDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Venue data object transfer.</param>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.AreaService">
+            <summary>
+            Area service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.AreaService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.AreaService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Create(TicketManagement.Dto.AreaDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Delete(TicketManagement.Dto.AreaDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Update(TicketManagement.Dto.AreaDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.EventAreaService">
+            <summary>
+            Event area service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventAreaService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.EventAreaService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.UpdatePrice(TicketManagement.Dto.EventAreaDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.EventSeatService">
+            <summary>
+            Event seat service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventSeatService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.EventSeatService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.UpdateState(TicketManagement.Dto.EventSeatDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.EventService">
+            <summary>
+            Event service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.EventService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Create(TicketManagement.Dto.EventDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Delete(TicketManagement.Dto.EventDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Update(TicketManagement.Dto.EventDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.LayoutService">
+            <summary>
+            Layout service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.LayoutService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.LayoutService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Create(TicketManagement.Dto.LayoutDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Delete(TicketManagement.Dto.LayoutDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Update(TicketManagement.Dto.LayoutDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.SeatService">
+            <summary>
+            Seat service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.SeatService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.SeatService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Create(TicketManagement.Dto.SeatDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Delete(TicketManagement.Dto.SeatDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Update(TicketManagement.Dto.SeatDto)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TicketManagement.BusinessLogic.Services.VenueService">
+            <summary>
+            Venue service class.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.VenueService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
+        <member name="P:TicketManagement.BusinessLogic.Services.VenueService.DbContext">
+            <summary>
+            Gets property database context.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Create(TicketManagement.Dto.VenueDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Delete(TicketManagement.Dto.VenueDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Update(TicketManagement.Dto.VenueDto)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
