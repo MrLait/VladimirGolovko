@@ -1,4 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[GetAllEvent]
 AS
-    SELECT * FROM [dbo].[Event]
+    SELECT Id, Name, Description, LayoutId, DateTime FROM [dbo].[Event]
 GO
