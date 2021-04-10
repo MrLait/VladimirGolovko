@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenAreasExist_ShouldReturnAreaList()
+        public void GetAll_WhenAreasExist_ShouldReturnAreaList()
         {
             // Arrange
             var expected = _areas;
@@ -39,7 +39,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenAreasIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenAreasIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<Area>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
@@ -49,7 +49,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenAddArea_ShouldReturnAreaWithNewArea()
+        public void Create_WhenAddArea_ShouldReturnAreaWithNewArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -68,7 +68,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenAreaEmpty_ShouldReturnArgumentException()
+        public void Create_WhenAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -78,7 +78,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenExistArea_ShouldReturnAreaListWithoutDeletedArea()
+        public void Delete_WhenExistArea_ShouldReturnAreaListWithoutDeletedArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -96,7 +96,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroArea_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = 0 };
@@ -107,7 +107,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenNullArea_ShouldReturnArgumentException()
+        public void Delete_WhenNullArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -117,18 +117,18 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringArea_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringArea_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = 3 };
             var repository = new AdoUsingParametersRepository<Area>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(area));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistArea_ShouldReturnListWithUpdateArea()
+        public void Update_WhenExistArea_ShouldReturnListWithUpdateArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullArea_ShouldReturnArgumentException()
+        public void Update_WhenNullArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroArea_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(area));
         }
 
         [Test]
-        public void GivenGetById_WhenExistArea_ShouldReturnArea()
+        public void GetById_WhenExistArea_ShouldReturnArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
@@ -185,7 +185,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistArea_ShouldReturnNull()
+        public void GetById_WhenNonExistArea_ShouldReturnNull()
         {
             // Arrange
             Area expected = null;
@@ -201,46 +201,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroArea_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(area.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(area.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(area));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Area area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(area));
         }
     }

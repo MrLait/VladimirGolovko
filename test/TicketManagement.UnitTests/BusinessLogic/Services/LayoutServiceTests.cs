@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class LayoutServiceTests : MockEntites
     {
         [Test]
-        public void GivenCreate_WhenLayoutExist_ShouldReturnCreatedLayout()
+        public void Create_WhenLayoutExist_ShouldReturnCreatedLayout()
         {
             // Arrange
             var expected = new Layout { VenueId = 2, Description = "Created Description" };
@@ -32,17 +32,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenCreate_WhenLayoutEmpty_ShouldReturnArgumentException()
+        public void Create_WhenLayoutEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Create(null));
         }
 
         [Test]
-        public void GivenCreate_WhenLayoutAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenLayoutAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstLayout = Layouts.First();
@@ -50,12 +50,12 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Create(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Create(layoutDto));
         }
 
         [Test]
-        public void GivenDelete_WhenLayoutExist_ShouldReturnListWithDeletedLayout()
+        public void Delete_WhenLayoutExist_ShouldReturnListWithDeletedLayout()
         {
             // Arrange
             var expected = Layouts.Last();
@@ -71,37 +71,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenDelete_WhenLayoutEmpty_ShouldReturnArgumentException()
+        public void Delete_WhenLayoutEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenLayoutExist_ShouldReturnListWithUpdatedLayout()
+        public void Update_WhenLayoutExist_ShouldReturnListWithUpdatedLayout()
         {
             // Arrange
             var layoutLast = Layouts.Last();
@@ -120,37 +120,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenLayoutEmpty_ShouldReturnArgumentException()
+        public void Update_WhenLayoutEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenLayoutWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenLayoutWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstLayout = Layouts.First();
@@ -158,7 +158,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(layoutDto));
         }
     }

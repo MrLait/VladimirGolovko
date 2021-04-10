@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenLayoutsExist_ShouldReturnLayoutList()
+        public void GetAll_WhenLayoutsExist_ShouldReturnLayoutList()
         {
             // Arrange
             var expected = _layouts;
@@ -39,17 +39,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenLayoutsIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenLayoutsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<Layout>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddLayout_ShouldReturnLayoutWithNewLayout()
+        public void Create_WhenAddLayout_ShouldReturnLayoutWithNewLayout()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
@@ -68,17 +68,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenLayoutEmpty_ShouldReturnArgumentException()
+        public void Create_WhenLayoutEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistLayout_ShouldReturnLayoutListWithoutDeletedLayout()
+        public void Delete_WhenExistLayout_ShouldReturnLayoutListWithoutDeletedLayout()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
@@ -96,39 +96,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroLayout_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(layout));
         }
 
         [Test]
-        public void GivenDelete_WhenNullLayout_ShouldReturnArgumentException()
+        public void Delete_WhenNullLayout_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringLayout_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringLayout_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = 3 };
             var repository = new AdoUsingParametersRepository<Layout>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(layout));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistLayout_ShouldReturnListWithUpdateLayout()
+        public void Update_WhenExistLayout_ShouldReturnListWithUpdateLayout()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullLayout_ShouldReturnArgumentException()
+        public void Update_WhenNullLayout_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroLayout_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(layout));
         }
 
         [Test]
-        public void GivenGetById_WhenExistLayout_ShouldReturnLayout()
+        public void GetById_WhenExistLayout_ShouldReturnLayout()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
@@ -185,7 +185,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistLayout_ShouldReturnNull()
+        public void GetById_WhenNonExistLayout_ShouldReturnNull()
         {
             // Arrange
             Layout expected = null;
@@ -201,46 +201,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroLayout_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(layout.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(layout.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(layout));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Layout layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(layout));
         }
     }

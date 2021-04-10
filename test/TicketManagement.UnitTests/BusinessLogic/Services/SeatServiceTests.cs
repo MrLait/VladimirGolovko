@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class SeatServiceTests : MockEntites
     {
         [Test]
-        public void GivenCreate_WhenSeatExist_ShouldReturnCreatedSeat()
+        public void Create_WhenSeatExist_ShouldReturnCreatedSeat()
         {
             // Arrange
             var expected = new Seat { AreaId = 12, Number = 3, Row = 5 };
@@ -32,17 +32,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenCreate_WhenSeatEmpty_ShouldReturnArgumentException()
+        public void Create_WhenSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Create(null));
         }
 
         [Test]
-        public void GivenCreate_WhenSeatAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenSeatAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstSeat = Seats.First();
@@ -50,12 +50,12 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Create(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => seatService.Create(seatDto));
         }
 
         [Test]
-        public void GivenDelete_WhenSeatExist_ShouldReturnListWithDeletedSeat()
+        public void Delete_WhenSeatExist_ShouldReturnListWithDeletedSeat()
         {
             // Arrange
             var expected = Seats.Last();
@@ -71,37 +71,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenDelete_WhenSeatEmpty_ShouldReturnArgumentException()
+        public void Delete_WhenSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenSeatExist_ShouldReturnListWithUpdatedSeat()
+        public void Update_WhenSeatExist_ShouldReturnListWithUpdatedSeat()
         {
             // Arrange
             var seatLast = Seats.Last();
@@ -120,37 +120,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenSeatEmpty_ShouldReturnArgumentException()
+        public void Update_WhenSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenSeatAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenSeatAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstSeat = Seats.First();
@@ -158,7 +158,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Update(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => seatService.Update(seatDto));
         }
     }

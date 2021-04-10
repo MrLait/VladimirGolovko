@@ -16,7 +16,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventSeatServiceTests : MockEntites
     {
         [Test]
-        public void GivenUpdateState_WhenEventSeatExist_ShouldReturnListWithUpdatedState()
+        public void UpdateState_WhenEventSeatExist_ShouldReturnListWithUpdatedState()
         {
             // Arrange
             var eventSeatLast = EventSeats.Last();
@@ -51,42 +51,42 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdateState_WhenEventSeatEmpty_ShouldReturnArgumentException()
+        public void UpdateState_WhenEventSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(null));
         }
 
         [Test]
-        public void GivenUpdateState_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void UpdateState_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenUpdateState_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void UpdateState_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdateState_WhenStateLeesThanZero_ShouldReturnArgumentException()
+        public void UpdateState_WhenStateLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
         }
     }

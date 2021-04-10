@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class AreaServiceTests : MockEntites
     {
         [Test]
-        public void GivenCreate_WhenAreaExist_ShouldReturnCreatedArea()
+        public void Create_WhenAreaExist_ShouldReturnCreatedArea()
         {
             // Arrange
             var expected = new Area { LayoutId = 2, Description = "Created", CoordX = 1, CoordY = 2 };
@@ -32,17 +32,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenCreate_WhenAreaEmpty_ShouldReturnArgumentException()
+        public void Create_WhenAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Create(null));
         }
 
         [Test]
-        public void GivenCreate_WhenAreaAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenAreaAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstArea = Areas.First();
@@ -50,12 +50,12 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
             Mock.Setup(x => x.Areas.Create(It.IsAny<Area>())).Callback<Area>(v => Areas.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => areaService.Create(areaDto));
         }
 
         [Test]
-        public void GivenDelete_WhenAreaExist_ShouldReturnListWithDeletedArea()
+        public void Delete_WhenAreaExist_ShouldReturnListWithDeletedArea()
         {
             // Arrange
             var expected = Areas.Last();
@@ -71,37 +71,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenDelete_WhenAreaEmpty_ShouldReturnArgumentException()
+        public void Delete_WhenAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenAreaExist_ShouldReturnListWithUpdatedArea()
+        public void Update_WhenAreaExist_ShouldReturnListWithUpdatedArea()
         {
             // Arrange
             var layoutLast = Areas.Last();
@@ -120,37 +120,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void GivenUpdate_WhenAreaEmpty_ShouldReturnArgumentException()
+        public void Update_WhenAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenAreaWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenAreaWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
             var firstArea = Areas.First();
@@ -158,7 +158,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
             Mock.Setup(x => x.Areas.Update(It.IsAny<Area>())).Callback<Area>(v => Areas.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => areaService.Update(areaDto));
         }
     }

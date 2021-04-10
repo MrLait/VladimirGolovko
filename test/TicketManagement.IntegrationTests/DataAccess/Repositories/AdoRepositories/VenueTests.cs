@@ -11,7 +11,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
     internal class VenueTests : AdoRepositoryTests
     {
         [Test]
-        public void GivenGetAll_WhenVenuesExist_ShouldReturnVenueList()
+        public void GetAll_WhenVenuesExist_ShouldReturnVenueList()
         {
             // Arrange
             var expected = new List<Venue>
@@ -29,17 +29,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenVenuesIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenVenuesIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<Venue>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddVenue_ShouldReturnVenueWithNewVenue()
+        public void Create_WhenAddVenue_ShouldReturnVenueWithNewVenue()
         {
             // Arrange
             Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
@@ -61,17 +61,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenVenueEmpty_ShouldReturnArgumentException()
+        public void Create_WhenVenueEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistVenue_ShouldReturnVenueListWithoutDeletedVenue()
+        public void Delete_WhenExistVenue_ShouldReturnVenueListWithoutDeletedVenue()
         {
             // Arrange
             Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
@@ -91,39 +91,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZerotVenue_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZerotVenue_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(venue));
         }
 
         [Test]
-        public void GivenDelete_WhenNullVenue_ShouldReturnArgumentException()
+        public void Delete_WhenNullVenue_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringVenue_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringVenue_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(venue));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistVenue_ShouldReturnListWithUpdateVenue()
+        public void Update_WhenExistVenue_ShouldReturnListWithUpdateVenue()
         {
             // Arrange
             Venue venue = new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
@@ -144,28 +144,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullVenue_ShouldReturnArgumentException()
+        public void Update_WhenNullVenue_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroVenue_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroVenue_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(venue));
         }
 
         [Test]
-        public void GivenGetById_WhenExistVenue_ShouldReturnVenue()
+        public void GetById_WhenExistVenue_ShouldReturnVenue()
         {
             // Arrange
             Venue expectedVenue = new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" };
@@ -180,7 +180,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistVenue_ShouldReturnNull()
+        public void GetById_WhenNonExistVenue_ShouldReturnNull()
         {
             // Arrange
             Venue venue = new Venue { Id = 5, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
@@ -196,46 +196,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroVenue_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroVenue_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(venue.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(venue.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(venue));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(venue));
         }
     }

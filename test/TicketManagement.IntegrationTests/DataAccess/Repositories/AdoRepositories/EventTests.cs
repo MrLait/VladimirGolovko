@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventsExist_ShouldReturnEventList()
+        public void GetAll_WhenEventsExist_ShouldReturnEventList()
         {
             // Arrange
             var expected = _eventModels;
@@ -39,17 +39,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventsIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenEventsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddEvent_ShouldReturnEventWithNewEvent()
+        public void Create_WhenAddEvent_ShouldReturnEventWithNewEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
@@ -68,17 +68,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenEventEmpty_ShouldReturnArgumentException()
+        public void Create_WhenEventEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistEvent_ShouldReturnEventListWithoutDeletedEvent()
+        public void Delete_WhenExistEvent_ShouldReturnEventListWithoutDeletedEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
@@ -96,39 +96,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroEvent_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
 
         [Test]
-        public void GivenDelete_WhenNullEvent_ShouldReturnArgumentException()
+        public void Delete_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringEvent_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 3 };
             var repository = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistEvent_ShouldReturnListWithUpdateEvent()
+        public void Update_WhenExistEvent_ShouldReturnListWithUpdateEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullEvent_ShouldReturnArgumentException()
+        public void Update_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroEvent_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
         }
 
         [Test]
-        public void GivenGetById_WhenExistEvent_ShouldReturnEvent()
+        public void GetById_WhenExistEvent_ShouldReturnEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
@@ -185,7 +185,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistEvent_ShouldReturnNull()
+        public void GetById_WhenNonExistEvent_ShouldReturnNull()
         {
             // Arrange
             Event expected = null;
@@ -201,46 +201,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroEvent_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
         }
     }

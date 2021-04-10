@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventSeatsExist_ShouldReturnEventSeatList()
+        public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeatList()
         {
             // Arrange
             var expected = _eventSeats;
@@ -39,17 +39,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventSeatsIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenEventSeatsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddEventSeat_ShouldReturnEventSeatWithNewEventSeat()
+        public void Create_WhenAddEventSeat_ShouldReturnEventSeatWithNewEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
@@ -68,17 +68,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenEventSeatEmpty_ShouldReturnArgumentException()
+        public void Create_WhenEventSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistEventSeat_ShouldReturnEventSeatListWithoutDeletedEventSeat()
+        public void Delete_WhenExistEventSeat_ShouldReturnEventSeatListWithoutDeletedEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
@@ -96,39 +96,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroEventSeat_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
 
         [Test]
-        public void GivenDelete_WhenNullEventSeat_ShouldReturnArgumentException()
+        public void Delete_WhenNullEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringEventSeat_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 3 };
             var repository = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistEventSeat_ShouldReturnListWithUpdateEventSeat()
+        public void Update_WhenExistEventSeat_ShouldReturnListWithUpdateEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullEventSeat_ShouldReturnArgumentException()
+        public void Update_WhenNullEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroEventSeat_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
         }
 
         [Test]
-        public void GivenGetById_WhenExistEventSeat_ShouldReturnEventSeat()
+        public void GetById_WhenExistEventSeat_ShouldReturnEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
@@ -192,7 +192,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistEventSeat_ShouldReturnNull()
+        public void GetById_WhenNonExistEventSeat_ShouldReturnNull()
         {
             // Arrange
             EventSeat expected = null;
@@ -208,46 +208,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroEventSeat_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
         }
     }
