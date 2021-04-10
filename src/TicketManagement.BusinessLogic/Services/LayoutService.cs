@@ -85,7 +85,7 @@ namespace TicketManagement.BusinessLogic.Services
         private bool ChackThatLayoutForThisVenueWithDescriptionAlreadyExist(LayoutDto dto)
         {
             var allLayoutByVenueId = DbContext.Layouts.GetAll().Where(x => x.VenueId == dto.VenueId).ToList();
-            var isLayoutContain = allLayoutByVenueId.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
+            var isLayoutContain = allLayoutByVenueId.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }
     }

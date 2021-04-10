@@ -85,7 +85,7 @@ namespace TicketManagement.BusinessLogic.Services
         private bool ChackThatAreaWithThisDescriptionInLayoutAlreadyExist(AreaDto dto)
         {
             var allAreas = DbContext.Areas.GetAll().ToList();
-            var isLayoutContain = allAreas.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
+            var isLayoutContain = allAreas.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }
     }

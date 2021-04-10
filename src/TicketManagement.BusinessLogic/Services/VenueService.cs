@@ -33,7 +33,7 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             var allVenues = DbContext.Venues.GetAll().ToList();
-            var isVenueContain = allVenues.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
+            var isVenueContain = allVenues.Any(x => x.Description.Contains(dto.Description));
 
             if (isVenueContain)
             {

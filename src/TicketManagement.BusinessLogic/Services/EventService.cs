@@ -49,7 +49,7 @@ namespace TicketManagement.BusinessLogic.Services
 
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
 
-            if (atLeastOneAreaContainsSeats)
+            if (!atLeastOneAreaContainsSeats)
             {
                 throw new ValidationException($"Can not create the Event {dto.Description} because no one of the Area has no seats.");
             }
@@ -118,7 +118,7 @@ namespace TicketManagement.BusinessLogic.Services
             if (isLayoutChanged)
             {
                 var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
-                if (atLeastOneAreaContainsSeats)
+                if (!atLeastOneAreaContainsSeats)
                 {
                     throw new ValidationException($"Can not Update the Event {dto.Description} because no one of the Area has no seats.");
                 }
@@ -154,9 +154,7 @@ namespace TicketManagement.BusinessLogic.Services
         private bool CheckThatEventNotCreatedInTheSameTimeFotVenue(EventDto dto)
         {
             List<Event> allEvents = DbContext.Events.GetAll().ToList();
-            var isEventContainSameVenueInSameTime = allEvents.Select(x => x.DateTime.ToString().Contains(dto.DateTime.ToString()) && x.LayoutId == dto.LayoutId)
-                .Where(z => z.Equals(true))
-                .ElementAtOrDefault(0);
+            var isEventContainSameVenueInSameTime = allEvents.Any(x => x.DateTime.ToString().Contains(dto.DateTime.ToString()) && x.LayoutId == dto.LayoutId);
             return isEventContainSameVenueInSameTime;
         }
 
@@ -170,13 +168,11 @@ namespace TicketManagement.BusinessLogic.Services
         {
             var allSeats = DbContext.Seats.GetAll();
             IEnumerable<Area> allAreasInLayout = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
-            List<bool> isAreasContainSeats = new List<bool>();
-            foreach (var item in allAreasInLayout)
-            {
-                isAreasContainSeats.Add(allSeats.Where(x => x.AreaId == item.Id).Select(x => x.AreaId.ToString().Contains(item.Id.ToString())).Where(z => z.Equals(true)).ElementAtOrDefault(0));
-            }
 
-            var atLeastOneAreaContainsSeats = isAreasContainSeats.All(x => x.Equals(false));
+            var atLeastOneAreaContainsSeats = allSeats.Join(allAreasInLayout,
+                            seatAreaId => seatAreaId.AreaId,
+                            areaId => areaId.Id,
+                            (seatAreaId, areaId) => (SeatAreaId: seatAreaId, AreaId: areaId)).Any(x => x.SeatAreaId.AreaId.ToString().Contains(x.AreaId.Id.ToString()));
 
             return atLeastOneAreaContainsSeats;
         }
