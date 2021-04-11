@@ -7,37 +7,53 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 {
     internal class AdoRepositoryTests
     {
-        private const string _databaseName = "TicketManagement.Database";
-        private const string _databaseSnapshotName = "TicketManagement_DatabaseSnapshot";
         private const string _scriptCreateDatabaseName = "TicketManagement.Database_Create.sql";
-        private readonly string _masterConnectionString = new DatabaseConnectionBase("master").DbConnString;
-        private readonly string _snapshotConnectionString = new DatabaseConnectionBase(_databaseSnapshotName).DbConnString;
         private readonly DatabaseHelper _databaseHelper = new DatabaseHelper();
 
-        public string MainConnectionString { get; } = new DatabaseConnectionBase(_databaseName).DbConnString;
+        public AdoRepositoryTests()
+        {
+            DatabaseConnectionFactory = new DatabaseConnectionFactory();
+            DefaultDatabaseName = DatabaseConnectionFactory.DefaultDatabaseName;
+            SnapshotDatabaseName = DatabaseConnectionFactory.SnapshotDatabaseName;
+            MainConnectionString = DatabaseConnectionFactory.CreateDefaultConnection();
+            MasterConnectionString = DatabaseConnectionFactory.CreateMasterConnection();
+            SnapshotConnectionString = DatabaseConnectionFactory.CreateSnapshotConnection();
+    }
+
+        public DatabaseConnectionFactory DatabaseConnectionFactory { get; set; }
+
+        public string DefaultDatabaseName { get; set; }
+
+        public string SnapshotDatabaseName { get; set; }
+
+        public string MainConnectionString { get; set; }
+
+        public string MasterConnectionString { get; set; }
+
+        public string SnapshotConnectionString { get; set; }
 
         [OneTimeSetUp]
         public void Init()
         {
             string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Scripts", _scriptCreateDatabaseName));
-            _databaseHelper.CreateDatabase(scriptPath, _masterConnectionString);
+            _databaseHelper.CreateDatabase(scriptPath, MasterConnectionString);
             string snapshotsDirectoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Snapshots"));
-            _databaseHelper.CreateSnapshot(_databaseSnapshotName, _databaseName, snapshotsDirectoryPath, MainConnectionString);
+            _databaseHelper.CreateSnapshot(SnapshotDatabaseName, DefaultDatabaseName, snapshotsDirectoryPath, MainConnectionString);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _databaseHelper.SetOfflineWithRollBack(_databaseName, _masterConnectionString);
-            _databaseHelper.SetOnlineWithRollBack(_databaseName, _masterConnectionString);
-            _databaseHelper.RestorDatabaseSnapshot(_databaseName, _databaseSnapshotName, _snapshotConnectionString);
+            _databaseHelper.SetOfflineWithRollBack(DefaultDatabaseName, MasterConnectionString);
+            _databaseHelper.SetOnlineWithRollBack(DefaultDatabaseName, MasterConnectionString);
+            _databaseHelper.RestorDatabaseSnapshot(DefaultDatabaseName, SnapshotDatabaseName, SnapshotConnectionString);
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            _databaseHelper.DropDatabase(_databaseSnapshotName, _masterConnectionString);
-            _databaseHelper.DropDatabase(_databaseName, _masterConnectionString);
+            _databaseHelper.DropDatabase(SnapshotDatabaseName, MasterConnectionString);
+            _databaseHelper.DropDatabase(DefaultDatabaseName, MasterConnectionString);
         }
     }
 }
