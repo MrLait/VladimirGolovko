@@ -26,19 +26,20 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             venueService.Create(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
+            var actual = Venues.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Venues.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenVenueEmpty_ShouldThrowArgumentException()
+        public void Create_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Create(null));
+            Assert.Throws<ValidationException>(() => venueService.Create(null));
         }
 
         [Test]
@@ -64,39 +65,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             venueService.Delete(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
+            var actual = Venues.Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Venues.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenVenueEmpty_ShouldThrowArgumentException()
+        public void Delete_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Delete(null));
+            Assert.Throws<ValidationException>(() => venueService.Delete(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Delete(new VenueDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Delete(new VenueDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = -1 }));
         }
 
         [Test]
@@ -113,39 +115,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Venues.Update(It.IsAny<Venue>())).Callback(updateLastAction);
 
             venueService.Update(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
+            var actual = Venues[venueLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Venues[venueLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenVenueEmpty_ShouldThrowArgumentException()
+        public void Update_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Update(null));
+            Assert.Throws<ValidationException>(() => venueService.Update(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Update(new VenueDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => venueService.Update(new VenueDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = -1 }));
         }
     }
 }

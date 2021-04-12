@@ -29,14 +29,14 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {(SeatDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isSeatContain = ChackThatSeatAlreadyCointainsForThisArea(dto);
+            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
 
             if (isSeatContain)
             {
-                throw new ValidationException($"The Seat for this Area with this parameters: Row = {dto.Row} and Number = {dto.Number} - already exists.");
+                throw new ValidationException(ExceptionMessages.SeatForTheAreaExis, dto.Row, dto.Number);
             }
 
             Seat seat = new Seat { AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row };
@@ -48,12 +48,17 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {(SeatDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not delete object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             DbContext.Seats.Delete(new Seat { Id = dto.Id });
@@ -64,25 +69,30 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {(SeatDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isSeatContain = ChackThatSeatAlreadyCointainsForThisArea(dto);
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
 
             if (isSeatContain)
             {
-                throw new ValidationException($"The Seat for this Area with this parameters: Row = {dto.Row} and Number = {dto.Number} - already exists.");
+                throw new ValidationException(ExceptionMessages.SeatForTheAreaExis, dto.Row, dto.Number);
             }
 
             DbContext.Seats.Update(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });
         }
 
-        private bool ChackThatSeatAlreadyCointainsForThisArea(SeatDto dto)
+        private bool CheckThatSeatAlreadyCointainsForThisArea(SeatDto dto)
         {
             var allSeatsByAreaId = DbContext.Seats.GetAll().Where(x => x.AreaId == dto.AreaId).ToList();
             var isSeatContain = allSeatsByAreaId.Any(x => x.Number == dto.Row && x.Row == dto.Row);

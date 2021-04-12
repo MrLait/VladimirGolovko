@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
@@ -47,49 +48,50 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Description = expected.Description,
                 Price = expected.Price,
             });
+            var actual = EventAreas[eventAreaLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(EventAreas[eventAreaLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void UpdatePrice_WhenEventAreaEmpty_ShouldThrowArgumentException()
+        public void UpdatePrice_WhenEventAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(null));
+            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(null));
         }
 
         [Test]
-        public void UpdatePrice_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void UpdatePrice_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 }));
         }
 
         [Test]
-        public void UpdatePrice_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void UpdatePrice_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 }));
         }
 
         [Test]
-        public void UpdatePrice_WhenPriceLeesThanZero_ShouldThrowArgumentException()
+        public void UpdatePrice_WhenPriceLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
+            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
         }
     }
 }

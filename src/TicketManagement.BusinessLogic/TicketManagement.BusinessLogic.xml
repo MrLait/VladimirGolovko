@@ -4,6 +4,73 @@
         <name>TicketManagement.BusinessLogic</name>
     </assembly>
     <members>
+        <member name="T:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages">
+            <summary>
+            Exception messages conainer.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.AreaForTheLayoutExist">
+            <summary>
+            {0} - Description.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.IdIsNegative">
+            <summary>
+            {0} - Id.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.IdIsZero">
+            <summary>
+            {0} - Id.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.PriceIsNegative">
+            <summary>
+            {0} - Price.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StateIsNegative">
+            <summary>
+            {0} - State.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.EventDateTimeValidation">
+            <summary>
+            {0} - DateTime.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.EventForTheSameVenueInTheSameDateTime">
+            <summary>
+            {0} - Description.
+            {1} - DateTime.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.ThereAreNoSeatsInTheEvent">
+            <summary>
+            {0} - Description.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.LayoutForTheVenueExist">
+            <summary>
+            {0} - Description.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.SeatForTheAreaExis">
+            <summary>
+            {0} - Row.
+            {1} - Number.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.VenueExist">
+            <summary>
+            {0} - Description.
+            </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages"/> class.
+            </summary>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException">
             <summary>
             Validation class.
@@ -27,24 +94,12 @@
             <param name="message">Validation message.</param>
             <param name="innerException">Inner exceprion.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
-            </summary>
-            <param name="message">Validation message.</param>
-            <param name="prop">Property string.</param>
-        </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ValidationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ValidationException"/> class.
             </summary>
             <param name="info">Stores all the data needed to serialize or deserialize an object.</param>
             <param name="context">Describes the source and destination of a given serialized stream, and provides an additional caller-defined context.</param>
-        </member>
-        <member name="P:TicketManagement.BusinessLogic.Infrastructure.ValidationException.Property">
-            <summary>
-            Gets or sets property string.
-            </summary>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.IAreaService">
             <summary>

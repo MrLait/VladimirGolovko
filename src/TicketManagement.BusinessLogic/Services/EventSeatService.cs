@@ -1,4 +1,4 @@
-﻿using System;
+﻿using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
@@ -26,17 +26,22 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {(EventSeatDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             if (dto.State < 0)
             {
-                throw new ArgumentException($"Can not update object with state less then zero: {dto.State}!");
+                throw new ValidationException(ExceptionMessages.StateIsNegative, dto.State);
             }
 
             var currentEventSeat = DbContext.EventSeats.GetByID(dto.Id);

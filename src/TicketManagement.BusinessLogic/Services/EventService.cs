@@ -30,28 +30,28 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {(EventDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
             bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
 
             if (!isDataTimeValid)
             {
-                throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be created in the past.");
+                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.DateTime);
             }
 
-            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
+            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
 
             if (isEventContainSameVenueInSameTime)
             {
-                throw new ValidationException($"Can not create the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
+                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.DateTime);
             }
 
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
 
             if (!atLeastOneAreaContainsSeats)
             {
-                throw new ValidationException($"Can not create the Event {dto.Description} because no one of the Area has no seats.");
+                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
             }
 
             GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas);
@@ -69,20 +69,24 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {(EventDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            var eventId = dto.Id;
-            if (eventId <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not delete object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var allEvents = DbContext.Events.GetByID(eventId);
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            var allEvents = DbContext.Events.GetByID(dto.Id);
 
             if (allEvents == null)
             {
-                throw new ValidationException($"The event by id: {eventId} does not exist in the store.");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
             DbContext.Events.Delete(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, DateTime = dto.DateTime });
@@ -93,25 +97,29 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not Update null object: {(EventDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            var eventId = dto.Id;
-            if (eventId <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not Update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var curEvent = DbContext.Events.GetByID(eventId);
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            var curEvent = DbContext.Events.GetByID(dto.Id);
             if (curEvent == null)
             {
-                throw new ArgumentException($"The event by id: {eventId} does not exist in the store.");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
             var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
-                throw new ValidationException($"The Event with date time: {dto.DateTime} - can't be Update in the past.");
+                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.DateTime);
             }
 
             var isLayoutChanged = dto.LayoutId != curEvent.LayoutId;
@@ -120,13 +128,13 @@ namespace TicketManagement.BusinessLogic.Services
                 var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
                 if (!atLeastOneAreaContainsSeats)
                 {
-                    throw new ValidationException($"Can not Update the Event {dto.Description} because no one of the Area has no seats.");
+                    throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
                 }
 
-                var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeFotVenue(dto);
+                var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
                 if (isEventContainSameVenueInSameTime)
                 {
-                    throw new ValidationException($"Can not Update the Event {dto.Description} for the Venue with the same date time: {dto.DateTime}");
+                    throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.DateTime);
                 }
 
                 GetAllAreasInLayoutAndAllSeatsForThisAreas(dto, out IEnumerable<Area> allAreasInLayout, out List<Seat> allSeatsForAllAreas);
@@ -151,7 +159,7 @@ namespace TicketManagement.BusinessLogic.Services
             }
         }
 
-        private bool CheckThatEventNotCreatedInTheSameTimeFotVenue(EventDto dto)
+        private bool CheckThatEventNotCreatedInTheSameTimeForVenue(EventDto dto)
         {
             List<Event> allEvents = DbContext.Events.GetAll().ToList();
             var isEventContainSameVenueInSameTime = allEvents.Any(x => x.DateTime.ToString().Contains(dto.DateTime.ToString()) && x.LayoutId == dto.LayoutId);

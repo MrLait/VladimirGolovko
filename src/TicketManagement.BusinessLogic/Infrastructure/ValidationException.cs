@@ -35,15 +35,9 @@ namespace TicketManagement.BusinessLogic.Infrastructure
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationException"/> class.
-        /// </summary>
-        /// <param name="message">Validation message.</param>
-        /// <param name="prop">Property string.</param>
-        public ValidationException(string message, string prop)
-            : this(message)
+        public ValidationException(string format, params object[] args)
+            : base(string.Format(format, args))
         {
-            Property = prop;
         }
 
         /// <summary>
@@ -55,10 +49,5 @@ namespace TicketManagement.BusinessLogic.Infrastructure
             : base(info, context)
         {
         }
-
-        /// <summary>
-        /// Gets or sets property string.
-        /// </summary>
-        public string Property { get; protected set; }
     }
 }

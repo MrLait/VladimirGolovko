@@ -26,19 +26,20 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             areaService.Create(new AreaDto { LayoutId = 2, Description = "Created", CoordY = 2, CoordX = 1 });
+            var actual = Areas.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Areas.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenAreaEmpty_ShouldThrowArgumentException()
+        public void Create_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Create(null));
+            Assert.Throws<ValidationException>(() => areaService.Create(null));
         }
 
         [Test]
@@ -61,43 +62,43 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var expected = Areas.Last();
             Mock.Setup(x => x.Areas.Delete(It.IsAny<Area>())).Callback<Area>(v => Areas.RemoveAt(v.Id - 1));
             var areaService = new AreaService(Mock.Object);
-            var layoutLast = Areas.Last();
 
             // Act
-            areaService.Delete(new AreaDto { Id = layoutLast.Id, LayoutId = layoutLast.LayoutId, Description = layoutLast.Description, CoordY = layoutLast.CoordY, CoordX = layoutLast.CoordX });
+            areaService.Delete(new AreaDto { Id = expected.Id, LayoutId = expected.LayoutId, Description = expected.Description, CoordY = expected.CoordY, CoordX = expected.CoordX });
+            var actual = Areas.Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Areas.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenAreaEmpty_ShouldThrowArgumentException()
+        public void Delete_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Delete(null));
+            Assert.Throws<ValidationException>(() => areaService.Delete(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => areaService.Delete(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Delete(new AreaDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => areaService.Delete(new AreaDto { Id = -1 }));
         }
 
         [Test]
@@ -114,39 +115,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Areas.Update(It.IsAny<Area>())).Callback(updateLastAction);
 
             areaService.Update(new AreaDto { Id = layoutLast.Id, LayoutId = expected.LayoutId, CoordY = expected.CoordY, CoordX = expected.CoordX, Description = expected.Description });
+            var actual = Areas[layoutLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Areas[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenAreaEmpty_ShouldThrowArgumentException()
+        public void Update_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Update(null));
+            Assert.Throws<ValidationException>(() => areaService.Update(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => areaService.Update(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => areaService.Update(new AreaDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => areaService.Update(new AreaDto { Id = -1 }));
         }
 
         [Test]

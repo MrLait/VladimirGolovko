@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
@@ -45,49 +46,50 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Row = expected.Row,
                 State = expected.State,
             });
+            var actual = EventSeats[eventSeatLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(EventSeats[eventSeatLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void UpdateState_WhenEventSeatEmpty_ShouldThrowArgumentException()
+        public void UpdateState_WhenEventSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(null));
+            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(null));
         }
 
         [Test]
-        public void UpdateState_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void UpdateState_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 0 }));
         }
 
         [Test]
-        public void UpdateState_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void UpdateState_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = -1 }));
         }
 
         [Test]
-        public void UpdateState_WhenStateLeesThanZero_ShouldThrowArgumentException()
+        public void UpdateState_WhenStateLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
+            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {(VenueDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
             var allVenues = DbContext.Venues.GetAll().ToList();
@@ -37,7 +37,7 @@ namespace TicketManagement.BusinessLogic.Services
 
             if (isVenueContain)
             {
-                throw new ValidationException($"The Venue with this description: {dto.Description} - already exists.");
+                throw new ValidationException(ExceptionMessages.VenueExist, dto.Description);
             }
 
             Venue venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
@@ -49,12 +49,17 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {(VenueDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not delete object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             DbContext.Venues.Delete(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
@@ -65,12 +70,17 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {(VenueDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             DbContext.Venues.Update(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -29,14 +28,14 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {(AreaDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = ChackThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {
-                throw new ValidationException($"The Area for this Layout with the description: {dto.Description} - already exists.");
+                throw new ValidationException(ExceptionMessages.AreaForTheLayoutExist, dto.Description);
             }
 
             Area area = new Area { LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY };
@@ -48,12 +47,17 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {(AreaDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not delete object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             DbContext.Areas.Delete(new Area { Id = dto.Id });
@@ -64,27 +68,32 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {(AreaDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isLayoutContain = ChackThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {
-                throw new ValidationException($"The Area for this Layout with the description: {dto.Description} - already exists.");
+                throw new ValidationException(ExceptionMessages.AreaForTheLayoutExist, dto.Description);
             }
 
             DbContext.Areas.Update(new Area { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY });
         }
 
-        private bool ChackThatAreaWithThisDescriptionInLayoutAlreadyExist(AreaDto dto)
+        private bool CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(AreaDto dto)
         {
-            var allAreas = DbContext.Areas.GetAll().ToList();
+            var allAreas = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
             var isLayoutContain = allAreas.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }

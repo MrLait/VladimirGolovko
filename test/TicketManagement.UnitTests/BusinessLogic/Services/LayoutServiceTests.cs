@@ -26,19 +26,20 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             layoutService.Create(new LayoutDto { VenueId = 2, Description = "Created Description" });
+            var actual = Layouts.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Layouts.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenLayoutEmpty_ShouldThrowArgumentException()
+        public void Create_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Create(null));
+            Assert.Throws<ValidationException>(() => layoutService.Create(null));
         }
 
         [Test]
@@ -71,33 +72,33 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenLayoutEmpty_ShouldThrowArgumentException()
+        public void Delete_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Delete(null));
+            Assert.Throws<ValidationException>(() => layoutService.Delete(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => layoutService.Delete(new LayoutDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Delete(new LayoutDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => layoutService.Delete(new LayoutDto { Id = -1 }));
         }
 
         [Test]
@@ -114,39 +115,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback(updateLastAction);
 
             layoutService.Update(new LayoutDto { Id = layoutLast.Id, VenueId = expected.VenueId, Description = expected.Description });
+            var actual = Layouts[layoutLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Layouts[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenLayoutEmpty_ShouldThrowArgumentException()
+        public void Update_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Update(null));
+            Assert.Throws<ValidationException>(() => layoutService.Update(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => layoutService.Update(new LayoutDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => layoutService.Update(new LayoutDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => layoutService.Update(new LayoutDto { Id = -1 }));
         }
 
         [Test]

@@ -26,19 +26,20 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             seatService.Create(new SeatDto { AreaId = 12, Number = 3, Row = 5 });
+            var actual = Seats.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Seats.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenSeatEmpty_ShouldThrowArgumentException()
+        public void Create_WhenSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Create(null));
+            Assert.Throws<ValidationException>(() => seatService.Create(null));
         }
 
         [Test]
@@ -65,39 +66,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             seatService.Delete(new SeatDto { Id = seatLast.Id, AreaId = seatLast.AreaId, Number = seatLast.Number, Row = seatLast.Row });
+            var actual = Seats.Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Seats.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenSeatEmpty_ShouldThrowArgumentException()
+        public void Delete_WhenSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Delete(null));
+            Assert.Throws<ValidationException>(() => seatService.Delete(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => seatService.Delete(new SeatDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Delete(new SeatDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => seatService.Delete(new SeatDto { Id = -1 }));
         }
 
         [Test]
@@ -114,39 +116,40 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Seats.Update(It.IsAny<Seat>())).Callback(updateLastAction);
 
             seatService.Update(new SeatDto { Id = seatLast.Id, AreaId = expected.AreaId, Number = expected.Number, Row = expected.Row });
+            var actual = Seats[seatLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Seats[seatLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenSeatEmpty_ShouldThrowArgumentException()
+        public void Update_WhenSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Update(null));
+            Assert.Throws<ValidationException>(() => seatService.Update(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => seatService.Update(new SeatDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => seatService.Update(new SeatDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => seatService.Update(new SeatDto { Id = -1 }));
         }
 
         [Test]

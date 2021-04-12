@@ -27,19 +27,20 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var actual = Events.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Events.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenEventEmpty_ShouldThrowArgumentException()
+        public void Create_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Create(null));
+            Assert.Throws<ValidationException>(() => eventService.Create(null));
         }
 
         [Test]
@@ -131,43 +132,44 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             eventService.Delete(eventDto);
+            var actual = Events.Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Events.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenEventEmpty_ShouldThrowArgumentException()
+        public void Delete_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Delete(null));
+            Assert.Throws<ValidationException>(() => eventService.Delete(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Delete_WhenEventWithIdNotExist_ShouldThrowArgumentException()
+        public void Delete_WhenEventWithIdNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
@@ -208,49 +210,50 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
 
             eventService.Update(eventDto);
+            var actual = Events[layoutLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Events[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenEventEmpty_ShouldThrowArgumentException()
+        public void Update_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Update(null));
+            Assert.Throws<ValidationException>(() => eventService.Update(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = 0 }));
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = -1 }));
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenIdIsNotExist_ShouldThrowArgumentException()
+        public void Update_WhenIdIsNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
@@ -286,9 +289,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
 
             eventService.Update(eventDto);
+            var actual = Events[layoutLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Events[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
