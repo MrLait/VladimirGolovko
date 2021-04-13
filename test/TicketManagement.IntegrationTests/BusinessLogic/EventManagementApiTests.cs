@@ -1,33 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
-    /// <summary>
-    /// Event service tests.
-    /// </summary>
     [TestFixture]
-    public class EventServiceTests : MockEntites
+    internal class EventManagementApiTests : TestDatabaseLoader
     {
+        private AdoUsingParametersRepository<Layout> _layoutRepository;
+        private AdoUsingStoredProcedureRepository<Event> _eventRepository;
+        private AdoDbContext _adoDbContext;
+
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
+            _eventRepository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
+
         [Test]
         public void Create_WhenEventExist_ShouldReturnCreatedEvent()
         {
             // Arrange
-            var firstLayoutId = Layouts.First().Id;
-            var expected = new Event { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) };
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
-            var eventService = new EventService(Mock.Object);
+            var firstLayoutId = _layoutRepository.GetAll().First().Id;
+            var expected = new Event { Id = _eventRepository.GetAll().Last().Id + 1,  Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) };
+            var eventService = new EventService(_adoDbContext);
 
             // Act
             eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
-            var actual = Events.Last();
+            var actual = _eventRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -37,7 +47,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(null));
@@ -47,19 +57,18 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenEventCreatedInThePast_ShouldReturnValidationException()
         {
             // Arrange
-            var eventFirst = Events.First();
+            var firstEvent = _eventRepository.GetAll().First();
             var eventDto = new EventDto
             {
-                Id = eventFirst.Id,
+                Id = firstEvent.Id,
                 DateTime = new DateTime(2000, 1, 1),
-                Description = eventFirst.Description,
-                LayoutId = eventFirst.LayoutId,
-                Name = eventFirst.Name,
+                Description = firstEvent.Description,
+                LayoutId = firstEvent.LayoutId,
+                Name = firstEvent.Name,
                 Price = 100,
                 State = 0,
             };
-            var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
@@ -69,19 +78,18 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
         {
             // Arrange
-            var eventFirst = Events.First();
+            var firstEvent = _eventRepository.GetAll().First();
             var eventDto = new EventDto
             {
-                Id = eventFirst.Id,
-                DateTime = eventFirst.DateTime,
-                Description = eventFirst.Description,
-                LayoutId = eventFirst.LayoutId,
-                Name = eventFirst.Name,
+                Id = firstEvent.Id,
+                DateTime = firstEvent.DateTime,
+                Description = firstEvent.Description,
+                LayoutId = firstEvent.LayoutId,
+                Name = firstEvent.Name,
                 Price = 100,
                 State = 0,
             };
-            var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
@@ -91,8 +99,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
         {
             // Arrange
-            var layoutWithoutSeatsArea = Layouts.Last().Id;
-            var lastEvent = Events.Last();
+            var layoutWithoutSeatsArea = _layoutRepository.GetAll().Last().Id;
+            var lastEvent = _eventRepository.GetAll().Last();
             var eventDto = new EventDto
             {
                 Id = lastEvent.Id,
@@ -103,8 +111,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
@@ -114,10 +121,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenEventExist_ShouldReturnListWithDeletedEvent()
         {
             // Arrange
-            var expected = Events.Last();
-            Mock.Setup(x => x.Events.Delete(It.IsAny<Event>())).Callback<Event>(v => Events.RemoveAt(v.Id - 1));
-            Mock.Setup(x => x.Events.GetByID(expected.Id)).Returns(expected);
-            var eventService = new EventService(Mock.Object);
+            var expected = _eventRepository.GetAll().Last();
+            var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -131,7 +136,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             eventService.Delete(eventDto);
-            var actual = Events.Last();
+            var actual = _eventRepository.GetAll().Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
@@ -141,7 +146,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Delete(null));
@@ -151,7 +156,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = 0 }));
@@ -161,7 +166,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = -1 }));
@@ -171,26 +176,26 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenEventWithIdNotExist_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = Events.Last().Id + 1 }));
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = _eventRepository.GetAll().Last().Id + 1 }));
         }
 
         [Test]
         public void Update_WhenEventExist_ShouldReturnListWithUpdatedEvent()
         {
             // Arrange
-            var eventLast = Events.Last();
+            var eventLast = _eventRepository.GetAll().Last();
             var expected = new Event
             {
                 Id = eventLast.Id,
-                DateTime = eventLast.DateTime,
+                DateTime = eventLast.DateTime.AddYears(1000),
                 Description = "Updated Description",
                 LayoutId = eventLast.LayoutId,
                 Name = "Updated name",
             };
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -201,15 +206,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
             // Act
-            Action<Event> updateLastAction = venues => Events.RemoveAt(eventLast.Id - 1);
-            updateLastAction += v => Events.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
-
             eventService.Update(eventDto);
-            var actual = Events[eventLast.Id - 1];
+            var actual = _eventRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -219,7 +219,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(null));
@@ -229,7 +229,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = 0 }));
@@ -239,7 +239,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = -1 }));
@@ -249,30 +249,30 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdIsNotExist_ShouldThrowValidationException()
         {
             // Arrange
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = _eventRepository.GetAll().Last().Id + 1 }));
         }
 
         [Test]
         public void Update_WhenLayoutChanged_ShouldReturnListWithUpdatedEvent()
         {
             // Arrange
-            var eventLast = Events.Last();
+            var eventLast = _eventRepository.GetAll().Last();
             var layoutIdChanged = eventLast.Id + 1;
             var expected = new Event
             {
                 Id = eventLast.Id,
-                DateTime = eventLast.DateTime,
+                DateTime = eventLast.DateTime.AddYears(1000),
                 Description = "Updated Description",
                 LayoutId = layoutIdChanged,
                 Name = "Updated name",
             };
-            var eventService = new EventService(Mock.Object);
+            var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
-                Id = eventLast.Id,
+                Id = expected.Id,
                 DateTime = expected.DateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
@@ -280,15 +280,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
             // Act
-            Action<Event> updateLastAction = events => Events.RemoveAt(eventLast.Id - 1);
-            updateLastAction += v => Events.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
-
             eventService.Update(eventDto);
-            var actual = Events[eventLast.Id - 1];
+            var actual = _eventRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -298,8 +293,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenEventUpdatedInThePast_ShouldReturnValidationException()
         {
             // Arrange
-            var eventLast = Events.Last();
-            var eventService = new EventService(Mock.Object);
+            var eventLast = _eventRepository.GetAll().Last();
+            var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
                 Id = eventLast.Id,
@@ -310,7 +305,6 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
@@ -320,21 +314,19 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
         {
             // Arrange
-            var eventFirst = Events.First();
+            var firstEvent = _eventRepository.GetAll().First();
             var layoutIdChanged = 2;
             var eventDto = new EventDto
             {
-                Id = eventFirst.Id,
-                DateTime = Events[2].DateTime,
-                Description = eventFirst.Description,
+                Id = firstEvent.Id,
+                DateTime = _eventRepository.GetAll().ToList()[2].DateTime,
+                Description = firstEvent.Description,
                 LayoutId = layoutIdChanged,
-                Name = eventFirst.Name,
+                Name = firstEvent.Name,
                 Price = 100,
                 State = 0,
             };
-            var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.GetByID(eventFirst.Id)).Returns(eventFirst);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
@@ -344,21 +336,19 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
         {
             // Arrange
-            var eventLast = Events.Last();
-            var layoutWithoutSeatsArea = Layouts.Last().Id;
+            var lastEvent = _eventRepository.GetAll().Last();
+            var layoutWithoutSeatsArea = _layoutRepository.GetAll().Last().Id;
             var eventDto = new EventDto
             {
-                Id = eventLast.Id,
+                Id = lastEvent.Id,
                 DateTime = new DateTime(2990, 1, 1),
-                Description = eventLast.Description,
+                Description = lastEvent.Description,
                 LayoutId = layoutWithoutSeatsArea,
-                Name = eventLast.Name,
+                Name = lastEvent.Name,
                 Price = 100,
                 State = 0,
             };
-            var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+            var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));

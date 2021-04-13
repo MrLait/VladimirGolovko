@@ -8,7 +8,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
     [TestFixture]
-    internal class VenueTests : AdoRepositoryTests
+    internal class VenueTests : TestDatabaseLoader
     {
         [Test]
         public void GetAll_WhenVenuesExist_ShouldReturnVenueList()

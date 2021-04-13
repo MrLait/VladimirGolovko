@@ -3,14 +3,14 @@ using System.IO;
 using NUnit.Framework;
 using TicketManagement.IntegrationTests.Services;
 
-namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
+namespace TicketManagement.IntegrationTests
 {
-    internal class AdoRepositoryTests
+    internal class TestDatabaseLoader
     {
         private const string _scriptCreateDatabaseName = "TicketManagement.Database_Create.sql";
         private readonly DatabaseHelper _databaseHelper = new DatabaseHelper();
 
-        public AdoRepositoryTests()
+        public TestDatabaseLoader()
         {
             DatabaseConnectionFactory = new DatabaseConnectionFactory();
             DefaultDatabaseName = DatabaseConnectionFactory.DefaultDatabaseName;

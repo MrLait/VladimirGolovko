@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
     [TestFixture]
-    internal class EventAreaTests : AdoRepositoryTests
+    internal class EventAreaTests : TestDatabaseLoader
     {
         private readonly List<EventArea> _eventAreas = new List<EventArea>();
 

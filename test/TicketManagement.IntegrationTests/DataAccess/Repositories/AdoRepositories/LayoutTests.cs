@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
     [TestFixture]
-    internal class LayoutTests : AdoRepositoryTests
+    internal class LayoutTests : TestDatabaseLoader
     {
         private readonly List<Layout> _layouts = new List<Layout>();
 

@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TicketManagement.BusinessLogic\TicketManagement.BusinessLogic.csproj" />
     <ProjectReference Include="..\..\src\TicketManagement.DataAccess\TicketManagement.DataAccess.csproj" />
   </ItemGroup>
 

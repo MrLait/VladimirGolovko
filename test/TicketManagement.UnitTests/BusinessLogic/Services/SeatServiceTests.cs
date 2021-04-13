@@ -46,8 +46,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenSeatAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
-            var firstSeat = Seats.First();
-            var seatDto = new SeatDto { Id = firstSeat.Id, Row = firstSeat.Row, Number = firstSeat.Number, AreaId = firstSeat.AreaId };
+            var seatFirst = Seats.First();
+            var seatDto = new SeatDto { Id = seatFirst.Id, Row = seatFirst.Row, Number = seatFirst.Number, AreaId = seatFirst.AreaId };
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Create(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 
@@ -156,8 +156,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenSeatAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
-            var firstSeat = Seats.First();
-            var seatDto = new SeatDto { Id = firstSeat.Id, Row = firstSeat.Row, Number = firstSeat.Number, AreaId = firstSeat.AreaId };
+            var seatFirst = Seats.First();
+            var seatDto = new SeatDto { Id = seatFirst.Id, Row = seatFirst.Row, Number = seatFirst.Number, AreaId = seatFirst.AreaId };
             var seatService = new SeatService(Mock.Object);
             Mock.Setup(x => x.Seats.Update(It.IsAny<Seat>())).Callback<Seat>(v => Seats.Add(v));
 

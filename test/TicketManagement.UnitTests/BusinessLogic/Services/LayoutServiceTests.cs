@@ -46,8 +46,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenLayoutAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
-            var firstLayout = Layouts.First();
-            var layoutDto = new LayoutDto { Id = firstLayout.Id, Description = firstLayout.Description, VenueId = firstLayout.VenueId };
+            var layoutFirst = Layouts.First();
+            var layoutDto = new LayoutDto { Id = layoutFirst.Id, Description = layoutFirst.Description, VenueId = layoutFirst.VenueId };
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Create(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 
@@ -155,8 +155,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenLayoutWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
         {
             // Arrange
-            var firstLayout = Layouts.First();
-            var layoutDto = new LayoutDto { Id = firstLayout.Id, Description = firstLayout.Description, VenueId = firstLayout.VenueId };
+            var layoutFirst = Layouts.First();
+            var layoutDto = new LayoutDto { Id = layoutFirst.Id, Description = layoutFirst.Description, VenueId = layoutFirst.VenueId };
             var layoutService = new LayoutService(Mock.Object);
             Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
 

@@ -193,9 +193,23 @@ namespace TicketManagement.BusinessLogic.Services
                 DbContext.EventAreas.Create(new EventArea { Description = item.Description, EventId = eventId, CoordX = item.CoordX, CoordY = item.CoordY, Price = dto.Price });
             }
 
+            int currSateId = allSeatsForAllAreas.FirstOrDefault().AreaId;
+            bool isChanged = true;
             foreach (var item in allSeatsForAllAreas)
             {
-                DbContext.EventSeats.Create(new EventSeat { EventAreaId = item.AreaId + lastEventAreaId, Number = item.Number, Row = item.Row, State = dto.State });
+                if (isChanged)
+                {
+                    lastEventAreaId++;
+                    isChanged = false;
+                }
+
+                DbContext.EventSeats.Create(new EventSeat { EventAreaId = lastEventAreaId, Number = item.Number, Row = item.Row, State = dto.State });
+
+                if (currSateId != item.AreaId)
+                {
+                    isChanged = true;
+                    currSateId = item.AreaId;
+                }
             }
         }
     }

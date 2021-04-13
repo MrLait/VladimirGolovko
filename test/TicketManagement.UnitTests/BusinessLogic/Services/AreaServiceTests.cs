@@ -105,17 +105,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenAreaExist_ShouldReturnListWithUpdatedArea()
         {
             // Arrange
-            var layoutLast = Areas.Last();
-            var expected = new Area { Id = layoutLast.Id, Description = "Updated Description", CoordX = layoutLast.CoordX + 1, CoordY = layoutLast.CoordY + 1, LayoutId = layoutLast.LayoutId };
+            var areaLast = Areas.Last();
+            var expected = new Area { Id = areaLast.Id, Description = "Updated Description", CoordX = areaLast.CoordX + 1, CoordY = areaLast.CoordY + 1, LayoutId = areaLast.LayoutId };
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            Action<Area> updateLastAction = venues => Areas.RemoveAt(layoutLast.Id - 1);
+            Action<Area> updateLastAction = venues => Areas.RemoveAt(areaLast.Id - 1);
             updateLastAction += v => Areas.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Areas.Update(It.IsAny<Area>())).Callback(updateLastAction);
 
-            areaService.Update(new AreaDto { Id = layoutLast.Id, LayoutId = expected.LayoutId, CoordY = expected.CoordY, CoordX = expected.CoordX, Description = expected.Description });
-            var actual = Areas[layoutLast.Id - 1];
+            areaService.Update(new AreaDto { Id = areaLast.Id, LayoutId = expected.LayoutId, CoordY = expected.CoordY, CoordX = expected.CoordX, Description = expected.Description });
+            var actual = Areas[areaLast.Id - 1];
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
