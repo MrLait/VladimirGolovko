@@ -43,7 +43,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenLayoutAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenLayoutAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var layoutFirst = Layouts.First();
@@ -56,7 +56,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenLayoutExist_ShouldReturnListWithDeletedLayout()
+        public void Delete_WhenLayoutExist_ShouldDeleteLastLayout()
         {
             // Arrange
             var expected = Layouts.Last();
@@ -102,7 +102,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenLayoutExist_ShouldReturnListWithUpdatedLayout()
+        public void Update_WhenLayoutExist_ShouldUpdateLastLayout()
         {
             // Arrange
             var layoutLast = Layouts.Last();
@@ -152,7 +152,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenLayoutWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenLayoutWithThisDescriptionAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var layoutFirst = Layouts.First();

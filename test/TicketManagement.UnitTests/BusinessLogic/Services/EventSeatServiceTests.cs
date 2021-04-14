@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventSeatServiceTests : MockEntites
     {
         [Test]
-        public void UpdateState_WhenEventSeatExist_ShouldReturnListWithUpdatedState()
+        public void UpdateState_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
             var eventSeatLast = EventSeats.Last();

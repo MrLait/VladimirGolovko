@@ -43,7 +43,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenSeatAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenSeatAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var seatFirst = Seats.First();
@@ -56,7 +56,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenSeatExist_ShouldReturnListWithDeletedSeat()
+        public void Delete_WhenSeatExist_ShouldDeleteLastSeat()
         {
             // Arrange
             var expected = Seats.Last();
@@ -103,7 +103,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenSeatExist_ShouldReturnListWithUpdatedSeat()
+        public void Update_WhenSeatExist_ShouldUpdateLastSeat()
         {
             // Arrange
             var seatLast = Seats.Last();
@@ -153,7 +153,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenSeatAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenSeatAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var seatFirst = Seats.First();

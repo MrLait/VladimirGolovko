@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistSeat_ShouldReturnListWithUpdateSeat()
+        public void Update_WhenExistSeat_ShouldUpdateLastSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);

@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistLayout_ShouldReturnListWithUpdateLayout()
+        public void Update_WhenExistLayout_ShouldUpdateLastLayout()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(MainConnectionString);

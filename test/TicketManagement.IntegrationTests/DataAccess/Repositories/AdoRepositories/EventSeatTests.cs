@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistEventSeat_ShouldReturnListWithUpdateEventSeat()
+        public void Update_WhenExistEventSeat_ShouldUpdateLastEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);

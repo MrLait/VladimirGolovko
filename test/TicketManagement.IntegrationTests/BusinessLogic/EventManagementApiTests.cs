@@ -28,7 +28,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenEventExist_ShouldReturnCreatedEvent()
+        public void Create_WhenEventExist_ShouldCreateEvent()
         {
             // Arrange
             var firstLayoutId = _layoutRepository.GetAll().First().Id;
@@ -54,7 +54,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenEventCreatedInThePast_ShouldReturnValidationException()
+        public void Create_WhenEventCreatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
             var firstEvent = _eventRepository.GetAll().First();
@@ -75,7 +75,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
+        public void Create_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
             var firstEvent = _eventRepository.GetAll().First();
@@ -96,7 +96,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
+        public void Create_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
             var layoutWithoutSeatsArea = _layoutRepository.GetAll().Last().Id;
@@ -118,7 +118,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Delete_WhenEventExist_ShouldReturnListWithDeletedEvent()
+        public void Delete_WhenEventExist_ShouldDeleteLastEvent()
         {
             // Arrange
             var expected = _eventRepository.GetAll().Last();
@@ -183,7 +183,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Update_WhenEventExist_ShouldReturnListWithUpdatedEvent()
+        public void Update_WhenEventExist_ShouldUpdateEvent()
         {
             // Arrange
             var eventLast = _eventRepository.GetAll().Last();
@@ -256,7 +256,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Update_WhenLayoutChanged_ShouldReturnListWithUpdatedEvent()
+        public void Update_WhenLayoutChanged_ShouldUpdateLastEvent()
         {
             // Arrange
             var eventLast = _eventRepository.GetAll().Last();
@@ -290,7 +290,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Update_WhenEventUpdatedInThePast_ShouldReturnValidationException()
+        public void Update_WhenEventUpdatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
             var eventLast = _eventRepository.GetAll().Last();
@@ -311,7 +311,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Update_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
+        public void Update_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
             var firstEvent = _eventRepository.GetAll().First();
@@ -333,7 +333,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Update_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
+        public void Update_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
             var lastEvent = _eventRepository.GetAll().Last();

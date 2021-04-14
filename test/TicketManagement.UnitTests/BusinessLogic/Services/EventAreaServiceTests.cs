@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventAreaServiceTests : MockEntites
     {
         [Test]
-        public void UpdatePrice_WhenEventAreaExist_ShouldReturnListWithUpdatedEventArea()
+        public void UpdatePrice_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
         {
             // Arrange
             var eventAreaLast = EventAreas.Last();

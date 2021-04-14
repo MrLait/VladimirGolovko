@@ -43,7 +43,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenDescriptionExist_ShouldReturnValidationException()
+        public void Create_WhenDescriptionExist_ShouldThrowValidationException()
         {
             // Arrange
             var venueDto = new VenueDto { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" };
@@ -55,7 +55,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenVenueExist_ShouldReturnListWithDeletedVenue()
+        public void Delete_WhenVenueExist_ShouldDeleteLastVenue()
         {
             // Arrange
             var expected = Venues.Last();
@@ -102,7 +102,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenVenueExist_ShouldReturnListWithUpdatedVenue()
+        public void Update_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
             var venueLast = Venues.Last();

@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistArea_ShouldReturnListWithUpdateArea()
+        public void Update_WhenExistArea_ShouldUpdateLastArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(MainConnectionString);

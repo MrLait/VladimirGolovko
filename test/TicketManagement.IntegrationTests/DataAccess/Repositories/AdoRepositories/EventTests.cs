@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistEvent_ShouldReturnListWithUpdateEvent()
+        public void Update_WhenExistEvent_ShouldUpdateLastEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);

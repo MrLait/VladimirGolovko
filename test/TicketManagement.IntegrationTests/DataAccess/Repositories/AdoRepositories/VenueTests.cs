@@ -123,7 +123,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistVenue_ShouldReturnListWithUpdateVenue()
+        public void Update_WhenExistVenue_ShouldUpdateThirdVenue()
         {
             // Arrange
             Venue venue = new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };

@@ -43,7 +43,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenAreaAlreadyExist_ShouldReturnValidationException()
+        public void Create_WhenAreaAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var firstArea = Areas.First();
@@ -56,7 +56,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenAreaExist_ShouldReturnListWithDeletedArea()
+        public void Delete_WhenAreaExist_ShouldDeleteLastArea()
         {
             // Arrange
             var expected = Areas.Last();
@@ -102,7 +102,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenAreaExist_ShouldReturnListWithUpdatedArea()
+        public void Update_WhenAreaExist_ShouldUpdateLastArea()
         {
             // Arrange
             var areaLast = Areas.Last();
@@ -152,7 +152,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenAreaWithThisDescriptionAlreadyExist_ShouldReturnValidationException()
+        public void Update_WhenAreaWithThisDescriptionAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
             var firstArea = Areas.First();

@@ -128,7 +128,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Update_WhenExistEventArea_ShouldReturnListWithUpdateEventArea()
+        public void Update_WhenExistEventArea_ShouldUpdateLastEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
