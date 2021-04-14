@@ -30,7 +30,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = eventSeatLast.State + 1,
             };
 
-            var areaService = new EventSeatService(Mock.Object);
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act
             Action<EventSeat> updateLastAction = venues => EventSeats.RemoveAt(eventSeatLast.Id - 1);
@@ -38,7 +38,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.EventSeats.GetByID(eventSeatLast.Id)).Returns(eventSeatLast);
             Mock.Setup(x => x.EventSeats.Update(It.IsAny<EventSeat>())).Callback(updateLastAction);
 
-            areaService.UpdateState(new EventSeatDto
+            eventSeatsService.UpdateState(new EventSeatDto
             {
                 Id = eventSeatLast.Id,
                 EventAreaId = expected.EventAreaId,
@@ -90,6 +90,57 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
+        }
+
+        [Test]
+        public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeats()
+        {
+            // Arrange
+            var expected = EventSeats;
+            Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
+            var eventSeatsService = new EventSeatService(Mock.Object);
+
+            // Act
+            var actual = eventSeatsService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenEventSeatExist_ShouldReturnLastEventSeat()
+        {
+            // Arrange
+            var expected = EventSeats.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.EventSeats.GetByID(expectedId)).Returns(EventSeats.Last());
+            var eventSeatsService = new EventSeatService(Mock.Object);
+
+            // Act
+            var actual = eventSeatsService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatsService = new EventSeatService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatsService = new EventSeatService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(-1));
         }
     }
 }

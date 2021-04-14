@@ -31,7 +31,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = eventAreaLast.Price + 100,
             };
 
-            var areaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
             Action<EventArea> updateLastAction = venues => EventAreas.RemoveAt(eventAreaLast.Id - 1);
@@ -39,7 +39,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             Mock.Setup(x => x.EventAreas.GetByID(eventAreaLast.Id)).Returns(eventAreaLast);
             Mock.Setup(x => x.EventAreas.Update(It.IsAny<EventArea>())).Callback(updateLastAction);
 
-            areaService.UpdatePrice(new EventAreaDto
+            eventAreaService.UpdatePrice(new EventAreaDto
             {
                 Id = eventAreaLast.Id,
                 EventId = expected.EventId,
@@ -92,6 +92,57 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
+        }
+
+        [Test]
+        public void GetAll_WhenEventAreasExist_ShouldReturnAreas()
+        {
+            // Arrange
+            var expected = EventAreas;
+            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
+            var eventAreaService = new EventAreaService(Mock.Object);
+
+            // Act
+            var actual = eventAreaService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenEventAreaExist_ShouldReturnLastEventArea()
+        {
+            // Arrange
+            var expected = EventAreas.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.EventAreas.GetByID(expectedId)).Returns(EventAreas.Last());
+            var eventAreaService = new EventAreaService(Mock.Object);
+
+            // Act
+            var actual = eventAreaService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventAreaService = new EventAreaService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventAreaService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventAreaService = new AreaService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventAreaService.GetByID(-1));
         }
     }
 }

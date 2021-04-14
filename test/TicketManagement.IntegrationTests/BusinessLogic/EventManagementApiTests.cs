@@ -44,6 +44,94 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
+        public void Create_WhenEventExist_ShouldCreateEventAreas()
+        {
+            // Arrange
+            var firstLayoutId = _layoutRepository.GetAll().First().Id;
+            var eventService = new EventService(_adoDbContext);
+            var areaService = new AreaService(_adoDbContext);
+            var eventAreasService = new EventAreaService(_adoDbContext);
+            int lastEventAreaId = eventAreasService.GetAll().Last().Id;
+            var expectedEventAreasDto = new List<EventAreaDto>();
+
+            // Act
+            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var eventId = eventService.GetAll().Last().Id;
+            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
+
+            for (int i = 0; i < allAreasInLayout.Count; i++)
+            {
+                expectedEventAreasDto.Add(new EventAreaDto
+                {
+                    Id = lastEventAreaId + i + 1,
+                    Description = allAreasInLayout[i].Description,
+                    EventId = eventId,
+                    CoordX = allAreasInLayout[i].CoordX,
+                    CoordY = allAreasInLayout[i].CoordY,
+                });
+            }
+
+            var actualEventAreasDto = eventAreasService.GetAll().Where(x => x.Id > lastEventAreaId);
+
+            // Assert
+            actualEventAreasDto.Should().BeEquivalentTo(expectedEventAreasDto);
+        }
+
+        [Test]
+        public void Create_WhenEventExist_ShouldCreateEventSeats()
+        {
+            // Arrange
+            var firstLayoutId = _layoutRepository.GetAll().First().Id;
+            var eventService = new EventService(_adoDbContext);
+            var areaService = new AreaService(_adoDbContext);
+            var seatsService = new SeatService(_adoDbContext);
+            var eventSeatService = new EventSeatService(_adoDbContext);
+            var expectedEventSeatsDto = new List<EventSeatDto>();
+            var allSeatsForAllAreas = new List<SeatDto>();
+            var lastEventAreaId = new EventAreaService(_adoDbContext).GetAll().Last().Id;
+            var lastEventSeatId = eventSeatService.GetAll().Last().Id;
+
+            // Act
+            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
+            foreach (var item in allAreasInLayout)
+            {
+                allSeatsForAllAreas.AddRange(seatsService.GetAll().Where(x => x.AreaId == item.Id));
+            }
+
+            int currSateId = allSeatsForAllAreas.FirstOrDefault().AreaId;
+            bool isChanged = true;
+
+            for (int i = 0; i < allSeatsForAllAreas.Count; i++)
+            {
+                if (isChanged)
+                {
+                    lastEventAreaId++;
+                    isChanged = false;
+                }
+
+                expectedEventSeatsDto.Add(new EventSeatDto
+                {
+                    Id = lastEventSeatId + i + 1,
+                    EventAreaId = lastEventAreaId,
+                    Number = allSeatsForAllAreas[i].Number,
+                    Row = allSeatsForAllAreas[i].Row,
+                });
+
+                if (currSateId != allSeatsForAllAreas[i].AreaId)
+                {
+                    isChanged = true;
+                    currSateId = allSeatsForAllAreas[i].AreaId;
+                }
+            }
+
+            var actualEventSeatsDto = eventSeatService.GetAll().Where(x => x.Id > lastEventSeatId);
+
+            // Assert
+            actualEventSeatsDto.Should().BeEquivalentTo(expectedEventSeatsDto);
+        }
+
+        [Test]
         public void Create_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange

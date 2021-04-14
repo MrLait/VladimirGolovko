@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
@@ -21,6 +22,46 @@ namespace TicketManagement.BusinessLogic.Services
         /// Gets property database context.
         /// </summary>
         public IDbContext DbContext { get; }
+
+        /// <inheritdoc/>
+        public IEnumerable<EventAreaDto> GetAll()
+        {
+            var eventAreas = DbContext.EventAreas.GetAll();
+            List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
+            foreach (var item in eventAreas)
+            {
+                eventAreasDto.Add(new EventAreaDto { Id = item.Id, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY, EventId = item.EventId, Price = item.Price });
+            }
+
+            return eventAreasDto;
+        }
+
+        /// <inheritdoc/>
+        public EventAreaDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var eventArea = DbContext.EventAreas.GetByID(id);
+            var eventAreaDto = new EventAreaDto
+            {
+                Id = eventArea.Id,
+                Description = eventArea.Description,
+                CoordX = eventArea.CoordX,
+                CoordY = eventArea.CoordY,
+                EventId = eventArea.EventId,
+                Price = eventArea.Price,
+            };
+
+            return eventAreaDto;
+        }
 
         /// <inheritdoc/>
         public void UpdatePrice(EventAreaDto dto)

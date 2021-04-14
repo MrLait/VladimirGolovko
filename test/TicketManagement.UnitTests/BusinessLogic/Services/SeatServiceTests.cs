@@ -164,5 +164,56 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act & Assert
             Assert.Throws<ValidationException>(() => seatService.Update(seatDto));
         }
+
+        [Test]
+        public void GetAll_WhenSeatsExist_ShouldReturnSeats()
+        {
+            // Arrange
+            var expected = Seats;
+            Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
+            var seatService = new SeatService(Mock.Object);
+
+            // Act
+            var actual = seatService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenSeatExist_ShouldReturnLastSeat()
+        {
+            // Arrange
+            var expected = Seats.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Seats.GetByID(expectedId)).Returns(Seats.Last());
+            var seatService = new SeatService(Mock.Object);
+
+            // Act
+            var actual = seatService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var seatService = new SeatService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => seatService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var seatService = new SeatService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => seatService.GetByID(-1));
+        }
     }
 }

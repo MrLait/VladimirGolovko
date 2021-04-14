@@ -163,5 +163,56 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act & Assert
             Assert.Throws<ValidationException>(() => areaService.Update(areaDto));
         }
+
+        [Test]
+        public void GetAll_WhenAreasExist_ShouldReturnAreas()
+        {
+            // Arrange
+            var expected = Areas;
+            Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
+            var areaService = new AreaService(Mock.Object);
+
+            // Act
+            var actual = areaService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenAreaExist_ShouldReturnLastArea()
+        {
+            // Arrange
+            var expected = Areas.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Areas.GetByID(expectedId)).Returns(Areas.Last());
+            var areaService = new AreaService(Mock.Object);
+
+            // Act
+            var actual = areaService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var areaService = new AreaService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => areaService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var areaService = new AreaService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => areaService.GetByID(-1));
+        }
     }
 }

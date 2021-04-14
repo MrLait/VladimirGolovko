@@ -163,5 +163,56 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(layoutDto));
         }
+
+        [Test]
+        public void GetAll_WhenLayoutsExist_ShouldReturnLayouts()
+        {
+            // Arrange
+            var expected = Layouts;
+            Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
+            var layoutService = new LayoutService(Mock.Object);
+
+            // Act
+            var actual = layoutService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenLayoutExist_ShouldReturnLastLayout()
+        {
+            // Arrange
+            var expected = Layouts.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Layouts.GetByID(expectedId)).Returns(Layouts.Last());
+            var layoutService = new LayoutService(Mock.Object);
+
+            // Act
+            var actual = layoutService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var layoutService = new LayoutService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => layoutService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var layoutService = new LayoutService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => layoutService.GetByID(-1));
+        }
     }
 }

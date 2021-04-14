@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -63,6 +64,36 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             DbContext.Venues.Delete(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<VenueDto> GetAll()
+        {
+            var venues = DbContext.Venues.GetAll();
+            List<VenueDto> venuesDto = new List<VenueDto>();
+            foreach (var item in venues)
+            {
+                venuesDto.Add(new VenueDto { Id = item.Id, Address = item.Address, Description = item.Description, Phone = item.Phone });
+            }
+
+            return venuesDto;
+        }
+
+        /// <inheritdoc/>
+        public VenueDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var venue = DbContext.Venues.GetByID(id);
+            return new VenueDto { Id = venue.Id, Address = venue.Address, Description = venue.Description, Phone = venue.Phone };
         }
 
         /// <inheritdoc/>

@@ -212,5 +212,47 @@ namespace TicketManagement.BusinessLogic.Services
                 }
             }
         }
+
+        /// <inheritdoc/>
+        public EventDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var curEvent = DbContext.Events.GetByID(id);
+            var eventDto = new EventDto
+            {
+                Id = curEvent.Id,
+                LayoutId = curEvent.LayoutId,
+                DateTime = curEvent.DateTime,
+                Description = curEvent.Description,
+                Name = curEvent.Name,
+            };
+
+            return eventDto;
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<EventDto> GetAll()
+        {
+            var events = DbContext.Events.GetAll();
+            List<EventDto> eventDto = new List<EventDto>();
+            foreach (var item in events)
+            {
+                eventDto.Add(new EventDto
+                {
+                    Id = item.Id, LayoutId = item.LayoutId, DateTime = item.DateTime, Description = item.Description, Name = item.Name,
+                });
+            }
+
+            return eventDto;
+        }
     }
 }

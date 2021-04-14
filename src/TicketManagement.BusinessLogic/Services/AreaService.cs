@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -61,6 +62,36 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             DbContext.Areas.Delete(new Area { Id = dto.Id });
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<AreaDto> GetAll()
+        {
+            var areas = DbContext.Areas.GetAll();
+            List<AreaDto> areasDto = new List<AreaDto>();
+            foreach (var item in areas)
+            {
+                areasDto.Add(new AreaDto { Id = item.Id, LayoutId = item.LayoutId, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY });
+            }
+
+            return areasDto;
+        }
+
+        /// <inheritdoc/>
+        public AreaDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var area = DbContext.Areas.GetByID(id);
+            return new AreaDto { Id = area.Id, LayoutId = area.LayoutId, Description = area.Description, CoordX = area.CoordX, CoordY = area.CoordY };
         }
 
         /// <inheritdoc/>

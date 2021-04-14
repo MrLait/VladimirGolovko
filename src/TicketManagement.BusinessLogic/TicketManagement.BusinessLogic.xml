@@ -124,6 +124,19 @@
             </summary>
             <param name="dto">Area data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventAreaService">
             <summary>
             Event area service interface.
@@ -135,6 +148,19 @@
             </summary>
             <param name="dto">Event area data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventSeatService">
             <summary>
             Event seat service interface.
@@ -145,6 +171,19 @@
             Update state object in database.
             </summary>
             <param name="dto">Event seat data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.IEventService">
             <summary>
@@ -169,6 +208,19 @@
             </summary>
             <param name="dto">Event data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.ILayoutService">
             <summary>
             Layout service interface.
@@ -192,6 +244,19 @@
             </summary>
             <param name="dto">Layout data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.ISeatService">
             <summary>
             Seat service interface.
@@ -214,6 +279,19 @@
             Update object in database.
             </summary>
             <param name="dto">Seat data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Interfaces.IService">
             <summary>
@@ -243,6 +321,19 @@
             </summary>
             <param name="dto">Venue data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetByID(System.Int32)">
+            <summary>
+            Get object by Id from table in database.
+            </summary>
+            <param name="id">Object id.</param>
+            <returns>Returns object by id.</returns>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetAll">
+            <summary>
+            Method to get all objects from database table.
+            </summary>
+            <returns>Returns list of objects.</returns>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Services.AreaService">
             <summary>
             Area service class.
@@ -265,6 +356,12 @@
         <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Delete(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetByID(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Update(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
@@ -284,6 +381,12 @@
             Gets property database context.
             </summary>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetByID(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.UpdatePrice(TicketManagement.Dto.EventAreaDto)">
             <inheritdoc/>
         </member>
@@ -302,6 +405,12 @@
             <summary>
             Gets property database context.
             </summary>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetByID(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.UpdateState(TicketManagement.Dto.EventSeatDto)">
             <inheritdoc/>
@@ -331,6 +440,12 @@
         <member name="M:TicketManagement.BusinessLogic.Services.EventService.Update(TicketManagement.Dto.EventDto)">
             <inheritdoc/>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetByID(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetAll">
+            <inheritdoc/>
+        </member>
         <member name="T:TicketManagement.BusinessLogic.Services.LayoutService">
             <summary>
             Layout service class.
@@ -351,6 +466,12 @@
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Delete(TicketManagement.Dto.LayoutDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetByID(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Update(TicketManagement.Dto.LayoutDto)">
@@ -378,6 +499,12 @@
         <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Delete(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetByID(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Update(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
@@ -401,6 +528,12 @@
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Delete(TicketManagement.Dto.VenueDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetByID(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Update(TicketManagement.Dto.VenueDto)">

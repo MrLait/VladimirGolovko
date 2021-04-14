@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -62,6 +63,46 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             DbContext.Layouts.Delete(new Layout { Id = dto.Id });
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<LayoutDto> GetAll()
+        {
+            var layouts = DbContext.Layouts.GetAll();
+            List<LayoutDto> layoutDto = new List<LayoutDto>();
+            foreach (var layout in layouts)
+            {
+                layoutDto.Add(new LayoutDto
+                {
+                    Id = layout.Id, Description = layout.Description, VenueId = layout.VenueId,
+                });
+            }
+
+            return layoutDto;
+        }
+
+        /// <inheritdoc/>
+        public LayoutDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var layout = DbContext.Layouts.GetByID(id);
+            var layoutDto = new LayoutDto
+            {
+                Id = layout.Id,
+                Description = layout.Description,
+                VenueId = layout.VenueId,
+            };
+
+            return layoutDto;
         }
 
         /// <inheritdoc/>

@@ -363,5 +363,56 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
+
+        [Test]
+        public void GetAll_WhenEventsExist_ShouldReturnEvents()
+        {
+            // Arrange
+            var expected = Events;
+            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            var eventService = new EventService(Mock.Object);
+
+            // Act
+            var actual = eventService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenEventExist_ShouldReturnLastEvent()
+        {
+            // Arrange
+            var expected = Events.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Events.GetByID(expectedId)).Returns(Events.Last());
+            var eventService = new EventService(Mock.Object);
+
+            // Act
+            var actual = eventService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.GetByID(-1));
+        }
     }
 }

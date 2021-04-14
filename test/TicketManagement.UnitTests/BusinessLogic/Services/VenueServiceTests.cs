@@ -150,5 +150,56 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = -1 }));
         }
+
+        [Test]
+        public void GetAll_WhenVenuesExist_ShouldReturnVenues()
+        {
+            // Arrange
+            var expected = Venues;
+            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
+            var venueService = new VenueService(Mock.Object);
+
+            // Act
+            var actual = venueService.GetAll();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenVenueExist_ShouldReturnLastVenue()
+        {
+            // Arrange
+            var expected = Venues.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Venues.GetByID(expectedId)).Returns(Venues.Last());
+            var venueService = new VenueService(Mock.Object);
+
+            // Act
+            var actual = venueService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var venueService = new VenueService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => venueService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var venueService = new VenueService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => venueService.GetByID(-1));
+        }
     }
 }
