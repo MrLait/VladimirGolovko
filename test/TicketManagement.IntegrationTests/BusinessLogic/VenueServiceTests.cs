@@ -1,32 +1,38 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
-    /// <summary>
-    /// Venue service tests.
-    /// </summary>
     [TestFixture]
-    public class VenueServiceTests : MockEntites
+    internal class VenueServiceTests : TestDatabaseLoader
     {
+        private AdoUsingParametersRepository<Venue> _venueRepository;
+        private AdoDbContext _adoDbContext;
+
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _venueRepository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
+
         [Test]
         public void Create_WhenVenueExist_ShouldReturnCreatedVenue()
         {
             // Arrange
-            var expected = new Venue { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
-            Mock.Setup(x => x.Venues.Create(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
-            var venueService = new VenueService(Mock.Object);
+            var expected = new Venue { Id = _venueRepository.GetAll().Last().Id + 1, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
+            var venueService = new VenueService(_adoDbContext);
 
             // Act
             venueService.Create(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
-            var actual = Venues.Last();
+            var actual = _venueRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -36,7 +42,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Create(null));
@@ -47,8 +53,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var venueDto = new VenueDto { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" };
-            var venueService = new VenueService(Mock.Object);
-            Mock.Setup(x => x.Venues.Create(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Create(venueDto));
@@ -58,14 +63,13 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenVenueExist_ShouldDeleteLastVenue()
         {
             // Arrange
-            var expected = Venues.Last();
-            Mock.Setup(x => x.Venues.Delete(It.IsAny<Venue>())).Callback<Venue>(v => Venues.RemoveAt(v.Id - 1));
-            var venueService = new VenueService(Mock.Object);
-            var venueLast = Venues.Last();
+            var expected = _venueRepository.GetAll().Last();
+            var venueService = new VenueService(_adoDbContext);
+            var venueLast = _venueRepository.GetAll().Last();
 
             // Act
             venueService.Delete(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
-            var actual = Venues.Last();
+            var actual = _venueRepository.GetAll().Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
@@ -75,7 +79,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Delete(null));
@@ -85,7 +89,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = 0 }));
@@ -95,7 +99,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = -1 }));
@@ -105,17 +109,13 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
-            var venueLast = Venues.Last();
+            var venueLast = _venueRepository.GetAll().Last();
             var expected = new Venue { Id = venueLast.Id, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act
-            Action<Venue> updateLastAction = venues => Venues.RemoveAt(venueLast.Id - 1);
-            updateLastAction += v => Venues.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Venues.Update(It.IsAny<Venue>())).Callback(updateLastAction);
-
             venueService.Update(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
-            var actual = Venues[venueLast.Id - 1];
+            var actual = _venueRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -125,7 +125,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Update(null));
@@ -135,7 +135,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = 0 }));
@@ -145,7 +145,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = -1 }));
@@ -155,9 +155,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetAll_WhenVenuesExist_ShouldReturnVenues()
         {
             // Arrange
-            var expected = Venues;
-            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
-            var venueService = new VenueService(Mock.Object);
+            var expected = _venueRepository.GetAll();
+            var venueService = new VenueService(_adoDbContext);
 
             // Act
             var actual = venueService.GetAll();
@@ -170,10 +169,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetById_WhenVenueExist_ShouldReturnLastVenue()
         {
             // Arrange
-            var expected = Venues.Last();
-            var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Venues.GetByID(expectedId)).Returns(Venues.Last());
-            var venueService = new VenueService(Mock.Object);
+            var expected = _venueRepository.GetAll().Last();
+            var expectedId = expected.Id;
+            var venueService = new VenueService(_adoDbContext);
 
             // Act
             var actual = venueService.GetByID(expectedId);
@@ -186,7 +184,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.GetByID(0));
@@ -196,7 +194,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(Mock.Object);
+            var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => venueService.GetByID(-1));

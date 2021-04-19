@@ -1,26 +1,33 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
-    /// <summary>
-    /// Event seat server tests.
-    /// </summary>
     [TestFixture]
-    public class EventSeatServiceTests : MockEntites
+    internal class EventSeatServiceTests : TestDatabaseLoader
     {
+        private AdoUsingParametersRepository<EventSeat> _eventSeatRepository;
+        private AdoDbContext _adoDbContext;
+
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _eventSeatRepository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
+
         [Test]
         public void UpdateState_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
-            var eventSeatLast = EventSeats.Last();
+            var eventSeatLast = _eventSeatRepository.GetAll().Last();
             EventSeat expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
@@ -30,14 +37,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = eventSeatLast.State + 1,
             };
 
-            var eventSeatsService = new EventSeatService(Mock.Object);
+            var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
-            Action<EventSeat> updateLastAction = venues => EventSeats.RemoveAt(eventSeatLast.Id - 1);
-            updateLastAction += v => EventSeats.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.EventSeats.GetByID(eventSeatLast.Id)).Returns(eventSeatLast);
-            Mock.Setup(x => x.EventSeats.Update(It.IsAny<EventSeat>())).Callback(updateLastAction);
-
             eventSeatsService.UpdateState(new EventSeatDto
             {
                 Id = eventSeatLast.Id,
@@ -46,7 +48,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Row = expected.Row,
                 State = expected.State,
             });
-            var actual = EventSeats[eventSeatLast.Id - 1];
+            var actual = _eventSeatRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -56,7 +58,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdateState_WhenEventSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(Mock.Object);
+            var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(null));
@@ -66,7 +68,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdateState_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(Mock.Object);
+            var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 0 }));
@@ -76,7 +78,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdateState_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(Mock.Object);
+            var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = -1 }));
@@ -86,7 +88,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdateState_WhenStateLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(Mock.Object);
+            var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
@@ -96,9 +98,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeats()
         {
             // Arrange
-            var expected = EventSeats;
-            Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
-            var eventSeatsService = new EventSeatService(Mock.Object);
+            var expected = _eventSeatRepository.GetAll();
+            var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
             var actual = eventSeatsService.GetAll();
@@ -111,10 +112,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetById_WhenEventSeatExist_ShouldReturnLastEventSeat()
         {
             // Arrange
-            var expected = EventSeats.Last();
-            var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.EventSeats.GetByID(expectedId)).Returns(EventSeats.Last());
-            var eventSeatsService = new EventSeatService(Mock.Object);
+            var expected = _eventSeatRepository.GetAll().Last();
+            var expectedId = expected.Id;
+            var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
             var actual = eventSeatsService.GetByID(expectedId);
@@ -127,7 +127,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatsService = new EventSeatService(Mock.Object);
+            var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(0));
@@ -137,7 +137,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatsService = new EventSeatService(Mock.Object);
+            var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(-1));

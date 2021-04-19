@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
     [TestFixture]
-    internal class EventAreaTests : AdoRepositoryTests
+    internal class EventAreaTests : TestDatabaseLoader
     {
         private readonly List<EventArea> _eventAreas = new List<EventArea>();
 
@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventAreasExist_ShouldReturnEventAreaList()
+        public void GetAll_WhenEventAreasExist_ShouldReturnEventAreaList()
         {
             // Arrange
             var expected = _eventAreas;
@@ -39,17 +39,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenEventAreasIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenEventAreasIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<EventArea>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddEventArea_ShouldReturnEventAreaWithNewEventArea()
+        public void Create_WhenAddEventArea_ShouldReturnEventAreaWithNewEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
@@ -68,17 +68,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenEventAreaEmpty_ShouldReturnArgumentException()
+        public void Create_WhenEventAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventArea()
+        public void Delete_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
@@ -96,39 +96,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroEventArea_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
         }
 
         [Test]
-        public void GivenDelete_WhenNullEventArea_ShouldReturnArgumentException()
+        public void Delete_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringEventArea_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 3 };
             var repository = new AdoUsingParametersRepository<EventArea>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistEventArea_ShouldReturnListWithUpdateEventArea()
+        public void Update_WhenExistEventArea_ShouldUpdateLastEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullEventArea_ShouldReturnArgumentException()
+        public void Update_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroEventArea_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventArea));
         }
 
         [Test]
-        public void GivenGetById_WhenExistEventArea_ShouldReturnEventArea()
+        public void GetById_WhenExistEventArea_ShouldReturnEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
@@ -193,7 +193,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistEventArea_ShouldReturnNull()
+        public void GetById_WhenNonExistEventArea_ShouldReturnNull()
         {
             // Arrange
             EventArea expected = null;
@@ -209,46 +209,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroEventArea_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventArea.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(eventArea.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(eventArea));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
         }
     }

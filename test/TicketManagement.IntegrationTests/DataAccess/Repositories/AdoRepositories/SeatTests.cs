@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.Repositories.AdoRepositories;
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
 {
     [TestFixture]
-    internal class SeatTests : AdoRepositoryTests
+    internal class SeatTests : TestDatabaseLoader
     {
         private readonly List<Seat> _seats = new List<Seat>();
 
@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenSeatsExist_ShouldReturnSeatList()
+        public void GetAll_WhenSeatsExist_ShouldReturnSeatList()
         {
             // Arrange
             var expected = _seats;
@@ -39,17 +39,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetAll_WhenSeatsIncorrectConnectionSting_ShouldReturnArgumentException()
+        public void GetAll_WhenSeatsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<Seat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => actual.GetAll());
         }
 
         [Test]
-        public void GivenCreate_WhenAddSeat_ShouldReturnSeatWithNewSeat()
+        public void Create_WhenAddSeat_ShouldReturnSeatWithNewSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
@@ -68,17 +68,17 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenCreate_WhenSeatEmpty_ShouldReturnArgumentException()
+        public void Create_WhenSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Create(null));
         }
 
         [Test]
-        public void GivenDelete_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeat()
+        public void Delete_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
@@ -96,39 +96,39 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZeroSeat_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZeroSeat_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
 
         [Test]
-        public void GivenDelete_WhenNullSeat_ShouldReturnArgumentException()
+        public void Delete_WhenNullSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIncorrectConnectionStringSeat_ShouldReturnArgumentException()
+        public void Delete_WhenIncorrectConnectionStringSeat_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = 3 };
             var repository = new AdoUsingParametersRepository<Seat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
 
         [Test]
-        public void GivenUpdate_WhenExistSeat_ShouldReturnListWithUpdateSeat()
+        public void Update_WhenExistSeat_ShouldUpdateLastSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
@@ -147,28 +147,28 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenUpdate_WhenNullSeat_ShouldReturnArgumentException()
+        public void Update_WhenNullSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZeroSeat_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZeroSeat_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(seat));
         }
 
         [Test]
-        public void GivenGetById_WhenExistSeat_ShouldReturnSeat()
+        public void GetById_WhenExistSeat_ShouldReturnSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
@@ -185,7 +185,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenNonExistSeat_ShouldReturnNull()
+        public void GetById_WhenNonExistSeat_ShouldReturnNull()
         {
             // Arrange
             Seat expected = null;
@@ -201,46 +201,46 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void GivenGetById_WhenIdEqualZeroSeat_ShouldReturnArgumentException()
+        public void GetById_WhenIdEqualZeroSeat_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(seat.Id));
         }
 
         [Test]
-        public void GivenGetById_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.GetByID(seat.Id));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Update(seat));
         }
 
         [Test]
-        public void GivenDelete_WhenIdLessThenZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
             var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
 
-            // Act
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => repository.Delete(seat));
         }
     }

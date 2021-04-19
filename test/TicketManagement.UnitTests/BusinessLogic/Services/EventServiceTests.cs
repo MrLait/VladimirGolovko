@@ -17,7 +17,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventServiceTests : MockEntites
     {
         [Test]
-        public void GivenCreate_WhenEventExist_ShouldReturnCreatedEvent()
+        public void Create_WhenEventExist_ShouldCreateEvent()
         {
             // Arrange
             var firstLayoutId = Layouts.First().Id;
@@ -27,67 +27,68 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             // Act
             eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var actual = Events.Last();
 
             // Assert
-            expected.Should().BeEquivalentTo(Events.Last());
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GivenCreate_WhenEventEmpty_ShouldReturnArgumentException()
+        public void Create_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Create(null));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Create(null));
         }
 
         [Test]
-        public void GivenCreate_WhenEventCreatedInThePast_ShouldReturnValidationException()
+        public void Create_WhenEventCreatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = Events.First();
+            var eventFirst = Events.First();
             var eventDto = new EventDto
             {
-                Id = firstEvent.Id,
+                Id = eventFirst.Id,
                 DateTime = new DateTime(2000, 1, 1),
-                Description = firstEvent.Description,
-                LayoutId = firstEvent.LayoutId,
-                Name = firstEvent.Name,
+                Description = eventFirst.Description,
+                LayoutId = eventFirst.LayoutId,
+                Name = eventFirst.Name,
                 Price = 100,
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
-        public void GivenCreate_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
+        public void Create_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = Events.First();
+            var eventFirst = Events.First();
             var eventDto = new EventDto
             {
-                Id = firstEvent.Id,
-                DateTime = firstEvent.DateTime,
-                Description = firstEvent.Description,
-                LayoutId = firstEvent.LayoutId,
-                Name = firstEvent.Name,
+                Id = eventFirst.Id,
+                DateTime = eventFirst.DateTime,
+                Description = eventFirst.Description,
+                LayoutId = eventFirst.LayoutId,
+                Name = eventFirst.Name,
                 Price = 100,
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
-        public void GivenCreate_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
+        public void Create_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
             var layoutWithoutSeatsArea = Layouts.Last().Id;
@@ -105,94 +106,94 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
         }
 
         [Test]
-        public void GivenDelete_WhenEventExist_ShouldReturnListWithDeletedEvent()
+        public void Delete_WhenEventExist_ShouldUpdateEvent()
         {
             // Arrange
             var expected = Events.Last();
             Mock.Setup(x => x.Events.Delete(It.IsAny<Event>())).Callback<Event>(v => Events.RemoveAt(v.Id - 1));
             Mock.Setup(x => x.Events.GetByID(expected.Id)).Returns(expected);
             var eventService = new EventService(Mock.Object);
-            var layoutLast = Events.Last();
             var eventDto = new EventDto
             {
-                Id = layoutLast.Id,
-                DateTime = layoutLast.DateTime,
-                Description = layoutLast.Description,
-                LayoutId = layoutLast.LayoutId,
-                Name = layoutLast.Name,
+                Id = expected.Id,
+                DateTime = expected.DateTime,
+                Description = expected.Description,
+                LayoutId = expected.LayoutId,
+                Name = expected.Name,
                 Price = 100,
                 State = 0,
             };
 
             // Act
             eventService.Delete(eventDto);
+            var actual = Events.Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Events.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void GivenDelete_WhenEventEmpty_ShouldReturnArgumentException()
+        public void Delete_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Delete(null));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Delete(null));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = 0 }));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenDelete_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Delete(new EventDto { Id = -1 }));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenDelete_WhenEventWithIdNotExist_ShouldReturnArgumentException()
+        public void Delete_WhenEventWithIdNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenEventExist_ShouldReturnListWithUpdatedEvent()
+        public void Update_WhenEventExist_ShouldUpdateLastEvent()
         {
             // Arrange
-            var layoutLast = Events.Last();
+            var eventLast = Events.Last();
             var expected = new Event
             {
-                Id = layoutLast.Id,
-                DateTime = layoutLast.DateTime,
+                Id = eventLast.Id,
+                DateTime = eventLast.DateTime,
                 Description = "Updated Description",
-                LayoutId = layoutLast.LayoutId,
+                LayoutId = eventLast.LayoutId,
                 Name = "Updated name",
             };
             var eventService = new EventService(Mock.Object);
             var eventDto = new EventDto
             {
-                Id = layoutLast.Id,
+                Id = expected.Id,
                 DateTime = expected.DateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
@@ -200,69 +201,70 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(layoutLast.Id)).Returns(layoutLast);
+            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
             // Act
-            Action<Event> updateLastAction = venues => Events.RemoveAt(layoutLast.Id - 1);
+            Action<Event> updateLastAction = venues => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
 
             eventService.Update(eventDto);
+            var actual = Events[eventLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Events[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GivenUpdate_WhenEventEmpty_ShouldReturnArgumentException()
+        public void Update_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Update(null));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Update(null));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = 0 }));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdEqualLeesThanZero_ShouldReturnArgumentException()
+        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = -1 }));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenIdIsNotExist_ShouldReturnArgumentException()
+        public void Update_WhenIdIsNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
-            // Act
-            Assert.Throws<ArgumentException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
-        public void GivenUpdate_WhenLayoutChanged_ShouldReturnListWithUpdatedEvent()
+        public void Update_WhenLayoutChanged_ShouldUpdateLastEvent()
         {
             // Arrange
-            var layoutLast = Events.Last();
-            var layoutIdChanged = layoutLast.Id + 1;
+            var eventLast = Events.Last();
+            var layoutIdChanged = eventLast.Id + 1;
             var expected = new Event
             {
-                Id = layoutLast.Id,
-                DateTime = layoutLast.DateTime,
+                Id = eventLast.Id,
+                DateTime = eventLast.DateTime,
                 Description = "Updated Description",
                 LayoutId = layoutIdChanged,
                 Name = "Updated name",
@@ -270,7 +272,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
             var eventDto = new EventDto
             {
-                Id = layoutLast.Id,
+                Id = eventLast.Id,
                 DateTime = expected.DateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
@@ -278,87 +280,139 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(layoutLast.Id)).Returns(layoutLast);
+            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
             // Act
-            Action<Event> updateLastAction = venues => Events.RemoveAt(layoutLast.Id - 1);
+            Action<Event> updateLastAction = events => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
 
             eventService.Update(eventDto);
+            var actual = Events[eventLast.Id - 1];
 
             // Assert
-            expected.Should().BeEquivalentTo(Events[layoutLast.Id - 1]);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GivenUpdate_WhenEventUpdatedInThePast_ShouldReturnValidationException()
+        public void Update_WhenEventUpdatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutLast = Events.Last();
+            var eventLast = Events.Last();
             var eventService = new EventService(Mock.Object);
             var eventDto = new EventDto
             {
-                Id = layoutLast.Id,
+                Id = eventLast.Id,
                 DateTime = new DateTime(2000, 1, 1),
-                Description = layoutLast.Description,
-                LayoutId = layoutLast.LayoutId,
-                Name = layoutLast.Name,
+                Description = eventLast.Description,
+                LayoutId = eventLast.LayoutId,
+                Name = eventLast.Name,
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(layoutLast.Id)).Returns(layoutLast);
+            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
 
         [Test]
-        public void GivenUpdate_WhenTheSameVenueInTheSameTime_ShouldReturnValidationException()
+        public void Update_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = Events.First();
+            var eventFirst = Events.First();
             var layoutIdChanged = 2;
             var eventDto = new EventDto
             {
-                Id = firstEvent.Id,
+                Id = eventFirst.Id,
                 DateTime = Events[2].DateTime,
-                Description = firstEvent.Description,
+                Description = eventFirst.Description,
                 LayoutId = layoutIdChanged,
-                Name = firstEvent.Name,
+                Name = eventFirst.Name,
                 Price = 100,
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.GetByID(firstEvent.Id)).Returns(firstEvent);
+            Mock.Setup(x => x.Events.GetByID(eventFirst.Id)).Returns(eventFirst);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
         }
 
         [Test]
-        public void GivenUpdate_WhenNoOneAreaNotContainSeats_ShouldReturnValidationException()
+        public void Update_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
-            var lastEvent = Events.Last();
+            var eventLast = Events.Last();
             var layoutWithoutSeatsArea = Layouts.Last().Id;
             var eventDto = new EventDto
             {
-                Id = lastEvent.Id,
+                Id = eventLast.Id,
                 DateTime = new DateTime(2990, 1, 1),
-                Description = lastEvent.Description,
+                Description = eventLast.Description,
                 LayoutId = layoutWithoutSeatsArea,
-                Name = lastEvent.Name,
+                Name = eventLast.Name,
                 Price = 100,
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
-            Mock.Setup(x => x.Events.GetByID(lastEvent.Id)).Returns(lastEvent);
+            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+        }
+
+        [Test]
+        public void GetAll_WhenEventsExist_ShouldReturnEvents()
+        {
+            // Arrange
+            var expected = Events;
+            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            var eventService = new EventService(Mock.Object);
+
+            // Act
+            var actual = eventService.GetAll();
 
             // Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetById_WhenEventExist_ShouldReturnLastEvent()
+        {
+            // Arrange
+            var expected = Events.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.Events.GetByID(expectedId)).Returns(Events.Last());
+            var eventService = new EventService(Mock.Object);
+
+            // Act
+            var actual = eventService.GetByID(expectedId);
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.GetByID(0));
+        }
+
+        [Test]
+        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(Mock.Object);
+
+            // Act & Assert
+            Assert.Throws<ValidationException>(() => eventService.GetByID(-1));
         }
     }
 }

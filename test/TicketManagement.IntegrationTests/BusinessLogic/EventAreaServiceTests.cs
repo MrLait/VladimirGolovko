@@ -1,26 +1,33 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
-    /// <summary>
-    /// Event area service tests.
-    /// </summary>
     [TestFixture]
-    public class EventAreaServiceTests : MockEntites
+    internal class EventAreaServiceTests : TestDatabaseLoader
     {
+        private AdoUsingParametersRepository<EventArea> _eventAreaRepository;
+        private AdoDbContext _adoDbContext;
+
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _eventAreaRepository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
+
         [Test]
         public void UpdatePrice_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
         {
             // Arrange
-            var eventAreaLast = EventAreas.Last();
+            var eventAreaLast = _eventAreaRepository.GetAll().Last();
             EventArea expected = new EventArea
             {
                 Id = eventAreaLast.Id,
@@ -31,14 +38,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = eventAreaLast.Price + 100,
             };
 
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
-            Action<EventArea> updateLastAction = venues => EventAreas.RemoveAt(eventAreaLast.Id - 1);
-            updateLastAction += v => EventAreas.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.EventAreas.GetByID(eventAreaLast.Id)).Returns(eventAreaLast);
-            Mock.Setup(x => x.EventAreas.Update(It.IsAny<EventArea>())).Callback(updateLastAction);
-
             eventAreaService.UpdatePrice(new EventAreaDto
             {
                 Id = eventAreaLast.Id,
@@ -48,7 +50,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Description = expected.Description,
                 Price = expected.Price,
             });
-            var actual = EventAreas[eventAreaLast.Id - 1];
+            var actual = _eventAreaRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -58,7 +60,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdatePrice_WhenEventAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(null));
@@ -68,7 +70,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdatePrice_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 }));
@@ -78,7 +80,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdatePrice_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 }));
@@ -88,7 +90,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void UpdatePrice_WhenPriceLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
@@ -98,9 +100,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetAll_WhenEventAreasExist_ShouldReturnAreas()
         {
             // Arrange
-            var expected = EventAreas;
-            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var expected = _eventAreaRepository.GetAll();
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
             var actual = eventAreaService.GetAll();
@@ -113,10 +114,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetById_WhenEventAreaExist_ShouldReturnLastEventArea()
         {
             // Arrange
-            var expected = EventAreas.Last();
-            var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.EventAreas.GetByID(expectedId)).Returns(EventAreas.Last());
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var expected = _eventAreaRepository.GetAll().Last();
+            var expectedId = expected.Id;
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
             var actual = eventAreaService.GetByID(expectedId);
@@ -129,7 +129,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(Mock.Object);
+            var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.GetByID(0));
@@ -139,7 +139,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new AreaService(Mock.Object);
+            var eventAreaService = new AreaService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => eventAreaService.GetByID(-1));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -29,14 +30,14 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not create null object: {(LayoutDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = ChackThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
+            bool isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
 
             if (isLayoutContain)
             {
-                throw new ValidationException($"The Layout for this Venue with the description: {dto.Description} - already exists.");
+                throw new ValidationException(ExceptionMessages.LayoutForTheVenueExist, dto.Description);
             }
 
             Layout layout = new Layout { VenueId = dto.VenueId, Description = dto.Description };
@@ -48,15 +49,60 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not delete null object: {(LayoutDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not delete object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             DbContext.Layouts.Delete(new Layout { Id = dto.Id });
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<LayoutDto> GetAll()
+        {
+            var layouts = DbContext.Layouts.GetAll();
+            List<LayoutDto> layoutDto = new List<LayoutDto>();
+            foreach (var layout in layouts)
+            {
+                layoutDto.Add(new LayoutDto
+                {
+                    Id = layout.Id, Description = layout.Description, VenueId = layout.VenueId,
+                });
+            }
+
+            return layoutDto;
+        }
+
+        /// <inheritdoc/>
+        public LayoutDto GetByID(int id)
+        {
+            if (id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            if (id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, id);
+            }
+
+            var layout = DbContext.Layouts.GetByID(id);
+            var layoutDto = new LayoutDto
+            {
+                Id = layout.Id,
+                Description = layout.Description,
+                VenueId = layout.VenueId,
+            };
+
+            return layoutDto;
         }
 
         /// <inheritdoc/>
@@ -64,28 +110,33 @@ namespace TicketManagement.BusinessLogic.Services
         {
             if (dto == null)
             {
-                throw new ArgumentException($"Can not update null object: {(LayoutDto) null}!");
+                throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id <= 0)
+            if (dto.Id == 0)
             {
-                throw new ArgumentException($"Can not update object with id: {dto.Id}!");
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isLayoutContain = ChackThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            bool isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
 
             if (isLayoutContain)
             {
-                throw new ValidationException($"The Layout for this Venue with the description: {dto.Description} - already exists.");
+                throw new ValidationException(ExceptionMessages.LayoutForTheVenueExist, dto.Description);
             }
 
             DbContext.Layouts.Update(new Layout { Id = dto.Id, VenueId = dto.VenueId, Description = dto.Description });
         }
 
-        private bool ChackThatLayoutForThisVenueWithDescriptionAlreadyExist(LayoutDto dto)
+        private bool CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(LayoutDto dto)
         {
             var allLayoutByVenueId = DbContext.Layouts.GetAll().Where(x => x.VenueId == dto.VenueId).ToList();
-            var isLayoutContain = allLayoutByVenueId.Select(x => x.Description.Contains(dto.Description)).Where(z => z.Equals(true)).ElementAtOrDefault(0);
+            var isLayoutContain = allLayoutByVenueId.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }
     }

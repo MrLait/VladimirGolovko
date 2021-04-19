@@ -1,32 +1,38 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.UnitTests.BusinessLogic.Services
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
-    /// <summary>
-    /// Layout service tests.
-    /// </summary>
     [TestFixture]
-    public class LayoutServiceTests : MockEntites
+    internal class LayoutServiceTests : TestDatabaseLoader
     {
+        private AdoUsingParametersRepository<Layout> _layoutRepository;
+        private AdoDbContext _adoDbContext;
+
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
+
         [Test]
         public void Create_WhenLayoutExist_ShouldReturnCreatedLayout()
         {
             // Arrange
-            var expected = new Layout { VenueId = 2, Description = "Created Description" };
-            Mock.Setup(x => x.Layouts.Create(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
-            var layoutService = new LayoutService(Mock.Object);
+            var expected = new Layout { Id = _layoutRepository.GetAll().Last().Id + 1, VenueId = 2, Description = "Created Description" };
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act
             layoutService.Create(new LayoutDto { VenueId = 2, Description = "Created Description" });
-            var actual = Layouts.Last();
+            var actual = _layoutRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -36,7 +42,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Create(null));
@@ -46,10 +52,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Create_WhenLayoutAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutFirst = Layouts.First();
+            var layoutFirst = _layoutRepository.GetAll().First();
             var layoutDto = new LayoutDto { Id = layoutFirst.Id, Description = layoutFirst.Description, VenueId = layoutFirst.VenueId };
-            var layoutService = new LayoutService(Mock.Object);
-            Mock.Setup(x => x.Layouts.Create(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Create(layoutDto));
@@ -59,23 +64,22 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenLayoutExist_ShouldDeleteLastLayout()
         {
             // Arrange
-            var expected = Layouts.Last();
-            Mock.Setup(x => x.Layouts.Delete(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.RemoveAt(v.Id - 1));
-            var layoutService = new LayoutService(Mock.Object);
-            var layoutLast = Layouts.Last();
+            var expected = _layoutRepository.GetAll().Last();
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act
-            layoutService.Delete(new LayoutDto { Id = layoutLast.Id, VenueId = layoutLast.VenueId, Description = layoutLast.Description });
+            layoutService.Delete(new LayoutDto { Id = expected.Id, VenueId = expected.VenueId, Description = expected.Description });
+            var actual = _layoutRepository.GetAll().Last();
 
             // Assert
-            expected.Should().NotBeEquivalentTo(Layouts.Last());
+            actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
         public void Delete_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Delete(null));
@@ -85,7 +89,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Delete(new LayoutDto { Id = 0 }));
@@ -95,7 +99,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Delete(new LayoutDto { Id = -1 }));
@@ -105,17 +109,13 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenLayoutExist_ShouldUpdateLastLayout()
         {
             // Arrange
-            var layoutLast = Layouts.Last();
+            var layoutLast = _layoutRepository.GetAll().Last();
             var expected = new Layout { Id = layoutLast.Id, Description = "Updated Description", VenueId = layoutLast.VenueId };
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act
-            Action<Layout> updateLastAction = venues => Layouts.RemoveAt(layoutLast.Id - 1);
-            updateLastAction += v => Layouts.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback(updateLastAction);
-
             layoutService.Update(new LayoutDto { Id = layoutLast.Id, VenueId = expected.VenueId, Description = expected.Description });
-            var actual = Layouts[layoutLast.Id - 1];
+            var actual = _layoutRepository.GetAll().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -125,7 +125,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenLayoutEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(null));
@@ -135,7 +135,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(new LayoutDto { Id = 0 }));
@@ -145,7 +145,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(new LayoutDto { Id = -1 }));
@@ -155,10 +155,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void Update_WhenLayoutWithThisDescriptionAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutFirst = Layouts.First();
+            var layoutFirst = _layoutRepository.GetAll().First();
             var layoutDto = new LayoutDto { Id = layoutFirst.Id, Description = layoutFirst.Description, VenueId = layoutFirst.VenueId };
-            var layoutService = new LayoutService(Mock.Object);
-            Mock.Setup(x => x.Layouts.Update(It.IsAny<Layout>())).Callback<Layout>(v => Layouts.Add(v));
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.Update(layoutDto));
@@ -168,9 +167,8 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetAll_WhenLayoutsExist_ShouldReturnLayouts()
         {
             // Arrange
-            var expected = Layouts;
-            Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
-            var layoutService = new LayoutService(Mock.Object);
+            var expected = _layoutRepository.GetAll();
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act
             var actual = layoutService.GetAll();
@@ -183,10 +181,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetById_WhenLayoutExist_ShouldReturnLastLayout()
         {
             // Arrange
-            var expected = Layouts.Last();
-            var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Layouts.GetByID(expectedId)).Returns(Layouts.Last());
-            var layoutService = new LayoutService(Mock.Object);
+            var expected = _layoutRepository.GetAll().Last();
+            var expectedId = expected.Id;
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act
             var actual = layoutService.GetByID(expectedId);
@@ -199,7 +196,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.GetByID(0));
@@ -209,7 +206,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutService = new LayoutService(Mock.Object);
+            var layoutService = new LayoutService(_adoDbContext);
 
             // Act & Assert
             Assert.Throws<ValidationException>(() => layoutService.GetByID(-1));
