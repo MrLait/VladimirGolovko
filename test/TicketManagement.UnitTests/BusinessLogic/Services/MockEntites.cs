@@ -203,13 +203,13 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             };
 
             Mock = new Mock<IDbContext>();
-            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
-            Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
-            Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
-            Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
-            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
-            Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
-            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            Mock.Setup(x => x.Venues.GetAllAsync()).ReturnsAsync(Venues);
+            Mock.Setup(x => x.Seats.GetAllAsync()).ReturnsAsync(Seats);
+            Mock.Setup(x => x.Layouts.GetAllAsync()).ReturnsAsync(Layouts);
+            Mock.Setup(x => x.Areas.GetAllAsync()).ReturnsAsync(Areas);
+            Mock.Setup(x => x.EventAreas.GetAllAsync()).ReturnsAsync(EventAreas);
+            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats);
+            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events);
         }
     }
 }

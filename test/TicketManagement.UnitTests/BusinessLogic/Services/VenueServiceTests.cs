@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -17,15 +18,15 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class VenueServiceTests : MockEntites
     {
         [Test]
-        public void Create_WhenVenueExist_ShouldReturnCreatedVenue()
+        public async Task CreateAsync_WhenVenueExist_ShouldReturnCreatedVenue()
         {
             // Arrange
             var expected = new Venue { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
-            Mock.Setup(x => x.Venues.Create(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
+            Mock.Setup(x => x.Venues.CreateAsync(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            venueService.Create(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
+            await venueService.CreateAsync(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
             var actual = Venues.Last();
 
             // Assert
@@ -33,38 +34,38 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenVenueEmpty_ShouldThrowValidationException()
+        public void CreateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Create(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(null));
         }
 
         [Test]
-        public void Create_WhenDescriptionExist_ShouldThrowValidationException()
+        public void CreateAsync_WhenDescriptionExist_ShouldThrowValidationException()
         {
             // Arrange
             var venueDto = new VenueDto { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" };
             var venueService = new VenueService(Mock.Object);
-            Mock.Setup(x => x.Venues.Create(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
+            Mock.Setup(x => x.Venues.CreateAsync(It.IsAny<Venue>())).Callback<Venue>(v => Venues.Add(v));
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Create(venueDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(venueDto));
         }
 
         [Test]
-        public void Delete_WhenVenueExist_ShouldDeleteLastVenue()
+        public async Task DeleteAsync_WhenVenueExist_ShouldDeleteLastVenue()
         {
             // Arrange
             var expected = Venues.Last();
-            Mock.Setup(x => x.Venues.Delete(It.IsAny<Venue>())).Callback<Venue>(v => Venues.RemoveAt(v.Id - 1));
+            Mock.Setup(x => x.Venues.DeleteAsync(It.IsAny<Venue>())).Callback<Venue>(v => Venues.RemoveAt(v.Id - 1));
             var venueService = new VenueService(Mock.Object);
             var venueLast = Venues.Last();
 
             // Act
-            venueService.Delete(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
+            await venueService.DeleteAsync(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
             var actual = Venues.Last();
 
             // Assert
@@ -72,37 +73,37 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenVenueEmpty_ShouldThrowValidationException()
+        public void DeleteAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenVenueExist_ShouldUpdateLastVenue()
+        public async Task UpdateAsync_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
             var venueLast = Venues.Last();
@@ -112,9 +113,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act
             Action<Venue> updateLastAction = venues => Venues.RemoveAt(venueLast.Id - 1);
             updateLastAction += v => Venues.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Venues.Update(It.IsAny<Venue>())).Callback(updateLastAction);
+            Mock.Setup(x => x.Venues.UpdateAsync(It.IsAny<Venue>())).Callback(updateLastAction);
 
-            venueService.Update(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
+            await venueService.UpdateAsync(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
             var actual = Venues[venueLast.Id - 1];
 
             // Assert
@@ -122,84 +123,84 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenVenueEmpty_ShouldThrowValidationException()
+        public void UpdateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = -1 }));
         }
 
         [Test]
-        public void GetAll_WhenVenuesExist_ShouldReturnVenues()
+        public async Task GetAllAsync_WhenVenuesExist_ShouldReturnVenues()
         {
             // Arrange
             var expected = Venues;
-            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
+            Mock.Setup(x => x.Venues.GetAllAsync()).ReturnsAsync(Venues);
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            var actual = venueService.GetAll();
+            var actual = await venueService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenVenueExist_ShouldReturnLastVenue()
+        public async Task GetByIdAsync_WhenVenueExist_ShouldReturnLastVenue()
         {
             // Arrange
             var expected = Venues.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Venues.GetByID(expectedId)).Returns(Venues.Last());
+            Mock.Setup(x => x.Venues.GetByIDAsync(expectedId)).ReturnsAsync(Venues.Last());
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            var actual = venueService.GetByID(expectedId);
+            var actual = await venueService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(-1));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
@@ -24,192 +25,192 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenAreaExist_ShouldReturnCreatedArea()
+        public async Task CreateAsync_WhenAreaExist_ShouldReturnCreatedArea()
         {
             // Arrange
-            var expected = new Area { Id = _areaRepository.GetAll().Last().Id + 1, LayoutId = 2, Description = "Created", CoordX = 1, CoordY = 2 };
+            var expected = new Area { Id = (await _areaRepository.GetAllAsync()).Last().Id + 1, LayoutId = 2, Description = "Created", CoordX = 1, CoordY = 2 };
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            areaService.Create(new AreaDto { LayoutId = 2, Description = "Created", CoordY = 2, CoordX = 1 });
-            var actual = _areaRepository.GetAll().Last();
+            await areaService.CreateAsync(new AreaDto { LayoutId = 2, Description = "Created", CoordY = 2, CoordX = 1 });
+            var actual = (await _areaRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenAreaEmpty_ShouldThrowValidationException()
+        public void CreateAsync_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Create(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.CreateAsync(null));
         }
 
         [Test]
-        public void Create_WhenAreaAlreadyExist_ShouldThrowValidationException()
+        public async Task CreateAsync_WhenAreaAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
-            var firstArea = _areaRepository.GetAll().First();
+            var firstArea = (await _areaRepository.GetAllAsync()).First();
             var areaDto = new AreaDto { Id = firstArea.Id, CoordX = firstArea.CoordX, CoordY = firstArea.CoordY, Description = firstArea.Description, LayoutId = firstArea.LayoutId };
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Create(areaDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.CreateAsync(areaDto));
         }
 
         [Test]
-        public void Delete_WhenAreaExist_ShouldDeleteLastArea()
+        public async Task DeleteAsync_WhenAreaExist_ShouldDeleteLastArea()
         {
             // Arrange
-            var expected = _areaRepository.GetAll().Last();
+            var expected = (await _areaRepository.GetAllAsync()).Last();
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            areaService.Delete(new AreaDto { Id = expected.Id, LayoutId = expected.LayoutId, Description = expected.Description, CoordY = expected.CoordY, CoordX = expected.CoordX });
-            var actual = _areaRepository.GetAll().Last();
+            await areaService.DeleteAsync(new AreaDto { Id = expected.Id, LayoutId = expected.LayoutId, Description = expected.Description, CoordY = expected.CoordY, CoordX = expected.CoordX });
+            var actual = (await _areaRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenAreaEmpty_ShouldThrowValidationException()
+        public void DeleteAsync_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Delete(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Delete(new AreaDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.DeleteAsync(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Delete(new AreaDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.DeleteAsync(new AreaDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenAreaExist_ShouldUpdateLastArea()
+        public async Task UpdateAsync_WhenAreaExist_ShouldUpdateLastArea()
         {
             // Arrange
-            var areaLast = _areaRepository.GetAll().Last();
+            var areaLast = (await _areaRepository.GetAllAsync()).Last();
             var expected = new Area { Id = areaLast.Id, Description = "Updated Description", CoordX = areaLast.CoordX + 1, CoordY = areaLast.CoordY + 1, LayoutId = areaLast.LayoutId };
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            areaService.Update(new AreaDto { Id = areaLast.Id, LayoutId = expected.LayoutId, CoordY = expected.CoordY, CoordX = expected.CoordX, Description = expected.Description });
-            var actual = _areaRepository.GetAll().Last();
+            await areaService.UpdateAsync(new AreaDto { Id = areaLast.Id, LayoutId = expected.LayoutId, CoordY = expected.CoordY, CoordX = expected.CoordX, Description = expected.Description });
+            var actual = (await _areaRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenAreaEmpty_ShouldThrowValidationException()
+        public void UpdateAsync_WhenAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Update(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Update(new AreaDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.UpdateAsync(new AreaDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Update(new AreaDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.UpdateAsync(new AreaDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenAreaWithThisDescriptionAlreadyExist_ShouldThrowValidationException()
+        public async Task UpdateAsync_WhenAreaWithThisDescriptionAlreadyExist_ShouldThrowValidationException()
         {
             // Arrange
-            var firstArea = _areaRepository.GetAll().First();
+            var firstArea = (await _areaRepository.GetAllAsync()).First();
             var areaDto = new AreaDto { Id = firstArea.Id, Description = firstArea.Description, CoordX = firstArea.CoordX, CoordY = firstArea.CoordY, LayoutId = firstArea.LayoutId };
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.Update(areaDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.UpdateAsync(areaDto));
         }
 
         [Test]
-        public void GetAll_WhenAreasExist_ShouldReturnAreas()
+        public async Task GetAllAsync_WhenAreasExist_ShouldReturnAreas()
         {
             // Arrange
-            var expected = _areaRepository.GetAll();
+            var expected = await _areaRepository.GetAllAsync();
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            var actual = areaService.GetAll();
+            var actual = await areaService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenAreaExist_ShouldReturnLastArea()
+        public async Task GetByIdAsync_WhenAreaExist_ShouldReturnLastArea()
         {
             // Arrange
-            var expected = _areaRepository.GetAll().Last();
+            var expected = (await _areaRepository.GetAllAsync()).Last();
             var expectedId = expected.Id;
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            var actual = areaService.GetByID(expectedId);
+            var actual = await areaService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => areaService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(-1));
         }
     }
 }

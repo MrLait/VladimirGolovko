@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Threading.Tasks;
+using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
@@ -10,6 +13,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
     /// </summary>
     /// <typeparam name="T">Table model.</typeparam>
     internal abstract class AdoRepository<T> : IRepository<T>
+        where T : IEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoRepository{T}"/> class.
@@ -23,19 +27,61 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         protected string DbConString { get; }
 
         /// <inheritdoc/>
-        public abstract void Delete(T entity);
+        public virtual Task DeleteAsync(T entity)
+        {
+            if (Equals(entity, default(T)))
+            {
+                throw new ArgumentException($"Can not delete null object: {default(T)}!");
+            }
+
+            if (entity.Id <= 0)
+            {
+                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entity.Id}!");
+            }
+
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc/>
-        public abstract IEnumerable<T> GetAll();
+        public abstract Task<IEnumerable<T>> GetAllAsync();
 
         /// <inheritdoc/>
-        public abstract T GetByID(int byId);
+        public virtual Task<T> GetByIDAsync(int byId)
+        {
+            if (byId <= 0)
+            {
+                throw new ArgumentException($"byId shouldn't be equal {byId}");
+            }
+
+            return Task.FromResult(default(T));
+        }
 
         /// <inheritdoc/>
-        public abstract void Create(T entity);
+        public virtual Task CreateAsync(T entity)
+        {
+            if (Equals(entity, default(T)))
+            {
+                throw new ArgumentException($"Can not add null object: {typeof(T).Name} !");
+            }
+
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc/>
-        public abstract void Update(T entity);
+        public virtual Task UpdateAsync(T entity)
+        {
+            if (Equals(entity, default(T)))
+            {
+                throw new ArgumentException($"{typeof(T).Name} object shouldn't be null when saving to database");
+            }
+
+            if (entity.Id <= 0)
+            {
+                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entity.Id}!");
+            }
+
+            return Task.CompletedTask;
+        }
 
         protected List<SqlParameter> GetAddParameter(object obj)
         {

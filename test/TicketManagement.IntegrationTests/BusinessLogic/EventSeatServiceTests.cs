@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
@@ -24,10 +25,10 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void UpdateState_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
+        public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
-            var eventSeatLast = _eventSeatRepository.GetAll().Last();
+            var eventSeatLast = (await _eventSeatRepository.GetAllAsync()).Last();
             EventSeat expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
@@ -40,7 +41,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
-            eventSeatsService.UpdateState(new EventSeatDto
+            await eventSeatsService.UpdateStateAsync(new EventSeatDto
             {
                 Id = eventSeatLast.Id,
                 EventAreaId = expected.EventAreaId,
@@ -48,99 +49,99 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 Row = expected.Row,
                 State = expected.State,
             });
-            var actual = _eventSeatRepository.GetAll().Last();
+            var actual = (await _eventSeatRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void UpdateState_WhenEventSeatEmpty_ShouldThrowValidationException()
+        public void UpdateStateAsync_WhenEventSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(null));
         }
 
         [Test]
-        public void UpdateState_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateStateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 0 }));
         }
 
         [Test]
-        public void UpdateState_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateStateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = -1 }));
         }
 
         [Test]
-        public void UpdateState_WhenStateLeesThanZero_ShouldThrowValidationException()
+        public void UpdateStateAsync_WhenStateLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatService.UpdateState(new EventSeatDto { Id = 1, State = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 1, State = -1 }));
         }
 
         [Test]
-        public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeats()
+        public async Task GetAllAsync_WhenEventSeatsExist_ShouldReturnEventSeats()
         {
             // Arrange
-            var expected = _eventSeatRepository.GetAll();
+            var expected = await _eventSeatRepository.GetAllAsync();
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
-            var actual = eventSeatsService.GetAll();
+            var actual = await eventSeatsService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenEventSeatExist_ShouldReturnLastEventSeat()
+        public async Task GetByIdAsync_WhenEventSeatExist_ShouldReturnLastEventSeat()
         {
             // Arrange
-            var expected = _eventSeatRepository.GetAll().Last();
+            var expected = (await _eventSeatRepository.GetAllAsync()).Last();
             var expectedId = expected.Id;
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
-            var actual = eventSeatsService.GetByID(expectedId);
+            var actual = await eventSeatsService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventSeatsService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));
         }
     }
 }

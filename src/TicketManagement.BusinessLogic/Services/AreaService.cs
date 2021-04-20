@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -25,14 +26,14 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; private set; }
 
         /// <inheritdoc/>
-        public void Create(AreaDto dto)
+        public async Task CreateAsync(AreaDto dto)
         {
             if (dto == null)
             {
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            bool isLayoutContain = await CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(dto);
 
             if (isLayoutContain)
             {
@@ -40,11 +41,11 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             Area area = new Area { LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY };
-            DbContext.Areas.Create(area);
+            await DbContext.Areas.CreateAsync(area);
         }
 
         /// <inheritdoc/>
-        public void Delete(AreaDto dto)
+        public async Task DeleteAsync(AreaDto dto)
         {
             if (dto == null)
             {
@@ -61,13 +62,13 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            DbContext.Areas.Delete(new Area { Id = dto.Id });
+            await DbContext.Areas.DeleteAsync(new Area { Id = dto.Id });
         }
 
         /// <inheritdoc/>
-        public IEnumerable<AreaDto> GetAll()
+        public async Task<IEnumerable<AreaDto>> GetAllAsync()
         {
-            var areas = DbContext.Areas.GetAll();
+            var areas = await DbContext.Areas.GetAllAsync();
             List<AreaDto> areasDto = new List<AreaDto>();
             foreach (var item in areas)
             {
@@ -78,7 +79,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public AreaDto GetByID(int id)
+        public async Task<AreaDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -90,12 +91,12 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var area = DbContext.Areas.GetByID(id);
+            var area = await DbContext.Areas.GetByIDAsync(id);
             return new AreaDto { Id = area.Id, LayoutId = area.LayoutId, Description = area.Description, CoordX = area.CoordX, CoordY = area.CoordY };
         }
 
         /// <inheritdoc/>
-        public void Update(AreaDto dto)
+        public async Task UpdateAsync(AreaDto dto)
         {
             if (dto == null)
             {
@@ -112,19 +113,19 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            bool isLayoutContain = await CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(dto);
 
             if (isLayoutContain)
             {
                 throw new ValidationException(ExceptionMessages.AreaForTheLayoutExist, dto.Description);
             }
 
-            DbContext.Areas.Update(new Area { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY });
+            await DbContext.Areas.UpdateAsync(new Area { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY });
         }
 
-        private bool CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(AreaDto dto)
+        private async Task<bool> CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(AreaDto dto)
         {
-            var allAreas = DbContext.Areas.GetAll().Where(x => x.LayoutId == dto.LayoutId);
+            var allAreas = (await DbContext.Areas.GetAllAsync()).Where(x => x.LayoutId == dto.LayoutId);
             var isLayoutContain = allAreas.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }

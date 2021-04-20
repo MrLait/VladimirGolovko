@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -17,7 +18,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventAreaServiceTests : MockEntites
     {
         [Test]
-        public void UpdatePrice_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
+        public async Task UpdatePriceAsync_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
         {
             // Arrange
             var eventAreaLast = EventAreas.Last();
@@ -36,10 +37,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Act
             Action<EventArea> updateLastAction = venues => EventAreas.RemoveAt(eventAreaLast.Id - 1);
             updateLastAction += v => EventAreas.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.EventAreas.GetByID(eventAreaLast.Id)).Returns(eventAreaLast);
-            Mock.Setup(x => x.EventAreas.Update(It.IsAny<EventArea>())).Callback(updateLastAction);
+            Mock.Setup(x => x.EventAreas.GetByIDAsync(eventAreaLast.Id)).ReturnsAsync(eventAreaLast);
+            Mock.Setup(x => x.EventAreas.UpdateAsync(It.IsAny<EventArea>())).Callback(updateLastAction);
 
-            eventAreaService.UpdatePrice(new EventAreaDto
+            await eventAreaService.UpdatePriceAsync(new EventAreaDto
             {
                 Id = eventAreaLast.Id,
                 EventId = expected.EventId,
@@ -55,94 +56,94 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void UpdatePrice_WhenEventAreaEmpty_ShouldThrowValidationException()
+        public void UpdatePriceAsync_WhenEventAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(null));
         }
 
         [Test]
-        public void UpdatePrice_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdatePriceAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = 0 }));
         }
 
         [Test]
-        public void UpdatePrice_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdatePriceAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = -1 }));
         }
 
         [Test]
-        public void UpdatePrice_WhenPriceLeesThanZero_ShouldThrowValidationException()
+        public void UpdatePriceAsync_WhenPriceLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.UpdatePrice(new EventAreaDto { Id = 1, Price = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = 1, Price = -1 }));
         }
 
         [Test]
-        public void GetAll_WhenEventAreasExist_ShouldReturnAreas()
+        public async Task GetAllAsync_WhenEventAreasExist_ShouldReturnAreas()
         {
             // Arrange
             var expected = EventAreas;
-            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
+            Mock.Setup(x => x.EventAreas.GetAllAsync()).ReturnsAsync(EventAreas);
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            var actual = eventAreaService.GetAll();
+            var actual = await eventAreaService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenEventAreaExist_ShouldReturnLastEventArea()
+        public async Task GetByIdAsync_WhenEventAreaExist_ShouldReturnLastEventArea()
         {
             // Arrange
             var expected = EventAreas.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.EventAreas.GetByID(expectedId)).Returns(EventAreas.Last());
+            Mock.Setup(x => x.EventAreas.GetByIDAsync(expectedId)).ReturnsAsync(EventAreas.Last());
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            var actual = eventAreaService.GetByID(expectedId);
+            var actual = await eventAreaService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventAreaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventAreaService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(-1));
         }
     }
 }

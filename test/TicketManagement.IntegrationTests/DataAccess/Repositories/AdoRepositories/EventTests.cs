@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -14,81 +15,81 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         private readonly List<Event> _eventModels = new List<Event>();
 
         [OneTimeSetUp]
-        public void InitEvents()
+        public async Task InitEventsAsync()
         {
             var eventModelRepository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
-            var countAllEvents = eventModelRepository.GetAll().Last().Id;
+            var countAllEvents = (await eventModelRepository.GetAllAsync()).Last().Id;
 
             for (int i = 1; i <= countAllEvents; i++)
             {
-                _eventModels.Add(eventModelRepository.GetByID(i));
+                _eventModels.Add(await eventModelRepository.GetByIDAsync(i));
             }
         }
 
         [Test]
-        public void GetAll_WhenEventsExist_ShouldReturnEventList()
+        public async Task GetAllAsync_WhenEventsExist_ShouldReturnEventList()
         {
             // Arrange
             var expected = _eventModels;
 
             // Act
-            var actual = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString).GetAll();
+            var actual = await new AdoUsingStoredProcedureRepository<Event>(MainConnectionString).GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetAll_WhenEventsIncorrectConnectionSting_ShouldThrowArgumentException()
+        public void GetAllAsync_WhenEventsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => actual.GetAll());
+            Assert.ThrowsAsync<ArgumentException>(async () => await actual.GetAllAsync());
         }
 
         [Test]
-        public void Create_WhenAddEvent_ShouldReturnEventWithNewEvent()
+        public async Task CreateAsync_WhenAddEvent_ShouldReturnEventWithNewEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
-            Event eventModel = new Event { Id = repository.GetAll().ToList().Count + 1, LayoutId = 2, DateTime = DateTime.Today, Description = "Created event", Name = "Test event" };
+            Event eventModel = new Event { Id = (await repository.GetAllAsync()).ToList().Count + 1, LayoutId = 2, DateTime = DateTime.Today, Description = "Created event", Name = "Test event" };
             List<Event> expected = new List<Event>(_eventModels)
             {
                 eventModel,
             };
 
             // Act
-            repository.Create(eventModel);
-            var actual = repository.GetAll();
+            await repository.CreateAsync(eventModel);
+            var actual = await repository.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenEventEmpty_ShouldThrowArgumentException()
+        public void CreateAsync_WhenEventEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Create(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
         }
 
         [Test]
-        public void Delete_WhenExistEvent_ShouldReturnEventListWithoutDeletedEvent()
+        public async Task DeleteAsync_WhenExistEvent_ShouldReturnEventListWithoutDeletedEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            var allEvents = repository.GetAll();
+            var allEvents = await repository.GetAllAsync();
             var lastEvent = allEvents.Last();
-            repository.Delete(lastEvent);
+            await repository.DeleteAsync(lastEvent);
 
-            var actual = repository.GetAll();
+            var actual = await repository.GetAllAsync();
             int countEventWithoutLast = allEvents.ToList().Count - 1;
 
             // Assert
@@ -96,152 +97,152 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Delete_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventModel));
         }
 
         [Test]
-        public void Delete_WhenNullEvent_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIncorrectConnectionStringEvent_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIncorrectConnectionStringEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 3 };
             var repository = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventModel));
         }
 
         [Test]
-        public void Update_WhenExistEvent_ShouldUpdateLastEvent()
+        public async Task UpdateAsync_WhenExistEvent_ShouldUpdateLastEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
             var expected = new Event { LayoutId = 2, Name = "Updated ivent", Description = "Description updated event", DateTime = DateTime.Today };
 
             // Act
-            var lastEvent = repository.GetAll().Last();
+            var lastEvent = (await repository.GetAllAsync()).Last();
             var idLastEvent = lastEvent.Id;
             expected.Id = idLastEvent;
 
-            repository.Update(expected);
-            var actual = repository.GetAll().Last();
+            await repository.UpdateAsync(expected);
+            var actual = (await repository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenNullEvent_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventModel));
         }
 
         [Test]
-        public void GetById_WhenExistEvent_ShouldReturnEvent()
+        public async Task GetByIdAsync_WhenExistEvent_ShouldReturnEvent()
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            var lastEvent = repository.GetAll().Last();
+            var lastEvent = (await repository.GetAllAsync()).Last();
             Event expectedEvent = new Event { Id = lastEvent.Id, DateTime = lastEvent.DateTime, Description = lastEvent.Description, Name = lastEvent.Name, LayoutId = lastEvent.LayoutId };
 
             int actualId = expectedEvent.Id;
-            var actual = repository.GetByID(actualId);
+            var actual = await repository.GetByIDAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEvent);
         }
 
         [Test]
-        public void GetById_WhenNonExistEvent_ShouldReturnNull()
+        public async Task GetByIdAsync_WhenNonExistEvent_ShouldReturnNull()
         {
             // Arrange
             Event expected = null;
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act
-            var lastEvent = repository.GetAll().Last();
+            var lastEvent = (await repository.GetAllAsync()).Last();
             int nonExistId = lastEvent.Id + 1;
-            var actual = repository.GetByID(nonExistId);
+            var actual = await repository.GetByIDAsync(nonExistId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
         }
 
         [Test]
-        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventModel.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
         }
 
         [Test]
-        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventModel));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventModel));
         }
 
         [Test]
-        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventModel));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventModel));
         }
     }
 }

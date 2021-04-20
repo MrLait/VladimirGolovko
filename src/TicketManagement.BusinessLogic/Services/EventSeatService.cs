@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
@@ -23,9 +24,9 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public IEnumerable<EventSeatDto> GetAll()
+        public async Task<IEnumerable<EventSeatDto>> GetAllAsync()
         {
-            var eventSeats = DbContext.EventSeats.GetAll();
+            var eventSeats = await DbContext.EventSeats.GetAllAsync();
             List<EventSeatDto> eventSeatsDto = new List<EventSeatDto>();
             foreach (var eventSeat in eventSeats)
             {
@@ -39,7 +40,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public EventSeatDto GetByID(int id)
+        public async Task<EventSeatDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -51,7 +52,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var eventSeat = DbContext.EventSeats.GetByID(id);
+            var eventSeat = await DbContext.EventSeats.GetByIDAsync(id);
             var eventSeatDto = new EventSeatDto
             {
                 Id = eventSeat.Id,
@@ -65,7 +66,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public void UpdateState(EventSeatDto dto)
+        public async Task UpdateStateAsync(EventSeatDto dto)
         {
             if (dto == null)
             {
@@ -87,9 +88,9 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.StateIsNegative, dto.State);
             }
 
-            var currentEventSeat = DbContext.EventSeats.GetByID(dto.Id);
+            var currentEventSeat = await DbContext.EventSeats.GetByIDAsync(dto.Id);
             currentEventSeat.State = dto.State;
-            DbContext.EventSeats.Update(currentEventSeat);
+            await DbContext.EventSeats.UpdateAsync(currentEventSeat);
         }
     }
 }

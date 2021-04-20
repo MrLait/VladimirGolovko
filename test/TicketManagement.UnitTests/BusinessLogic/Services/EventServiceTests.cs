@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -17,16 +18,16 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     public class EventServiceTests : MockEntites
     {
         [Test]
-        public void Create_WhenEventExist_ShouldCreateEvent()
+        public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
         {
             // Arrange
             var firstLayoutId = Layouts.First().Id;
             var expected = new Event { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) };
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
             var eventService = new EventService(Mock.Object);
 
             // Act
-            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
             var actual = Events.Last();
 
             // Assert
@@ -34,17 +35,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Create_WhenEventEmpty_ShouldThrowValidationException()
+        public void CreateAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(null));
         }
 
         [Test]
-        public void Create_WhenEventCreatedInThePast_ShouldThrowValidationException()
+        public void CreateAsync_WhenEventCreatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
             var eventFirst = Events.First();
@@ -59,14 +60,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Create_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        public void CreateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
             var eventFirst = Events.First();
@@ -81,14 +82,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Create_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        public void CreateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
             var layoutWithoutSeatsArea = Layouts.Last().Id;
@@ -104,19 +105,19 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Delete_WhenEventExist_ShouldUpdateEvent()
+        public async Task DeleteAsync_WhenEventExist_ShouldUpdateEvent()
         {
             // Arrange
             var expected = Events.Last();
-            Mock.Setup(x => x.Events.Delete(It.IsAny<Event>())).Callback<Event>(v => Events.RemoveAt(v.Id - 1));
-            Mock.Setup(x => x.Events.GetByID(expected.Id)).Returns(expected);
+            Mock.Setup(x => x.Events.DeleteAsync(It.IsAny<Event>())).Callback<Event>(v => Events.RemoveAt(v.Id - 1));
+            Mock.Setup(x => x.Events.GetByIDAsync(expected.Id)).ReturnsAsync(expected);
             var eventService = new EventService(Mock.Object);
             var eventDto = new EventDto
             {
@@ -130,7 +131,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             };
 
             // Act
-            eventService.Delete(eventDto);
+            await eventService.DeleteAsync(eventDto);
             var actual = Events.Last();
 
             // Assert
@@ -138,47 +139,47 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Delete_WhenEventEmpty_ShouldThrowValidationException()
+        public void DeleteAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Delete_WhenEventWithIdNotExist_ShouldThrowValidationException()
+        public void DeleteAsync_WhenEventWithIdNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = Events.Last().Id + 1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
-        public void Update_WhenEventExist_ShouldUpdateLastEvent()
+        public async Task UpdateAsync_WhenEventExist_ShouldUpdateLastEvent()
         {
             // Arrange
             var eventLast = Events.Last();
@@ -201,14 +202,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act
             Action<Event> updateLastAction = venues => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
+            Mock.Setup(x => x.Events.UpdateAsync(It.IsAny<Event>())).Callback(updateLastAction);
 
-            eventService.Update(eventDto);
+            await eventService.UpdateAsync(eventDto);
             var actual = Events[eventLast.Id - 1];
 
             // Assert
@@ -216,47 +217,47 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenEventEmpty_ShouldThrowValidationException()
+        public void UpdateAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenIdIsNotExist_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdIsNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = Events.Last().Id + 1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = Events.Last().Id + 1 }));
         }
 
         [Test]
-        public void Update_WhenLayoutChanged_ShouldUpdateLastEvent()
+        public async Task UpdateAsync_WhenLayoutChanged_ShouldUpdateLastEvent()
         {
             // Arrange
             var eventLast = Events.Last();
@@ -280,14 +281,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act
             Action<Event> updateLastAction = events => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.Events.Update(It.IsAny<Event>())).Callback(updateLastAction);
+            Mock.Setup(x => x.Events.UpdateAsync(It.IsAny<Event>())).Callback(updateLastAction);
 
-            eventService.Update(eventDto);
+            await eventService.UpdateAsync(eventDto);
             var actual = Events[eventLast.Id - 1];
 
             // Assert
@@ -295,7 +296,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         }
 
         [Test]
-        public void Update_WhenEventUpdatedInThePast_ShouldThrowValidationException()
+        public void UpdateAsync_WhenEventUpdatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
             var eventLast = Events.Last();
@@ -310,14 +311,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 Price = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
 
         [Test]
-        public void Update_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        public void UpdateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
             var eventFirst = Events.First();
@@ -333,15 +334,15 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.GetByID(eventFirst.Id)).Returns(eventFirst);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.GetByIDAsync(eventFirst.Id)).ReturnsAsync(eventFirst);
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
 
         [Test]
-        public void Update_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        public void UpdateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
             var eventLast = Events.Last();
@@ -357,62 +358,62 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.Create(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
-            Mock.Setup(x => x.Events.GetByID(eventLast.Id)).Returns(eventLast);
+            Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
+            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
 
         [Test]
-        public void GetAll_WhenEventsExist_ShouldReturnEvents()
+        public async Task GetAllAsync_WhenEventsExist_ShouldReturnEvents()
         {
             // Arrange
             var expected = Events;
-            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events);
             var eventService = new EventService(Mock.Object);
 
             // Act
-            var actual = eventService.GetAll();
+            var actual = await eventService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenEventExist_ShouldReturnLastEvent()
+        public async Task GetByIdAsync_WhenEventExist_ShouldReturnLastEvent()
         {
             // Arrange
             var expected = Events.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Events.GetByID(expectedId)).Returns(Events.Last());
+            Mock.Setup(x => x.Events.GetByIDAsync(expectedId)).ReturnsAsync(Events.Last());
             var eventService = new EventService(Mock.Object);
 
             // Act
-            var actual = eventService.GetByID(expectedId);
+            var actual = await eventService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(-1));
         }
     }
 }

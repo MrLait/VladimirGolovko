@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
@@ -24,180 +25,180 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenVenueExist_ShouldReturnCreatedVenue()
+        public async Task CreateAsync_WhenVenueExist_ShouldReturnCreatedVenue()
         {
             // Arrange
-            var expected = new Venue { Id = _venueRepository.GetAll().Last().Id + 1, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
+            var expected = new Venue { Id = (await _venueRepository.GetAllAsync()).Last().Id + 1, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
             var venueService = new VenueService(_adoDbContext);
 
             // Act
-            venueService.Create(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
-            var actual = _venueRepository.GetAll().Last();
+            await venueService.CreateAsync(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
+            var actual = (await _venueRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenVenueEmpty_ShouldThrowValidationException()
+        public void CreateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Create(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(null));
         }
 
         [Test]
-        public void Create_WhenDescriptionExist_ShouldThrowValidationException()
+        public void CreateAsync_WhenDescriptionExist_ShouldThrowValidationException()
         {
             // Arrange
             var venueDto = new VenueDto { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" };
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Create(venueDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(venueDto));
         }
 
         [Test]
-        public void Delete_WhenVenueExist_ShouldDeleteLastVenue()
+        public async Task DeleteAsync_WhenVenueExist_ShouldDeleteLastVenue()
         {
             // Arrange
-            var expected = _venueRepository.GetAll().Last();
+            var expected = (await _venueRepository.GetAllAsync()).Last();
             var venueService = new VenueService(_adoDbContext);
-            var venueLast = _venueRepository.GetAll().Last();
+            var venueLast = (await _venueRepository.GetAllAsync()).Last();
 
             // Act
-            venueService.Delete(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
-            var actual = _venueRepository.GetAll().Last();
+            await venueService.DeleteAsync(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
+            var actual = (await _venueRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenVenueEmpty_ShouldThrowValidationException()
+        public void DeleteAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Delete(new VenueDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenVenueExist_ShouldUpdateLastVenue()
+        public async Task UpdateAsync_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
-            var venueLast = _venueRepository.GetAll().Last();
+            var venueLast = (await _venueRepository.GetAllAsync()).Last();
             var expected = new Venue { Id = venueLast.Id, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
             var venueService = new VenueService(_adoDbContext);
 
             // Act
-            venueService.Update(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
-            var actual = _venueRepository.GetAll().Last();
+            await venueService.UpdateAsync(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
+            var actual = (await _venueRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenVenueEmpty_ShouldThrowValidationException()
+        public void UpdateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.Update(new VenueDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = -1 }));
         }
 
         [Test]
-        public void GetAll_WhenVenuesExist_ShouldReturnVenues()
+        public async Task GetAllAsync_WhenVenuesExist_ShouldReturnVenues()
         {
             // Arrange
-            var expected = _venueRepository.GetAll();
+            var expected = await _venueRepository.GetAllAsync();
             var venueService = new VenueService(_adoDbContext);
 
             // Act
-            var actual = venueService.GetAll();
+            var actual = await venueService.GetAllAsync();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenVenueExist_ShouldReturnLastVenue()
+        public async Task GetByIdAsync_WhenVenueExist_ShouldReturnLastVenue()
         {
             // Arrange
-            var expected = _venueRepository.GetAll().Last();
+            var expected = (await _venueRepository.GetAllAsync()).Last();
             var expectedId = expected.Id;
             var venueService = new VenueService(_adoDbContext);
 
             // Act
-            var actual = venueService.GetByID(expectedId);
+            var actual = await venueService.GetByIDAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetByID_WhenIdEqualZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.GetByID(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(0));
         }
 
         [Test]
-        public void GetByID_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var venueService = new VenueService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => venueService.GetByID(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(-1));
         }
     }
 }

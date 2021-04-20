@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
@@ -28,36 +29,43 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public void Create_WhenEventExist_ShouldCreateEvent()
+        public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
         {
             // Arrange
-            var firstLayoutId = _layoutRepository.GetAll().First().Id;
-            var expected = new Event { Id = _eventRepository.GetAll().Last().Id + 1,  Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) };
+            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
+            var expected = new Event
+            {
+                Id = (await _eventRepository.GetAllAsync()).Last().Id + 1,
+                Name = "Created",
+                LayoutId = firstLayoutId,
+                Description = "Created",
+                DateTime = new DateTime(3000, 1, 1),
+            };
             var eventService = new EventService(_adoDbContext);
 
             // Act
-            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
-            var actual = _eventRepository.GetAll().Last();
+            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var actual = (await _eventRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenEventExist_ShouldCreateEventAreas()
+        public async Task Create_WhenEventExist_ShouldCreateEventAreas()
         {
             // Arrange
-            var firstLayoutId = _layoutRepository.GetAll().First().Id;
+            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
             var eventService = new EventService(_adoDbContext);
             var areaService = new AreaService(_adoDbContext);
             var eventAreasService = new EventAreaService(_adoDbContext);
-            int lastEventAreaId = eventAreasService.GetAll().Last().Id;
+            int lastEventAreaId = (await eventAreasService.GetAllAsync()).Last().Id;
             var expectedEventAreasDto = new List<EventAreaDto>();
 
             // Act
-            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
-            var eventId = eventService.GetAll().Last().Id;
-            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
+            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var eventId = (await eventService.GetAllAsync()).Last().Id;
+            var allAreasInLayout = (await areaService.GetAllAsync()).Where(x => x.LayoutId == firstLayoutId).ToList();
 
             for (int i = 0; i < allAreasInLayout.Count; i++)
             {
@@ -71,32 +79,32 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 });
             }
 
-            var actualEventAreasDto = eventAreasService.GetAll().Where(x => x.Id > lastEventAreaId);
+            var actualEventAreasDto = (await eventAreasService.GetAllAsync()).Where(x => x.Id > lastEventAreaId);
 
             // Assert
             actualEventAreasDto.Should().BeEquivalentTo(expectedEventAreasDto);
         }
 
         [Test]
-        public void Create_WhenEventExist_ShouldCreateEventSeats()
+        public async Task CreateAsync_WhenEventExist_ShouldCreateEventSeats()
         {
             // Arrange
-            var firstLayoutId = _layoutRepository.GetAll().First().Id;
+            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
             var eventService = new EventService(_adoDbContext);
             var areaService = new AreaService(_adoDbContext);
             var seatsService = new SeatService(_adoDbContext);
             var eventSeatService = new EventSeatService(_adoDbContext);
             var expectedEventSeatsDto = new List<EventSeatDto>();
             var allSeatsForAllAreas = new List<SeatDto>();
-            var lastEventAreaId = new EventAreaService(_adoDbContext).GetAll().Last().Id;
-            var lastEventSeatId = eventSeatService.GetAll().Last().Id;
+            var lastEventAreaId = (await new EventAreaService(_adoDbContext).GetAllAsync()).Last().Id;
+            var lastEventSeatId = (await eventSeatService.GetAllAsync()).Last().Id;
 
             // Act
-            eventService.Create(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
-            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
+            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            var allAreasInLayout = (await areaService.GetAllAsync()).Where(x => x.LayoutId == firstLayoutId).ToList();
             foreach (var item in allAreasInLayout)
             {
-                allSeatsForAllAreas.AddRange(seatsService.GetAll().Where(x => x.AreaId == item.Id));
+                allSeatsForAllAreas.AddRange((await seatsService.GetAllAsync()).Where(x => x.AreaId == item.Id));
             }
 
             int currSateId = allSeatsForAllAreas.FirstOrDefault().AreaId;
@@ -125,27 +133,27 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 }
             }
 
-            var actualEventSeatsDto = eventSeatService.GetAll().Where(x => x.Id > lastEventSeatId);
+            var actualEventSeatsDto = (await eventSeatService.GetAllAsync()).Where(x => x.Id > lastEventSeatId);
 
             // Assert
             actualEventSeatsDto.Should().BeEquivalentTo(expectedEventSeatsDto);
         }
 
         [Test]
-        public void Create_WhenEventEmpty_ShouldThrowValidationException()
+        public void CreateAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(null));
         }
 
         [Test]
-        public void Create_WhenEventCreatedInThePast_ShouldThrowValidationException()
+        public async Task CreateAsync_WhenEventCreatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = _eventRepository.GetAll().First();
+            var firstEvent = (await _eventRepository.GetAllAsync()).First();
             var eventDto = new EventDto
             {
                 Id = firstEvent.Id,
@@ -159,14 +167,14 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Create_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        public async Task CreateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = _eventRepository.GetAll().First();
+            var firstEvent = (await _eventRepository.GetAllAsync()).First();
             var eventDto = new EventDto
             {
                 Id = firstEvent.Id,
@@ -180,15 +188,15 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Create_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        public async Task CreateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
-            var layoutWithoutSeatsArea = _layoutRepository.GetAll().Last().Id;
-            var lastEvent = _eventRepository.GetAll().Last();
+            var layoutWithoutSeatsArea = (await _layoutRepository.GetAllAsync()).Last().Id;
+            var lastEvent = (await _eventRepository.GetAllAsync()).Last();
             var eventDto = new EventDto
             {
                 Id = lastEvent.Id,
@@ -202,14 +210,14 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Create(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
         }
 
         [Test]
-        public void Delete_WhenEventExist_ShouldDeleteLastEvent()
+        public async Task DeleteAsync_WhenEventExist_ShouldDeleteLastEvent()
         {
             // Arrange
-            var expected = _eventRepository.GetAll().Last();
+            var expected = (await _eventRepository.GetAllAsync()).Last();
             var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
@@ -223,58 +231,58 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             };
 
             // Act
-            eventService.Delete(eventDto);
-            var actual = _eventRepository.GetAll().Last();
+            await eventService.DeleteAsync(eventDto);
+            var actual = (await _eventRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
         }
 
         [Test]
-        public void Delete_WhenEventEmpty_ShouldThrowValidationException()
+        public void DeleteAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIdEqualZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Delete_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Delete_WhenEventWithIdNotExist_ShouldThrowValidationException()
+        public void DeleteAsync_WhenEventWithIdNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Delete(new EventDto { Id = _eventRepository.GetAll().Last().Id + 1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = (await _eventRepository.GetAllAsync()).Last().Id + 1 }));
         }
 
         [Test]
-        public void Update_WhenEventExist_ShouldUpdateEvent()
+        public async Task UpdateAsync_WhenEventExist_ShouldUpdateEvent()
         {
             // Arrange
-            var eventLast = _eventRepository.GetAll().Last();
+            var eventLast = (await _eventRepository.GetAllAsync()).Last();
             var expected = new Event
             {
                 Id = eventLast.Id,
@@ -296,58 +304,58 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             };
 
             // Act
-            eventService.Update(eventDto);
-            var actual = _eventRepository.GetAll().Last();
+            await eventService.UpdateAsync(eventDto);
+            var actual = (await _eventRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenEventEmpty_ShouldThrowValidationException()
+        public void UpdateAsync_WhenEventEmpty_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(null));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = 0 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = 0 }));
         }
 
         [Test]
-        public void Update_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = -1 }));
         }
 
         [Test]
-        public void Update_WhenIdIsNotExist_ShouldThrowValidationException()
+        public void UpdateAsync_WhenIdIsNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(new EventDto { Id = _eventRepository.GetAll().Last().Id + 1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = (await _eventRepository.GetAllAsync()).Last().Id + 1 }));
         }
 
         [Test]
-        public void Update_WhenLayoutChanged_ShouldUpdateLastEvent()
+        public async Task UpdateAsync_WhenLayoutChanged_ShouldUpdateLastEvent()
         {
             // Arrange
-            var eventLast = _eventRepository.GetAll().Last();
+            var eventLast = (await _eventRepository.GetAllAsync()).Last();
             var layoutIdChanged = eventLast.Id + 1;
             var expected = new Event
             {
@@ -370,18 +378,18 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             };
 
             // Act
-            eventService.Update(eventDto);
-            var actual = _eventRepository.GetAll().Last();
+            await eventService.UpdateAsync(eventDto);
+            var actual = (await _eventRepository.GetAllAsync()).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenEventUpdatedInThePast_ShouldThrowValidationException()
+        public async Task UpdateAsync_WhenEventUpdatedInThePast_ShouldThrowValidationException()
         {
             // Arrange
-            var eventLast = _eventRepository.GetAll().Last();
+            var eventLast = (await _eventRepository.GetAllAsync()).Last();
             var eventService = new EventService(_adoDbContext);
             var eventDto = new EventDto
             {
@@ -395,19 +403,19 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             };
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
 
         [Test]
-        public void Update_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        public async Task UpdateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
         {
             // Arrange
-            var firstEvent = _eventRepository.GetAll().First();
+            var firstEvent = (await _eventRepository.GetAllAsync()).First();
             var layoutIdChanged = 2;
             var eventDto = new EventDto
             {
                 Id = firstEvent.Id,
-                DateTime = _eventRepository.GetAll().ToList()[2].DateTime,
+                DateTime = (await _eventRepository.GetAllAsync()).ToList()[2].DateTime,
                 Description = firstEvent.Description,
                 LayoutId = layoutIdChanged,
                 Name = firstEvent.Name,
@@ -417,15 +425,15 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
 
         [Test]
-        public void Update_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        public async Task UpdateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
         {
             // Arrange
-            var lastEvent = _eventRepository.GetAll().Last();
-            var layoutWithoutSeatsArea = _layoutRepository.GetAll().Last().Id;
+            var lastEvent = (await _eventRepository.GetAllAsync()).Last();
+            var layoutWithoutSeatsArea = (await _layoutRepository.GetAllAsync()).Last().Id;
             var eventDto = new EventDto
             {
                 Id = lastEvent.Id,
@@ -439,7 +447,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventService = new EventService(_adoDbContext);
 
             // Act & Assert
-            Assert.Throws<ValidationException>(() => eventService.Update(eventDto));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
         }
     }
 }

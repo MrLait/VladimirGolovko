@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -12,19 +13,19 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// Update price object in database.
         /// </summary>
         /// <param name="dto">Event area data object transfer.</param>
-        void UpdatePrice(EventAreaDto dto);
+        Task UpdatePriceAsync(EventAreaDto dto);
 
         /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        EventAreaDto GetByID(int id);
+        Task<EventAreaDto> GetByIDAsync(int id);
 
         /// <summary>
         /// Method to get all objects from database table.
         /// </summary>
         /// <returns>Returns list of objects.</returns>
-        IEnumerable<EventAreaDto> GetAll();
+        Task<IEnumerable<EventAreaDto>> GetAllAsync();
     }
 }

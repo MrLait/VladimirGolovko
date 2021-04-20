@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -12,31 +13,31 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// Create object in database.
         /// </summary>
         /// <param name="dto">Area data object transfer.</param>
-        void Create(AreaDto dto);
+        Task CreateAsync(AreaDto dto);
 
         /// <summary>
         /// Delete object in database.
         /// </summary>
         /// <param name="dto">Area data object transfer.</param>
-        void Delete(AreaDto dto);
+        Task DeleteAsync(AreaDto dto);
 
         /// <summary>
         /// Update object in database.
         /// </summary>
         /// <param name="dto">Area data object transfer.</param>
-        void Update(AreaDto dto);
+        Task UpdateAsync(AreaDto dto);
 
         /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        AreaDto GetByID(int id);
+        Task<AreaDto> GetByIDAsync(int id);
 
         /// <summary>
         /// Method to get all objects from database table.
         /// </summary>
         /// <returns>Returns list of objects.</returns>
-        IEnumerable<AreaDto> GetAll();
+        Task<IEnumerable<AreaDto>> GetAllAsync();
     }
 }
