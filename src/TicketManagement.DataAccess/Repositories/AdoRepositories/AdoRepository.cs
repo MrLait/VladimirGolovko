@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
@@ -43,7 +44,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public abstract Task<IEnumerable<T>> GetAllAsync();
+        public abstract Task<IQueryable<T>> GetAllAsync();
 
         /// <inheritdoc/>
         public virtual Task<T> GetByIDAsync(int byId)

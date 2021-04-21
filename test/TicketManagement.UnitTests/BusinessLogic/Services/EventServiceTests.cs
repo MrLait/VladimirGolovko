@@ -370,7 +370,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var expected = Events;
-            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events);
+            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events.AsQueryable());
             var eventService = new EventService(Mock.Object);
 
             // Act

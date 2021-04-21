@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -203,13 +204,13 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             };
 
             Mock = new Mock<IDbContext>();
-            Mock.Setup(x => x.Venues.GetAllAsync()).ReturnsAsync(Venues);
-            Mock.Setup(x => x.Seats.GetAllAsync()).ReturnsAsync(Seats);
-            Mock.Setup(x => x.Layouts.GetAllAsync()).ReturnsAsync(Layouts);
-            Mock.Setup(x => x.Areas.GetAllAsync()).ReturnsAsync(Areas);
-            Mock.Setup(x => x.EventAreas.GetAllAsync()).ReturnsAsync(EventAreas);
-            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats);
-            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events);
+            Mock.Setup(x => x.Venues.GetAllAsync()).ReturnsAsync(Venues.AsQueryable());
+            Mock.Setup(x => x.Seats.GetAllAsync()).ReturnsAsync(Seats.AsQueryable());
+            Mock.Setup(x => x.Layouts.GetAllAsync()).ReturnsAsync(Layouts.AsQueryable());
+            Mock.Setup(x => x.Areas.GetAllAsync()).ReturnsAsync(Areas.AsQueryable());
+            Mock.Setup(x => x.EventAreas.GetAllAsync()).ReturnsAsync(EventAreas.AsQueryable());
+            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats.AsQueryable());
+            Mock.Setup(x => x.Events.GetAllAsync()).ReturnsAsync(Events.AsQueryable());
         }
     }
 }

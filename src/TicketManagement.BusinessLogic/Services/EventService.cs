@@ -185,7 +185,7 @@ namespace TicketManagement.BusinessLogic.Services
 
         private async Task<bool> CheckThatAtLeastOneAreaContainsSeatsAsync(EventDto dto)
         {
-            var allSeats = await DbContext.Seats.GetAllAsync();
+            var allSeats = (await DbContext.Seats.GetAllAsync()).ToList();
             IEnumerable<Area> allAreasInLayout = (await DbContext.Areas.GetAllAsync()).Where(x => x.LayoutId == dto.LayoutId);
 
             var atLeastOneAreaContainsSeats = allSeats.Join(allAreasInLayout,

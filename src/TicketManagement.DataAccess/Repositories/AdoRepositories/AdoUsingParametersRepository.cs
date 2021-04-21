@@ -79,7 +79,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override async Task<IEnumerable<T>> GetAllAsync()
+        public override async Task<IQueryable<T>> GetAllAsync()
         {
             var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
             string strCol = string.Join(", ", poropertyNames);
@@ -94,7 +94,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             {
                 DataSet ds = new DataSet();
                 await Task.Run(() => sqlDataAdapter.Fill(ds));
-                return ds.Tables[0].ToEnumerable<T>();
+                return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
             catch (SqlException sqlEx)
             {

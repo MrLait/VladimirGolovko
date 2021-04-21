@@ -170,7 +170,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var expected = Layouts;
-            Mock.Setup(x => x.Layouts.GetAllAsync()).ReturnsAsync(Layouts);
+            Mock.Setup(x => x.Layouts.GetAllAsync()).ReturnsAsync(Layouts.AsQueryable());
             var layoutService = new LayoutService(Mock.Object);
 
             // Act

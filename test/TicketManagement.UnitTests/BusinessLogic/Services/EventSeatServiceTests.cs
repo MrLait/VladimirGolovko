@@ -98,7 +98,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var expected = EventSeats;
-            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats);
+            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats.AsQueryable());
             var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act
