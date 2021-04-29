@@ -22,12 +22,12 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var firstLayoutId = Layouts.First().Id;
-            var expected = new Event { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) };
+            var expected = new Event { Name = "Created", LayoutId = firstLayoutId, Description = "Created", StartDateTime = new DateTime(3000, 1, 1) };
             Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
             var eventService = new EventService(Mock.Object);
 
             // Act
-            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", DateTime = new DateTime(3000, 1, 1) });
+            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", StartDateTime = new DateTime(3000, 1, 1) });
             var actual = Events.Last();
 
             // Assert
@@ -52,7 +52,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventFirst.Id,
-                DateTime = new DateTime(2000, 1, 1),
+                StartDateTime = new DateTime(2000, 1, 1),
                 Description = eventFirst.Description,
                 LayoutId = eventFirst.LayoutId,
                 Name = eventFirst.Name,
@@ -74,7 +74,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventFirst.Id,
-                DateTime = eventFirst.DateTime,
+                StartDateTime = eventFirst.StartDateTime,
                 Description = eventFirst.Description,
                 LayoutId = eventFirst.LayoutId,
                 Name = eventFirst.Name,
@@ -97,7 +97,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = lastEvent.Id,
-                DateTime = new DateTime(2990, 1, 1),
+                StartDateTime = new DateTime(2990, 1, 1),
                 Description = lastEvent.Description,
                 LayoutId = layoutWithoutSeatsArea,
                 Name = lastEvent.Name,
@@ -122,7 +122,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = expected.Id,
-                DateTime = expected.DateTime,
+                StartDateTime = expected.StartDateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
                 Name = expected.Name,
@@ -186,7 +186,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var expected = new Event
             {
                 Id = eventLast.Id,
-                DateTime = eventLast.DateTime,
+                StartDateTime = eventLast.StartDateTime,
                 Description = "Updated Description",
                 LayoutId = eventLast.LayoutId,
                 Name = "Updated name",
@@ -195,7 +195,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = expected.Id,
-                DateTime = expected.DateTime,
+                StartDateTime = expected.StartDateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
                 Name = expected.Name,
@@ -265,7 +265,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var expected = new Event
             {
                 Id = eventLast.Id,
-                DateTime = eventLast.DateTime,
+                StartDateTime = eventLast.StartDateTime,
                 Description = "Updated Description",
                 LayoutId = layoutIdChanged,
                 Name = "Updated name",
@@ -274,7 +274,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventLast.Id,
-                DateTime = expected.DateTime,
+                StartDateTime = expected.StartDateTime,
                 Description = expected.Description,
                 LayoutId = expected.LayoutId,
                 Name = expected.Name,
@@ -304,7 +304,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventLast.Id,
-                DateTime = new DateTime(2000, 1, 1),
+                StartDateTime = new DateTime(2000, 1, 1),
                 Description = eventLast.Description,
                 LayoutId = eventLast.LayoutId,
                 Name = eventLast.Name,
@@ -326,7 +326,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventFirst.Id,
-                DateTime = Events[2].DateTime,
+                StartDateTime = Events[2].StartDateTime,
                 Description = eventFirst.Description,
                 LayoutId = layoutIdChanged,
                 Name = eventFirst.Name,
@@ -350,7 +350,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventDto = new EventDto
             {
                 Id = eventLast.Id,
-                DateTime = new DateTime(2990, 1, 1),
+                StartDateTime = new DateTime(2990, 1, 1),
                 Description = eventLast.Description,
                 LayoutId = layoutWithoutSeatsArea,
                 Name = eventLast.Name,

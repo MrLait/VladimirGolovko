@@ -54,7 +54,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
-            Event eventModel = new Event { Id = (await repository.GetAllAsync()).ToList().Count + 1, LayoutId = 2, DateTime = DateTime.Today, Description = "Created event", Name = "Test event" };
+            Event eventModel = new Event { Id = (await repository.GetAllAsync()).ToList().Count + 1, LayoutId = 2, StartDateTime = DateTime.Today, Description = "Created event", Name = "Test event" };
             List<Event> expected = new List<Event>(_eventModels)
             {
                 eventModel,
@@ -133,7 +133,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
-            var expected = new Event { LayoutId = 2, Name = "Updated ivent", Description = "Description updated event", DateTime = DateTime.Today };
+            var expected = new Event { LayoutId = 2, Name = "Updated ivent", Description = "Description updated event", StartDateTime = DateTime.Today };
 
             // Act
             var lastEvent = (await repository.GetAllAsync()).Last();
@@ -176,7 +176,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastEvent = (await repository.GetAllAsync()).Last();
-            Event expectedEvent = new Event { Id = lastEvent.Id, DateTime = lastEvent.DateTime, Description = lastEvent.Description, Name = lastEvent.Name, LayoutId = lastEvent.LayoutId };
+            Event expectedEvent = new Event { Id = lastEvent.Id, StartDateTime = lastEvent.StartDateTime, Description = lastEvent.Description, Name = lastEvent.Name, LayoutId = lastEvent.LayoutId };
 
             int actualId = expectedEvent.Id;
             var actual = await repository.GetByIDAsync(actualId);

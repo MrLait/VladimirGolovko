@@ -7,7 +7,7 @@ namespace TicketManagement.BusinessLogic.Interfaces
     /// <summary>
     /// Event service interface.
     /// </summary>
-    internal interface IEventService : IService
+    public interface IEventService : IService
     {
         /// <summary>
         /// Create object in database.

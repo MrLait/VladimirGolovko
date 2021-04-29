@@ -6,3 +6,35 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@*@model IEnumerable<TicketManagement.DataAccess.Domain.Models.Event>
+    @{
+        ViewData["Title"] = "Список смартфонов";
+        Layout = null;
+    }
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+        <title>Магазин смартфонов</title>
+    </head>
+    <body>
+        <h3>Смартфоны</h3>
+        <table>
+            <tr>
+                <td>Модель</td>
+                <td>Производитель</td>
+                <td>Цена</td>
+                <td></td>
+            </tr>
+            @foreach (var phone in Model)
+            {
+                <tr>
+                    <td>@phone.Name</td>
+                    <td>@phone.Description</td>
+                    <td><a href="~/Home/Buy/@phone.Id">Купить</a></td>
+                </tr>
+            }
+        </table>
+    </body>
+    </html>*@

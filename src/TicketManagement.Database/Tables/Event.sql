@@ -4,5 +4,7 @@
 	[Name] nvarchar(120) NOT NULL,
 	[Description] nvarchar(max) NOT NULL,
 	[LayoutId] int NOT NULL, 
-    [DateTime] DATETIME NOT NULL,
+    [StartDateTime] DATETIME NOT NULL, 
+    [EndDateTime] DATETIME NOT NULL, 
+    [ImageUrl] nvarchar(MAX) NULL,
 )

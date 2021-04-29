@@ -34,8 +34,18 @@ namespace TicketManagement.DataAccess.Domain.Models
         public int LayoutId { get; set; }
 
         /// <summary>
-        /// Gets or sets dateTime column in table.
+        /// Gets or sets start date time column in table.
         /// </summary>
-        public DateTime DateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets end date time column in table.
+        /// </summary>
+        public DateTime EndDateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets image url column in table.
+        /// </summary>
+        public string ImageUrl { get; set; }
     }
 }

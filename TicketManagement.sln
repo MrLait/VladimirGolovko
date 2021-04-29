@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketManagement.Integratio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketManagement.Dto", "src\TicketManagement.Dto\TicketManagement.Dto.csproj", "{9DA863F2-26A2-47F6-8A91-8E7594CE9B80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagement.WebMVC", "src\TicketManagement.WebMVC\TicketManagement.WebMVC.csproj", "{2600E3F3-2301-4D0B-9A95-ED9310AD3989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketManagement.WebMVC", "src\TicketManagement.WebMVC\TicketManagement.WebMVC.csproj", "{2600E3F3-2301-4D0B-9A95-ED9310AD3989}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,10 +2,12 @@
 	@Name           varchar(120),
 	@Description    varchar(max),
 	@LayoutId       int,
-    @DateTime       Datetime
+    @StartDateTime  Datetime,
+    @EndDateTime    Datetime,
+    @ImageUrl       varchar(max)
 AS
-    INSERT INTO [dbo].[Event] (Name, Description, LayoutId, DateTime)
-    VALUES (@Name, @Description, @LayoutId, @DateTime)
+    INSERT INTO [dbo].[Event] (Name, Description, LayoutId, StartDateTime, EndDateTime, ImageUrl)
+    VALUES (@Name, @Description, @LayoutId, @StartDateTime, @EndDateTime, @ImageUrl)
 
     SELECT SCOPE_IDENTITY()
 GO

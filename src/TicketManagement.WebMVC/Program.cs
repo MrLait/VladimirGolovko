@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace TicketManagement.WebMVC
 {
-    internal class Program
+    public class Program
     {
         protected Program()
         {

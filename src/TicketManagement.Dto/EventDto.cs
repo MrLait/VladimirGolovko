@@ -6,7 +6,7 @@ namespace TicketManagement.Dto
     /// <summary>
     /// Event data transfer object class.
     /// </summary>
-    internal class EventDto : IDtoEntity
+    public class EventDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.
@@ -29,18 +29,38 @@ namespace TicketManagement.Dto
         public int LayoutId { get; set; }
 
         /// <summary>
-        /// Gets or sets DateTime.
+        /// Gets or sets start date time column in table.
         /// </summary>
-        public DateTime DateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
 
         /// <summary>
-        /// Gets or sets Price.
+        /// Gets or sets end date time column in table.
         /// </summary>
-        public decimal Price { get; set; }
+        public DateTime EndDateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets min price.
+        /// </summary>
+        public decimal PriceFrom { get; set; }
+
+        /// <summary>
+        /// Gets or sets max price.
+        /// </summary>
+        public decimal PriceTo { get; set; }
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
         public int State { get; set; }
+
+        /// <summary>
+        /// Gets or sets image url column in table.
+        /// </summary>
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets available seats.
+        /// </summary>
+        public int AvailableSeats { get; set; }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model TicketManagement.WebMVC.ViewModels.CatalogViewModels.IndexViewModel
+
+@{ ViewData["Title"] = "Catalog"; }
+
+<div class="container">
+
+    @if (Model.EventItems.Count() > 0)
+    {
+    <div class="esh-catalog-items row">
+        @foreach (var catalogItem in Model.EventItems)
+        {
+        <div class="esh-catalog-item col-md-4">
+            <partial name="_product" model="catalogItem" />
+        </div>
+        }
+    </div>
+    }
+    else
+    {
+    <div class="esh-catalog-items row">
+        THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
+    </div>
+    }
+</div>

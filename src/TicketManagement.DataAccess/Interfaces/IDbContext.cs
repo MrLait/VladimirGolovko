@@ -5,7 +5,7 @@ namespace TicketManagement.DataAccess.Interfaces
     /// <summary>
     /// Database context interface.
     /// </summary>
-    internal interface IDbContext
+    public interface IDbContext
     {
         /// <summary>
         /// Gets area table repository.

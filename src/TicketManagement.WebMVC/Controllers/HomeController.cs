@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TicketManagement.DataAccess.Ado;
 using TicketManagement.WebMVC.Models;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -9,14 +12,18 @@ namespace TicketManagement.WebMVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly EfDbContext _context;
+
+        public HomeController(ILogger<HomeController> logger, EfDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var getEvent = await _context.Events.GetAllAsync();
+            return View(getEvent);
         }
 
         public IActionResult Privacy()
