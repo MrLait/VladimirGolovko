@@ -63,6 +63,7 @@
     <Folder Include="PostDeploy" />
     <Folder Include="StoredProcedure" />
     <Folder Include="StoredProcedure\Event" />
+    <Folder Include="Tables\Identity" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ForeignKeys\FK_Venue_Layout.sql" />
@@ -77,6 +78,13 @@
     <Build Include="StoredProcedure\Event\UpdateEvent.sql" />
     <Build Include="StoredProcedure\Event\GetAllEvent.sql" />
     <Build Include="StoredProcedure\Event\GetByIdEvent.sql" />
+    <Build Include="Tables\Identity\AspNetRoles.sql" />
+    <Build Include="Tables\Identity\AspNetUsers.sql" />
+    <Build Include="Tables\Identity\AspNetRoleClaims.sql" />
+    <Build Include="Tables\Identity\AspNetUserClaims.sql" />
+    <Build Include="Tables\Identity\AspNetUserLogins.sql" />
+    <Build Include="Tables\Identity\AspNetUserRoles.sql" />
+    <Build Include="Tables\Identity\AspNetUserTokens.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Event.sql" />
