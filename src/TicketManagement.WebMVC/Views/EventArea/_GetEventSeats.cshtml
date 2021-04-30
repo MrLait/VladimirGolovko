@@ -1,0 +1,22 @@
+﻿@*@model TicketManagement.WebMVC.ViewModels.EventSeatViewModels.IndexViewModel*@
+
+<h3>@Model</h3>
+
+<a asp-controller="EventSeat" asp-action="GetEventAreaId" asp-route-id="@Model">1</a>
+
+@*<form asp-controller="EventSeat" asp-action="GetEventAreaId">
+        <input class="esh-event-area-button" type="submit" value="Choose tickets" />
+        <input type="hidden" asp-for="@Model" name="id" />
+    </form>*@
+@*@if (Model.EvenSeatItems.Count() > 0)
+    {
+        @foreach (var item in Model.EvenSeatItems)
+        {
+
+            <form asp-controller="EventSeat" asp-action="GetEventAreaId">
+                <input type="hidden" asp-for="@Model" name="id" />
+            </form>
+
+            <h3>@Model</h3>
+        }
+    }*@

@@ -11,13 +11,13 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event area service class.
     /// </summary>
-    internal class EventAreaService : IEventAreaService
+    public class EventAreaService : IEventAreaService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventAreaService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        internal EventAreaService(IDbContext dbContext) => DbContext = dbContext;
+        public EventAreaService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.

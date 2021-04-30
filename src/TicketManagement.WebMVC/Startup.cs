@@ -29,6 +29,8 @@ namespace TicketManagement.WebMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IEventAreaService, EventAreaService>();
+            services.AddScoped<IEventSeatService, EventSeatService>();
             services.AddScoped<IDbContext, EfDbContext>();
 
             var connectionString = Configuration.GetConnectionString("TestConnection");
@@ -65,7 +67,7 @@ namespace TicketManagement.WebMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=EventHomePage}/{action=Index}/{id?}");
             });
         }
     }

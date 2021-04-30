@@ -1,23 +1,23 @@
-﻿@model TicketManagement.WebMVC.ViewModels.CatalogViewModels.IndexViewModel
+﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
 
-@{ ViewData["Title"] = "Catalog"; }
+@{ ViewData["Title"] = "Events"; }
 
 <div class="container">
 
     @if (Model.EventItems.Count() > 0)
     {
-    <div class="esh-catalog-items row">
-        @foreach (var catalogItem in Model.EventItems)
+    <div class="esh-event-items row">
+        @foreach (var eventItem in Model.EventItems)
         {
-        <div class="esh-catalog-item col-md-4">
-            <partial name="_product" model="catalogItem" />
+        <div class="esh-event-item col-md-4">
+            <partial name="_product" model="eventItem"/>
         </div>
         }
     </div>
     }
     else
     {
-    <div class="esh-catalog-items row">
+    <div class="esh-event-items row">
         THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
     </div>
     }

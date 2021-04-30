@@ -7,7 +7,7 @@ namespace TicketManagement.BusinessLogic.Interfaces
     /// <summary>
     /// Event seat service interface.
     /// </summary>
-    internal interface IEventSeatService : IService
+    public interface IEventSeatService : IService
     {
         /// <summary>
         /// Update state object in database.

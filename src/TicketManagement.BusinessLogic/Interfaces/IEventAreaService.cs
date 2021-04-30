@@ -7,7 +7,7 @@ namespace TicketManagement.BusinessLogic.Interfaces
     /// <summary>
     /// Event area service interface.
     /// </summary>
-    internal interface IEventAreaService : IService
+    public interface IEventAreaService : IService
     {
         /// <summary>
         /// Update price object in database.

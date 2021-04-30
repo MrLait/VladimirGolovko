@@ -10,13 +10,13 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event seat service class.
     /// </summary>
-    internal class EventSeatService : IEventSeatService
+    public class EventSeatService : IEventSeatService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventSeatService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        internal EventSeatService(IDbContext dbContext) => DbContext = dbContext;
+        public EventSeatService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.

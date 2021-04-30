@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TicketManagement.Dto;
 
-namespace TicketManagement.WebMVC.ViewModels.CatalogViewModels
+namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
     public class IndexViewModel
     {
