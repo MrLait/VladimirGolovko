@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +16,7 @@ using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.WebMVC.Extencions;
 
 namespace TicketManagement.WebMVC
 {
@@ -41,9 +44,11 @@ namespace TicketManagement.WebMVC
             });
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
+            services.AddCustomAuthentication(Configuration);
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +70,7 @@ namespace TicketManagement.WebMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
