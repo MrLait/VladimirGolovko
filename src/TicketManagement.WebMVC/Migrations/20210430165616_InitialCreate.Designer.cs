@@ -9,7 +9,7 @@ using TicketManagement.WebMVC;
 
 namespace TicketManagement.WebMVC.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210430165616_InitialCreate")]
     partial class InitialCreate
     {

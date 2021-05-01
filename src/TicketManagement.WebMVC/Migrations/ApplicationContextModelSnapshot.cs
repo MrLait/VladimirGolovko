@@ -8,7 +8,7 @@ using TicketManagement.WebMVC;
 
 namespace TicketManagement.WebMVC.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

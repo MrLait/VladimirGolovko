@@ -17,6 +17,7 @@ using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Extencions;
+using TicketManagement.WebMVC.Models;
 
 namespace TicketManagement.WebMVC
 {
@@ -43,8 +44,9 @@ namespace TicketManagement.WebMVC
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
             services.AddCustomAuthentication(Configuration);
