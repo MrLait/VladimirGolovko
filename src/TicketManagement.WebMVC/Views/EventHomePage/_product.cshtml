@@ -23,7 +23,8 @@
     <span>@Model.PriceFrom.ToString("N2")</span>
     <span>@Model.PriceTo.ToString("N2")</span>
 </div>
-<form asp-controller="EventArea" asp-action="GetViewEventArea">
-    <input class="esh-event-area-button" type="submit" value="Choose tickets" />
+
+<form asp-controller="EventArea" asp-action="GetViewEventArea" class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" data-tooltip="Для перехода на эту страницу нужно авторизироваться" >
+    <input class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" type="submit" value="Choose tickets" />
     <input type="hidden" asp-for="@Model.Id" name="id" />
 </form>

@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - TicketManagement.WebMVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/EventHomePage/eventHomePage.css" />
 </head>
 <body>
     <header>
@@ -25,39 +26,34 @@
                     </ul>
                 </div>
             </div>
-                <div class="container">
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-link nav-item text-dark">
-                                    @User.Identity.Name
-                                </li>
-                                <li class="nav-item">
-                                    <form class="nav-link text-dark" asp-area="" method="post" asp-controller="Account" asp-action="Logout">
-                                        <input type="submit" value="Выход" />
-                                    </form>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+            <div class="container">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-link nav-item text-dark">
+                                @User.Identity.Name
+                            </li>
+                            <li class="nav-item">
+                                <form class="nav-link text-dark" asp-area="" method="post" asp-controller="Account" asp-action="Logout">
+                                    <input type="submit" value="Выход" />
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
-                @*<div class="container">
-                    <article class="row">
-                        @await Html.PartialAsync("_LoginPartial")
-                    </article>
-                </div>*@
-            </nav>
-</header>
+            </div>
+        </nav>
+    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

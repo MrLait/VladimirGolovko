@@ -3,7 +3,6 @@
 @{ ViewData["Title"] = "Events"; }
 
 <div class="container">
-
     @if (Model.EventItems.Count() > 0)
     {
 <div class="esh-event-items row">
@@ -13,8 +12,8 @@
     <partial name="_product" model="eventItem" />
 </div>}
 </div> }
-            else
-            {
+else
+{
 <div class="esh-event-items row">
     THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
 </div>}
