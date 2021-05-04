@@ -41,5 +41,10 @@ namespace TicketManagement.DataAccess.Interfaces
         /// Gets venue table repository.
         /// </summary>
         IRepository<Venue> Venues { get; }
+
+        /// <summary>
+        /// Gets basket table repository.
+        /// </summary>
+        IRepository<Basket> Baskets { get; }
     }
 }

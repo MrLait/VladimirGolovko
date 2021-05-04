@@ -15,7 +15,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>TicketManagement.UnitTests</_Parameter1>
@@ -45,4 +44,11 @@
       <_Parameter1>TicketManagement.WebMVC</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>TicketManagement.Dto</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
 </Project>

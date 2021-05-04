@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
+using TicketManagement.WebMVC.Models;
+using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.EventAreaViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -13,11 +19,13 @@ namespace TicketManagement.WebMVC.Controllers
     {
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
+        private readonly IBasketService _basketService;
 
-        public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService)
+        public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService, IBasketService basketService)
         {
             _eventAreaService = eventAreaService;
             _eventSeatService = eventSeatService;
+            _basketService = basketService;
         }
 
         public async Task<IActionResult> Index(EventDto dto)
@@ -38,9 +46,22 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
-        public IActionResult AddToCart(int eventId, int seatId)
+        public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         {
-            return RedirectToAction("Index", "EventArea", new EventDto { Id = eventId });
+            var user = Parse(HttpContext.User);
+            await _basketService.AddAsync(user, itemId);
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
+
+            return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+        }
+
+        public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
+        {
+            var user = Parse(HttpContext.User);
+            await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
+
+            return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
         }
 
         public IActionResult GetViewEventArea(EventDto dto)
@@ -56,6 +77,24 @@ namespace TicketManagement.WebMVC.Controllers
         public ActionResult GetEventSeats()
         {
             return PartialView("_GetEventSeats");
+        }
+
+        public ApplicationUser Parse(IPrincipal principal)
+        {
+            // Pattern matching 'is' expression
+            // assigns "claims" if "principal" is a "ClaimsPrincipal"
+            if (principal is ClaimsPrincipal claims)
+            {
+                return new ApplicationUser
+                {
+                    Email = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "",
+                    Id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "",
+                    PhoneNumber = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone)?.Value ?? "",
+                    UserName = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? "",
+                };
+            }
+
+            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
         }
     }
 }

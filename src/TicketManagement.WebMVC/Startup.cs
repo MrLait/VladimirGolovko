@@ -18,6 +18,7 @@ using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Extencions;
 using TicketManagement.WebMVC.Models;
+using TicketManagement.WebMVC.Services;
 
 namespace TicketManagement.WebMVC
 {
@@ -36,6 +37,7 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventAreaService, EventAreaService>();
             services.AddScoped<IEventSeatService, EventSeatService>();
+            services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IDbContext, EfDbContext>();
 
             var connectionString = Configuration.GetConnectionString("TestConnection");

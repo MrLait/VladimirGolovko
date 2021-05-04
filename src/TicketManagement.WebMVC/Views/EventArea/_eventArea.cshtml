@@ -7,18 +7,30 @@
 <div class="container">
     @if (Model.EvenSeats.Count() > 0)
     {
-        <div class="esh-event-seat-item col-md-4">
-            @foreach (var item in Model.EvenSeats)
+    <div class="esh-event-seat-item col-md-4">
+        @foreach (var item in Model.EvenSeats)
+        {
+            @if (item.State == TicketManagement.DataAccess.Enums.States.Available)
             {
-                <span>@item.Id</span>
-                <span>@Model.EventId</span>
-                <form asp-controller="EventArea" asp-action="AddToCart">
-                    <input type="hidden" asp-for="@Model.EventId" name="eventId" />
-                    <input type="hidden" asp-for="@item.Id" name="seatId" />
+                <form asp-controller="EventArea" asp-action="AddToBasket">
+                    <input type="hidden" asp-for="@Model.Id" name="id" />
+                    <input type="hidden" asp-for="@item.Id" name="itemId" />
+                    <input type="hidden" asp-for="@item.State" name="itemState" />
                     <input class="button button1" type="submit" value=@item.Id />
                 </form>
             }
-        </div>
+            else
+            {
+                <form asp-controller="EventArea" asp-action="RemoveFromBasket">
+                    <input type="hidden" asp-for="@Model.Id" name="id" />
+                    <input type="hidden" asp-for="@item.Id" name="itemId" />
+                    <input type="hidden" asp-for="@item.State" name="itemState" />
+                    <input class="button button1 clicked" type="submit" value=@item.Id />
+                </form>
+            }
+
+        }
+    </div>
     }
     else
     {
@@ -28,35 +40,7 @@
     }
 </div>
 
-    <style>
-        .button {
-            border: none;
-            color: white;
-            padding: 16px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-        }
 
-        .button1 {
-            background-color: white;
-            color: black;
-            border: 2px solid #4CAF50;
-        }
-
-            .button1:hover {
-                background-color: #4CAF50;
-                color: white;
-            }
-        .clicked {
-            color: rgb(255,255,255);
-            background-color: rgb(0,0,0);
-        }
-    </style>
 
     <script type="text/javascript">
 

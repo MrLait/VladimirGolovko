@@ -85,6 +85,7 @@
     <Build Include="Tables\Identity\AspNetUserLogins.sql" />
     <Build Include="Tables\Identity\AspNetUserRoles.sql" />
     <Build Include="Tables\Identity\AspNetUserTokens.sql" />
+    <Build Include="Tables\Basket.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Event.sql" />

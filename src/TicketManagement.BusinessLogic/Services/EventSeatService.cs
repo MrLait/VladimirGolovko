@@ -61,7 +61,6 @@ namespace TicketManagement.BusinessLogic.Services
                 Row = eventSeat.Row,
                 State = eventSeat.State,
             };
-
             return eventSeatDto;
         }
 
@@ -83,10 +82,10 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            if (dto.State < 0)
-            {
-                throw new ValidationException(ExceptionMessages.StateIsNegative, dto.State);
-            }
+            ////if (dto.State < 0)
+            ////{
+            ////    throw new ValidationException(ExceptionMessages.StateIsNegative, dto.State);
+            ////}
 
             var currentEventSeat = await DbContext.EventSeats.GetByIDAsync(dto.Id);
             currentEventSeat.State = dto.State;

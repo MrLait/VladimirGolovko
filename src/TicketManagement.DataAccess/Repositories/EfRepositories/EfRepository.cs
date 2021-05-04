@@ -34,7 +34,7 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
 
         public async Task<IQueryable<T>> GetAllAsync()
         {
-            var test = await Context.Set<T>().ToListAsync();
+            var test = await Context.Set<T>().AsNoTracking().ToListAsync();
             return test.AsQueryable();
         }
 

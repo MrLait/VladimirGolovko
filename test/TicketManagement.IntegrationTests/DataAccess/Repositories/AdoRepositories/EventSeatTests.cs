@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
@@ -54,7 +55,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            EventSeat eventSeat = new EventSeat { Id = (await repository.GetAllAsync()).ToList().Count + 1, EventAreaId = 2, Number = 2, Row = 2, State = 2 };
+            EventSeat eventSeat = new EventSeat { Id = (await repository.GetAllAsync()).ToList().Count + 1, EventAreaId = 2, Number = 2, Row = 2, State = States.Booked };
             List<EventSeat> expected = new List<EventSeat>(_eventSeats)
             {
                 eventSeat,
@@ -133,7 +134,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            var expected = new EventSeat { EventAreaId = 2, State = 1, Row = 2, Number = 2 };
+            var expected = new EventSeat { EventAreaId = 2, State = States.Purchased, Row = 2, Number = 2 };
 
             // Act
             var lastEventSeat = (await repository.GetAllAsync()).Last();

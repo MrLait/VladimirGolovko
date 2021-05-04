@@ -6,6 +6,7 @@ using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
@@ -92,7 +93,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventSeatService = new EventSeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 1, State = -1 }));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 1, State = (States)(-1) }));
         }
 
         [Test]

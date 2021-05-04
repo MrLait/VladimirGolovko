@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
@@ -63,7 +64,7 @@ namespace TicketManagement.BusinessLogic.Services
 
             var incrementedEventId = (await DbContext.Events.GetAllAsync()).Last().Id;
 
-            await CreateEventAreasAndThenEventSeatsAsync(dto, allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
+            await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
         }
 
         /// <inheritdoc/>
@@ -143,7 +144,7 @@ namespace TicketManagement.BusinessLogic.Services
                 var allSeatsForAllAreas = await GetAllSeatsForThisAreasAsync(allAreasInLayout);
 
                 await DbContext.Events.UpdateAsync(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, StartDateTime = dto.StartDateTime });
-                await CreateEventAreasAndThenEventSeatsAsync(dto, allAreasInLayout, allSeatsForAllAreas, dto.Id);
+                await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, dto.Id);
             }
             else
             {
@@ -281,7 +282,7 @@ namespace TicketManagement.BusinessLogic.Services
             return atLeastOneAreaContainsSeats;
         }
 
-        private async Task CreateEventAreasAndThenEventSeatsAsync(EventDto dto, IEnumerable<Area> allAreasInLayout, List<Seat> allSeatsForAllAreas, int eventId)
+        private async Task CreateEventAreasAndThenEventSeatsAsync(IEnumerable<Area> allAreasInLayout, List<Seat> allSeatsForAllAreas, int eventId)
         {
             var lastEventAreaId = (await DbContext.EventAreas.GetAllAsync()).Last().Id;
             foreach (var item in allAreasInLayout)
@@ -299,7 +300,7 @@ namespace TicketManagement.BusinessLogic.Services
                     isChanged = false;
                 }
 
-                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId, Number = item.Number, Row = item.Row, State = dto.State });
+                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId, Number = item.Number, Row = item.Row, State = States.Available });
 
                 if (currSateId != item.AreaId)
                 {

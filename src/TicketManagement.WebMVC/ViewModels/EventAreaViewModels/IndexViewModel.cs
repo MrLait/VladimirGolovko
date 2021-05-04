@@ -6,8 +6,8 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.WebMVC.ViewModels.EventAreaViewModels
 {
-    public class IndexViewModel
+    public record IndexViewModel
     {
-        public IEnumerable<EventAreaDto> EvenAreatItems { get; set; }
+        public IEnumerable<EventAreaDto> EvenAreatItems { get; init; }
     }
 }

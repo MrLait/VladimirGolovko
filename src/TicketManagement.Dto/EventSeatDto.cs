@@ -1,4 +1,5 @@
-﻿using TicketManagement.Dto.Interfaces;
+﻿using TicketManagement.DataAccess.Enums;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
@@ -30,6 +31,6 @@ namespace TicketManagement.Dto
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public int State { get; set; }
+        public States State { get; set; }
     }
 }

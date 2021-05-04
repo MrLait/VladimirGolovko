@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 {
-    public class RegisterViewModel
+    public record RegisterViewModel
     {
         [Required]
         [Display(Name = "Email")]

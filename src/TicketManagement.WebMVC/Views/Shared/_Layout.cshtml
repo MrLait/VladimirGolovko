@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/EventHomePage/eventHomePage.css" />
+    <link rel="stylesheet" href="~/css/EventArea/EventArea.css" />
 </head>
 <body>
     <header>
@@ -18,7 +19,6 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="EventHomePage" asp-action="Index">Home</a>
@@ -32,6 +32,9 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-link nav-item text-dark">
+                                <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> Basket </a>
+                            </li>
+                            <li class="nav-link nav-item text-dark">
                                 @User.Identity.Name
                             </li>
                             <li class="nav-item">
@@ -39,18 +42,22 @@
                                     <input type="submit" value="Выход" />
                                 </form>
                             </li>
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
                             </li>
-                        }
-                    </ul>
+                            }
+                        </ul>
                 </div>
+            </div>
+
+            <div class="container">
+
             </div>
         </nav>
     </header>

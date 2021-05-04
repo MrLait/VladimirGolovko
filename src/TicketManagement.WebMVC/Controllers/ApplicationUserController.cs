@@ -18,6 +18,7 @@ namespace TicketManagement.WebMVC.Controllers
             _applicationUserManager = applicationUser;
         }
 
+        //// нужно ограничить
         public IActionResult Index() => View(_applicationUserManager.Users.ToList());
 
         public IActionResult Create() => View();

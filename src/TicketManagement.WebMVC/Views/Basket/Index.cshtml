@@ -1,0 +1,30 @@
+﻿@model TicketManagement.WebMVC.ViewModels.BasketViewModels.BasketViewModel
+
+@{ ViewData["Title"] = "Basket"; }
+@{ int rowNumber = 0; }
+
+<tbody>
+    @if (@Model.Items.Count > 0)
+    {
+
+        @foreach (var item in Model.Items)
+        {
+            rowNumber++;
+            <tr role="row">
+                <td class="table-number">@rowNumber.ToString()</td>
+                <td class="table-image">
+                    <div> <img src="@item.PictureUrl" /> </div>
+                </td>
+                <td class="table-event-name">@item.EventName</td>
+                <td class="table-event-area-description">@item.EventAreaDescription</td>
+                <td class="table-Row">@item.Row</td>
+                <td class="table-number-of-seat">@item.NumberOfSeat</td>
+                <td class="table-event-date-time-start">@item.EventDateTimeStart</td>
+                <td class="table-event-date-time-end">@item.EventDateTimeEnd</td>
+                <td class="table-price">@item.Price</td>
+            </tr>
+        }
+ <div>       @Model.TotalPrice.ToString("N2")</div>
+     
+    }
+</tbody>
