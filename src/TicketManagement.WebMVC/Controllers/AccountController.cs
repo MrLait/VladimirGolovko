@@ -33,11 +33,19 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.Email };
+                ApplicationUser user = new ApplicationUser
+                {
+                    Email = model.Email,
+                    UserName = model.Email,
+                    FirstName = model.FirstName,
+                    Language = model.Language,
+                    Surname = model.Surname,
+                    TimeZoneOffset = model.TimeZoneOffset,
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // установка куки
+                    await _userManager.AddToRoleAsync(user, "user");
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "EventHomePage");
                 }
@@ -92,7 +100,6 @@ namespace TicketManagement.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "EventHomePage");
         }

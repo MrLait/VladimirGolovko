@@ -8,13 +8,23 @@ namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 {
     public record RegisterViewModel
     {
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Surname")]
+        public string Surname { get; set; }
+
+        public string Language { get; set; }
+
+        public string TimeZoneOffset { get; set; }
+
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        ////[Required]
-        ////[Display(Name = "Год рождения")]
-        ////public int Year { get; set; }
+        [Required]
+        [Display(Name = "Год рождения")]
+        public int Year { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

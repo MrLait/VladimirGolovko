@@ -46,5 +46,10 @@ namespace TicketManagement.DataAccess.Interfaces
         /// Gets basket table repository.
         /// </summary>
         IRepository<Basket> Baskets { get; }
+
+        /// <summary>
+        /// Gets purchase history table repository.
+        /// </summary>
+        IRepository<PurchaseHistory> PurchaseHistories { get; }
     }
 }

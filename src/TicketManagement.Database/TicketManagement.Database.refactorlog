@@ -14,4 +14,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ImageUrl" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="38b202b0-8c20-4b10-ac99-9a533a556cd4" ChangeDateTime="05/04/2021 13:08:26">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[Year]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FirstName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="047fc7a4-a56e-49cf-b235-76bf92eeedd6" ChangeDateTime="05/04/2021 13:12:15">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[TimeZone]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TimeZoneOffcet" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="be999e7b-cb39-4869-a894-0381daf3273f" ChangeDateTime="05/04/2021 13:13:09">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[TimeZoneOffcet]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TimeZoneOffset" />
+  </Operation>
 </Operations>

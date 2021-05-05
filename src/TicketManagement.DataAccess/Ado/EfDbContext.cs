@@ -18,6 +18,7 @@ namespace TicketManagement.DataAccess.Ado
         private EfRepository<Seat> _seatRepository;
         private EfRepository<Venue> _venueRepository;
         private EfRepository<Basket> _basketRepository;
+        private EfRepository<PurchaseHistory> _purchaseHistoryRepository;
 
         public EfDbContext(DbContextOptions<EfDbContext> options)
             : base(options)
@@ -47,6 +48,11 @@ namespace TicketManagement.DataAccess.Ado
         /// Gets basket table property.
         /// </summary>
         public IRepository<Basket> Baskets => _basketRepository ??= new EfRepository<Basket>(this);
+
+        /// <summary>
+        /// Gets purchase history table property.
+        /// </summary>
+        public IRepository<PurchaseHistory> PurchaseHistories => _purchaseHistoryRepository ??= new EfRepository<PurchaseHistory>(this);
 
         /// <summary>
         /// Gets event table property.
@@ -93,6 +99,8 @@ namespace TicketManagement.DataAccess.Ado
         public virtual DbSet<Venue> Venue { get; set; }
 
         public virtual DbSet<Basket> Basket { get; set; }
+
+        public virtual DbSet<PurchaseHistory> PurchaseHistory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

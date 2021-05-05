@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿var language = window.navigator ? (window.navigator.language ||
+    window.navigator.systemLanguage ||
+    window.navigator.userLanguage) : "ru";
+language = language.substr(0, 2).toLowerCase();
 
-// Write your JavaScript code.
+
+$('#stringName').replaceWith(localStorage.getItem(language));
+
+function setMyValue(value) {
+    $('#myVar').val(value);
+}
