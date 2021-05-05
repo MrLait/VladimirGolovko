@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TicketManagement.DataAccess.Domain.Interfaces;
+using TicketManagement.DataAccess.Enums;
 
 namespace TicketManagement.DataAccess.Domain.Models
 {
@@ -35,6 +36,6 @@ namespace TicketManagement.DataAccess.Domain.Models
         /// <summary>
         /// Gets or sets state column in table.
         /// </summary>
-        public int State { get; set; }
+        public States State { get; set; }
     }
 }

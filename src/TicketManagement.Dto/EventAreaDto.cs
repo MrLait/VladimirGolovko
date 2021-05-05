@@ -1,11 +1,12 @@
-﻿using TicketManagement.Dto.Interfaces;
+﻿using System.Collections.Generic;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
     /// <summary>
     /// EventArea data transfer object class.
     /// </summary>
-    internal class EventAreaDto : IDtoEntity
+    public class EventAreaDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.
@@ -36,5 +37,7 @@ namespace TicketManagement.Dto
         /// Gets or sets Price.
         /// </summary>
         public decimal Price { get; set; }
+
+        public IEnumerable<EventSeatDto> EvenSeats { get; set; }
     }
 }

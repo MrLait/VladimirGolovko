@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Exstension;
 
@@ -26,29 +27,19 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Delete(T entity)
+        public override async Task DeleteAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"Can not delete null object: {default(T)}!");
-            }
-
-            var entityId = entity.Id;
-
-            if (entityId <= 0)
-            {
-                throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
-            }
+            await base.DeleteAsync(entity);
 
             string tableName = new T().GetType().Name;
             string storedProcedure = $"Delete{tableName}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
-            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new[] { new SqlParameter("Id", entityId) });
+            using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new[] { new SqlParameter("Id", entity.Id) });
             try
             {
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
+                await sqlConnection.OpenAsync();
+                await sqlCommand.ExecuteNonQueryAsync();
             }
             catch (SqlException sqlEx)
             {
@@ -57,7 +48,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<T> GetAll()
+        public override async Task<IQueryable<T>> GetAllAsync()
         {
             string tableName = new T().GetType().Name;
             string storedProcedure = $"GetAll{tableName}";
@@ -69,8 +60,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 DataSet ds = new DataSet();
-                adpt.Fill(ds);
-                return ds.Tables[0].ToEnumerable<T>();
+                await Task.Run(() => adpt.Fill(ds));
+                return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
             catch (SqlException sqlEx)
             {
@@ -79,12 +70,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override T GetByID(int byId)
+        public override async Task<T> GetByIDAsync(int byId)
         {
-            if (byId <= 0)
-            {
-                throw new ArgumentException($"byId shouldn't be equal {byId}");
-            }
+            await base.GetByIDAsync(byId);
 
             string tableName = new T().GetType().Name;
             string storedProcedure = $"GetById{tableName}";
@@ -96,7 +84,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 DataSet ds = new DataSet();
-                sqlDataAdapter.Fill(ds);
+                await Task.Run(() => sqlDataAdapter.Fill(ds));
                 return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
             }
             catch (SqlException sqlEx)
@@ -106,12 +94,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Create(T entity)
+        public override async Task CreateAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"Can not add null object: {typeof(T).Name} !");
-            }
+            await base.CreateAsync(entity);
 
             var storedProcedure = $"Create{entity.GetType().Name}";
 
@@ -120,8 +105,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 sqlCommand.Parameters.AddRange(GetAddParameter(entity).ToArray());
-                sqlConnection.Open();
-                sqlCommand.ExecuteScalar();
+                await sqlConnection.OpenAsync();
+                await sqlCommand.ExecuteScalarAsync();
             }
             catch (SqlException sqlEx)
             {
@@ -130,19 +115,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Update(T entity)
+        public override async Task UpdateAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"{typeof(T).Name} object shouldn't be null when saving to database");
-            }
-
-            var entityId = entity.Id;
-
-            if (entityId <= 0)
-            {
-                throw new ArgumentException($"There is not this entity in the storage with Id: {entityId}!");
-            }
+            await base.UpdateAsync(entity);
 
             string tableName = new T().GetType().Name;
             string storedProcedure = $"Update{tableName}";
@@ -156,7 +131,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 
             try
             {
-                adpt.Fill(ds);
+                await Task.Run(() => adpt.Fill(ds));
             }
             catch (SqlException sqlEx)
             {

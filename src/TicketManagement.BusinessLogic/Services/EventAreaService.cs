@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Interfaces;
@@ -10,13 +10,13 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event area service class.
     /// </summary>
-    internal class EventAreaService : IEventAreaService
+    public class EventAreaService : IEventAreaService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventAreaService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        internal EventAreaService(IDbContext dbContext) => DbContext = dbContext;
+        public EventAreaService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
@@ -24,9 +24,9 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public IEnumerable<EventAreaDto> GetAll()
+        public async Task<IEnumerable<EventAreaDto>> GetAllAsync()
         {
-            var eventAreas = DbContext.EventAreas.GetAll();
+            var eventAreas = await DbContext.EventAreas.GetAllAsync();
             List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)
             {
@@ -37,7 +37,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public EventAreaDto GetByID(int id)
+        public async Task<EventAreaDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -49,7 +49,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var eventArea = DbContext.EventAreas.GetByID(id);
+            var eventArea = await DbContext.EventAreas.GetByIDAsync(id);
             var eventAreaDto = new EventAreaDto
             {
                 Id = eventArea.Id,
@@ -64,7 +64,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public void UpdatePrice(EventAreaDto dto)
+        public async Task UpdatePriceAsync(EventAreaDto dto)
         {
             if (dto == null)
             {
@@ -86,9 +86,9 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.PriceIsNegative, dto.Price);
             }
 
-            var currentEventAreas = DbContext.EventAreas.GetByID(dto.Id);
+            var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);
             currentEventAreas.Price = dto.Price;
-            DbContext.EventAreas.Update(currentEventAreas);
+            await DbContext.EventAreas.UpdateAsync(currentEventAreas);
         }
     }
 }

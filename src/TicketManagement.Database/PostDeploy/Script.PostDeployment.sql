@@ -60,9 +60,9 @@ values
 ----- Event
 insert into dbo.Event
 values
-('Footbal match.', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00'),
-('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00'),
-('Event to test.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00')
+('Footbal match.', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00', N'2021-03-01 01:00:00', 'src\TicketManagement.BusinessLogic\Pics\FootballPicOne'),
+('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00', N'2021-04-01 02:00:00', 'src\TicketManagement.BusinessLogic\Pics\FootballPicOne'),
+('Event to test.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00', N'2021-04-01 03:00:00', 'src\TicketManagement.BusinessLogic\Pics\FootballPicOne')
 
 INSERT INTO [dbo].[EventArea] ([EventId], [Description], [CoordX], [CoordY], [Price]) 
 VALUES

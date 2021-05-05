@@ -1,4 +1,5 @@
-﻿using TicketManagement.Dto.Interfaces;
+﻿using System.Collections.Generic;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {

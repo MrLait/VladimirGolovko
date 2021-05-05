@@ -5,7 +5,7 @@ namespace TicketManagement.DataAccess.Interfaces
     /// <summary>
     /// Database context interface.
     /// </summary>
-    internal interface IDbContext
+    public interface IDbContext
     {
         /// <summary>
         /// Gets area table repository.
@@ -41,5 +41,15 @@ namespace TicketManagement.DataAccess.Interfaces
         /// Gets venue table repository.
         /// </summary>
         IRepository<Venue> Venues { get; }
+
+        /// <summary>
+        /// Gets basket table repository.
+        /// </summary>
+        IRepository<Basket> Baskets { get; }
+
+        /// <summary>
+        /// Gets purchase history table repository.
+        /// </summary>
+        IRepository<PurchaseHistory> PurchaseHistories { get; }
     }
 }

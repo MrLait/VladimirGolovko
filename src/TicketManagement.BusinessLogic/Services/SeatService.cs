@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -26,14 +27,14 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public void Create(SeatDto dto)
+        public async Task CreateAsync(SeatDto dto)
         {
             if (dto == null)
             {
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
+            bool isSeatContain = await CheckThatSeatAlreadyCointainsForThisAreaAsync(dto);
 
             if (isSeatContain)
             {
@@ -41,11 +42,11 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             Seat seat = new Seat { AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row };
-            DbContext.Seats.Create(seat);
+            await DbContext.Seats.CreateAsync(seat);
         }
 
         /// <inheritdoc/>
-        public void Delete(SeatDto dto)
+        public async Task DeleteAsync(SeatDto dto)
         {
             if (dto == null)
             {
@@ -62,13 +63,13 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            DbContext.Seats.Delete(new Seat { Id = dto.Id });
+            await DbContext.Seats.DeleteAsync(new Seat { Id = dto.Id });
         }
 
         /// <inheritdoc/>
-        public IEnumerable<SeatDto> GetAll()
+        public async Task<IEnumerable<SeatDto>> GetAllAsync()
         {
-            var seats = DbContext.Seats.GetAll();
+            var seats = await DbContext.Seats.GetAllAsync();
             List<SeatDto> seatDto = new List<SeatDto>();
             foreach (var seat in seats)
             {
@@ -85,7 +86,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public SeatDto GetByID(int id)
+        public async Task<SeatDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -97,7 +98,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var seat = DbContext.Seats.GetByID(id);
+            var seat = await DbContext.Seats.GetByIDAsync(id);
             var seatDto = new SeatDto
             {
                 Id = seat.Id,
@@ -110,7 +111,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public void Update(SeatDto dto)
+        public async Task UpdateAsync(SeatDto dto)
         {
             if (dto == null)
             {
@@ -127,19 +128,19 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
+            bool isSeatContain = await CheckThatSeatAlreadyCointainsForThisAreaAsync(dto);
 
             if (isSeatContain)
             {
                 throw new ValidationException(ExceptionMessages.SeatForTheAreaExis, dto.Row, dto.Number);
             }
 
-            DbContext.Seats.Update(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });
+            await DbContext.Seats.UpdateAsync(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });
         }
 
-        private bool CheckThatSeatAlreadyCointainsForThisArea(SeatDto dto)
+        private async Task<bool> CheckThatSeatAlreadyCointainsForThisAreaAsync(SeatDto dto)
         {
-            var allSeatsByAreaId = DbContext.Seats.GetAll().Where(x => x.AreaId == dto.AreaId).ToList();
+            var allSeatsByAreaId = (await DbContext.Seats.GetAllAsync()).Where(x => x.AreaId == dto.AreaId).ToList();
             var isSeatContain = allSeatsByAreaId.Any(x => x.Number == dto.Row && x.Row == dto.Row);
             return isSeatContain;
         }

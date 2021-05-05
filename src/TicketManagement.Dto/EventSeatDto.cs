@@ -1,11 +1,12 @@
-﻿using TicketManagement.Dto.Interfaces;
+﻿using TicketManagement.DataAccess.Enums;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
     /// <summary>
     /// EventSeat data transfer object class.
     /// </summary>
-    internal class EventSeatDto : IDtoEntity
+    public class EventSeatDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.
@@ -30,6 +31,6 @@ namespace TicketManagement.Dto
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public int State { get; set; }
+        public States State { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
 using TicketManagement.DataAccess.Exstension;
 
@@ -25,12 +26,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Create(T entity)
+        public override async Task CreateAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"Can not add null object: {typeof(T).Name} !");
-            }
+            await base.CreateAsync(entity);
 
             SqlParameter[] parameters = GetAddParameter(entity).ToArray();
 
@@ -49,8 +47,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
                     sqlCommand.Parameters.AddWithValue("@" + item.ParameterName, item.Value);
                 }
 
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
+                await sqlConnection.OpenAsync();
+                await sqlCommand.ExecuteNonQueryAsync();
             }
             catch (SqlException sqlEx)
             {
@@ -59,30 +57,20 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Delete(T entity)
+        public override async Task DeleteAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"Can not delete null object: {default(T)}!");
-            }
-
-            var entityId = entity.Id;
-
-            if (entityId <= 0)
-            {
-                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entityId}!");
-            }
+            await base.DeleteAsync(entity);
 
             string tableName = new T().GetType().Name;
-            string sqlExpressionInsert = $"DELETE FROM {tableName} WHERE Id = {entityId}";
+            string sqlExpressionInsert = $"DELETE FROM {tableName} WHERE Id = {entity.Id}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
             using SqlCommand sqlCommand = new SqlCommand(sqlExpressionInsert, sqlConnection);
 
             try
             {
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
+                await sqlConnection.OpenAsync();
+                await sqlCommand.ExecuteNonQueryAsync();
             }
             catch (SqlException sqlEx)
             {
@@ -91,7 +79,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<T> GetAll()
+        public override async Task<IQueryable<T>> GetAllAsync()
         {
             var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
             string strCol = string.Join(", ", poropertyNames);
@@ -105,8 +93,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 DataSet ds = new DataSet();
-                sqlDataAdapter.Fill(ds);
-                return ds.Tables[0].ToEnumerable<T>();
+                await Task.Run(() => sqlDataAdapter.Fill(ds));
+                return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
             catch (SqlException sqlEx)
             {
@@ -115,12 +103,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override T GetByID(int byId)
+        public override async Task<T> GetByIDAsync(int byId)
         {
-            if (byId <= 0)
-            {
-                throw new ArgumentException($"byId shouldn't be equal {byId}");
-            }
+            await base.GetByIDAsync(byId);
 
             var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
             string strCol = string.Join(", ", poropertyNames);
@@ -134,7 +119,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 DataSet ds = new DataSet();
-                sqlDataAdapter.Fill(ds);
+                await Task.Run(() => sqlDataAdapter.Fill(ds));
                 return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
             }
             catch (SqlException sqlEx)
@@ -144,19 +129,9 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override void Update(T entity)
+        public override async Task UpdateAsync(T entity)
         {
-            if (Equals(entity, default(T)))
-            {
-                throw new ArgumentException($"{typeof(T).Name} object shouldn't be null when saving to database");
-            }
-
-            var entityId = entity.Id;
-
-            if (entityId <= 0)
-            {
-                throw new ArgumentException($"There is not this item in the Item Storage with Id: {entityId}!");
-            }
+            await base.UpdateAsync(entity);
 
             SqlParameter[] parameters = GetAddParameter(entity).ToArray();
 
@@ -174,8 +149,8 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
                     sqlCommand.Parameters.AddWithValue("@" + item.ParameterName, item.Value);
                 }
 
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
+                await sqlConnection.OpenAsync();
+                await sqlCommand.ExecuteNonQueryAsync();
             }
             catch (SqlException sqlEx)
             {
