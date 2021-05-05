@@ -12,6 +12,8 @@ namespace TicketManagement.WebMVC.Services
 
         Task DeleteAsync(Basket basketItem);
 
+        Task DeleteAsync(ApplicationUser user);
+
         Task<IQueryable<Basket>> GetAllAsync();
 
         Task<BasketViewModel> GetAllByUserAsync(ApplicationUser user);

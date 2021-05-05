@@ -1,12 +1,12 @@
-﻿@model TicketManagement.WebMVC.ViewModels.BasketViewModels.BasketViewModel
+﻿@model TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels.PurchaseHistoryViewModel
 
-@{ ViewData["Title"] = "Basket"; }
+@{ ViewData["Title"] = "Purchase history"; }
 @{ int rowNumber = 0; }
 
 @if (Model == null)
 {
     <div class="esh-event-items row">
-        <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> The basket is empty. Go to purchase history </a>
+        THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
     </div>
 }
 else
@@ -32,24 +32,11 @@ else
                 </tr>
             }
         </table>
-
-        <div> Total price: @Model.TotalPrice.ToString("N2")</div>
-
-        <form asp-action="Buy">
-            <table class="table">
-                <tr>
-                    <td>
-                        <input type="submit" value="Buy" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-
     }
     else
     {
         <div class="esh-event-items row">
-            The basket is empty.
+            THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
         </div>
     }
 }

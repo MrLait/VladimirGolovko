@@ -5,59 +5,30 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Enums;
-using TicketManagement.Dto;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    public class BasketController : Controller
+    public class PurchaseHistoryController : Controller
     {
         private readonly IBasketService _basketService;
         private readonly IApplicationUserService _applicationUserService;
         private readonly IPurchaseHistoryService _purchaseHistoryService;
-        private readonly IEventSeatService _eventSeatService;
 
-        public BasketController(IBasketService basketService, IApplicationUserService applicationUserService, IPurchaseHistoryService purchaseHistoryService, IEventSeatService eventSeatService)
+        public PurchaseHistoryController(IBasketService basketService, IApplicationUserService applicationUserService, IPurchaseHistoryService purchaseHistoryService)
         {
             _basketService = basketService;
             _applicationUserService = applicationUserService;
             _purchaseHistoryService = purchaseHistoryService;
-            _eventSeatService = eventSeatService;
         }
 
         public async Task<IActionResult> Index()
         {
             var user = Parse(HttpContext.User);
-            var vm = await _basketService.GetAllByUserAsync(user);
+            var vm = await _purchaseHistoryService.GetAllByUserAsync(user);
 
             return View(vm);
-        }
-
-        public async Task<IActionResult> Buy()
-        {
-            var user = Parse(HttpContext.User);
-            var vm = await _basketService.GetAllByUserAsync(user);
-            var currentBalance = await _applicationUserService.GetBalanceAsync(user);
-            var totalPrice = vm.TotalPrice;
-
-            if (currentBalance >= totalPrice)
-            {
-                user.Balance = currentBalance - totalPrice;
-                await _applicationUserService.UpdateBalanceAsync(user);
-                var basketItems = (await _basketService.GetAllAsync()).Where(x => x.UserId == user.Id);
-                await _purchaseHistoryService.AddFromBasketAsync(basketItems);
-                foreach (var item in basketItems)
-                {
-                    await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = item.ProductId, State = States.Purchased });
-                }
-
-                await _basketService.DeleteAsync(user);
-            }
-
-            return View("Index");
         }
 
         public ApplicationUser Parse(IPrincipal principal)

@@ -38,6 +38,8 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IEventAreaService, EventAreaService>();
             services.AddScoped<IEventSeatService, EventSeatService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
             services.AddScoped<IDbContext, EfDbContext>();
 
             var connectionString = Configuration.GetConnectionString("TestConnection");

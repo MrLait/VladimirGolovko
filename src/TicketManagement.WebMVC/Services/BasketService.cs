@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels;
@@ -78,6 +77,12 @@ namespace TicketManagement.WebMVC.Services
         {
             if (basketItem.Id == 0)
             {
+                var currentSeatState = (await _eventSeatService.GetByIDAsync(basketItem.ProductId)).State;
+                if (currentSeatState == States.Purchased)
+                {
+                    return;
+                }
+
                 var productId = (await GetAllAsync()).Where(x => x.ProductId == basketItem.ProductId && x.UserId == basketItem.UserId).FirstOrDefault().Id;
                 basketItem.Id = productId;
                 await DbContext.Baskets.DeleteAsync(basketItem);
@@ -85,6 +90,15 @@ namespace TicketManagement.WebMVC.Services
             }
 
             await DbContext.Baskets.DeleteAsync(basketItem);
+        }
+
+        public async Task DeleteAsync(ApplicationUser user)
+        {
+            var basketItems = (await DbContext.Baskets.GetAllAsync()).Where(x => x.UserId == user.Id);
+            foreach (var item in basketItems)
+            {
+                await DeleteAsync(item);
+            }
         }
     }
 }

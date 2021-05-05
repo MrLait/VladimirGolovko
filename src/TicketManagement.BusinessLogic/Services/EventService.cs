@@ -173,6 +173,8 @@ namespace TicketManagement.BusinessLogic.Services
                 StartDateTime = curEvent.StartDateTime,
                 Description = curEvent.Description,
                 Name = curEvent.Name,
+                ImageUrl = curEvent.ImageUrl,
+                EndDateTime = curEvent.EndDateTime,
             };
 
             return eventDto;
