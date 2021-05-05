@@ -35,11 +35,13 @@ else
 
         <div> Total price: @Model.TotalPrice.ToString("N2")</div>
 
-        <form asp-action="Buy">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly"></div>
             <table class="table">
                 <tr>
                     <td>
-                        <input type="submit" value="Buy" />
+                        <input type="hidden" asp-for="@Model" name="model" />
+                        <input type="submit" value="Buy" name="model" />
                     </td>
                 </tr>
             </table>
@@ -49,7 +51,11 @@ else
     else
     {
         <div class="esh-event-items row">
-            The basket is empty.
+            <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">
+                The basket is empty.
+                - Go to purchase history
+            </a>
+            <a class="esh-basketstatus" asp-area="" asp-controller="EventHomePage" asp-action="Index"> Go to purchases </a>
         </div>
     }
 }

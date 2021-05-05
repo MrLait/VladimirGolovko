@@ -10,6 +10,7 @@ using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
+using TicketManagement.WebMVC.ViewModels.BasketViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
@@ -36,7 +37,8 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
-        public async Task<IActionResult> Buy()
+        [HttpPost]
+        public async Task<IActionResult> Index(BasketViewModel model)
         {
             var user = Parse(HttpContext.User);
             var vm = await _basketService.GetAllByUserAsync(user);
@@ -55,9 +57,15 @@ namespace TicketManagement.WebMVC.Controllers
                 }
 
                 await _basketService.DeleteAsync(user);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Not enough money.");
             }
 
-            return View("Index");
+            return View(vm);
         }
 
         public ApplicationUser Parse(IPrincipal principal)
