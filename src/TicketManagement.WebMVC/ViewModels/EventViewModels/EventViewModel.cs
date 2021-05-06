@@ -4,6 +4,8 @@ namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
     public class EventViewModel
     {
+        public int Id { get; set; }
+
         /// <summary>
         /// Gets or sets name column in table.
         /// </summary>

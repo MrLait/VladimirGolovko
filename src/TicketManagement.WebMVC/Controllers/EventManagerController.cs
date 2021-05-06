@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -64,6 +63,82 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateEventAsync(int id)
+        {
+            var eventItem = await _eventService.GetByIDAsync(id);
+            if (eventItem == null)
+            {
+                return NotFound();
+            }
+
+            EventViewModel model = new EventViewModel
+            {
+                Id = id,
+                Name = eventItem.Name,
+                Description = eventItem.Description,
+                EndDateTime = eventItem.EndDateTime,
+                ImageUrl = eventItem.ImageUrl,
+                LayoutId = eventItem.LayoutId,
+                StartDateTime = eventItem.StartDateTime,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEvent(EventViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var eventDto = new EventDto
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    LayoutId = model.LayoutId,
+                    StartDateTime = model.StartDateTime,
+                    EndDateTime = model.EndDateTime,
+                    ImageUrl = model.ImageUrl,
+                };
+
+                await _eventService.UpdateAsync(eventDto);
+                return RedirectToAction("Index", "EventManager");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var eventDto = new EventDto
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    LayoutId = model.LayoutId,
+                    StartDateTime = model.StartDateTime,
+                    EndDateTime = model.EndDateTime,
+                    ImageUrl = model.ImageUrl,
+                };
+
+                await _eventService.UpdateLayoutIdAsync(eventDto);
+                return RedirectToAction("Index", "EventManager");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteEventAsync(int id)
+        {
+            await _eventService.DeleteAsync(new EventDto { Id = id });
+
+            return RedirectToAction("Index", "EventManager");
         }
 
         public async Task<ApplicationUser> ParseAsync(IPrincipal principal)

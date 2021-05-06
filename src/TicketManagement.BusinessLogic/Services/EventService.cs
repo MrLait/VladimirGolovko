@@ -93,14 +93,10 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var allEvents = await DbContext.Events.GetByIDAsync(dto.Id);
-
-            if (allEvents == null)
+            await DbContext.Events.DeleteAsync(new Event
             {
-                throw new ValidationException(ExceptionMessages.NullReference);
-            }
-
-            await DbContext.Events.DeleteAsync(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, StartDateTime = dto.StartDateTime });
+                Id = dto.Id,
+            });
         }
 
         /// <inheritdoc/>
@@ -121,10 +117,39 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var curEvent = await DbContext.Events.GetByIDAsync(dto.Id);
-            if (curEvent == null)
+            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+            if (!isDataTimeValid)
+            {
+                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
+            }
+
+            await DbContext.Events.UpdateAsync(new Event
+            {
+                Id = dto.Id,
+                LayoutId = dto.LayoutId,
+                Description = dto.Description,
+                Name = dto.Name,
+                StartDateTime = dto.StartDateTime,
+                EndDateTime = dto.EndDateTime,
+                ImageUrl = dto.ImageUrl,
+            });
+        }
+
+        public async Task UpdateLayoutIdAsync(EventDto dto)
+        {
+            if (dto == null)
             {
                 throw new ValidationException(ExceptionMessages.NullReference);
+            }
+
+            if (dto.Id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
             var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
@@ -133,31 +158,33 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
             }
 
-            var isLayoutChanged = dto.LayoutId != curEvent.LayoutId;
-            if (isLayoutChanged)
+            var atLeastOneAreaContainsSeats = await CheckThatAtLeastOneAreaContainsSeatsAsync(dto);
+            if (!atLeastOneAreaContainsSeats)
             {
-                var atLeastOneAreaContainsSeats = await CheckThatAtLeastOneAreaContainsSeatsAsync(dto);
-                if (!atLeastOneAreaContainsSeats)
-                {
-                    throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
-                }
-
-                var isEventContainSameVenueInSameTime = await CheckThatEventNotCreatedInTheSameTimeForVenueAsync(dto);
-                if (isEventContainSameVenueInSameTime)
-                {
-                    throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
-                }
-
-                var allAreasInLayout = await GetAllAreasInLayoutAsync(dto);
-                var allSeatsForAllAreas = await GetAllSeatsForThisAreasAsync(allAreasInLayout);
-
-                await DbContext.Events.UpdateAsync(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, StartDateTime = dto.StartDateTime });
-                await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, dto.Id);
+                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
             }
-            else
+
+            var isEventContainSameVenueInSameTime = await CheckThatEventNotCreatedInTheSameTimeForVenueAsync(dto);
+            if (isEventContainSameVenueInSameTime)
             {
-                await DbContext.Events.UpdateAsync(new Event { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, StartDateTime = dto.StartDateTime });
+                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
             }
+
+            var allAreasInLayout = await GetAllAreasInLayoutAsync(dto);
+            var allSeatsForAllAreas = await GetAllSeatsForThisAreasAsync(allAreasInLayout);
+
+            await DbContext.Events.UpdateAsync(
+                new Event
+                {
+                    Id = dto.Id,
+                    LayoutId = dto.LayoutId,
+                    Description = dto.Description,
+                    Name = dto.Name,
+                    StartDateTime = dto.StartDateTime,
+                    EndDateTime = dto.EndDateTime,
+                    ImageUrl = dto.ImageUrl,
+                });
+            await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, dto.Id);
         }
 
         /// <inheritdoc/>
@@ -290,13 +317,14 @@ namespace TicketManagement.BusinessLogic.Services
 
         private async Task CreateEventAreasAndThenEventSeatsAsync(IEnumerable<Area> allAreasInLayout, List<Seat> allSeatsForAllAreas, int eventId)
         {
-            var lastEventAreaId = (await DbContext.EventAreas.GetAllAsync()).Last().Id;
             foreach (var item in allAreasInLayout)
             {
                 await DbContext.EventAreas.CreateAsync(new EventArea { Description = item.Description, EventId = eventId, CoordX = item.CoordX, CoordY = item.CoordY, Price = default });
             }
 
-            int currSateId = allSeatsForAllAreas.FirstOrDefault().AreaId;
+            var lastEventAreaId = ((await DbContext.EventAreas.GetAllAsync()).LastOrDefault()?.Id ?? 0) - allAreasInLayout.Count();
+
+            int currSateId = allSeatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
             bool isChanged = true;
             foreach (var item in allSeatsForAllAreas)
             {

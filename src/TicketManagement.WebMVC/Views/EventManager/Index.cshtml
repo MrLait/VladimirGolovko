@@ -19,14 +19,17 @@
                 <td class="table-event-date-time-start">The event starts at @item.StartDateTime</td>
                 <td class="table-event-date-time-end">The event ends at @item.EndDateTime</td>
                 <td class="table-availible-seats">Availible seats: @item.AvailableSeats</td>
-
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="UpdateEvent" asp-route-id="@item.Id">Update</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="DeleteEvent" asp-route-id="@item.Id">Delete</a>
+                </td>
             </tr>
         }
     </table>
-    <td>
-        <a class="btn btn-sm btn-primary" asp-action="CreateEvent">Create event</a>
-    </td>
+
 }
-else
-{
-}
+<td>
+    <a class="btn btn-sm btn-primary" asp-action="CreateEvent">Create event</a>
+</td>

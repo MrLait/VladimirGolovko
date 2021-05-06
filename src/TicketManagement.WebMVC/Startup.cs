@@ -45,7 +45,8 @@ namespace TicketManagement.WebMVC
             var connectionString = Configuration.GetConnectionString("TestConnection");
             services.AddDbContext<EfDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString)
+                .EnableSensitiveDataLogging();
             });
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
@@ -54,7 +55,7 @@ namespace TicketManagement.WebMVC
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
-            services.AddCustomAuthentication(Configuration);
+            services.AddAuthentication();
             services.AddAuthorization();
         }
 
