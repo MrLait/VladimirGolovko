@@ -246,6 +246,7 @@ namespace TicketManagement.WebMVC.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Deposite(string id, decimal balance)
         {
             ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);

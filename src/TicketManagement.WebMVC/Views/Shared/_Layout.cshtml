@@ -31,11 +31,20 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            @if (User.IsInRole("eventManager"))
+                            {
+                                <li class="nav-link nav-item text-dark">
+                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">Event manager area</a>
+                                </li>
+                            }
                             <li class="nav-link nav-item text-dark">
                                 <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
                                 <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> Basket </a>
+                            </li>
+                            <li class="nav-link nav-item text-dark">
+                                <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> Purchase history </a>
                             </li>
                             <li class="nav-link nav-item text-dark">
                                 @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Email).Value

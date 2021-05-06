@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.WebMVC.Models;
+using TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels;
 
 namespace TicketManagement.WebMVC.Services
 {
@@ -15,6 +14,8 @@ namespace TicketManagement.WebMVC.Services
 
         Task<IQueryable<PurchaseHistory>> GetAllAsync();
 
-        ////Task<BasketViewModel> GetAllByUserAsync(ApplicationUser user);
+        Task AddFromBasketAsync(IQueryable<Basket> baskets);
+
+        Task<PurchaseHistoryViewModel> GetAllByUserAsync(ApplicationUser user);
     }
 }

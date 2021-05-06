@@ -1,0 +1,35 @@
+﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
+
+@{ ViewData["Title"] = "Event manager area"; }
+@{ int rowNumber = 0; }
+
+@if (Model.EventItems.Count() > 0)
+{
+    <table>
+        @foreach (var item in Model.EventItems)
+        {
+            rowNumber++;
+            <tr>
+                <td class="table-number">#@rowNumber.ToString()</td>
+                <td class="table-image">
+                    <div> <img src="@item.ImageUrl" /> </div>
+                </td>
+                <td class="table-event-name">Event name: @item.Name</td>
+                <td class="table-event-description">Description: @item.Description</td>
+                <td class="table-event-date-time-start">The event starts at @item.StartDateTime</td>
+                <td class="table-event-date-time-end">The event ends at @item.EndDateTime</td>
+                <td class="table-availible-seats">Availible seats: @item.AvailableSeats</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="UpdateEvent" asp-route-id="@item.Id">Update</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="DeleteEvent" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+}
+<td>
+    <a class="btn btn-sm btn-primary" asp-action="CreateEvent">Create event</a>
+</td>

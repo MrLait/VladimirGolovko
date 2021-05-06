@@ -57,6 +57,11 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         {
+            if (itemState == States.Purchased)
+            {
+                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+            }
+
             var user = Parse(HttpContext.User);
             await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
             await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });

@@ -26,10 +26,10 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             await Context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
             Context.Set<T>().Remove(entity);
-            return Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         public async Task<IQueryable<T>> GetAllAsync()
@@ -43,10 +43,11 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             return await Context.Set<T>().FindAsync(byId);
         }
 
-        public Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            Context.Entry(entity).State = EntityState.Modified;
-            return Context.SaveChangesAsync();
+            Context.Update<T>(entity);
+            ////Context.Entry(entity).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
         }
     }
 }

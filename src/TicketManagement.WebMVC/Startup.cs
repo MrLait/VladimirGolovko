@@ -38,12 +38,15 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IEventAreaService, EventAreaService>();
             services.AddScoped<IEventSeatService, EventSeatService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
             services.AddScoped<IDbContext, EfDbContext>();
 
             var connectionString = Configuration.GetConnectionString("TestConnection");
             services.AddDbContext<EfDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString)
+                .EnableSensitiveDataLogging();
             });
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
@@ -52,7 +55,7 @@ namespace TicketManagement.WebMVC
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
-            services.AddCustomAuthentication(Configuration);
+            services.AddAuthentication();
             services.AddAuthorization();
         }
 

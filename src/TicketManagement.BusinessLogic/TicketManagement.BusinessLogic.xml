@@ -208,6 +208,12 @@
             </summary>
             <param name="dto">Event data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.UpdateLayoutIdAsync(TicketManagement.Dto.EventDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Event data object transfer.</param>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.

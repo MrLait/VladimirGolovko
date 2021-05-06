@@ -28,6 +28,12 @@ namespace TicketManagement.BusinessLogic.Interfaces
         Task UpdateAsync(EventDto dto);
 
         /// <summary>
+        /// Update object in database.
+        /// </summary>
+        /// <param name="dto">Event data object transfer.</param>
+        Task UpdateLayoutIdAsync(EventDto dto);
+
+        /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
