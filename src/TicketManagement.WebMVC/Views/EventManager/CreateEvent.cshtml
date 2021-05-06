@@ -1,0 +1,36 @@
+﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.EventViewModel
+
+<form method="post" asp-controller="EventManager" asp-action="CreateEvent">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label asp-for="Description"></label><br />
+        <input asp-for="Description" />
+    </div>
+
+    <div>
+        <label asp-for="LayoutId"></label><br />
+        <input asp-for="LayoutId" />
+    </div>
+
+    <div>
+        <label asp-for="StartDateTime"></label><br />
+        <input asp-for="StartDateTime" />
+    </div>
+
+    <div>
+        <label asp-for="EndDateTime"></label><br />
+        <input asp-for="EndDateTime" />
+    </div>
+
+    <div>
+        <label asp-for="ImageUrl"></label><br />
+        <input asp-for="ImageUrl" />
+    </div>
+    <div>
+        <input type="submit" value="Create event" />
+    </div>
+</form>

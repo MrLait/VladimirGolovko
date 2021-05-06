@@ -59,7 +59,15 @@ namespace TicketManagement.BusinessLogic.Services
             var allAreasInLayout = await GetAllAreasInLayoutAsync(dto);
             var allSeatsForAllAreas = await GetAllSeatsForThisAreasAsync(allAreasInLayout);
 
-            Event eventEntity = new Event { LayoutId = dto.LayoutId, Description = dto.Description, Name = dto.Name, StartDateTime = dto.StartDateTime };
+            Event eventEntity = new Event
+            {
+                LayoutId = dto.LayoutId,
+                Description = dto.Description,
+                Name = dto.Name,
+                StartDateTime = dto.StartDateTime,
+                EndDateTime = dto.EndDateTime,
+                ImageUrl = dto.ImageUrl,
+            };
             await DbContext.Events.CreateAsync(eventEntity);
 
             var incrementedEventId = (await DbContext.Events.GetAllAsync()).Last().Id;
@@ -189,32 +197,28 @@ namespace TicketManagement.BusinessLogic.Services
             {
                 var allEventAreasInLayout = await GetAllEvntAreasInLayoutAsync(new EventDto { Id = item.Id });
 
-                if (allEventAreasInLayout.Count() == 0)
+                if (allEventAreasInLayout.Count() != 0)
                 {
-                    return eventDto;
+                    var allEventSeatsForAllAreas = (await GetAllEventSeatsForThisEventAreasAsync(allEventAreasInLayout)).ToList();
+
+                    if (allEventSeatsForAllAreas.Count != 0)
+                    {
+                        var avalibleSeats = allEventSeatsForAllAreas.Where(x => x.State == States.Available);
+                        eventDto.Add(new EventDto
+                        {
+                            Id = item.Id,
+                            LayoutId = item.LayoutId,
+                            StartDateTime = item.StartDateTime,
+                            EndDateTime = item.EndDateTime,
+                            ImageUrl = item.ImageUrl,
+                            Description = item.Description,
+                            Name = item.Name,
+                            AvailableSeats = avalibleSeats.Count(),
+                            PriceFrom = allEventAreasInLayout.Min(x => x.Price),
+                            PriceTo = allEventAreasInLayout.Max(x => x.Price),
+                        });
+                    }
                 }
-
-                var allEventSeatsForAllAreas = (await GetAllEventSeatsForThisEventAreasAsync(allEventAreasInLayout)).ToList();
-
-                if (allEventSeatsForAllAreas.Count == 0)
-                {
-                    return eventDto;
-                }
-
-                var avalibleSeats = allEventSeatsForAllAreas.Where(x => x.State == 0);
-                eventDto.Add(new EventDto
-                {
-                    Id = item.Id,
-                    LayoutId = item.LayoutId,
-                    StartDateTime = item.StartDateTime,
-                    EndDateTime = item.EndDateTime,
-                    ImageUrl = item.ImageUrl,
-                    Description = item.Description,
-                    Name = item.Name,
-                    AvailableSeats = avalibleSeats.Count(),
-                    PriceFrom = allEventAreasInLayout.Min(x => x.Price),
-                    PriceTo = allEventAreasInLayout.Max(x => x.Price),
-                });
             }
 
             return eventDto;

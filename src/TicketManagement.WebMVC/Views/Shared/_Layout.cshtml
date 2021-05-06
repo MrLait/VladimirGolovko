@@ -31,6 +31,12 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            @if (User.IsInRole("eventManager"))
+                            {
+                                <li class="nav-link nav-item text-dark">
+                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">Event manager area</a>
+                                </li>
+                            }
                             <li class="nav-link nav-item text-dark">
                                 <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
                             </li>
