@@ -131,7 +131,7 @@ namespace TicketManagement.WebMVC.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                    ModelState.AddModelError(string.Empty, "User is not found");
                 }
             }
 

@@ -6,3 +6,6 @@ To run tests, you need to follow these steps:
 
 # Task 2
 RSPEC-138 - removed; because this rule did not allow creating scripts for Identity
+
+To deploy the database, you need to publish TicketManagement.Database. 
+Change connection string in TicketManagement.WebMVC project in appsettings.json file
