@@ -337,22 +337,16 @@ namespace TicketManagement.BusinessLogic.Services
             var lastEventAreaId = ((await DbContext.EventAreas.GetAllAsync()).LastOrDefault()?.Id ?? 0) - allAreasInLayout.Count();
 
             int currSateId = allSeatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
-            bool isChanged = true;
             foreach (var item in allSeatsForAllAreas)
             {
-                if (isChanged)
-                {
-                    lastEventAreaId++;
-                    isChanged = false;
-                }
-
-                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId, Number = item.Number, Row = item.Row, State = States.Available });
 
                 if (currSateId != item.AreaId)
                 {
-                    isChanged = true;
                     currSateId = item.AreaId;
+                    lastEventAreaId++;
                 }
+
+                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId + 1, Number = item.Number, Row = item.Row, State = States.Available });
             }
         }
     }
