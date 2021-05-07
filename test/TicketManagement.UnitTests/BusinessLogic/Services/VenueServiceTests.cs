@@ -161,7 +161,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            var actual = await venueService.GetAllAsync();
+            var actual = await venueService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

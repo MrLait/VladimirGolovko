@@ -174,7 +174,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            var actual = await areaService.GetAllAsync();
+            var actual = await areaService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

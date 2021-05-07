@@ -34,7 +34,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = await CheckThatLayoutForThisVenueWithDescriptionAlreadyExistAsync(dto);
+            bool isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
 
             if (isLayoutContain)
             {
@@ -67,9 +67,9 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<LayoutDto>> GetAllAsync()
+        public IEnumerable<LayoutDto> GetAll()
         {
-            var layouts = await DbContext.Layouts.GetAllAsync();
+            var layouts = DbContext.Layouts.GetAllAsQueryable();
             List<LayoutDto> layoutDto = new List<LayoutDto>();
             foreach (var layout in layouts)
             {
@@ -124,7 +124,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isLayoutContain = await CheckThatLayoutForThisVenueWithDescriptionAlreadyExistAsync(dto);
+            bool isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
 
             if (isLayoutContain)
             {
@@ -134,9 +134,9 @@ namespace TicketManagement.BusinessLogic.Services
             await DbContext.Layouts.UpdateAsync(new Layout { Id = dto.Id, VenueId = dto.VenueId, Description = dto.Description });
         }
 
-        private async Task<bool> CheckThatLayoutForThisVenueWithDescriptionAlreadyExistAsync(LayoutDto dto)
+        private bool CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(LayoutDto dto)
         {
-            var allLayoutByVenueId = (await DbContext.Layouts.GetAllAsync()).Where(x => x.VenueId == dto.VenueId).ToList();
+            var allLayoutByVenueId = DbContext.Layouts.GetAllAsQueryable().Where(x => x.VenueId == dto.VenueId).ToList();
             var isLayoutContain = allLayoutByVenueId.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }

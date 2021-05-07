@@ -29,7 +29,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
-            var eventSeatLast = (await _eventSeatRepository.GetAllAsync()).Last();
+            var eventSeatLast = _eventSeatRepository.GetAllAsQueryable().Last();
             EventSeat expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
@@ -50,7 +50,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 Row = expected.Row,
                 State = expected.State,
             });
-            var actual = (await _eventSeatRepository.GetAllAsync()).Last();
+            var actual = _eventSeatRepository.GetAllAsQueryable().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -97,14 +97,14 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         }
 
         [Test]
-        public async Task GetAllAsync_WhenEventSeatsExist_ShouldReturnEventSeats()
+        public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeats()
         {
             // Arrange
-            var expected = await _eventSeatRepository.GetAllAsync();
+            var expected = _eventSeatRepository.GetAllAsQueryable();
             var eventSeatsService = new EventSeatService(_adoDbContext);
 
             // Act
-            var actual = await eventSeatsService.GetAllAsync();
+            var actual = eventSeatsService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -114,7 +114,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task GetByIdAsync_WhenEventSeatExist_ShouldReturnLastEventSeat()
         {
             // Arrange
-            var expected = (await _eventSeatRepository.GetAllAsync()).Last();
+            var expected = _eventSeatRepository.GetAllAsQueryable().Last();
             var expectedId = expected.Id;
             var eventSeatsService = new EventSeatService(_adoDbContext);
 

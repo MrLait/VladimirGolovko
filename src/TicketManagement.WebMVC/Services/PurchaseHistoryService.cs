@@ -42,12 +42,12 @@ namespace TicketManagement.WebMVC.Services
 
         public async Task<PurchaseHistoryViewModel> GetAllByUserAsync(ApplicationUser user)
         {
-            var purchaseHistoryItems = (await DbContext.PurchaseHistories.GetAllAsync()).Where(x => x.UserId == user.Id);
+            var purchaseHistoryItems = DbContext.PurchaseHistories.GetAllAsQueryable().Where(x => x.UserId == user.Id);
             var purchaseHistoryViewModel = new PurchaseHistoryViewModel
             {
                 UserId = user.Id,
             };
-            foreach (var item in purchaseHistoryItems)
+            foreach (var item in purchaseHistoryItems.ToList())
             {
                 var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
                 var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
@@ -71,7 +71,7 @@ namespace TicketManagement.WebMVC.Services
 
         public async Task AddFromBasketAsync(IQueryable<Basket> baskets)
         {
-            foreach (var item in baskets)
+            foreach (var item in baskets.ToList())
             {
                 var purchaseHistoryItem = new PurchaseHistory
                 {

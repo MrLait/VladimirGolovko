@@ -34,7 +34,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isSeatContain = await CheckThatSeatAlreadyCointainsForThisAreaAsync(dto);
+            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
 
             if (isSeatContain)
             {
@@ -67,9 +67,9 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<SeatDto>> GetAllAsync()
+        public IEnumerable<SeatDto> GetAll()
         {
-            var seats = await DbContext.Seats.GetAllAsync();
+            var seats = DbContext.Seats.GetAllAsQueryable();
             List<SeatDto> seatDto = new List<SeatDto>();
             foreach (var seat in seats)
             {
@@ -128,7 +128,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isSeatContain = await CheckThatSeatAlreadyCointainsForThisAreaAsync(dto);
+            bool isSeatContain = CheckThatSeatAlreadyCointainsForThisArea(dto);
 
             if (isSeatContain)
             {
@@ -138,9 +138,9 @@ namespace TicketManagement.BusinessLogic.Services
             await DbContext.Seats.UpdateAsync(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });
         }
 
-        private async Task<bool> CheckThatSeatAlreadyCointainsForThisAreaAsync(SeatDto dto)
+        private bool CheckThatSeatAlreadyCointainsForThisArea(SeatDto dto)
         {
-            var allSeatsByAreaId = (await DbContext.Seats.GetAllAsync()).Where(x => x.AreaId == dto.AreaId).ToList();
+            var allSeatsByAreaId = DbContext.Seats.GetAllAsQueryable().Where(x => x.AreaId == dto.AreaId).ToList();
             var isSeatContain = allSeatsByAreaId.Any(x => x.Number == dto.Row && x.Row == dto.Row);
             return isSeatContain;
         }

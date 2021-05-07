@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
+using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.ProfileViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -13,15 +10,19 @@ namespace TicketManagement.WebMVC.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
+        private readonly IIdentityParser<ApplicationUser> _identityParser;
 
-        public ProfileController(UserManager<ApplicationUser> applicationUser)
+        public ProfileController(UserManager<ApplicationUser> applicationUser,
+            IIdentityParser<ApplicationUser> identityParser)
         {
             _applicationUserManager = applicationUser;
+            _identityParser = identityParser;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var user = await ParseAsync(HttpContext.User);
+            var userId = _identityParser.Parse(HttpContext.User).Id;
+            var user = await _applicationUserManager.FindByIdAsync(userId);
 
             var vm = new ProfileViewModel
             {
@@ -274,16 +275,16 @@ namespace TicketManagement.WebMVC.Controllers
             return View();
         }
 
-        public async Task<ApplicationUser> ParseAsync(IPrincipal principal)
-        {
-            if (principal is ClaimsPrincipal claims)
-            {
-                var id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
-                return user;
-            }
+        ////public async Task<ApplicationUser> ParseAsync(IPrincipal principal)
+        ////{
+        ////    if (principal is ClaimsPrincipal claims)
+        ////    {
+        ////        var id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
+        ////        ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+        ////        return user;
+        ////    }
 
-            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
-        }
+        ////    throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
+        ////}
     }
 }

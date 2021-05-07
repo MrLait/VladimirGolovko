@@ -26,9 +26,9 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<EventAreaDto>> GetAllAsync()
+        public IEnumerable<EventAreaDto> GetAll()
         {
-            var eventAreas = await DbContext.EventAreas.GetAllAsync();
+            var eventAreas = DbContext.EventAreas.GetAllAsQueryable();
             List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)
             {
@@ -93,9 +93,9 @@ namespace TicketManagement.BusinessLogic.Services
             await DbContext.EventAreas.UpdateAsync(currentEventAreas);
         }
 
-        public async Task<IEnumerable<EventAreaDto>> GetAllEventAreasForEventAsync(EventDto dto)
+        public IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto)
         {
-            var allEventAreasForEvent = (await DbContext.EventAreas.GetAllAsync()).Where(x => x.EventId == dto.Id);
+            var allEventAreasForEvent = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
             var eventAreasDto = new List<EventAreaDto>();
 
             foreach (var item in allEventAreasForEvent)

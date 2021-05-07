@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -17,9 +15,9 @@ namespace TicketManagement.WebMVC.Controllers
             _eventSeatService = eventSeatService;
         }
 
-        public async Task<IActionResult> Index(int id)
+        public IActionResult Index(int id)
         {
-            var eventSeatDto = (await _eventSeatService.GetAllAsync()).Where(x => x.EventAreaId == id);
+            var eventSeatDto = _eventSeatService.GetAll().Where(x => x.EventAreaId == id);
             var vm = new IndexViewModel
             {
                 EvenSeatItems = eventSeatDto,

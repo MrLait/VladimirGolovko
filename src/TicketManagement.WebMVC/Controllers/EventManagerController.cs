@@ -25,11 +25,9 @@ namespace TicketManagement.WebMVC.Controllers
             _eventService = eventService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
-            ////var user = await ParseAsync(HttpContext.User);
-
-            var eventCatalog = await _eventService.GetAllAsync();
+            var eventCatalog = _eventService.GetAll();
             var vm = new IndexViewModel
             {
                 EventItems = eventCatalog,
@@ -139,18 +137,6 @@ namespace TicketManagement.WebMVC.Controllers
             await _eventService.DeleteAsync(new EventDto { Id = id });
 
             return RedirectToAction("Index", "EventManager");
-        }
-
-        public async Task<ApplicationUser> ParseAsync(IPrincipal principal)
-        {
-            if (principal is ClaimsPrincipal claims)
-            {
-                var id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
-                return user;
-            }
-
-            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
         }
     }
 }

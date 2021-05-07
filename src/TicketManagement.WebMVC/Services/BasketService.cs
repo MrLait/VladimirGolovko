@@ -39,19 +39,19 @@ namespace TicketManagement.WebMVC.Services
             await DbContext.Baskets.CreateAsync(basketItem);
         }
 
-        public async Task<IQueryable<Basket>> GetAllAsync()
+        public IQueryable<Basket> GetAll()
         {
-            return await DbContext.Baskets.GetAllAsync();
+            return DbContext.Baskets.GetAllAsQueryable();
         }
 
         public async Task<BasketViewModel> GetAllByUserAsync(ApplicationUser user)
         {
-            var basketItems = (await DbContext.Baskets.GetAllAsync()).Where(x => x.UserId == user.Id);
+            var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == user.Id);
             var basketViewModel = new BasketViewModel
             {
                 UserId = user.Id,
             };
-            foreach (var item in basketItems)
+            foreach (var item in basketItems.ToList())
             {
                 var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
                 var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
@@ -83,7 +83,7 @@ namespace TicketManagement.WebMVC.Services
                     return;
                 }
 
-                var productId = (await GetAllAsync()).Where(x => x.ProductId == basketItem.ProductId && x.UserId == basketItem.UserId).FirstOrDefault().Id;
+                var productId = GetAll().Where(x => x.ProductId == basketItem.ProductId && x.UserId == basketItem.UserId).FirstOrDefault().Id;
                 basketItem.Id = productId;
                 await DbContext.Baskets.DeleteAsync(basketItem);
                 return;
@@ -94,8 +94,8 @@ namespace TicketManagement.WebMVC.Services
 
         public async Task DeleteAsync(ApplicationUser user)
         {
-            var basketItems = (await DbContext.Baskets.GetAllAsync()).Where(x => x.UserId == user.Id);
-            foreach (var item in basketItems)
+            var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == user.Id);
+            foreach (var item in basketItems.ToList())
             {
                 await DeleteAsync(item);
             }

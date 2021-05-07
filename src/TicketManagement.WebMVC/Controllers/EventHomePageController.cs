@@ -14,9 +14,9 @@ namespace TicketManagement.WebMVC.Controllers
             _eventService = eventService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var eventCatalog = await _eventService.GetAllAsync();
+            var eventCatalog = _eventService.GetAll();
             var vm = new IndexViewModel
             {
                 EventItems = eventCatalog,

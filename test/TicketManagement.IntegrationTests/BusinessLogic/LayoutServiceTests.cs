@@ -172,7 +172,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var layoutService = new LayoutService(_adoDbContext);
 
             // Act
-            var actual = await layoutService.GetAllAsync();
+            var actual = await layoutService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

@@ -15,38 +15,23 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IBasketService _basketService;
         private readonly IApplicationUserService _applicationUserService;
         private readonly IPurchaseHistoryService _purchaseHistoryService;
+        private readonly IIdentityParser<ApplicationUser> _identityParser;
 
-        public PurchaseHistoryController(IBasketService basketService, IApplicationUserService applicationUserService, IPurchaseHistoryService purchaseHistoryService)
+        public PurchaseHistoryController(IBasketService basketService, IApplicationUserService applicationUserService, IPurchaseHistoryService purchaseHistoryService,
+            IIdentityParser<ApplicationUser> identityParser)
         {
             _basketService = basketService;
             _applicationUserService = applicationUserService;
             _purchaseHistoryService = purchaseHistoryService;
+            _identityParser = identityParser;
         }
 
         public async Task<IActionResult> Index()
         {
-            var user = Parse(HttpContext.User);
+            var user = _identityParser.Parse(HttpContext.User);
             var vm = await _purchaseHistoryService.GetAllByUserAsync(user);
 
             return View(vm);
-        }
-
-        public ApplicationUser Parse(IPrincipal principal)
-        {
-            // Pattern matching 'is' expression
-            // assigns "claims" if "principal" is a "ClaimsPrincipal"
-            if (principal is ClaimsPrincipal claims)
-            {
-                return new ApplicationUser
-                {
-                    Email = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "",
-                    Id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "",
-                    PhoneNumber = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone)?.Value ?? "",
-                    UserName = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? "",
-                };
-            }
-
-            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
         }
     }
 }

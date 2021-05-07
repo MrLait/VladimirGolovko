@@ -24,9 +24,9 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<EventSeatDto>> GetAllAsync()
+        public IEnumerable<EventSeatDto> GetAll()
         {
-            var eventSeats = await DbContext.EventSeats.GetAllAsync();
+            var eventSeats = DbContext.EventSeats.GetAllAsQueryable();
             List<EventSeatDto> eventSeatsDto = new List<EventSeatDto>();
             foreach (var eventSeat in eventSeats)
             {

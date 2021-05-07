@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -27,9 +26,9 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// Method to get all objects from database table.
         /// </summary>
         /// <returns>Returns list of objects.</returns>
-        Task<IEnumerable<EventAreaDto>> GetAllAsync();
+        IEnumerable<EventAreaDto> GetAll();
 
-        Task<IEnumerable<EventAreaDto>> GetAllEventAreasForEventAsync(EventDto dto);
+        IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto);
 
         Task DeleteAsync(EventAreaDto dto);
     }

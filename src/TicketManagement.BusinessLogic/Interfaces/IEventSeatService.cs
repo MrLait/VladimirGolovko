@@ -26,6 +26,6 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// Method to get all objects from database table.
         /// </summary>
         /// <returns>Returns list of objects.</returns>
-        Task<IEnumerable<EventSeatDto>> GetAllAsync();
+        IEnumerable<EventSeatDto> GetAll();
     }
 }

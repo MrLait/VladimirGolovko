@@ -173,7 +173,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var seatService = new SeatService(_adoDbContext);
 
             // Act
-            var actual = await seatService.GetAllAsync();
+            var actual = await seatService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

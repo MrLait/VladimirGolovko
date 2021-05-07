@@ -175,7 +175,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            var actual = await seatService.GetAllAsync();
+            var actual = await seatService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

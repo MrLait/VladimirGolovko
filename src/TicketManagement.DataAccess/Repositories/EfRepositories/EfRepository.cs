@@ -32,10 +32,9 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             await Context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<T>> GetAllAsync()
+        public IQueryable<T> GetAllAsQueryable()
         {
-            var test = await Context.Set<T>().AsNoTracking().ToListAsync();
-            return test.AsQueryable();
+            return Context.Set<T>().AsNoTracking().AsQueryable();
         }
 
         public async Task<T> GetByIDAsync(int byId)

@@ -105,7 +105,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
-            var actual = await eventAreaService.GetAllAsync();
+            var actual = await eventAreaService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

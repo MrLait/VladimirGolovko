@@ -131,7 +131,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -155,7 +155,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -179,7 +179,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -221,7 +221,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -257,7 +257,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -293,7 +293,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -334,7 +334,7 @@
             <param name="id">Object id.</param>
             <returns>Returns object by id.</returns>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetAll">
             <summary>
             Method to get all objects from database table.
             </summary>
@@ -362,7 +362,7 @@
         <member name="M:TicketManagement.BusinessLogic.Services.AreaService.DeleteAsync(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetByIDAsync(System.Int32)">
@@ -387,7 +387,7 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetByIDAsync(System.Int32)">
@@ -412,7 +412,7 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetByIDAsync(System.Int32)">
@@ -450,7 +450,7 @@
         <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetAll">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.LayoutService">
@@ -475,7 +475,7 @@
         <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.DeleteAsync(TicketManagement.Dto.LayoutDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetByIDAsync(System.Int32)">
@@ -506,7 +506,7 @@
         <member name="M:TicketManagement.BusinessLogic.Services.SeatService.DeleteAsync(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetByIDAsync(System.Int32)">
@@ -537,7 +537,7 @@
         <member name="M:TicketManagement.BusinessLogic.Services.VenueService.DeleteAsync(TicketManagement.Dto.VenueDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetAllAsync">
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetAll">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetByIDAsync(System.Int32)">

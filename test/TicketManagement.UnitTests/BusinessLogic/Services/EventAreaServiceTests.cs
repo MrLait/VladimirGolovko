@@ -104,7 +104,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            var actual = await eventAreaService.GetAllAsync();
+            var actual = await eventAreaService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

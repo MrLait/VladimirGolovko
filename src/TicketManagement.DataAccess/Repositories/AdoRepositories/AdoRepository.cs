@@ -44,7 +44,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public abstract Task<IQueryable<T>> GetAllAsync();
+        public abstract IQueryable<T> GetAllAsQueryable();
 
         /// <inheritdoc/>
         public virtual Task<T> GetByIDAsync(int byId)

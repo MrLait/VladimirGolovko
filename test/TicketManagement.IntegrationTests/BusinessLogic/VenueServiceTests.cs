@@ -160,7 +160,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
             var venueService = new VenueService(_adoDbContext);
 
             // Act
-            var actual = await venueService.GetAllAsync();
+            var actual = await venueService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

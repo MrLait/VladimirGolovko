@@ -174,7 +174,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            var actual = await layoutService.GetAllAsync();
+            var actual = await layoutService.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);

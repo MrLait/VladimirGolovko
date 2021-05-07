@@ -40,6 +40,7 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
             services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
+            services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddScoped<IDbContext, EfDbContext>();
 
             var connectionString = Configuration.GetConnectionString("TestConnection");

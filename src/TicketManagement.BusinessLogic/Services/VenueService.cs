@@ -34,7 +34,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            var allVenues = (await DbContext.Venues.GetAllAsync()).ToList();
+            var allVenues = DbContext.Venues.GetAllAsQueryable().ToList();
             var isVenueContain = allVenues.Any(x => x.Description.Contains(dto.Description));
 
             if (isVenueContain)
@@ -68,9 +68,9 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<VenueDto>> GetAllAsync()
+        public IEnumerable<VenueDto> GetAll()
         {
-            var venues = await DbContext.Venues.GetAllAsync();
+            var venues = DbContext.Venues.GetAllAsQueryable();
             List<VenueDto> venuesDto = new List<VenueDto>();
             foreach (var item in venues)
             {

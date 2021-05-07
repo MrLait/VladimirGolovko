@@ -33,7 +33,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = await CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(dto);
+            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {
@@ -66,9 +66,9 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<AreaDto>> GetAllAsync()
+        public IEnumerable<AreaDto> GetAll()
         {
-            var areas = await DbContext.Areas.GetAllAsync();
+            var areas = DbContext.Areas.GetAllAsQueryable();
             List<AreaDto> areasDto = new List<AreaDto>();
             foreach (var item in areas)
             {
@@ -113,7 +113,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            bool isLayoutContain = await CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(dto);
+            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {
@@ -123,9 +123,9 @@ namespace TicketManagement.BusinessLogic.Services
             await DbContext.Areas.UpdateAsync(new Area { Id = dto.Id, LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY });
         }
 
-        private async Task<bool> CheckThatAreaWithThisDescriptionInLayoutAlreadyExistAsync(AreaDto dto)
+        private bool CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(AreaDto dto)
         {
-            var allAreas = (await DbContext.Areas.GetAllAsync()).Where(x => x.LayoutId == dto.LayoutId);
+            var allAreas = DbContext.Areas.GetAllAsQueryable().Where(x => x.LayoutId == dto.LayoutId);
             var isLayoutContain = allAreas.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }

@@ -48,7 +48,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override async Task<IQueryable<T>> GetAllAsync()
+        public override IQueryable<T> GetAllAsQueryable()
         {
             string tableName = new T().GetType().Name;
             string storedProcedure = $"GetAll{tableName}";
@@ -60,7 +60,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
             try
             {
                 DataSet ds = new DataSet();
-                await Task.Run(() => adpt.Fill(ds));
+                adpt.Fill(ds);
                 return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
             catch (SqlException sqlEx)

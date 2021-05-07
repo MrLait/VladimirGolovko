@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -20,17 +17,20 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
         private readonly IBasketService _basketService;
+        private readonly IIdentityParser<ApplicationUser> _identityParser;
 
-        public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService, IBasketService basketService)
+        public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService, IBasketService basketService,
+            IIdentityParser<ApplicationUser> identityParser)
         {
             _eventAreaService = eventAreaService;
             _eventSeatService = eventSeatService;
             _basketService = basketService;
+            _identityParser = identityParser;
         }
 
-        public async Task<IActionResult> Index(EventDto dto)
+        public IActionResult Index(EventDto dto)
         {
-            var eventAreaDto = (await _eventAreaService.GetAllAsync()).Where(x => x.EventId == dto.Id);
+            var eventAreaDto = _eventAreaService.GetAll().Where(x => x.EventId == dto.Id);
 
             var vm = new IndexViewModel
             {
@@ -39,7 +39,7 @@ namespace TicketManagement.WebMVC.Controllers
 
             for (int i = 0; i < eventAreaDto.Count(); i++)
             {
-                List<EventSeatDto> eventSeatDto = (await _eventSeatService.GetAllAsync()).Where(x => x.EventAreaId == eventAreaDto.ToList()[i].Id).ToList();
+                List<EventSeatDto> eventSeatDto = _eventSeatService.GetAll().Where(x => x.EventAreaId == eventAreaDto.ToList()[i].Id).ToList();
                 vm.EvenAreatItems.ToList()[i].EvenSeats = eventSeatDto;
             }
 
@@ -48,7 +48,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         {
-            var user = Parse(HttpContext.User);
+            var user = _identityParser.Parse(HttpContext.User);
             await _basketService.AddAsync(user, itemId);
             await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
 
@@ -62,7 +62,7 @@ namespace TicketManagement.WebMVC.Controllers
                 return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
             }
 
-            var user = Parse(HttpContext.User);
+            var user = _identityParser.Parse(HttpContext.User);
             await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
             await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
 
@@ -82,24 +82,6 @@ namespace TicketManagement.WebMVC.Controllers
         public ActionResult GetEventSeats()
         {
             return PartialView("_GetEventSeats");
-        }
-
-        public ApplicationUser Parse(IPrincipal principal)
-        {
-            // Pattern matching 'is' expression
-            // assigns "claims" if "principal" is a "ClaimsPrincipal"
-            if (principal is ClaimsPrincipal claims)
-            {
-                return new ApplicationUser
-                {
-                    Email = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "",
-                    Id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "",
-                    PhoneNumber = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone)?.Value ?? "",
-                    UserName = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? "",
-                };
-            }
-
-            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
         }
     }
 }
