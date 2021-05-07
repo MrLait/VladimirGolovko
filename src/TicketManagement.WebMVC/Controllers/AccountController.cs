@@ -88,7 +88,7 @@ namespace TicketManagement.WebMVC.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    ModelState.AddModelError("", "Incorrect username and(or) password");
                 }
             }
 
