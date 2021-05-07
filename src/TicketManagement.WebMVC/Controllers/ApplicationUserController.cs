@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
@@ -9,6 +8,7 @@ using TicketManagement.WebMVC.ViewModels.ApplicationUserViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class ApplicationUserController : Controller
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
@@ -18,7 +18,6 @@ namespace TicketManagement.WebMVC.Controllers
             _applicationUserManager = applicationUser;
         }
 
-        //// нужно ограничить
         public IActionResult Index() => View(_applicationUserManager.Users.ToList());
 
         public IActionResult Create() => View();

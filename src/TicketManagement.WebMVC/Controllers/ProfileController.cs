@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
@@ -7,6 +8,7 @@ using TicketManagement.WebMVC.ViewModels.ProfileViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -11,6 +12,7 @@ using TicketManagement.WebMVC.ViewModels.EventAreaViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    [Authorize]
     public class EventAreaController : Controller
     {
         private readonly IEventAreaService _eventAreaService;

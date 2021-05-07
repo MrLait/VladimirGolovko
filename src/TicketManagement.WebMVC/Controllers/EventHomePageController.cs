@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    [AllowAnonymous]
     public class EventHomePageController : Controller
     {
         private readonly IEventService _eventService;

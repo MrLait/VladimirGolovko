@@ -4,12 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    [Authorize]
     public class PurchaseHistoryController : Controller
     {
         private readonly IBasketService _basketService;

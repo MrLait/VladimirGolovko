@@ -11,6 +11,7 @@ using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 namespace TicketManagement.WebMVC.Controllers
 {
     ////[Authorize(AuthenticationSchemes = OpenIdConnectDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
