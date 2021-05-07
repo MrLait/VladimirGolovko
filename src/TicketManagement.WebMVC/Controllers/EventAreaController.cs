@@ -30,7 +30,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public IActionResult Index(EventDto dto)
         {
-            var eventAreaDto = _eventAreaService.GetAll().Where(x => x.EventId == dto.Id);
+            var eventAreaDto = _eventAreaService.GetByEventId(dto);
 
             var vm = new IndexViewModel
             {
@@ -39,7 +39,7 @@ namespace TicketManagement.WebMVC.Controllers
 
             for (int i = 0; i < eventAreaDto.Count(); i++)
             {
-                List<EventSeatDto> eventSeatDto = _eventSeatService.GetAll().Where(x => x.EventAreaId == eventAreaDto.ToList()[i].Id).ToList();
+                var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
                 vm.EvenAreatItems.ToList()[i].EvenSeats = eventSeatDto;
             }
 

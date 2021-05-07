@@ -28,6 +28,8 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// <returns>Returns list of objects.</returns>
         IEnumerable<EventAreaDto> GetAll();
 
+        IEnumerable<EventAreaDto> GetByEventId(EventDto dto);
+
         IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto);
 
         Task DeleteAsync(EventAreaDto dto);

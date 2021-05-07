@@ -38,6 +38,19 @@ namespace TicketManagement.BusinessLogic.Services
             return eventAreasDto;
         }
 
+        public IEnumerable<EventAreaDto> GetByEventId(EventDto dto)
+        {
+            var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
+
+            List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
+            foreach (var item in eventAreas)
+            {
+                eventAreasDto.Add(new EventAreaDto { Id = item.Id, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY, EventId = item.EventId, Price = item.Price });
+            }
+
+            return eventAreasDto;
+        }
+
         /// <inheritdoc/>
         public async Task<EventAreaDto> GetByIDAsync(int id)
         {

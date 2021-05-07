@@ -22,6 +22,8 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// <returns>Returns object by id.</returns>
         Task<EventSeatDto> GetByIDAsync(int id);
 
+        IEnumerable<EventSeatDto> GetByEventAreaId(EventAreaDto dto);
+
         /// <summary>
         /// Method to get all objects from database table.
         /// </summary>

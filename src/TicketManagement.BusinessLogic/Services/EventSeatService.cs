@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
@@ -62,6 +63,26 @@ namespace TicketManagement.BusinessLogic.Services
                 State = eventSeat.State,
             };
             return eventSeatDto;
+        }
+
+        public IEnumerable<EventSeatDto> GetByEventAreaId(EventAreaDto dto)
+        {
+            var eventSeats = DbContext.EventSeats.GetAllAsQueryable().Where(x => x.EventAreaId == dto.Id);
+
+            var eventSeatsDto = new List<EventSeatDto>();
+            foreach (var item in eventSeats)
+            {
+                eventSeatsDto.Add(new EventSeatDto
+                {
+                    Id = item.Id,
+                    EventAreaId = item.EventAreaId,
+                    Number = item.Number,
+                    Row = item.Row,
+                    State = item.State,
+                });
+            }
+
+            return eventSeatsDto;
         }
 
         /// <inheritdoc/>
