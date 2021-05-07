@@ -77,7 +77,7 @@ namespace TicketManagement.BusinessLogic.Services
             };
             await DbContext.Events.CreateAsync(eventEntity);
 
-            var incrementedEventId = DbContext.Events.GetAllAsQueryable().Last().Id;
+            var incrementedEventId = DbContext.Events.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
             await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
         }
@@ -289,11 +289,11 @@ namespace TicketManagement.BusinessLogic.Services
             return allAreasInLayout;
         }
 
-        private List<Seat> GetAllSeatsForThisAreas(IEnumerable<Area> allAreasInLayout)
+        private IEnumerable<Seat> GetAllSeatsForThisAreas(IEnumerable<Area> allAreasInLayout)
         {
-            var allSeats = DbContext.Seats.GetAllAsQueryable();
+            var allSeats = DbContext.Seats.GetAllAsQueryable().ToList();
             var allSeatsForAllAreas = new List<Seat>();
-            foreach (var item in allAreasInLayout)
+            foreach (var item in allAreasInLayout.ToList())
             {
                 allSeatsForAllAreas.AddRange(allSeats.Where(x => x.AreaId == item.Id));
             }
@@ -327,14 +327,14 @@ namespace TicketManagement.BusinessLogic.Services
             return atLeastOneAreaContainsSeats;
         }
 
-        private async Task CreateEventAreasAndThenEventSeatsAsync(IEnumerable<Area> allAreasInLayout, List<Seat> allSeatsForAllAreas, int eventId)
+        private async Task CreateEventAreasAndThenEventSeatsAsync(IEnumerable<Area> allAreasInLayout, IEnumerable<Seat> allSeatsForAllAreas, int eventId)
         {
-            foreach (var item in allAreasInLayout)
+            foreach (var item in allAreasInLayout.ToList())
             {
                 await DbContext.EventAreas.CreateAsync(new EventArea { Description = item.Description, EventId = eventId, CoordX = item.CoordX, CoordY = item.CoordY, Price = default });
             }
 
-            var lastEventAreaId = (DbContext.EventAreas.GetAllAsQueryable().LastOrDefault()?.Id ?? 0) - allAreasInLayout.Count();
+            var lastEventAreaId = (DbContext.EventAreas.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault()?.Id ?? 0) - allAreasInLayout.Count();
 
             int currSateId = allSeatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
             foreach (var item in allSeatsForAllAreas)
