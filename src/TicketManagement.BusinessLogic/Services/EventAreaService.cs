@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
@@ -89,6 +91,47 @@ namespace TicketManagement.BusinessLogic.Services
             var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);
             currentEventAreas.Price = dto.Price;
             await DbContext.EventAreas.UpdateAsync(currentEventAreas);
+        }
+
+        public async Task<IEnumerable<EventAreaDto>> GetAllEventAreasForEventAsync(EventDto dto)
+        {
+            var allEventAreasForEvent = (await DbContext.EventAreas.GetAllAsync()).Where(x => x.EventId == dto.Id);
+            var eventAreasDto = new List<EventAreaDto>();
+
+            foreach (var item in allEventAreasForEvent)
+            {
+                eventAreasDto.Add(new EventAreaDto
+                {
+                    Id = item.Id,
+                    CoordX = item.CoordX,
+                    CoordY = item.CoordY,
+                    Description = item.Description,
+                    EventId = item.EventId,
+                    Price = item.Price,
+                });
+            }
+
+            return eventAreasDto;
+        }
+
+        public async Task DeleteAsync(EventAreaDto dto)
+        {
+            if (dto == null)
+            {
+                throw new ValidationException(ExceptionMessages.NullReference);
+            }
+
+            if (dto.Id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            await DbContext.EventAreas.DeleteAsync(new EventArea { Id = dto.Id });
         }
     }
 }

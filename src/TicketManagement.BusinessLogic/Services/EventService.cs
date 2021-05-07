@@ -16,11 +16,18 @@ namespace TicketManagement.BusinessLogic.Services
     /// </summary>
     internal class EventService : IEventService
     {
+        private readonly IEventAreaService _eventAreaService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EventService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public EventService(IDbContext dbContext) => DbContext = dbContext;
+        /// <param name="eventAreaService">Event area service.</param>
+        public EventService(IDbContext dbContext, IEventAreaService eventAreaService)
+        {
+            DbContext = dbContext;
+            _eventAreaService = eventAreaService;
+        }
 
         /// <summary>
         /// Gets property database context.
@@ -170,8 +177,13 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
             }
 
+            var allEventAreasInEvent = await _eventAreaService.GetAllEventAreasForEventAsync(dto);
             var allAreasInLayout = await GetAllAreasInLayoutAsync(dto);
             var allSeatsForAllAreas = await GetAllSeatsForThisAreasAsync(allAreasInLayout);
+            foreach (var item in allEventAreasInEvent)
+            {
+                await _eventAreaService.DeleteAsync(item);
+            }
 
             await DbContext.Events.UpdateAsync(
                 new Event

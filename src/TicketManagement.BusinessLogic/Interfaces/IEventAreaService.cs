@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -27,5 +28,9 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// </summary>
         /// <returns>Returns list of objects.</returns>
         Task<IEnumerable<EventAreaDto>> GetAllAsync();
+
+        Task<IEnumerable<EventAreaDto>> GetAllEventAreasForEventAsync(EventDto dto);
+
+        Task DeleteAsync(EventAreaDto dto);
     }
 }
