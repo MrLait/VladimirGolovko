@@ -66,6 +66,17 @@
             {0} - Description.
             </summary>
         </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.SeatsHaveAlreadyBeenPurchased">
+            <summary>
+            {0} - Event id.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StartDataTimeBeforeEndDataTime">
+            <summary>
+            {0} - Start data time.
+            {0} - End data time.
+            </summary>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages"/> class.
@@ -426,11 +437,12 @@
             Event service class.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext,TicketManagement.BusinessLogic.Interfaces.IEventAreaService)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext,TicketManagement.BusinessLogic.Interfaces.IEventSeatService,TicketManagement.BusinessLogic.Interfaces.IEventAreaService)">
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.
             </summary>
             <param name="dbContext">Database context.</param>
+            <param name="eventSeatService">Event seat service.</param>
             <param name="eventAreaService">Event area service.</param>
         </member>
         <member name="P:TicketManagement.BusinessLogic.Services.EventService.DbContext">

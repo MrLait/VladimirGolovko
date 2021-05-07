@@ -2,29 +2,33 @@
 
 <img class="esh-event-thumbnail" src="@Model.ImageUrl" />
 
-<div class="esh-event-name">
-    <span>@Model.Name</span>
-</div>
-
-<div class="esh-event-description">
-    <span>@Model.Description</span>
-</div>
-
-<div class="esh-event-duration">
-    <span>@Model.StartDateTime</span>
-    <span>@Model.EndDateTime</span>
-</div>
-
-<div class="esh-event-available-seats">
-    <span>@Model.AvailableSeats</span>
-</div>
-
-<div class="esh-event-price">
-    <span>@Model.PriceFrom.ToString("N2")</span>
-    <span>@Model.PriceTo.ToString("N2")</span>
-</div>
-
-<form asp-controller="EventArea" asp-action="GetViewEventArea" class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" data-tooltip="Для перехода на эту страницу нужно авторизироваться" >
+<table class="table">
+    <tr>
+        <td>Event name</td>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>@Model.Description</td>
+    </tr>
+    <tr>
+        <td>Event starts at</td>
+        <td>@Model.StartDateTime</td>
+    </tr>
+    <tr>
+        <td>Event ends at</td>
+        <td>@Model.EndDateTime</td>
+    </tr>
+    <tr>
+        <td>Avaliable of seats</td>
+        <td>@Model.AvailableSeats</td>
+    </tr>
+    <tr>
+        <td>Prices start from @Model.PriceFrom.ToString("N2") </td>
+        <td>to @Model.PriceTo.ToString("N2")</td>
+    </tr>
+</table>
+<form asp-controller="EventArea" asp-action="GetViewEventArea" class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" data-tooltip="To go to this page, you need to login.">
     <input class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" type="submit" value="Choose tickets" />
     <input type="hidden" asp-for="@Model.Id" name="id" />
 </form>

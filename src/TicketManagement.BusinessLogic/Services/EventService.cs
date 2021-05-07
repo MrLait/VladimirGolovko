@@ -17,16 +17,19 @@ namespace TicketManagement.BusinessLogic.Services
     internal class EventService : IEventService
     {
         private readonly IEventAreaService _eventAreaService;
+        private readonly IEventSeatService _eventSeatService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="eventSeatService">Event seat service.</param>
         /// <param name="eventAreaService">Event area service.</param>
-        public EventService(IDbContext dbContext, IEventAreaService eventAreaService)
+        public EventService(IDbContext dbContext, IEventSeatService eventSeatService, IEventAreaService eventAreaService)
         {
             DbContext = dbContext;
             _eventAreaService = eventAreaService;
+            _eventSeatService = eventSeatService;
         }
 
         /// <summary>
@@ -43,21 +46,24 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
-
             if (!isDataTimeValid)
             {
                 throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
             }
 
-            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
+            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
+            if (!isStartDataTimeBeforeEndTadaTime)
+            {
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+            }
 
+            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
             if (isEventContainSameVenueInSameTime)
             {
                 throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
             }
 
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
-
             if (!atLeastOneAreaContainsSeats)
             {
                 throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
@@ -100,6 +106,18 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
+            var allEventAreas = _eventAreaService.GetByEventId(dto).ToList();
+            bool isSeatPurchased = false;
+            foreach (var item in allEventAreas)
+            {
+                var eventSeats = _eventSeatService.GetByEventAreaId(item);
+                isSeatPurchased = eventSeats.Any(x => x.State == States.Purchased);
+                if (isSeatPurchased)
+                {
+                    throw new ValidationException(ExceptionMessages.SeatsHaveAlreadyBeenPurchased, dto.Id);
+                }
+            }
+
             await DbContext.Events.DeleteAsync(new Event
             {
                 Id = dto.Id,
@@ -128,6 +146,18 @@ namespace TicketManagement.BusinessLogic.Services
             if (!isDataTimeValid)
             {
                 throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
+            }
+
+            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
+            if (!isStartDataTimeBeforeEndTadaTime)
+            {
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+            }
+
+            var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
+            if (isEventContainSameVenueInSameTime)
+            {
+                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
             }
 
             await DbContext.Events.UpdateAsync(new Event
@@ -169,6 +199,12 @@ namespace TicketManagement.BusinessLogic.Services
             if (!atLeastOneAreaContainsSeats)
             {
                 throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
+            }
+
+            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
+            if (!isStartDataTimeBeforeEndTadaTime)
+            {
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
             }
 
             var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
@@ -234,7 +270,7 @@ namespace TicketManagement.BusinessLogic.Services
             var eventDto = new List<EventDto>();
             foreach (var item in events)
             {
-                var allEventAreasInLayout = GetAllEvntAreasInLayout(new EventDto { Id = item.Id });
+                var allEventAreasInLayout = GetAllEventAreasInLayout(new EventDto { Id = item.Id });
 
                 if (allEventAreasInLayout.Count() != 0)
                 {
@@ -263,10 +299,9 @@ namespace TicketManagement.BusinessLogic.Services
             return eventDto;
         }
 
-        private IQueryable<EventArea> GetAllEvntAreasInLayout(EventDto dto)
+        private IQueryable<EventArea> GetAllEventAreasInLayout(EventDto dto)
         {
             var allEventAreasInLayout = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
-
             return allEventAreasInLayout;
         }
 
@@ -304,8 +339,15 @@ namespace TicketManagement.BusinessLogic.Services
         private bool CheckThatEventNotCreatedInTheSameTimeForVenue(EventDto dto)
         {
             var allEvents = DbContext.Events.GetAllAsQueryable().ToList();
-            var isEventContainSameVenueInSameTime = allEvents.Any(x => x.StartDateTime.ToString().Contains(dto.StartDateTime.ToString()) && x.LayoutId == dto.LayoutId);
+            var isEventContainSameVenueInSameTime = allEvents.Any(x => x.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= x.EndDateTime && x.LayoutId == dto.LayoutId) ||
+                allEvents.Any(x => dto.StartDateTime <= x.StartDateTime && x.StartDateTime <= dto.EndDateTime && x.LayoutId == dto.LayoutId);
             return isEventContainSameVenueInSameTime;
+        }
+
+        private bool CheckThatStartDataTimeBeforeEndDadaTime(EventDto dto)
+        {
+            var isStartDataTimeBeforeEndDataTime = dto.StartDateTime < dto.EndDateTime;
+            return isStartDataTimeBeforeEndDataTime;
         }
 
         private bool CheckThatEventNotCreatedInThePast(EventDto dto)

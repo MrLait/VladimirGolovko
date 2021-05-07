@@ -27,7 +27,7 @@ namespace TicketManagement.BusinessLogic.Services
         /// <inheritdoc/>
         public IEnumerable<EventSeatDto> GetAll()
         {
-            var eventSeats = DbContext.EventSeats.GetAllAsQueryable();
+            var eventSeats = DbContext.EventSeats.GetAllAsQueryable().ToList();
             List<EventSeatDto> eventSeatsDto = new List<EventSeatDto>();
             foreach (var eventSeat in eventSeats)
             {
@@ -67,7 +67,7 @@ namespace TicketManagement.BusinessLogic.Services
 
         public IEnumerable<EventSeatDto> GetByEventAreaId(EventAreaDto dto)
         {
-            var eventSeats = DbContext.EventSeats.GetAllAsQueryable().Where(x => x.EventAreaId == dto.Id);
+            var eventSeats = DbContext.EventSeats.GetAllAsQueryable().OrderBy(x => x.EventAreaId).Where(x => x.EventAreaId == dto.Id);
 
             var eventSeatsDto = new List<EventSeatDto>();
             foreach (var item in eventSeats)

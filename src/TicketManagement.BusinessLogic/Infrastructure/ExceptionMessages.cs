@@ -65,6 +65,17 @@
         public const string VenueExist = "The Venue with a description: '{0}' - already exists.";
 
         /// <summary>
+        /// {0} - Event id.
+        /// </summary>
+        public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the '{0} event.";
+
+        /// <summary>
+        /// {0} - Start data time.
+        /// {0} - End data time.
+        /// </summary>
+        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event '{0}' cannot be after the end of the event '{1}'.";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMessages"/> class.
         /// </summary>
         protected ExceptionMessages()
