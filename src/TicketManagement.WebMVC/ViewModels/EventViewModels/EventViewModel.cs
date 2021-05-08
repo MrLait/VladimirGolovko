@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
-    public class EventViewModel
+    public record EventViewModel
     {
         public int Id { get; set; }
 
@@ -35,5 +36,7 @@ namespace TicketManagement.WebMVC.ViewModels.EventViewModels
         /// Gets or sets image url column in table.
         /// </summary>
         public string ImageUrl { get; set; }
+
+        public List<EventAreaItem> EventAreaItems { get; set; } = new List<EventAreaItem>();
     }
 }

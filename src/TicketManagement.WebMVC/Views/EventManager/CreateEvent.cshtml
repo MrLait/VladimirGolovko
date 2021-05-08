@@ -2,6 +2,10 @@
 
 <form method="post" asp-controller="EventManager" asp-action="CreateEvent">
     <div asp-validation-summary="ModelOnly"></div>
+    @if (@Model != null)
+    {
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+    }
     <div>
         <label asp-for="Name"></label><br />
         <input asp-for="Name" />
@@ -30,7 +34,33 @@
         <label asp-for="ImageUrl"></label><br />
         <input asp-for="ImageUrl" />
     </div>
-    <div>
-        <input type="submit" value="Create event" />
-    </div>
+    @if (Model == null)
+    {
+        <div>
+            <input id="hider" type="submit" value="Create event" />
+        </div>
+    }
+    else
+    {
+        @if (@Model.EventAreaItems.ToList().Count > 0)
+        {
+            for (int i = 0; i < Model.EventAreaItems.Count(); i++)
+            {
+                <p>
+                    <label>@Model.EventAreaItems[@i].Description</label><br />
+                    <input type="number" name="model.EventAreaItems[@i].Price" />
+                    <input type="hidden" name="model.EventAreaItems[@i].Id" value="@Model.EventAreaItems[@i].Id" />
+                    <input type="hidden" name="model.EventAreaItems[@i].EventId" value="@Model.EventAreaItems[@i].EventId" />
+                </p>
+            }
+            <input type="hidden" name="model.Id" value="@Model.Id" />
+            <input type="hidden" name="model.LayoutId" value="@Model.LayoutId" />
+            <input type="hidden" name="model.StartDateTime" value="@Model.StartDateTime" />
+            <input type="hidden" name="model.EndDateTime" value="@Model.EndDateTime" />
+            <input type="hidden" name="model.ImageUrl" value="@Model.ImageUrl" />
+        }
+        <div>
+            <input type="submit" value="Publish event" />
+        </div>
+    }
 </form>

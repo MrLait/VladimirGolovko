@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Models;
+using TicketManagement.WebMVC.ViewModels;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -12,13 +16,15 @@ namespace TicketManagement.WebMVC.Controllers
     [Authorize(Roles = "eventManager")]
     public class EventManagerController : Controller
     {
-        private readonly UserManager<ApplicationUser> _applicationUserManager;
         private readonly IEventService _eventService;
+        private readonly IEventAreaService _eventAreaService;
+        private readonly IMapper _mapper;
 
-        public EventManagerController(UserManager<ApplicationUser> applicationUser, IEventService eventService)
+        public EventManagerController(UserManager<ApplicationUser> applicationUser, IEventService eventService, IEventAreaService eventAreaService, IMapper mapper)
         {
-            _applicationUserManager = applicationUser;
             _eventService = eventService;
+            _eventAreaService = eventAreaService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -51,8 +57,25 @@ namespace TicketManagement.WebMVC.Controllers
                     EndDateTime = model.EndDateTime,
                     ImageUrl = model.ImageUrl,
                 };
+                if (model.Id == 0)
+                {
+                    await _eventService.CreateAsync(eventDto);
+                    var lastAddedEvent = _eventService.Last();
+                    model.Id = lastAddedEvent.Id;
+                    model.Name = lastAddedEvent.Name;
+                    model.Description = lastAddedEvent.Description;
+                    model.LayoutId = lastAddedEvent.LayoutId;
+                    model.StartDateTime = lastAddedEvent.StartDateTime;
+                    model.EndDateTime = lastAddedEvent.EndDateTime;
+                    model.ImageUrl = lastAddedEvent.ImageUrl;
 
-                await _eventService.CreateAsync(eventDto);
+                    var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent).ToList();
+                    model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
+                    return View(model);
+                }
+
+                var testMap = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
+                await _eventAreaService.UpdatePriceAsync(testMap);
                 return RedirectToAction("Index", "EventManager");
             }
 

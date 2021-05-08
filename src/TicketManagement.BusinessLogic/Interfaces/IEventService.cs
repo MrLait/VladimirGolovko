@@ -40,6 +40,8 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// <returns>Returns object by id.</returns>
         Task<EventDto> GetByIDAsync(int id);
 
+        EventDto Last();
+
         /// <summary>
         /// Method to get all objects from database table.
         /// </summary>

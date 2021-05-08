@@ -96,7 +96,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            if (dto.Price < 0)
+            if (dto.Price <= 0)
             {
                 throw new ValidationException(ExceptionMessages.PriceIsNegative, dto.Price);
             }
@@ -104,6 +104,14 @@ namespace TicketManagement.BusinessLogic.Services
             var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);
             currentEventAreas.Price = dto.Price;
             await DbContext.EventAreas.UpdateAsync(currentEventAreas);
+        }
+
+        public async Task UpdatePriceAsync(IEnumerable<EventAreaDto> dto)
+        {
+            foreach (var item in dto)
+            {
+                await UpdatePriceAsync(item);
+            }
         }
 
         public IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto)

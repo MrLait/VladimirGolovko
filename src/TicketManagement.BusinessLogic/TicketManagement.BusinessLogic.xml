@@ -159,6 +159,12 @@
             </summary>
             <param name="dto">Event area data object transfer.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.UpdatePriceAsync(System.Collections.Generic.IEnumerable{TicketManagement.Dto.EventAreaDto})">
+            <summary>
+            Update price object in database.
+            </summary>
+            <param name="dto">Event area data object transfer.</param>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.

@@ -16,6 +16,12 @@ namespace TicketManagement.BusinessLogic.Interfaces
         Task UpdatePriceAsync(EventAreaDto dto);
 
         /// <summary>
+        /// Update price object in database.
+        /// </summary>
+        /// <param name="dto">Event area data object transfer.</param>
+        Task UpdatePriceAsync(IEnumerable<EventAreaDto> dto);
+
+        /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>

@@ -39,6 +39,6 @@ namespace TicketManagement.WebMVC.ViewModels
         public decimal Price { get; init; }
 
         public IEnumerable<EventSeatItem> EvenSeatItems { get; init; }
-        public List<EventSeatDto> EvenSeats { get; internal set; }
+        public List<EventSeatDto> EvenSeats { get; set; }
     }
 }

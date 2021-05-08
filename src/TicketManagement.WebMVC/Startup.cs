@@ -42,7 +42,7 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddScoped<IDbContext, EfDbContext>();
-
+            services.AddAutoMapper(typeof(MappingProfile));
             var connectionString = Configuration.GetConnectionString("TestConnection");
             services.AddDbContext<EfDbContext>(options =>
             {

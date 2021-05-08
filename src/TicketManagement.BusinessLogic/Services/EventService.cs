@@ -81,8 +81,8 @@ namespace TicketManagement.BusinessLogic.Services
                 EndDateTime = dto.EndDateTime,
                 ImageUrl = dto.ImageUrl,
             };
-            await DbContext.Events.CreateAsync(eventEntity);
 
+            await DbContext.Events.CreateAsync(eventEntity);
             var incrementedEventId = DbContext.Events.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
             await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
@@ -263,6 +263,21 @@ namespace TicketManagement.BusinessLogic.Services
             return eventDto;
         }
 
+        public EventDto Last()
+        {
+            var item = DbContext.Events.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            return new EventDto
+            {
+                Id = item.Id,
+                LayoutId = item.LayoutId,
+                StartDateTime = item.StartDateTime,
+                EndDateTime = item.EndDateTime,
+                ImageUrl = item.ImageUrl,
+                Description = item.Description,
+                Name = item.Name,
+            };
+        }
+
         /// <inheritdoc/>
         public IEnumerable<EventDto> GetAll()
         {
@@ -339,8 +354,17 @@ namespace TicketManagement.BusinessLogic.Services
         private bool CheckThatEventNotCreatedInTheSameTimeForVenue(EventDto dto)
         {
             var allEvents = DbContext.Events.GetAllAsQueryable().ToList();
-            var isEventContainSameVenueInSameTime = allEvents.Any(x => x.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= x.EndDateTime && x.LayoutId == dto.LayoutId) ||
-                allEvents.Any(x => dto.StartDateTime <= x.StartDateTime && x.StartDateTime <= dto.EndDateTime && x.LayoutId == dto.LayoutId);
+            var isEventContainSameVenueInSameTime = false;
+            foreach (var item in allEvents)
+            {
+                if (item.StartDateTime != dto.StartDateTime && item.EndDateTime != dto.EndDateTime)
+                {
+                    var isdtoStartTimeBetwenItem = item.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= item.EndDateTime && item.LayoutId == dto.LayoutId;
+                    var isEndDtoTimeBetwenItem = dto.StartDateTime <= item.StartDateTime && item.StartDateTime <= dto.EndDateTime && item.LayoutId == dto.LayoutId;
+                    isEventContainSameVenueInSameTime = isdtoStartTimeBetwenItem || isEndDtoTimeBetwenItem;
+                }
+            }
+
             return isEventContainSameVenueInSameTime;
         }
 
