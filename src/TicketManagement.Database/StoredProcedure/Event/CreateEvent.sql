@@ -4,7 +4,7 @@
 	@LayoutId       int,
     @StartDateTime  Datetime,
     @EndDateTime    Datetime,
-    @ImageUrl       varchar(max)
+    @ImageUrl       varchar(max) = null
 AS
     INSERT INTO [dbo].[Event] (Name, Description, LayoutId, StartDateTime, EndDateTime, ImageUrl)
     VALUES (@Name, @Description, @LayoutId, @StartDateTime, @EndDateTime, @ImageUrl)

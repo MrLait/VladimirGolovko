@@ -81,9 +81,10 @@ namespace TicketManagement.BusinessLogic.Services
                 EndDateTime = dto.EndDateTime,
                 ImageUrl = dto.ImageUrl,
             };
-
             await DbContext.Events.CreateAsync(eventEntity);
-            var incrementedEventId = DbContext.Events.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
+
+            var allEvent = DbContext.Events.GetAllAsQueryable().AsEnumerable();
+            var incrementedEventId = allEvent.Any()? allEvent.Last().Id : 1;
 
             await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
         }
@@ -265,7 +266,7 @@ namespace TicketManagement.BusinessLogic.Services
 
         public EventDto Last()
         {
-            var item = DbContext.Events.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var item = DbContext.Events.GetAllAsQueryable().AsEnumerable().Last();
             return new EventDto
             {
                 Id = item.Id,

@@ -12,7 +12,7 @@ namespace TicketManagement.DataAccess.Ado
     {
         private EfRepository<Area> _areaRepository;
         private EfRepository<EventArea> _eventAreaRepository;
-        private EfRepository<Event> _eventRepository;
+        private EfRepositoryUsingStoredProcedure<Event> _eventRepository;
         private EfRepository<EventSeat> _eventSeatRepository;
         private EfRepository<Layout> _layoutRepository;
         private EfRepository<Seat> _seatRepository;
@@ -57,7 +57,7 @@ namespace TicketManagement.DataAccess.Ado
         /// <summary>
         /// Gets event table property.
         /// </summary>
-        public IRepository<Event> Events => _eventRepository ??= new EfRepository<Event>(this);
+        public IRepository<Event> Events => _eventRepository ??= new EfRepositoryUsingStoredProcedure<Event>(this);
 
         /// <summary>
         /// Gets eventArea table property.
