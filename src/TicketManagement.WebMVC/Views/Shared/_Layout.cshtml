@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,7 +24,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EventHomePage" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="EventHomePage" asp-action="Index">@Localizer["Home"]</a>
                         </li>
                     </ul>
                 </div>
@@ -34,34 +37,34 @@
                             @if (User.IsInRole("eventManager"))
                             {
                                 <li class="nav-link nav-item text-dark">
-                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">Event manager area</a>
+                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">@Localizer["EventManagerArea"]</a>
                                 </li>
                             }
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
+                                <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">@Localizer["Profile"]</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> Basket </a>
+                                <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> @Localizer["Basket"] </a>
                             </li>
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> Purchase history </a>
+                                <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">@Localizer["PurchaseHistory"]</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
                                 @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Email).Value
                             </li>
                             <li class="nav-item">
                                 <form class="nav-link text-dark" asp-area="" method="post" asp-controller="Account" asp-action="Logout">
-                                    <input type="submit" value="Выход" />
+                                    <input type="submit" value="@Localizer["Login"]" />
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a>
                             </li>
                         }
                     </ul>
@@ -79,11 +82,6 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - TicketManagement.WebMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/test.js"></script>

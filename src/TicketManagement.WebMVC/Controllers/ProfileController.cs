@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
@@ -195,34 +198,7 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> EditLanguage(string id, string language)
-        {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                user.Language = language;
-
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
-            return View();
-        }
-
-        public async Task<IActionResult> EditTimeZoneOffset(string id, string timeZoneOffset)
+        public async Task<IActionResult> EditTimeZoneOffset(string id, string timeZoneOffset, string returnUrl)
         {
             ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
             if (user == null)
@@ -246,7 +222,7 @@ namespace TicketManagement.WebMVC.Controllers
                 }
             }
 
-            return View();
+            return LocalRedirect(returnUrl);
         }
 
         [HttpPost]
@@ -277,16 +253,19 @@ namespace TicketManagement.WebMVC.Controllers
             return View();
         }
 
-        ////public async Task<ApplicationUser> ParseAsync(IPrincipal principal)
-        ////{
-        ////    if (principal is ClaimsPrincipal claims)
-        ////    {
-        ////        var id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
-        ////        ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
-        ////        return user;
-        ////    }
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true,
+                });
 
-        ////    throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
-        ////}
+            return LocalRedirect(returnUrl);
+        }
     }
 }

@@ -1,24 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.WebMVC.Extencions;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 
@@ -45,6 +38,19 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddScoped<IDbContext, EfDbContext>();
             services.AddAutoMapper(typeof(MappingProfile));
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                new CultureInfo("en"),
+                new CultureInfo("ru"),
+                new CultureInfo("be"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("ru");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
             var connectionString = Configuration.GetConnectionString("TestConnection");
             services.AddDbContext<EfDbContext>(options =>
@@ -69,6 +75,9 @@ namespace TicketManagement.WebMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,20 +88,6 @@ namespace TicketManagement.WebMVC
                 //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            var supportedCultures = new[]
-            {
-                new CultureInfo("en"),
-                new CultureInfo("ru"),
-                new CultureInfo("be"),
-            };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("ru"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures,
-            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
