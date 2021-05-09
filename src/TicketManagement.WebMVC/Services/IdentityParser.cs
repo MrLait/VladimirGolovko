@@ -10,14 +10,22 @@ namespace TicketManagement.WebMVC.Services
     {
         public ApplicationUser Parse(IPrincipal principal)
         {
-            if (principal is ClaimsPrincipal claims)
-            {
                 return new ApplicationUser
                 {
-                    Email = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "",
-                    Id = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "",
-                    UserName = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? "",
+                    Email = GetClaimValue(ClaimTypes.Email.ToString(), principal),
+                    Id = GetClaimValue(ClaimTypes.NameIdentifier.ToString(), principal),
+                    UserName = GetClaimValue(ClaimTypes.Name.ToString(), principal),
+                    Surname = GetClaimValue("Surname", principal),
+                    TimeZoneOffset = GetClaimValue("TimeZoneOffset", principal),
+                    Language = GetClaimValue("Language", principal),
                 };
+        }
+
+        private static string GetClaimValue(string claimType, IPrincipal principal)
+        {
+            if (principal is ClaimsPrincipal claims)
+            {
+                return claims.Claims.FirstOrDefault(x => x.Type == claimType)?.Value ?? "";
             }
 
             throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));

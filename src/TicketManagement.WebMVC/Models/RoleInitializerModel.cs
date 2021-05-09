@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
@@ -37,6 +38,8 @@ namespace TicketManagement.WebMVC.Models
                 {
                     await userManager.AddToRoleAsync(user, roleName);
                 }
+
+                await userManager.AddClaimAsync(user, CreateClaim("TimeZoneOffset", "0"));
             }
         }
 
@@ -46,6 +49,11 @@ namespace TicketManagement.WebMVC.Models
             {
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
+        }
+
+        private static Claim CreateClaim(string type, string value)
+        {
+            return new Claim(type, value, ClaimValueTypes.String, "RemoteClaims");
         }
     }
 }

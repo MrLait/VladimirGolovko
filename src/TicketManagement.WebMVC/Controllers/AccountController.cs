@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,6 +42,8 @@ namespace TicketManagement.WebMVC.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, "user");
                     await _signInManager.SignInAsync(user, false);
+                    await _userManager.AddClaimAsync(user, CreateClaim("TimeZoneOffset", user.TimeZoneOffset));
+                    await _userManager.AddClaimAsync(user, CreateClaim("Language", user.Language));
                     return RedirectToAction("Index", "EventHomePage");
                 }
 
@@ -89,6 +92,11 @@ namespace TicketManagement.WebMVC.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "EventHomePage");
+        }
+
+        private static Claim CreateClaim(string type, string value)
+        {
+            return new Claim(type, value, ClaimValueTypes.String, "RemoteClaims");
         }
     }
 }

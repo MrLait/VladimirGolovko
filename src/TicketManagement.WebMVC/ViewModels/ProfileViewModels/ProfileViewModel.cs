@@ -19,7 +19,7 @@ namespace TicketManagement.WebMVC.ViewModels.ProfileViewModels
         public string Email { get; set; }
 
         [Display(Name = "TimeZone")]
-        public string TimeZone { get; set; }
+        public string TimeZoneOffset { get; set; }
 
         [Display(Name = "Language")]
         public string Language { get; set; }

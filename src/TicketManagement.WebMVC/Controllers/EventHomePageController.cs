@@ -22,6 +22,7 @@ namespace TicketManagement.WebMVC.Controllers
             {
                 EventItems = eventCatalog,
             };
+
             return View(vm);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,29 +17,22 @@ namespace TicketManagement.WebMVC.Controllers
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
         private readonly IIdentityParser<ApplicationUser> _identityParser;
+        private readonly IMapper _mapper;
 
         public ProfileController(UserManager<ApplicationUser> applicationUser,
-            IIdentityParser<ApplicationUser> identityParser)
+            IIdentityParser<ApplicationUser> identityParser,
+            IMapper mapper)
         {
             _applicationUserManager = applicationUser;
             _identityParser = identityParser;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
             var userId = _identityParser.Parse(HttpContext.User).Id;
             var user = await _applicationUserManager.FindByIdAsync(userId);
-
-            var vm = new ProfileViewModel
-            {
-                Id = user.Id,
-                Balance = user.Balance,
-                FirstName = user.FirstName,
-                Surname = user.Surname,
-                Email = user.Email,
-                Language = user.Language,
-                TimeZone = user.TimeZoneOffset,
-            };
+            var vm = _mapper.Map<ApplicationUser, ProfileViewModel>(user);
 
             return View(vm);
         }
@@ -189,10 +183,8 @@ namespace TicketManagement.WebMVC.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
-                }
+
+                ModelState.AddModelError(string.Empty, "User is not found");
             }
 
             return View(model);
