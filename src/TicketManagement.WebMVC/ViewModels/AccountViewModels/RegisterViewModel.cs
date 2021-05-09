@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 {
     public record RegisterViewModel
     {
+        [Required(ErrorMessage = "UserNameRequired")]
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
+
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
@@ -18,23 +18,19 @@ namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 
         public string TimeZoneOffset { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "EmailRequired")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [Display(Name = "Год рождения")]
-        public int Year { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "PasswordRequired")]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Required]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+        [Required(ErrorMessage = "PasswordConfirmRequired")]
+        [Compare("Password", ErrorMessage = "PasswordMismatch")]
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердить пароль")]
+        [Display(Name = "ConfirmPassword")]
         public string PasswordConfirm { get; set; }
     }
 }

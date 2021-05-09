@@ -4,16 +4,16 @@ namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "EmailRequired")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "PasswordRequired")]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Запомнить?")]
+        [Display(Name = "RememberMe")]
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }

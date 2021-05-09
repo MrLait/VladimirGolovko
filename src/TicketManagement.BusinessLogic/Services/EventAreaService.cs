@@ -96,9 +96,14 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            if (dto.Price <= 0)
+            if (dto.Price < 0)
             {
-                throw new ValidationException(ExceptionMessages.PriceIsNegative, dto.Price);
+                throw new ValidationException(ExceptionMessages.PriceIsNegative);
+            }
+
+            if (dto.Price == 0)
+            {
+                throw new ValidationException(ExceptionMessages.PriceIsZero);
             }
 
             var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);

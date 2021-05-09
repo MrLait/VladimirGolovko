@@ -1,61 +1,63 @@
 ﻿@model TicketManagement.Dto.EventAreaDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="esh-event-area-name">
-    <span>@Model.Description</span>
+    <span>@Localizer["ModelDescription"]: @Model.Description</span>
 </div>
 
 <div class="container">
     @if (Model.EvenSeats.Count() > 0)
     {
-    <div class="esh-event-seat-item col-md-4">
-        @foreach (var item in Model.EvenSeats)
-        {
-            @if (item.State == TicketManagement.DataAccess.Enums.States.Available)
+        <div class="esh-event-seat-item col-md-4">
+            @foreach (var item in Model.EvenSeats)
             {
-                <form asp-controller="EventArea" asp-action="AddToBasket">
-                    <input type="hidden" asp-for="@Model.Id" name="id" />
-                    <input type="hidden" asp-for="@item.Id" name="itemId" />
-                    <input type="hidden" asp-for="@item.State" name="itemState" />
-                    <input class="button button1" type="submit" value= "Row: @item.Row Number: @item.Number" />
-                </form>
+                @if (item.State == TicketManagement.DataAccess.Enums.States.Available)
+                {
+                    <form asp-controller="EventArea" asp-action="AddToBasket">
+                        <input type="hidden" asp-for="@Model.Id" name="id" />
+                        <input type="hidden" asp-for="@item.Id" name="itemId" />
+                        <input type="hidden" asp-for="@item.State" name="itemState" />
+                        <input class="button button1" type="submit" value="@Localizer["Row"]: @item.Row @Localizer["Number"]: @item.Number" />
+                    </form>
+                }
+                else
+                {
+                    <form asp-controller="EventArea" asp-action="RemoveFromBasket">
+                        <input type="hidden" asp-for="@Model.Id" name="id" />
+                        <input type="hidden" asp-for="@item.Id" name="itemId" />
+                        <input type="hidden" asp-for="@item.State" name="itemState" />
+                        <input class="button button1 clicked" type="submit" value="@Localizer["Row"]: @item.Row @Localizer["Number"]: @item.Number" />
+                    </form>
+                }
             }
-            else
-            {
-                <form asp-controller="EventArea" asp-action="RemoveFromBasket">
-                    <input type="hidden" asp-for="@Model.Id" name="id" />
-                    <input type="hidden" asp-for="@item.Id" name="itemId" />
-                    <input type="hidden" asp-for="@item.State" name="itemState" />
-                    <input class="button button1 clicked" type="submit" value= "Row: @item.Row Number: @item.Number" />
-                </form>
-            }
-        }
-    </div>
+        </div>
     }
     else
     {
         <div class="esh-event-seat-items row">
-            THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
+            @Localizer["ThereIsNoSuchEvent"]
         </div>
     }
 </div>
 
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        var buttons = document.getElementsByTagName('input');
+    var buttons = document.getElementsByTagName('input');
 
-        function paintItBlack() {
-
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove('clicked');
-            }
-
-            this.classList.add('clicked');
-        }
+    function paintItBlack() {
 
         for (var i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener('click', paintItBlack, false);
+            buttons[i].classList.remove('clicked');
         }
 
-    </script>
+        this.classList.add('clicked');
+    }
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', paintItBlack, false);
+    }
+
+</script>

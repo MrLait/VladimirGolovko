@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +45,7 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddScoped<IDbContext, EfDbContext>();
             services.AddAutoMapper(typeof(MappingProfile));
+
             var connectionString = Configuration.GetConnectionString("TestConnection");
             services.AddDbContext<EfDbContext>(options =>
             {
@@ -55,7 +58,10 @@ namespace TicketManagement.WebMVC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddControllersWithViews()
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization();
             services.AddAuthentication();
             services.AddAuthorization();
         }
@@ -73,6 +79,20 @@ namespace TicketManagement.WebMVC
                 //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru"),
+                new CultureInfo("be"),
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

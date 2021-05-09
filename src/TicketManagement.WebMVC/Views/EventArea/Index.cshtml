@@ -1,4 +1,6 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventAreaViewModels.IndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{ ViewData["Title"] = "EventAreas"; }
 
@@ -6,18 +8,18 @@
 
     @if (Model.EvenAreatItems.Count() > 0)
     {
-    <div class="esh-event-area-items row">
-        @foreach (var eventAreaItem in Model.EvenAreatItems)
-        {
-        <div class="esh-event-area-item col-md-4">
-            <partial name="_eventArea" model="eventAreaItem" />
+        <div class="esh-event-area-items row">
+            @foreach (var eventAreaItem in Model.EvenAreatItems)
+            {
+                <div class="esh-event-area-item col-md-4">
+                    <partial name="_eventArea" model="eventAreaItem" />
+                </div>
+            }
         </div>
-        }
-    </div> 
     }
     else
     {
-    <div class="esh-event-area-items row">
-        THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
-    </div>}
+        <div class="esh-event-area-items row">
+            @Localizer["ThereIsNoSuchEvent"]
+        </div>}
 </div>  

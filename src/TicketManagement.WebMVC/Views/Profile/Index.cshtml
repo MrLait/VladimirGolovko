@@ -1,4 +1,7 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.ProfileViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
     ViewBag.Title = "User profile";
 }
@@ -9,7 +12,7 @@
         <tr><th>@Model.FirstName</th></tr>
         <tr>
             <td>
-                Balance - @Model.Balance
+                @Localizer["Balance"] - @Model.Balance <span> @Localizer["Currency"]</span>
             </td>
             <td>
                 <div class="form-group">
@@ -19,7 +22,7 @@
             </td>
             <td>
                 <div class="form-group">
-                    <input type="submit" value="Deposite" class="btn btn-sm btn-primary" />
+                    <input type="submit" value="@Localizer["Deposite"]" class="btn btn-sm btn-primary" />
                 </div>
             </td>
         </tr>
@@ -28,26 +31,26 @@
 
 <table class="table">
     <tr>
-        <td>FirstName - @Model.FirstName</td>
+        <td>@Localizer["FirstName"] - @Model.FirstName</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditFirstName" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditFirstName" asp-route-id="@Model.Id">@Localizer["EditFirstName"]</a>
         </td>
     </tr>
     <tr>
-        <td>Surname - @Model.Surname</td>
+        <td>@Localizer["Surname"] - @Model.Surname</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditSurname" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditSurname" asp-route-id="@Model.Id">@Localizer["EditSurname"]</a>
         </td>
     </tr>
     <tr>
-        <td>Email - @Model.Email</td>
+        <td>@Localizer["Email"] - @Model.Email</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditEmail" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditEmail" asp-route-id="@Model.Id">@Localizer["EditEmail"]</a>
         </td>
     </tr>
     <tr>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditPassword" asp-route-id="@Model.Id">Edit password</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditPassword" asp-route-id="@Model.Id">@Localizer["EditPassword"]</a>
         </td>
     </tr>
 </table>
@@ -55,14 +58,14 @@
 <form asp-action="EditLanguage" asp-route-id="@Model.Id">
     <table class="table">
         <tr>
-            <td>Language</td>
+            <td>@Localizer["Language"]</td>
             <td>
                 <div class="container">
                     <p>
                         <select id="myLanguageSelect" name="language">
                             <option></option>
                             <option lanuageId="1" value="ru">Русский</option>
-                            <option lanuageId="2" value="by">Белорусский</option>
+                            <option lanuageId="2" value="be">Белорусский</option>
                             <option lanuageId="3" value="en">English</option>
                         </select>
                     </p>
@@ -70,7 +73,7 @@
             </td>
 
             <td>
-                <input type="submit" value="Apply" />
+                <input type="submit" value="@Localizer["Apply"]" />
             </td>
         </tr>
     </table>
@@ -79,7 +82,7 @@
 <form asp-action="EditTimeZoneOffset" asp-route-id="@Model.Id">
     <table class="table">
         <tr>
-            <td>Time zone</td>
+            <td>@Localizer["TimeZone"]</td>
             <td>
                 <div class="container">
                     <p>
@@ -172,14 +175,14 @@
                 </div>
             </td>
             <td>
-                <input type="submit" value="Apply" />
+                <input type="submit" value="@Localizer["Apply"]" />
             </td>
         <tr>
     </table>
 </form>
 
 <div class="esh-event-items row">
-    <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> See purchase history </a>
+    <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> @Localizer["SeePurchaseHistory"]</a>
 </div>
 
 <script>

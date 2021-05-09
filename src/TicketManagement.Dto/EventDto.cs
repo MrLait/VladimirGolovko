@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
@@ -62,5 +63,7 @@ namespace TicketManagement.Dto
         /// Gets or sets available seats.
         /// </summary>
         public int AvailableSeats { get; set; }
+
+        public IEnumerable<EventAreaDto> EventAreas { get; set; }
     }
 }

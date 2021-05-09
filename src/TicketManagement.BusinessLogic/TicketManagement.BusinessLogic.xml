@@ -24,11 +24,6 @@
             {0} - Id.
             </summary>
         </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.PriceIsNegative">
-            <summary>
-            {0} - Price.
-            </summary>
-        </member>
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StateIsNegative">
             <summary>
             {0} - State.
@@ -64,11 +59,6 @@
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.VenueExist">
             <summary>
             {0} - Description.
-            </summary>
-        </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.SeatsHaveAlreadyBeenPurchased">
-            <summary>
-            {0} - Event id.
             </summary>
         </member>
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StartDataTimeBeforeEndDataTime">

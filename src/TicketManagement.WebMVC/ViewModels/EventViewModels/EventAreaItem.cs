@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using TicketManagement.Dto;
 
-namespace TicketManagement.WebMVC.ViewModels
+namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
-    public record EventAreaItem
+    public class EventAreaItem
     {
         /// <summary>
         /// Gets or sets id.
@@ -36,9 +34,12 @@ namespace TicketManagement.WebMVC.ViewModels
         /// <summary>
         /// Gets or sets Price.
         /// </summary>
+        [Required(ErrorMessage = "PriceRequired")]
+        [Display(Name = "Price")]
         public decimal Price { get; init; }
 
-        public IEnumerable<EventSeatItem> EvenSeatItems { get; init; }
+        public IEnumerable<EventSeatItem> EvenSeatItems { get; set; }
+
         public List<EventSeatDto> EvenSeats { get; set; }
     }
 }

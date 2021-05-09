@@ -1,13 +1,15 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels.PurchaseHistoryViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{ ViewData["Title"] = "Purchase history"; }
 @{ int rowNumber = 0; }
 
 @if (Model == null)
 {
-    <div class="esh-event-items row">
-        THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
-    </div>
+<div class="esh-event-items row">
+    @Localizer["PurchaseHistiryIsEmpty"]
+</div>
 }
 else
 {
@@ -22,21 +24,21 @@ else
                     <td class="table-image">
                         <div> <img src="@item.PictureUrl" /> </div>
                     </td>
-                    <td class="table-event-name">Event name @item.EventName</td>
-                    <td class="table-event-area-description">Area description @item.EventAreaDescription</td>
-                    <td class="table-Row">Row number @item.Row</td>
-                    <td class="table-number-of-seat">Number of seat @item.NumberOfSeat</td>
-                    <td class="table-event-date-time-start">The event starts at @item.EventDateTimeStart</td>
-                    <td class="table-event-date-time-end">The event ends at @item.EventDateTimeEnd</td>
-                    <td class="table-price">Price @item.Price</td>
+                    <td class="table-event-name">@Localizer["EventName"] @item.EventName</td>
+                    <td class="table-event-area-description">@Localizer["EventAreaDescription"] @item.EventAreaDescription</td>
+                    <td class="table-Row">@Localizer["RowNumber"] @item.Row</td>
+                    <td class="table-number-of-seat">@Localizer["NumberOfSeat"] @item.NumberOfSeat</td>
+                    <td class="table-event-date-time-start">@Localizer["TheEventStartsAt"] @item.EventDateTimeStart</td>
+                    <td class="table-event-date-time-end">@Localizer["TheEventEndsAt"] @item.EventDateTimeEnd</td>
+                    <td class="table-price">@Localizer["Price"] @item.Price</td>
                 </tr>
             }
         </table>
     }
     else
     {
-        <div class="esh-event-items row">
-            THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
-        </div>
+<div class="esh-event-items row">
+    @Localizer["PurchaseHistiryIsEmpty"]
+</div>
     }
 }

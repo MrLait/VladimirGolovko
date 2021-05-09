@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Enums;
@@ -31,29 +32,41 @@ namespace TicketManagement.WebMVC.Controllers
 
         public IActionResult Index(EventDto dto)
         {
-            var eventAreaDto = _eventAreaService.GetByEventId(dto);
-
-            var vm = new IndexViewModel
+            try
             {
-                EvenAreatItems = eventAreaDto,
-            };
+                var eventAreaDto = _eventAreaService.GetByEventId(dto);
 
-            for (int i = 0; i < eventAreaDto.Count(); i++)
-            {
-                var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
-                vm.EvenAreatItems.ToList()[i].EvenSeats = eventSeatDto;
+                var vm = new IndexViewModel { EvenAreatItems = eventAreaDto };
+
+                for (int i = 0; i < eventAreaDto.Count(); i++)
+                {
+                    var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
+                    vm.EvenAreatItems.ToList()[i].EvenSeats = eventSeatDto;
+                }
+
+                return View(vm);
             }
-
-            return View(vm);
+            catch (ValidationException)
+            {
+                return RedirectToAction("Index", "EventHomePage");
+            }
         }
 
         public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         {
-            var user = _identityParser.Parse(HttpContext.User);
-            await _basketService.AddAsync(user, itemId);
-            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
+            try
+            {
+                var user = _identityParser.Parse(HttpContext.User);
+                await _basketService.AddAsync(user, itemId);
+                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
 
-            return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+            }
+            catch (ValidationException ve)
+            {
+                ModelState.AddModelError("", ve.Message);
+                return RedirectToAction("Index", "EventHomePage");
+            }
         }
 
         public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
@@ -63,26 +76,34 @@ namespace TicketManagement.WebMVC.Controllers
                 return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
             }
 
-            var user = _identityParser.Parse(HttpContext.User);
-            await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
-            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
+            try
+            {
+                var user = _identityParser.Parse(HttpContext.User);
+                await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
+                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
 
-            return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+            }
+            catch (ValidationException ve)
+            {
+                ModelState.AddModelError("", ve.Message);
+                return RedirectToAction("Index", "EventHomePage");
+            }
         }
 
         public IActionResult GetViewEventArea(EventDto dto)
         {
+            if (dto is null)
+            {
+                return RedirectToAction("Index", "EventHomePage");
+            }
+
             if (dto.Id != 0)
             {
                 return RedirectToAction("Index", "EventArea", dto);
             }
 
             return RedirectToAction("Index", "EventHomePage");
-        }
-
-        public ActionResult GetEventSeats()
-        {
-            return PartialView("_GetEventSeats");
         }
     }
 }

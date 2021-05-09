@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketManagement.WebMVC.ViewModels
+namespace TicketManagement.WebMVC.ViewModels.BasketViewModels
 {
     public record BasketItem
     {

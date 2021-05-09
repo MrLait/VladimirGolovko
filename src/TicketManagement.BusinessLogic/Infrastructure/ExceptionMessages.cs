@@ -22,10 +22,9 @@
         /// </summary>
         public const string IdIsZero = "Id can't be Zero. The current Id is: '{0}'.";
 
-        /// <summary>
-        /// {0} - Price.
-        /// </summary>
-        public const string PriceIsNegative = "Price can't be negative. The current price is: '{0}'.";
+        public const string PriceIsNegative = "Price can't negative.";
+
+        public const string PriceIsZero = "Price can't equal zero.";
 
         /// <summary>
         /// {0} - State.
@@ -64,10 +63,7 @@
         /// </summary>
         public const string VenueExist = "The Venue with a description: '{0}' - already exists.";
 
-        /// <summary>
-        /// {0} - Event id.
-        /// </summary>
-        public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the '{0} event.";
+        public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the event.";
 
         /// <summary>
         /// {0} - Start data time.

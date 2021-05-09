@@ -1,4 +1,6 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.EventViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <form method="post" asp-controller="EventManager" asp-action="UpdateEvent">
     <div asp-validation-summary="ModelOnly"></div>
@@ -30,7 +32,7 @@
     </div>
 
     <div>
-        <input type="submit" value="Update event" />
+        <input type="submit" value="@Localizer["UpdateEvent"]" />
     </div>
 </form>
 
@@ -48,7 +50,7 @@
     </div>
 
     <div>
-        <input type="submit" value="Update event" />
+        <input type="submit" value="@Localizer["UpdateLayout"]" />
     </div>
 </form>
 

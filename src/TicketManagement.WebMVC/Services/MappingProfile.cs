@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using TicketManagement.Dto;
+using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels;
+using TicketManagement.WebMVC.ViewModels.AccountViewModels;
+using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Services
 {
@@ -14,6 +13,9 @@ namespace TicketManagement.WebMVC.Services
         {
             CreateMap<EventAreaDto, EventAreaItem>();
             CreateMap<EventAreaItem, EventAreaDto>();
+            CreateMap<EventViewModel, EventDto>();
+            CreateMap<EventDto, EventViewModel>();
+            CreateMap<RegisterViewModel, ApplicationUser>();
         }
     }
 }

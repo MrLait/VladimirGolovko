@@ -1,4 +1,6 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{ ViewData["Title"] = "Events"; }
 
@@ -17,7 +19,7 @@
     else
     {
         <div class="esh-event-items row">
-            THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
+            @Localizer["ThereIsNoSuchEvent"]
         </div>
     }
 </div>
