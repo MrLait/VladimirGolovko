@@ -5,7 +5,9 @@ namespace TicketManagement.WebMVC.Migrations
 {
     public partial class InitialCreate : Migration
     {
+#pragma warning disable S138 // Functions should not have too many lines of code
         protected override void Up(MigrationBuilder migrationBuilder)
+#pragma warning restore S138 // Functions should not have too many lines of code
         {
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",

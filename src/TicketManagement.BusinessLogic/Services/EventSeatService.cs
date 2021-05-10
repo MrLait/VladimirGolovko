@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
@@ -33,7 +34,7 @@ namespace TicketManagement.BusinessLogic.Services
             {
                 eventSeatsDto.Add(new EventSeatDto
                 {
-                    Id = eventSeat.Id, EventAreaId = eventSeat.EventAreaId, Number = eventSeat.Number, Row = eventSeat.Row, State = eventSeat.State,
+                    Id = eventSeat.Id, EventAreaId = eventSeat.EventAreaId, Number = eventSeat.Number, Row = eventSeat.Row, State = (States)eventSeat.State,
                 });
             }
 
@@ -60,7 +61,7 @@ namespace TicketManagement.BusinessLogic.Services
                 EventAreaId = eventSeat.EventAreaId,
                 Number = eventSeat.Number,
                 Row = eventSeat.Row,
-                State = eventSeat.State,
+                State = (States)eventSeat.State,
             };
             return eventSeatDto;
         }
@@ -78,7 +79,7 @@ namespace TicketManagement.BusinessLogic.Services
                     EventAreaId = item.EventAreaId,
                     Number = item.Number,
                     Row = item.Row,
-                    State = item.State,
+                    State = (States)item.State,
                 });
             }
 
@@ -103,13 +104,8 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            ////if (dto.State < 0)
-            ////{
-            ////    throw new ValidationException(ExceptionMessages.StateIsNegative, dto.State);
-            ////}
-
             var currentEventSeat = await DbContext.EventSeats.GetByIDAsync(dto.Id);
-            currentEventSeat.State = dto.State;
+            currentEventSeat.State = (int)dto.State;
             await DbContext.EventSeats.UpdateAsync(currentEventSeat);
         }
     }

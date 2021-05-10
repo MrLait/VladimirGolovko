@@ -433,6 +433,12 @@
             Event service class.
             </summary>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+        </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext,TicketManagement.BusinessLogic.Interfaces.IEventSeatService,TicketManagement.BusinessLogic.Interfaces.IEventAreaService)">
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.

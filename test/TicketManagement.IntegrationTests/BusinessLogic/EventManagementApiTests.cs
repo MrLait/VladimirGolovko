@@ -1,453 +1,474 @@
-﻿////using System;
-////using System.Collections.Generic;
-////using System.Linq;
-////using System.Threading.Tasks;
-////using FluentAssertions;
-////using NUnit.Framework;
-////using TicketManagement.BusinessLogic.Infrastructure;
-////using TicketManagement.BusinessLogic.Services;
-////using TicketManagement.DataAccess.Ado;
-////using TicketManagement.DataAccess.Domain.Models;
-////using TicketManagement.DataAccess.Repositories.AdoRepositories;
-////using TicketManagement.Dto;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using NUnit.Framework;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Repositories.AdoRepositories;
+using TicketManagement.Dto;
 
-////namespace TicketManagement.IntegrationTests.BusinessLogic
-////{
-////    [TestFixture]
-////    internal class EventManagementApiTests : TestDatabaseLoader
-////    {
-////        private AdoUsingParametersRepository<Layout> _layoutRepository;
-////        private AdoUsingStoredProcedureRepository<Event> _eventRepository;
-////        private AdoDbContext _adoDbContext;
+namespace TicketManagement.IntegrationTests.BusinessLogic
+{
+    [TestFixture]
+    internal class EventManagementApiTests : TestDatabaseLoader
+    {
+        private AdoUsingParametersRepository<Layout> _layoutRepository;
+        private AdoUsingStoredProcedureRepository<Event> _eventRepository;
+        private AdoDbContext _adoDbContext;
 
-////        [OneTimeSetUp]
-////        public void InitRepositories()
-////        {
-////            _layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
-////            _eventRepository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
-////            _adoDbContext = new AdoDbContext(MainConnectionString);
-////        }
+        [OneTimeSetUp]
+        public void InitRepositories()
+        {
+            _layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
+            _eventRepository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            _adoDbContext = new AdoDbContext(MainConnectionString);
+        }
 
-////        [Test]
-////        public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
-////        {
-////            // Arrange
-////            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
-////            var expected = new Event
-////            {
-////                Id = (await _eventRepository.GetAllAsync()).Last().Id + 1,
-////                Name = "Created",
-////                LayoutId = firstLayoutId,
-////                Description = "Created",
-////                StartDateTime = new DateTime(3000, 1, 1),
-////            };
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
+        {
+            // Arrange
+            var firstLayoutId = _layoutRepository.GetAllAsQueryable().First().Id;
+            var expected = new Event
+            {
+                Id = _eventRepository.GetAllAsQueryable().Last().Id + 1,
+                Name = "Created",
+                LayoutId = firstLayoutId,
+                Description = "Created",
+                StartDateTime = new DateTime(3000, 1, 1),
+                EndDateTime = new DateTime(4000, 1, 1),
+                ImageUrl = "asd",
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act
-////            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", StartDateTime = new DateTime(3000, 1, 1) });
-////            var actual = (await _eventRepository.GetAllAsync()).Last();
+            // Act
+            await eventService.CreateAsync(
+                new EventDto
+                {
+                    Name = "Created",
+                    LayoutId = firstLayoutId,
+                    Description = "Created",
+                    StartDateTime = new DateTime(3000, 1, 1),
+                    EndDateTime = new DateTime(4000, 1, 1),
+                    ImageUrl = "asd",
+                });
+            var actual = _eventRepository.GetAllAsQueryable().Last();
 
-////            // Assert
-////            actual.Should().BeEquivalentTo(expected);
-////        }
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-////        [Test]
-////        public async Task Create_WhenEventExist_ShouldCreateEventAreas()
-////        {
-////            // Arrange
-////            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
-////            var eventService = new EventService(_adoDbContext);
-////            var areaService = new AreaService(_adoDbContext);
-////            var eventAreasService = new EventAreaService(_adoDbContext);
-////            int lastEventAreaId = (await eventAreasService.GetAllAsync()).Last().Id;
-////            var expectedEventAreasDto = new List<EventAreaDto>();
+        [Test]
+        public async Task Create_WhenEventExist_ShouldCreateEventAreas()
+        {
+            // Arrange
+            var firstLayoutId = _layoutRepository.GetAllAsQueryable().First().Id;
+            var eventService = new EventService(_adoDbContext);
+            var areaService = new AreaService(_adoDbContext);
+            var eventAreasService = new EventAreaService(_adoDbContext);
+            int lastEventAreaId = eventAreasService.GetAll().Last().Id;
+            var expectedEventAreasDto = new List<EventAreaDto>();
 
-////            // Act
-////            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", StartDateTime = new DateTime(3000, 1, 1) });
-////            var eventId = (await eventService.GetAllAsync()).Last().Id;
-////            var allAreasInLayout = (await areaService.GetAllAsync()).Where(x => x.LayoutId == firstLayoutId).ToList();
+            // Act
+            await eventService.CreateAsync(new EventDto
+            {
+                Name = "Created",
+                LayoutId = firstLayoutId,
+                Description = "Created",
+                StartDateTime = new DateTime(3000, 1, 1),
+                EndDateTime = new DateTime(4000, 1, 1),
+                ImageUrl = "asd",
+            });
+            var eventId = eventService.GetAll().Last().Id;
+            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
 
-////            for (int i = 0; i < allAreasInLayout.Count; i++)
-////            {
-////                expectedEventAreasDto.Add(new EventAreaDto
-////                {
-////                    Id = lastEventAreaId + i + 1,
-////                    Description = allAreasInLayout[i].Description,
-////                    EventId = eventId,
-////                    CoordX = allAreasInLayout[i].CoordX,
-////                    CoordY = allAreasInLayout[i].CoordY,
-////                });
-////            }
+            for (int i = 0; i < allAreasInLayout.Count; i++)
+            {
+                expectedEventAreasDto.Add(new EventAreaDto
+                {
+                    Id = lastEventAreaId + i + 1,
+                    Description = allAreasInLayout[i].Description,
+                    EventId = eventId,
+                    CoordX = allAreasInLayout[i].CoordX,
+                    CoordY = allAreasInLayout[i].CoordY,
+                });
+            }
 
-////            var actualEventAreasDto = (await eventAreasService.GetAllAsync()).Where(x => x.Id > lastEventAreaId);
+            var actualEventAreasDto = eventAreasService.GetAll().Where(x => x.Id > lastEventAreaId);
 
-////            // Assert
-////            actualEventAreasDto.Should().BeEquivalentTo(expectedEventAreasDto);
-////        }
+            // Assert
+            actualEventAreasDto.Should().BeEquivalentTo(expectedEventAreasDto);
+        }
 
-////        [Test]
-////        public async Task CreateAsync_WhenEventExist_ShouldCreateEventSeats()
-////        {
-////            // Arrange
-////            var firstLayoutId = (await _layoutRepository.GetAllAsync()).First().Id;
-////            var eventService = new EventService(_adoDbContext);
-////            var areaService = new AreaService(_adoDbContext);
-////            var seatsService = new SeatService(_adoDbContext);
-////            var eventSeatService = new EventSeatService(_adoDbContext);
-////            var expectedEventSeatsDto = new List<EventSeatDto>();
-////            var allSeatsForAllAreas = new List<SeatDto>();
-////            var lastEventAreaId = (await new EventAreaService(_adoDbContext).GetAllAsync()).Last().Id;
-////            var lastEventSeatId = (await eventSeatService.GetAllAsync()).Last().Id;
+        [Test]
+        public async Task CreateAsync_WhenEventExist_ShouldCreateEventSeats()
+        {
+            // Arrange
+            var firstLayoutId = _layoutRepository.GetAllAsQueryable().First().Id;
+            var eventService = new EventService(_adoDbContext);
+            var areaService = new AreaService(_adoDbContext);
+            var seatsService = new SeatService(_adoDbContext);
+            var eventSeatService = new EventSeatService(_adoDbContext);
+            var expectedEventSeatsDto = new List<EventSeatDto>();
+            var allSeatsForAllAreas = new List<SeatDto>();
+            var lastEventSeatId = eventSeatService.GetAll().Last().Id;
 
-////            // Act
-////            await eventService.CreateAsync(new EventDto { Name = "Created", LayoutId = firstLayoutId, Description = "Created", StartDateTime = new DateTime(3000, 1, 1) });
-////            var allAreasInLayout = (await areaService.GetAllAsync()).Where(x => x.LayoutId == firstLayoutId).ToList();
-////            foreach (var item in allAreasInLayout)
-////            {
-////                allSeatsForAllAreas.AddRange((await seatsService.GetAllAsync()).Where(x => x.AreaId == item.Id));
-////            }
+            // Act
+            await eventService.CreateAsync(
+                new EventDto
+                {
+                    Name = "Created",
+                    LayoutId = firstLayoutId,
+                    Description = "Created",
+                    StartDateTime = new DateTime(3000, 1, 1),
+                    EndDateTime = new DateTime(4000, 1, 1),
+                    ImageUrl = "asd",
+                });
+            var allAreasInLayout = areaService.GetAll().Where(x => x.LayoutId == firstLayoutId).ToList();
+            var lastEventAreaId = new EventAreaService(_adoDbContext).GetAll().Last().Id - allAreasInLayout.Count;
 
-////            int currSateId = allSeatsForAllAreas.FirstOrDefault().AreaId;
-////            bool isChanged = true;
+            foreach (var item in allAreasInLayout)
+            {
+                allSeatsForAllAreas.AddRange(seatsService.GetAll().Where(x => x.AreaId == item.Id));
+            }
 
-////            for (int i = 0; i < allSeatsForAllAreas.Count; i++)
-////            {
-////                if (isChanged)
-////                {
-////                    lastEventAreaId++;
-////                    isChanged = false;
-////                }
+            int currSateId = allSeatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
 
-////                expectedEventSeatsDto.Add(new EventSeatDto
-////                {
-////                    Id = lastEventSeatId + i + 1,
-////                    EventAreaId = lastEventAreaId,
-////                    Number = allSeatsForAllAreas[i].Number,
-////                    Row = allSeatsForAllAreas[i].Row,
-////                });
+            for (int i = 0; i < allSeatsForAllAreas.Count; i++)
+            {
+                if (currSateId != allSeatsForAllAreas[i].AreaId)
+                {
+                    currSateId = allSeatsForAllAreas[i].AreaId;
+                    lastEventAreaId++;
+                }
 
-////                if (currSateId != allSeatsForAllAreas[i].AreaId)
-////                {
-////                    isChanged = true;
-////                    currSateId = allSeatsForAllAreas[i].AreaId;
-////                }
-////            }
+                expectedEventSeatsDto.Add(new EventSeatDto
+                {
+                    Id = lastEventSeatId + i + 1,
+                    EventAreaId = lastEventAreaId + 1,
+                    Number = allSeatsForAllAreas[i].Number,
+                    Row = allSeatsForAllAreas[i].Row,
+                });
+            }
 
-////            var actualEventSeatsDto = (await eventSeatService.GetAllAsync()).Where(x => x.Id > lastEventSeatId);
+            var actualEventSeatsDto = eventSeatService.GetAll().Where(x => x.Id > lastEventSeatId);
 
-////            // Assert
-////            actualEventSeatsDto.Should().BeEquivalentTo(expectedEventSeatsDto);
-////        }
+            // Assert
+            actualEventSeatsDto.Should().BeEquivalentTo(expectedEventSeatsDto);
+        }
 
-////        [Test]
-////        public void CreateAsync_WhenEventEmpty_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void CreateAsync_WhenEventEmpty_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(null));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(null));
+        }
 
-////        [Test]
-////        public async Task CreateAsync_WhenEventCreatedInThePast_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var firstEvent = (await _eventRepository.GetAllAsync()).First();
-////            var eventDto = new EventDto
-////            {
-////                Id = firstEvent.Id,
-////                StartDateTime = new DateTime(2000, 1, 1),
-////                Description = firstEvent.Description,
-////                LayoutId = firstEvent.LayoutId,
-////                Name = firstEvent.Name,
-////                Price = 100,
-////                State = 0,
-////            };
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void CreateAsync_WhenEventCreatedInThePast_ShouldThrowValidationException()
+        {
+            // Arrange
+            var firstEvent = _eventRepository.GetAllAsQueryable().First();
+            var eventDto = new EventDto
+            {
+                Id = firstEvent.Id,
+                StartDateTime = new DateTime(2000, 1, 1),
+                Description = firstEvent.Description,
+                LayoutId = firstEvent.LayoutId,
+                Name = firstEvent.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
+        }
 
-////        [Test]
-////        public async Task CreateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var firstEvent = (await _eventRepository.GetAllAsync()).First();
-////            var eventDto = new EventDto
-////            {
-////                Id = firstEvent.Id,
-////                StartDateTime = firstEvent.StartDateTime,
-////                Description = firstEvent.Description,
-////                LayoutId = firstEvent.LayoutId,
-////                Name = firstEvent.Name,
-////                Price = 100,
-////                State = 0,
-////            };
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void CreateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        {
+            // Arrange
+            var firstEvent = _eventRepository.GetAllAsQueryable().First();
+            var eventDto = new EventDto
+            {
+                Id = firstEvent.Id,
+                StartDateTime = firstEvent.StartDateTime,
+                Description = firstEvent.Description,
+                LayoutId = firstEvent.LayoutId,
+                Name = firstEvent.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
+        }
 
-////        [Test]
-////        public async Task CreateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var layoutWithoutSeatsArea = (await _layoutRepository.GetAllAsync()).Last().Id;
-////            var lastEvent = (await _eventRepository.GetAllAsync()).Last();
-////            var eventDto = new EventDto
-////            {
-////                Id = lastEvent.Id,
-////                StartDateTime = new DateTime(2990, 1, 1),
-////                Description = lastEvent.Description,
-////                LayoutId = layoutWithoutSeatsArea,
-////                Name = lastEvent.Name,
-////                Price = 100,
-////                State = 0,
-////            };
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void CreateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        {
+            // Arrange
+            var layoutWithoutSeatsArea = _layoutRepository.GetAllAsQueryable().Last().Id;
+            var lastEvent = _eventRepository.GetAllAsQueryable().Last();
+            var eventDto = new EventDto
+            {
+                Id = lastEvent.Id,
+                StartDateTime = new DateTime(2990, 1, 1),
+                Description = lastEvent.Description,
+                LayoutId = layoutWithoutSeatsArea,
+                Name = lastEvent.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.CreateAsync(eventDto));
+        }
 
-////        [Test]
-////        public async Task DeleteAsync_WhenEventExist_ShouldDeleteLastEvent()
-////        {
-////            // Arrange
-////            var expected = (await _eventRepository.GetAllAsync()).Last();
-////            var eventService = new EventService(_adoDbContext);
-////            var eventDto = new EventDto
-////            {
-////                Id = expected.Id,
-////                StartDateTime = expected.StartDateTime,
-////                Description = expected.Description,
-////                LayoutId = expected.LayoutId,
-////                Name = expected.Name,
-////                Price = 100,
-////                State = 0,
-////            };
+        [Test]
+        public async Task DeleteAsync_WhenEventExist_ShouldDeleteLastEvent()
+        {
+            // Arrange
+            var expected = _eventRepository.GetAllAsQueryable().Last();
+            var eventService = new EventService(_adoDbContext, new EventSeatService(_adoDbContext), new EventAreaService(_adoDbContext));
+            var eventDto = new EventDto
+            {
+                Id = expected.Id,
+                StartDateTime = expected.StartDateTime,
+                EndDateTime = expected.EndDateTime,
+                Description = expected.Description,
+                LayoutId = expected.LayoutId,
+                Name = expected.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
 
-////            // Act
-////            await eventService.DeleteAsync(eventDto);
-////            var actual = (await _eventRepository.GetAllAsync()).Last();
+            // Act
+            await eventService.DeleteAsync(eventDto);
+            var actual = _eventRepository.GetAllAsQueryable().Last();
 
-////            // Assert
-////            actual.Should().NotBeEquivalentTo(expected);
-////        }
+            // Assert
+            actual.Should().NotBeEquivalentTo(expected);
+        }
 
-////        [Test]
-////        public void DeleteAsync_WhenEventEmpty_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void DeleteAsync_WhenEventEmpty_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(null));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(null));
+        }
 
-////        [Test]
-////        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = 0 }));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = 0 }));
+        }
 
-////        [Test]
-////        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = -1 }));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = -1 }));
+        }
 
-////        [Test]
-////        public void DeleteAsync_WhenEventWithIdNotExist_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public async Task UpdateAsync_WhenEventExist_ShouldUpdateEvent()
+        {
+            // Arrange
+            var eventLast = _eventRepository.GetAllAsQueryable().Last();
+            var expected = new Event
+            {
+                Id = eventLast.Id,
+                StartDateTime = eventLast.StartDateTime.AddYears(1000),
+                EndDateTime = eventLast.EndDateTime.AddYears(1001),
+                Description = "Updated Description",
+                LayoutId = eventLast.LayoutId,
+                Name = "Updated name",
+                ImageUrl = "asd",
+            };
+            var eventService = new EventService(_adoDbContext);
+            var eventDto = new EventDto
+            {
+                Id = expected.Id,
+                StartDateTime = expected.StartDateTime,
+                EndDateTime = expected.EndDateTime,
+                Description = expected.Description,
+                LayoutId = expected.LayoutId,
+                Name = expected.Name,
+                PriceFrom = 100,
+                State = 0,
+                ImageUrl = expected.ImageUrl,
+            };
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.DeleteAsync(new EventDto { Id = (await _eventRepository.GetAllAsync()).Last().Id + 1 }));
-////        }
+            // Act
+            await eventService.UpdateAsync(eventDto);
+            var actual = _eventRepository.GetAllAsQueryable().Last();
 
-////        [Test]
-////        public async Task UpdateAsync_WhenEventExist_ShouldUpdateEvent()
-////        {
-////            // Arrange
-////            var eventLast = (await _eventRepository.GetAllAsync()).Last();
-////            var expected = new Event
-////            {
-////                Id = eventLast.Id,
-////                StartDateTime = eventLast.StartDateTime.AddYears(1000),
-////                Description = "Updated Description",
-////                LayoutId = eventLast.LayoutId,
-////                Name = "Updated name",
-////            };
-////            var eventService = new EventService(_adoDbContext);
-////            var eventDto = new EventDto
-////            {
-////                Id = expected.Id,
-////                StartDateTime = expected.StartDateTime,
-////                Description = expected.Description,
-////                LayoutId = expected.LayoutId,
-////                Name = expected.Name,
-////                Price = 100,
-////                State = 0,
-////            };
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-////            // Act
-////            await eventService.UpdateAsync(eventDto);
-////            var actual = (await _eventRepository.GetAllAsync()).Last();
+        [Test]
+        public void UpdateAsync_WhenEventEmpty_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Assert
-////            actual.Should().BeEquivalentTo(expected);
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(null));
+        }
 
-////        [Test]
-////        public void UpdateAsync_WhenEventEmpty_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(null));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = 0 }));
+        }
 
-////        [Test]
-////        public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = 0 }));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = -1 }));
+        }
 
-////        [Test]
-////        public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void UpdateAsync_WhenIdIsNotExist_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = -1 }));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = _eventRepository.GetAllAsQueryable().Last().Id + 1 }));
+        }
 
-////        [Test]
-////        public void UpdateAsync_WhenIdIsNotExist_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public async Task UpdateAsync_WhenLayoutChanged_ShouldUpdateLastEvent()
+        {
+            // Arrange
+            var eventLast = _eventRepository.GetAllAsQueryable().Last();
+            var layoutIdChanged = eventLast.Id + 1;
+            var expected = new Event
+            {
+                Id = eventLast.Id,
+                StartDateTime = eventLast.StartDateTime.AddYears(1000),
+                EndDateTime = eventLast.EndDateTime.AddYears(1001),
+                Description = "Updated Description",
+                LayoutId = layoutIdChanged,
+                Name = "Updated name",
+                ImageUrl = eventLast.ImageUrl,
+            };
+            var eventService = new EventService(_adoDbContext);
+            var eventDto = new EventDto
+            {
+                Id = expected.Id,
+                StartDateTime = expected.StartDateTime,
+                EndDateTime = expected.EndDateTime,
+                Description = expected.Description,
+                LayoutId = expected.LayoutId,
+                Name = expected.Name,
+                PriceFrom = 100,
+                State = 0,
+                ImageUrl = expected.ImageUrl,
+            };
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(new EventDto { Id = (await _eventRepository.GetAllAsync()).Last().Id + 1 }));
-////        }
+            // Act
+            await eventService.UpdateAsync(eventDto);
+            var actual = _eventRepository.GetAllAsQueryable().Last();
 
-////        [Test]
-////        public async Task UpdateAsync_WhenLayoutChanged_ShouldUpdateLastEvent()
-////        {
-////            // Arrange
-////            var eventLast = (await _eventRepository.GetAllAsync()).Last();
-////            var layoutIdChanged = eventLast.Id + 1;
-////            var expected = new Event
-////            {
-////                Id = eventLast.Id,
-////                StartDateTime = eventLast.StartDateTime.AddYears(1000),
-////                Description = "Updated Description",
-////                LayoutId = layoutIdChanged,
-////                Name = "Updated name",
-////            };
-////            var eventService = new EventService(_adoDbContext);
-////            var eventDto = new EventDto
-////            {
-////                Id = expected.Id,
-////                StartDateTime = expected.StartDateTime,
-////                Description = expected.Description,
-////                LayoutId = expected.LayoutId,
-////                Name = expected.Name,
-////                Price = 100,
-////                State = 0,
-////            };
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-////            // Act
-////            await eventService.UpdateAsync(eventDto);
-////            var actual = (await _eventRepository.GetAllAsync()).Last();
+        [Test]
+        public void UpdateAsync_WhenEventUpdatedInThePast_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventLast = _eventRepository.GetAllAsQueryable().Last();
+            var eventService = new EventService(_adoDbContext);
+            var eventDto = new EventDto
+            {
+                Id = eventLast.Id,
+                StartDateTime = new DateTime(2000, 1, 1),
+                Description = eventLast.Description,
+                LayoutId = eventLast.LayoutId,
+                Name = eventLast.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
 
-////            // Assert
-////            actual.Should().BeEquivalentTo(expected);
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
+        }
 
-////        [Test]
-////        public async Task UpdateAsync_WhenEventUpdatedInThePast_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var eventLast = (await _eventRepository.GetAllAsync()).Last();
-////            var eventService = new EventService(_adoDbContext);
-////            var eventDto = new EventDto
-////            {
-////                Id = eventLast.Id,
-////                StartDateTime = new DateTime(2000, 1, 1),
-////                Description = eventLast.Description,
-////                LayoutId = eventLast.LayoutId,
-////                Name = eventLast.Name,
-////                Price = 100,
-////                State = 0,
-////            };
+        [Test]
+        public void UpdateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
+        {
+            // Arrange
+            var firstEvent = _eventRepository.GetAllAsQueryable().First();
+            var layoutIdChanged = 2;
+            var eventDto = new EventDto
+            {
+                Id = firstEvent.Id,
+                StartDateTime = _eventRepository.GetAllAsQueryable().ToList()[2].StartDateTime,
+                Description = firstEvent.Description,
+                LayoutId = layoutIdChanged,
+                Name = firstEvent.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
-////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
+        }
 
-////        [Test]
-////        public async Task UpdateAsync_WhenTheSameVenueInTheSameTime_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var firstEvent = (await _eventRepository.GetAllAsync()).First();
-////            var layoutIdChanged = 2;
-////            var eventDto = new EventDto
-////            {
-////                Id = firstEvent.Id,
-////                StartDateTime = (await _eventRepository.GetAllAsync()).ToList()[2].StartDateTime,
-////                Description = firstEvent.Description,
-////                LayoutId = layoutIdChanged,
-////                Name = firstEvent.Name,
-////                Price = 100,
-////                State = 0,
-////            };
-////            var eventService = new EventService(_adoDbContext);
+        [Test]
+        public void UpdateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
+        {
+            // Arrange
+            var lastEvent = _eventRepository.GetAllAsQueryable().Last();
+            var layoutWithoutSeatsArea = _layoutRepository.GetAllAsQueryable().Last().Id;
+            var eventDto = new EventDto
+            {
+                Id = lastEvent.Id,
+                StartDateTime = new DateTime(2990, 1, 1),
+                Description = lastEvent.Description,
+                LayoutId = layoutWithoutSeatsArea,
+                Name = lastEvent.Name,
+                PriceFrom = 100,
+                State = 0,
+            };
+            var eventService = new EventService(_adoDbContext);
 
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
-////        }
-
-////        [Test]
-////        public async Task UpdateAsync_WhenNoOneAreaNotContainSeats_ShouldThrowValidationException()
-////        {
-////            // Arrange
-////            var lastEvent = (await _eventRepository.GetAllAsync()).Last();
-////            var layoutWithoutSeatsArea = (await _layoutRepository.GetAllAsync()).Last().Id;
-////            var eventDto = new EventDto
-////            {
-////                Id = lastEvent.Id,
-////                StartDateTime = new DateTime(2990, 1, 1),
-////                Description = lastEvent.Description,
-////                LayoutId = layoutWithoutSeatsArea,
-////                Name = lastEvent.Name,
-////                Price = 100,
-////                State = 0,
-////            };
-////            var eventService = new EventService(_adoDbContext);
-
-////            // Act & Assert
-////            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
-////        }
-////    }
-////}
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
+        }
+    }
+}

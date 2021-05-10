@@ -48,7 +48,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 EventAreaId = expected.EventAreaId,
                 Number = expected.Number,
                 Row = expected.Row,
-                State = expected.State,
+                State = (States)expected.State,
             });
             var actual = _eventSeatRepository.GetAllAsQueryable().Last();
 
@@ -74,26 +74,6 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 0 }));
-        }
-
-        [Test]
-        public void UpdateStateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
-        {
-            // Arrange
-            var eventSeatService = new EventSeatService(_adoDbContext);
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = -1 }));
-        }
-
-        [Test]
-        public void UpdateStateAsync_WhenStateLeesThanZero_ShouldThrowValidationException()
-        {
-            // Arrange
-            var eventSeatService = new EventSeatService(_adoDbContext);
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 1, State = (States)(-1) }));
         }
 
         [Test]

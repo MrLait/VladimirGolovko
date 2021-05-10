@@ -1,148 +1,138 @@
-﻿//////using System;
-//////using System.Linq;
-//////using System.Threading.Tasks;
-//////using FluentAssertions;
-//////using Moq;
-//////using NUnit.Framework;
-//////using TicketManagement.BusinessLogic.Infrastructure;
-//////using TicketManagement.BusinessLogic.Services;
-//////using TicketManagement.DataAccess.Domain.Models;
-//////using TicketManagement.DataAccess.Enums;
-//////using TicketManagement.Dto;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using TicketManagement.BusinessLogic.Infrastructure;
+using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
+using TicketManagement.Dto;
 
-//////namespace TicketManagement.UnitTests.BusinessLogic.Services
-//////{
-//////    /// <summary>
-//////    /// Event seat server tests.
-//////    /// </summary>
-//////    [TestFixture]
-//////    public class EventSeatServiceTests : MockEntites
-//////    {
-//////        [Test]
-//////        public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
-//////        {
-//////            // Arrange
-//////            var eventSeatLast = EventSeats.Last();
-//////            EventSeat expected = new EventSeat
-//////            {
-//////                Id = eventSeatLast.Id,
-//////                EventAreaId = eventSeatLast.EventAreaId,
-//////                Number = eventSeatLast.Number,
-//////                Row = eventSeatLast.Row,
-//////                State = eventSeatLast.State + 1,
-//////            };
+namespace TicketManagement.UnitTests.BusinessLogic.Services
+{
+    /// <summary>
+    /// Event seat server tests.
+    /// </summary>
+    [TestFixture]
+    public class EventSeatServiceTests : MockEntites
+    {
+        [Test]
+        public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
+        {
+            // Arrange
+            var eventSeatLast = EventSeats.Last();
+            EventSeat expected = new EventSeat
+            {
+                Id = eventSeatLast.Id,
+                EventAreaId = eventSeatLast.EventAreaId,
+                Number = eventSeatLast.Number,
+                Row = eventSeatLast.Row,
+                State = eventSeatLast.State + 1,
+            };
 
-//////            var eventSeatsService = new EventSeatService(Mock.Object);
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
-//////            // Act
-//////            Action<EventSeat> updateLastAction = venues => EventSeats.RemoveAt(eventSeatLast.Id - 1);
-//////            updateLastAction += v => EventSeats.Insert(v.Id - 1, v);
-//////            Mock.Setup(x => x.EventSeats.GetByIDAsync(eventSeatLast.Id)).ReturnsAsync(eventSeatLast);
-//////            Mock.Setup(x => x.EventSeats.UpdateAsync(It.IsAny<EventSeat>())).Callback(updateLastAction);
+            // Act
+            Action<EventSeat> updateLastAction = venues => EventSeats.RemoveAt(eventSeatLast.Id - 1);
+            updateLastAction += v => EventSeats.Insert(v.Id - 1, v);
+            Mock.Setup(x => x.EventSeats.GetByIDAsync(eventSeatLast.Id)).ReturnsAsync(eventSeatLast);
+            Mock.Setup(x => x.EventSeats.UpdateAsync(It.IsAny<EventSeat>())).Callback(updateLastAction);
 
-//////            await eventSeatsService.UpdateStateAsync(new EventSeatDto
-//////            {
-//////                Id = eventSeatLast.Id,
-//////                EventAreaId = expected.EventAreaId,
-//////                Number = expected.Number,
-//////                Row = expected.Row,
-//////                State = expected.State,
-//////            });
-//////            var actual = EventSeats[eventSeatLast.Id - 1];
+            await eventSeatsService.UpdateStateAsync(new EventSeatDto
+            {
+                Id = eventSeatLast.Id,
+                EventAreaId = expected.EventAreaId,
+                Number = expected.Number,
+                Row = expected.Row,
+                State = (States)expected.State,
+            });
+            var actual = EventSeats[eventSeatLast.Id - 1];
 
-//////            // Assert
-//////            actual.Should().BeEquivalentTo(expected);
-//////        }
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-//////        [Test]
-//////        public void UpdateStateAsync_WhenEventSeatEmpty_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatService = new EventSeatService(Mock.Object);
+        [Test]
+        public void UpdateStateAsync_WhenEventSeatEmpty_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatService = new EventSeatService(Mock.Object);
 
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(null));
-//////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(null));
+        }
 
-//////        [Test]
-//////        public void UpdateStateAsync_WhenIdEqualZero_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatService = new EventSeatService(Mock.Object);
+        [Test]
+        public void UpdateStateAsync_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatService = new EventSeatService(Mock.Object);
 
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 0 }));
-//////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 0 }));
+        }
 
-//////        [Test]
-//////        public void UpdateStateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatService = new EventSeatService(Mock.Object);
+        [Test]
+        public void UpdateStateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatService = new EventSeatService(Mock.Object);
 
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = -1 }));
-//////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = -1 }));
+        }
 
-//////        [Test]
-//////        public void UpdateStateAsync_WhenStateLeesThanZero_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatService = new EventSeatService(Mock.Object);
+        [Test]
+        public void GetAllAsQueryable_WhenEventSeatsExist_ShouldReturnEventSeats()
+        {
+            // Arrange
+            var expected = EventSeats;
+            Mock.Setup(x => x.EventSeats.GetAllAsQueryable()).Returns(EventSeats.AsQueryable());
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 1, State = (States)(-1) }));
-//////        }
+            // Act
+            var actual = eventSeatsService.GetAll();
 
-//////        [Test]
-//////        public async Task GetAllAsync_WhenEventSeatsExist_ShouldReturnEventSeats()
-//////        {
-//////            // Arrange
-//////            var expected = EventSeats;
-//////            Mock.Setup(x => x.EventSeats.GetAllAsync()).ReturnsAsync(EventSeats.AsQueryable());
-//////            var eventSeatsService = new EventSeatService(Mock.Object);
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-//////            // Act
-//////            var actual = await eventSeatsService.GetAll();
+        [Test]
+        public async Task GetByIdAsync_WhenEventSeatExist_ShouldReturnLastEventSeat()
+        {
+            // Arrange
+            var expected = EventSeats.Last();
+            var expectedId = expected.Id - 1;
+            Mock.Setup(x => x.EventSeats.GetByIDAsync(expectedId)).ReturnsAsync(EventSeats.Last());
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
-//////            // Assert
-//////            actual.Should().BeEquivalentTo(expected);
-//////        }
+            // Act
+            var actual = await eventSeatsService.GetByIDAsync(expectedId);
 
-//////        [Test]
-//////        public async Task GetByIdAsync_WhenEventSeatExist_ShouldReturnLastEventSeat()
-//////        {
-//////            // Arrange
-//////            var expected = EventSeats.Last();
-//////            var expectedId = expected.Id - 1;
-//////            Mock.Setup(x => x.EventSeats.GetByIDAsync(expectedId)).ReturnsAsync(EventSeats.Last());
-//////            var eventSeatsService = new EventSeatService(Mock.Object);
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
-//////            // Act
-//////            var actual = await eventSeatsService.GetByIDAsync(expectedId);
+        [Test]
+        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
-//////            // Assert
-//////            actual.Should().BeEquivalentTo(expected);
-//////        }
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
+        }
 
-//////        [Test]
-//////        public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatsService = new EventSeatService(Mock.Object);
+        [Test]
+        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
+        {
+            // Arrange
+            var eventSeatsService = new EventSeatService(Mock.Object);
 
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
-//////        }
-
-//////        [Test]
-//////        public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
-//////        {
-//////            // Arrange
-//////            var eventSeatsService = new EventSeatService(Mock.Object);
-
-//////            // Act & Assert
-//////            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));
-//////        }
-//////    }
-//////}
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));
+        }
+    }
+}

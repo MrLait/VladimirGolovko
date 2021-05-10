@@ -23,11 +23,20 @@ namespace TicketManagement.BusinessLogic.Services
         /// Initializes a new instance of the <see cref="EventService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        public EventService(IDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventService"/> class.
+        /// </summary>
+        /// <param name="dbContext">Database context.</param>
         /// <param name="eventSeatService">Event seat service.</param>
         /// <param name="eventAreaService">Event area service.</param>
         public EventService(IDbContext dbContext, IEventSeatService eventSeatService, IEventAreaService eventAreaService)
+            : this(dbContext)
         {
-            DbContext = dbContext;
             _eventAreaService = eventAreaService;
             _eventSeatService = eventSeatService;
         }
@@ -294,7 +303,7 @@ namespace TicketManagement.BusinessLogic.Services
 
                     if (allEventSeatsForAllAreas.Count != 0)
                     {
-                        var avalibleSeats = allEventSeatsForAllAreas.Where(x => x.State == States.Available);
+                        var avalibleSeats = allEventSeatsForAllAreas.Where(x => x.State == (int)States.Available);
                         eventDto.Add(new EventDto
                         {
                             Id = item.Id,
@@ -412,7 +421,7 @@ namespace TicketManagement.BusinessLogic.Services
                     lastEventAreaId++;
                 }
 
-                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId + 1, Number = item.Number, Row = item.Row, State = States.Available });
+                await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId + 1, Number = item.Number, Row = item.Row, State = (int)States.Available });
             }
         }
     }

@@ -36,6 +36,6 @@ namespace TicketManagement.DataAccess.Domain.Models
         /// <summary>
         /// Gets or sets state column in table.
         /// </summary>
-        public States State { get; set; }
+        public int State { get; set; }
     }
 }
