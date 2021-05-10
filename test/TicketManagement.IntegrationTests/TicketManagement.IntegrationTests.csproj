@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppSettings.json" />
+    <Content Include="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -47,7 +47,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var actual = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() =>actual.GetAllAsQueryable());
+            Assert.Throws<ArgumentException>(() => actual.GetAllAsQueryable());
         }
 
         [Test]

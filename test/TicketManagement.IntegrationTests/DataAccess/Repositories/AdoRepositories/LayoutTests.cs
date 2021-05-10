@@ -176,7 +176,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastLayout = repository.GetAllAsQueryable().Last();
-            Layout expectedLayout = new Layout { Id = lastLayout.Id,  VenueId = lastLayout.VenueId, Description = lastLayout.Description };
+            Layout expectedLayout = new Layout { Id = lastLayout.Id, VenueId = lastLayout.VenueId, Description = lastLayout.Description };
 
             int actualId = expectedLayout.Id;
             var actual = await repository.GetByIDAsync(actualId);
