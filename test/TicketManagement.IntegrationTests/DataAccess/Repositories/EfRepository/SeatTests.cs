@@ -73,23 +73,24 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.CreateAsync(null));
         }
 
-        ////[Test]
-        ////public async Task DeleteAsync_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeatAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Seat>(DbContext);
+        [Test]
+        public async Task DeleteAsync_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeatAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Seat>(dbContext);
 
-        ////    // Act
-        ////    var allSeats = repository.GetAllAsQueryable().ToList();
-        ////    var lastSeat = allSeats.LastOrDefault();
-        ////    await repository.DeleteAsync(lastSeat);
+            // Act
+            var allSeats = repository.GetAllAsQueryable().OrderBy(x => x.Id).ToList();
+            var lastSeat = allSeats.LastOrDefault();
+            await repository.DeleteAsync(lastSeat);
 
-        ////    var actual = repository.GetAllAsQueryable();
-        ////    int countSeatWithoutLast = allSeats.ToList().Count - 1;
+            var actual = repository.GetAllAsQueryable();
+            int countSeatWithoutLast = allSeats.ToList().Count - 1;
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(allSeats.Take(countSeatWithoutLast));
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(allSeats.Take(countSeatWithoutLast));
+        }
 
         [Test]
         public void DeleteAsync_WhenIdEqualZeroSeat_ShouldThrowInvalidOperationException()
@@ -112,24 +113,25 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.DeleteAsync(null));
         }
 
-        ////[Test]
-        ////public async Task UpdateAsync_WhenExistSeat_ShouldUpdateLastSeatAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Seat>(DbContext);
-        ////    var expected = new Seat { Number = 2, AreaId = 2, Row = 2 };
+        [Test]
+        public async Task UpdateAsync_WhenExistSeat_ShouldUpdateLastSeatAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Seat>(dbContext);
+            var expected = new Seat { Number = 2, AreaId = 2, Row = 2 };
 
-        ////    // Act
-        ////    var lastSeat = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-        ////    var idLastSeat = lastSeat.Id;
-        ////    expected.Id = idLastSeat;
+            // Act
+            var lastSeat = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var idLastSeat = lastSeat.Id;
+            expected.Id = idLastSeat;
 
-        ////    await repository.UpdateAsync(expected);
-        ////    var actual = repository.GetAllAsQueryable().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(expected);
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
         [Test]
         public void UpdateAsync_WhenNullSeat_ShouldThrowArgumentNullException()

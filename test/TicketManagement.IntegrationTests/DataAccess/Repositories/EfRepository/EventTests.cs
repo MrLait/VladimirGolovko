@@ -21,9 +21,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitEventsAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
-            var repository = new EfRepository<Event>(DbContext);
-            var countAllEvents = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
+            DbContext = new EfDbContext(MainConnectionString);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
+            var countAllEvents = repository.GetAllAsQueryable().AsEnumerable().Last().Id;
 
             for (int i = 1; i <= countAllEvents; i++)
             {
@@ -38,7 +38,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var expected = _events;
 
             // Act
-            var actual = new EfRepository<Event>(DbContext).GetAllAsQueryable();
+            var actual = new EfRepositoryUsingStoredProcedure<Event>(DbContext).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -48,134 +48,115 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task CreateAsync_WhenAddEvent_ShouldReturnEventWithNewEvent()
         {
             // Arrange
-            var repository = new EfRepository<Event>(DbContext);
+            var dbContext = new EfDbContext(MainConnectionString);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
+            var lastItem = repository.GetAllAsQueryable().AsEnumerable().Last();
             Event eventModel = new Event
             {
                 LayoutId = 2,
-                StartDateTime = DateTime.Today,
+                StartDateTime = DateTime.Today.AddDays(2),
                 Description = "Created event",
                 ImageUrl = "Test event",
                 Name = "Test event",
-                EndDateTime = DateTime.Today.AddDays(1),
+                EndDateTime = DateTime.Today.AddDays(3),
             };
-            List<Event> expected = new List<Event>(_events)
-            {
-                eventModel,
-            };
+
+            var expected = eventModel;
+            expected.Id = lastItem.Id + 1;
 
             // Act
             await repository.CreateAsync(eventModel);
-            var actual = repository.GetAllAsQueryable();
+            var actual = repository.GetAllAsQueryable().AsEnumerable().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void CreateAsync_WhenEventEmpty_ShouldThrowArgumentNullException()
+        public void CreateAsync_WhenEventEmpty_ShouldThrowNullReferenceException()
         {
             // Arrange
-            var repository = new EfRepository<Event>(DbContext);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.CreateAsync(null));
+            Assert.ThrowsAsync<NullReferenceException>(async () => await repository.CreateAsync(null));
         }
 
-        ////[Test]
-        ////public async Task DeleteAsync_WhenExistEvent_ShouldReturnEventListWithoutDeletedEventAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Event>(DbContext);
-
-        ////    // Act
-        ////    var allEvents = repository.GetAllAsQueryable().ToList();
-        ////    var lastEvent = allEvents.LastOrDefault();
-        ////    await repository.DeleteAsync(lastEvent);
-
-        ////    var actual = repository.GetAllAsQueryable();
-        ////    int countEventWithoutLast = allEvents.ToList().Count - 1;
-
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(allEvents.Take(countEventWithoutLast));
-        ////}
-
         [Test]
-        public void DeleteAsync_WhenIdEqualZeroEvent_ShouldThrowInvalidOperationException()
+        public async Task DeleteAsync_WhenExistEvent_ShouldReturnEventListWithoutDeletedEventAsync()
         {
             // Arrange
-            var event_ = new Event { Id = 0 };
-            var repository = new EfRepository<Event>(DbContext);
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
+
+            // Act
+            var allEvents = repository.GetAllAsQueryable().ToList();
+            var lastEvent = allEvents.LastOrDefault();
+            await repository.DeleteAsync(lastEvent);
+
+            var actual = repository.GetAllAsQueryable();
+            int countEventWithoutLast = allEvents.ToList().Count - 1;
 
             // Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.DeleteAsync(event_));
+            actual.Should().BeEquivalentTo(allEvents.Take(countEventWithoutLast));
         }
 
         [Test]
-        public void DeleteAsync_WhenNullEvent_ShouldThrowArgumentNullException()
+        public void DeleteAsync_WhenNullEvent_ShouldThrowNullReferenceException()
         {
             // Arrange
-            var repository = new EfRepository<Event>(DbContext);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.DeleteAsync(null));
-        }
-
-        ////[Test]
-        ////public async Task UpdateAsync_WhenExistEvent_ShouldUpdateLastEventAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Event>(DbContext);
-        ////    var expected = new Event
-        ////    {
-        ////        LayoutId = 2,
-        ////        Name = "Updated ivent",
-        ////        Description = "Description updated event",
-        ////        StartDateTime = DateTime.Today.AddDays(1),
-        ////        EndDateTime = DateTime.Today.AddDays(2),
-        ////        ImageUrl = "asd",
-        ////    };
-
-        ////    // Act
-        ////    var lastEvent = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-        ////    var idLastEvent = lastEvent.Id;
-        ////    expected.Id = idLastEvent;
-
-        ////    await repository.UpdateAsync(expected);
-        ////    var actual = repository.GetAllAsQueryable().Last();
-
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(expected);
-        ////}
-
-        [Test]
-        public void UpdateAsync_WhenNullEvent_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            var repository = new EfRepository<Event>(DbContext);
-
-            // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.UpdateAsync(null));
+            Assert.ThrowsAsync<NullReferenceException>(async () => await repository.DeleteAsync(null));
         }
 
         [Test]
-        public void UpdateAsync_WhenIdEqualZeroEvent_ShouldThrowDbUpdateConcurrencyException()
+        public async Task UpdateAsync_WhenExistEvent_ShouldUpdateLastEventAsync()
         {
             // Arrange
-            var event_ = new Event { Id = 0 };
-            var repository = new EfRepository<Event>(DbContext);
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
+            var expected = new Event
+            {
+                LayoutId = 2,
+                Name = "Updated ivent",
+                Description = "Description updated event",
+                StartDateTime = DateTime.Today.AddDays(1),
+                EndDateTime = DateTime.Today.AddDays(2),
+                ImageUrl = "asd",
+            };
+
+            // Act
+            var lastEvent = repository.GetAllAsQueryable().AsEnumerable().Last();
+            var idLastEvent = lastEvent.Id;
+            expected.Id = idLastEvent;
+
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().AsNoTracking().AsEnumerable().Last();
+
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void UpdateAsync_WhenNullEvent_ShouldThrowNullReferenceException()
+        {
+            // Arrange
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () => await repository.UpdateAsync(event_));
+            Assert.ThrowsAsync<NullReferenceException>(async () => await repository.UpdateAsync(null));
         }
 
         [Test]
         public async Task GetByIdAsync_WhenExistEvent_ShouldReturnEventAsync()
         {
             // Arrange
-            var repository = new EfRepository<Event>(DbContext);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Act
-            var lastEvent = repository.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault();
+            var lastEvent = repository.GetAllAsQueryable().AsEnumerable().LastOrDefault();
             Event expectedEvent = new Event
             {
                 Id = lastEvent.Id,
@@ -199,37 +180,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         {
             // Arrange
             Event expected = null;
-            var repository = new EfRepository<Event>(DbContext);
+            var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Act
-            var lastEvent = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var lastEvent = repository.GetAllAsQueryable().AsEnumerable().Last();
             int nonExistId = lastEvent.Id + 10;
             var actual = await repository.GetByIDAsync(nonExistId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Test]
-        public void UpdateAsync_WhenIdLessThenZero_ShouldThrowDbUpdateConcurrencyException()
-        {
-            // Arrange
-            var event_ = new Event { Id = -1 };
-            var repository = new EfRepository<Event>(DbContext);
-
-            // Act & Assert
-            Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () => await repository.UpdateAsync(event_));
-        }
-
-        [Test]
-        public void DeleteAsync_WhenIdLessThenZero_ShouldThrowDbUpdateConcurrencyException()
-        {
-            // Arrange
-            var event_ = new Event { Id = -1 };
-            var repository = new EfRepository<Event>(DbContext);
-
-            // Act & Assert
-            Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () => await repository.DeleteAsync(event_));
         }
     }
 }

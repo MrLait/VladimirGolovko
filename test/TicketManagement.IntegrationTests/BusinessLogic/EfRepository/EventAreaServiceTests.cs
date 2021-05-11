@@ -8,28 +8,30 @@ using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
+using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.IntegrationTests.BusinessLogic
+namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
 {
     [TestFixture]
     internal class EventAreaServiceTests : TestDatabaseLoader
     {
-        private AdoUsingParametersRepository<EventArea> _eventAreaRepository;
-        private AdoDbContext _adoDbContext;
+        private EfRepository<EventArea> _eventAreaRepository;
+
+        public EfDbContext DbContext { get; set; }
 
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            _eventAreaRepository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
-            _adoDbContext = new AdoDbContext(MainConnectionString);
+            DbContext = new EfDbContext(MainConnectionString);
+            _eventAreaRepository = new EfRepository<EventArea>(DbContext);
         }
 
         [Test]
         public async Task UpdatePriceAsync_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
         {
             // Arrange
-            var eventAreaLast = _eventAreaRepository.GetAllAsQueryable().Last();
+            var eventAreaLast = _eventAreaRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             EventArea expected = new EventArea
             {
                 Id = eventAreaLast.Id,
@@ -40,7 +42,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 Price = eventAreaLast.Price + 100,
             };
 
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act
             await eventAreaService.UpdatePriceAsync(new EventAreaDto
@@ -52,7 +54,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 Description = expected.Description,
                 Price = expected.Price,
             });
-            var actual = _eventAreaRepository.GetAllAsQueryable().Last();
+            var actual = _eventAreaRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -62,7 +64,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdatePriceAsync_WhenEventAreaEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto()));
@@ -72,7 +74,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdatePriceAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = 0 }));
@@ -82,7 +84,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdatePriceAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = -1 }));
@@ -92,7 +94,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdatePriceAsync_WhenPriceLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.UpdatePriceAsync(new EventAreaDto { Id = 1, Price = -1 }));
@@ -103,7 +105,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         {
             // Arrange
             var expected = _eventAreaRepository.GetAllAsQueryable();
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act
             var actual = eventAreaService.GetAll();
@@ -116,9 +118,9 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task GetByIdAsync_WhenEventAreaExist_ShouldReturnLastEventArea()
         {
             // Arrange
-            var expected = _eventAreaRepository.GetAllAsQueryable().Last();
+            var expected = _eventAreaRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             var expectedId = expected.Id;
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act
             var actual = await eventAreaService.GetByIDAsync(expectedId);
@@ -131,7 +133,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new EventAreaService(_adoDbContext);
+            var eventAreaService = new EventAreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(0));
@@ -141,7 +143,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventAreaService = new AreaService(_adoDbContext);
+            var eventAreaService = new AreaService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(-1));

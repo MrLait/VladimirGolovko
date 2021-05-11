@@ -7,29 +7,30 @@ using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Enums;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
+using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.IntegrationTests.BusinessLogic
+namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
 {
     [TestFixture]
     internal class EventSeatServiceTests : TestDatabaseLoader
     {
-        private AdoUsingParametersRepository<EventSeat> _eventSeatRepository;
-        private AdoDbContext _adoDbContext;
+        private EfRepository<EventSeat> _eventSeatRepository;
+
+        public EfDbContext DbContext { get; set; }
 
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            _eventSeatRepository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            _adoDbContext = new AdoDbContext(MainConnectionString);
+            DbContext = new EfDbContext(MainConnectionString);
+            _eventSeatRepository = new EfRepository<EventSeat>(DbContext);
         }
 
         [Test]
         public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
-            var eventSeatLast = _eventSeatRepository.GetAllAsQueryable().Last();
+            var eventSeatLast = _eventSeatRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             EventSeat expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
@@ -39,7 +40,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 State = eventSeatLast.State + 1,
             };
 
-            var eventSeatsService = new EventSeatService(_adoDbContext);
+            var eventSeatsService = new EventSeatService(DbContext);
 
             // Act
             await eventSeatsService.UpdateStateAsync(new EventSeatDto
@@ -50,7 +51,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
                 Row = expected.Row,
                 State = (States)expected.State,
             });
-            var actual = _eventSeatRepository.GetAllAsQueryable().Last();
+            var actual = _eventSeatRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -60,7 +61,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdateStateAsync_WhenEventSeatEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(_adoDbContext);
+            var eventSeatService = new EventSeatService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(null));
@@ -70,7 +71,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdateStateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatService = new EventSeatService(_adoDbContext);
+            var eventSeatService = new EventSeatService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventSeatService.UpdateStateAsync(new EventSeatDto { Id = 0 }));
@@ -81,7 +82,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         {
             // Arrange
             var expected = _eventSeatRepository.GetAllAsQueryable();
-            var eventSeatsService = new EventSeatService(_adoDbContext);
+            var eventSeatsService = new EventSeatService(DbContext);
 
             // Act
             var actual = eventSeatsService.GetAll();
@@ -94,9 +95,9 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task GetByIdAsync_WhenEventSeatExist_ShouldReturnLastEventSeat()
         {
             // Arrange
-            var expected = _eventSeatRepository.GetAllAsQueryable().Last();
+            var expected = _eventSeatRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             var expectedId = expected.Id;
-            var eventSeatsService = new EventSeatService(_adoDbContext);
+            var eventSeatsService = new EventSeatService(DbContext);
 
             // Act
             var actual = await eventSeatsService.GetByIDAsync(expectedId);
@@ -109,7 +110,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatsService = new EventSeatService(_adoDbContext);
+            var eventSeatsService = new EventSeatService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
@@ -119,7 +120,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var eventSeatsService = new EventSeatService(_adoDbContext);
+            var eventSeatsService = new EventSeatService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));

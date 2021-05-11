@@ -10,7 +10,7 @@ using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.IntegrationTests.BusinessLogic
+namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
 {
     [TestFixture]
     internal class LayoutServiceTests : TestDatabaseLoader

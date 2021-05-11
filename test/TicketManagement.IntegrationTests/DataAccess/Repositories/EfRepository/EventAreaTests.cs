@@ -73,23 +73,24 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.CreateAsync(null));
         }
 
-        ////[Test]
-        ////public async Task DeleteAsync_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventAreaAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<EventArea>(DbContext);
+        [Test]
+        public async Task DeleteAsync_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventAreaAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<EventArea>(dbContext);
 
-        ////    // Act
-        ////    var allEventAreas = repository.GetAllAsQueryable().ToList();
-        ////    var lastEventArea = allEventAreas.LastOrDefault();
-        ////    await repository.DeleteAsync(lastEventArea);
+            // Act
+            var allEventAreas = repository.GetAllAsQueryable().OrderBy(x => x.Id).ToList();
+            var lastEventArea = allEventAreas.LastOrDefault();
+            await repository.DeleteAsync(lastEventArea);
 
-        ////    var actual = repository.GetAllAsQueryable();
-        ////    int countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
+            var actual = repository.GetAllAsQueryable();
+            int countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(allEventAreas.Take(countEventAreaWithoutLast));
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(allEventAreas.Take(countEventAreaWithoutLast));
+        }
 
         [Test]
         public void DeleteAsync_WhenIdEqualZeroEventArea_ShouldThrowInvalidOperationException()
@@ -112,24 +113,25 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.DeleteAsync(null));
         }
 
-        ////[Test]
-        ////public async Task UpdateAsync_WhenExistEventArea_ShouldUpdateLastEventAreaAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<EventArea>(DbContext);
-        ////    var expected = new EventArea { Price = 2, EventId = 2, Description = "Updated", CoordY = 2, CoordX = 2 };
+        [Test]
+        public async Task UpdateAsync_WhenExistEventArea_ShouldUpdateLastEventAreaAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<EventArea>(dbContext);
+            var expected = new EventArea { Price = 2, EventId = 2, Description = "Updated", CoordY = 2, CoordX = 2 };
 
-        ////    // Act
-        ////    var lastEventArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-        ////    var idLastEventArea = lastEventArea.Id;
-        ////    expected.Id = idLastEventArea;
+            // Act
+            var lastEventArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var idLastEventArea = lastEventArea.Id;
+            expected.Id = idLastEventArea;
 
-        ////    await repository.UpdateAsync(expected);
-        ////    var actual = repository.GetAllAsQueryable().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(expected);
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
         [Test]
         public void UpdateAsync_WhenNullEventArea_ShouldThrowArgumentNullException()

@@ -6,34 +6,41 @@ using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
+using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
 
-namespace TicketManagement.IntegrationTests.BusinessLogic
+namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
 {
     [TestFixture]
     internal class VenueServiceTests : TestDatabaseLoader
     {
-        private AdoUsingParametersRepository<Venue> _venueRepository;
-        private AdoDbContext _adoDbContext;
+        private EfRepository<Venue> _venueRepository;
+
+        public EfDbContext DbContext { get; set; }
 
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            _venueRepository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
-            _adoDbContext = new AdoDbContext(MainConnectionString);
+            DbContext = new EfDbContext(MainConnectionString);
+            _venueRepository = new EfRepository<Venue>(DbContext);
         }
 
         [Test]
         public async Task CreateAsync_WhenVenueExist_ShouldReturnCreatedVenue()
         {
             // Arrange
-            var expected = new Venue { Id = _venueRepository.GetAllAsQueryable().Last().Id + 1, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
-            var venueService = new VenueService(_adoDbContext);
+            var expected = new Venue
+            {
+                Id = _venueRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id + 1,
+                Address = "Added Address",
+                Description = "Added Description",
+                Phone = "+375293094300",
+            };
+            var venueService = new VenueService(DbContext);
 
             // Act
             await venueService.CreateAsync(new VenueDto { Address = "Added Address", Description = "Added Description", Phone = "+375293094300" });
-            var actual = _venueRepository.GetAllAsQueryable().Last();
+            var actual = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -43,7 +50,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void CreateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(null));
@@ -54,7 +61,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         {
             // Arrange
             var venueDto = new VenueDto { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" };
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.CreateAsync(venueDto));
@@ -64,13 +71,13 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task DeleteAsync_WhenVenueExist_ShouldDeleteLastVenue()
         {
             // Arrange
-            var expected = _venueRepository.GetAllAsQueryable().Last();
-            var venueService = new VenueService(_adoDbContext);
-            var venueLast = _venueRepository.GetAllAsQueryable().Last();
+            var expected = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
+            var venueService = new VenueService(DbContext);
+            var venueLast = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
 
             // Act
             await venueService.DeleteAsync(new VenueDto { Id = venueLast.Id, Description = venueLast.Description, Address = venueLast.Address, Phone = venueLast.Phone });
-            var actual = _venueRepository.GetAllAsQueryable().Last();
+            var actual = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
 
             // Assert
             actual.Should().NotBeEquivalentTo(expected);
@@ -80,7 +87,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void DeleteAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(null));
@@ -90,7 +97,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void DeleteAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = 0 }));
@@ -100,7 +107,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void DeleteAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.DeleteAsync(new VenueDto { Id = -1 }));
@@ -110,13 +117,14 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task UpdateAsync_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
-            var venueLast = _venueRepository.GetAllAsQueryable().Last();
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var venueLast = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
             var expected = new Venue { Id = venueLast.Id, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(dbContext);
 
             // Act
             await venueService.UpdateAsync(new VenueDto { Id = venueLast.Id, Description = expected.Description, Address = expected.Address, Phone = expected.Phone });
-            var actual = _venueRepository.GetAllAsQueryable().Last();
+            var actual = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -126,7 +134,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdateAsync_WhenVenueEmpty_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(null));
@@ -136,7 +144,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdateAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = 0 }));
@@ -146,7 +154,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void UpdateAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.UpdateAsync(new VenueDto { Id = -1 }));
@@ -157,7 +165,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         {
             // Arrange
             var expected = _venueRepository.GetAllAsQueryable();
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act
             var actual = venueService.GetAll();
@@ -170,9 +178,9 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public async Task GetByIdAsync_WhenVenueExist_ShouldReturnLastVenue()
         {
             // Arrange
-            var expected = _venueRepository.GetAllAsQueryable().Last();
+            var expected = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
             var expectedId = expected.Id;
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act
             var actual = await venueService.GetByIDAsync(expectedId);
@@ -185,7 +193,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(0));
@@ -195,7 +203,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic
         public void GetByIDAsync_WhenIdEqualLeesThanZero_ShouldThrowValidationException()
         {
             // Arrange
-            var venueService = new VenueService(_adoDbContext);
+            var venueService = new VenueService(DbContext);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(-1));

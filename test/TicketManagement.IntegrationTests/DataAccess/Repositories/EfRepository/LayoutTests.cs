@@ -73,23 +73,24 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.CreateAsync(null));
         }
 
-        ////[Test]
-        ////public async Task DeleteAsync_WhenExistLayout_ShouldReturnLayoutListWithoutDeletedLayoutAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Layout>(DbContext);
+        [Test]
+        public async Task DeleteAsync_WhenExistLayout_ShouldReturnLayoutListWithoutDeletedLayoutAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Layout>(dbContext);
 
-        ////    // Act
-        ////    var allLayouts = repository.GetAllAsQueryable().ToList();
-        ////    var lastLayout = allLayouts.LastOrDefault();
-        ////    await repository.DeleteAsync(lastLayout);
+            // Act
+            var allLayouts = repository.GetAllAsQueryable().ToList();
+            var lastLayout = allLayouts.LastOrDefault();
+            await repository.DeleteAsync(lastLayout);
 
-        ////    var actual = repository.GetAllAsQueryable();
-        ////    int countLayoutWithoutLast = allLayouts.ToList().Count - 1;
+            var actual = repository.GetAllAsQueryable();
+            int countLayoutWithoutLast = allLayouts.ToList().Count - 1;
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(allLayouts.Take(countLayoutWithoutLast));
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(allLayouts.Take(countLayoutWithoutLast));
+        }
 
         [Test]
         public void DeleteAsync_WhenIdEqualZeroLayout_ShouldThrowInvalidOperationException()
@@ -112,24 +113,25 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.DeleteAsync(null));
         }
 
-        ////[Test]
-        ////public async Task UpdateAsync_WhenExistLayout_ShouldUpdateLastLayoutAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Layout>(DbContext);
-        ////    var expected = new Layout { VenueId = 2, Description = "Updated Layout" };
+        [Test]
+        public async Task UpdateAsync_WhenExistLayout_ShouldUpdateLastLayoutAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Layout>(dbContext);
+            var expected = new Layout { VenueId = 2, Description = "Updated Layout" };
 
-        ////    // Act
-        ////    var lastLayout = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-        ////    var idLastLayout = lastLayout.Id;
-        ////    expected.Id = idLastLayout;
+            // Act
+            var lastLayout = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var idLastLayout = lastLayout.Id;
+            expected.Id = idLastLayout;
 
-        ////    await repository.UpdateAsync(expected);
-        ////    var actual = repository.GetAllAsQueryable().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(expected);
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
         [Test]
         public void UpdateAsync_WhenNullLayout_ShouldThrowArgumentNullException()

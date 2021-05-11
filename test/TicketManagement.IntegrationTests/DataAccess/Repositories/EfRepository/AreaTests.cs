@@ -73,23 +73,24 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.CreateAsync(null));
         }
 
-        ////[Test]
-        ////public async Task DeleteAsync_WhenExistArea_ShouldReturnAreaListWithoutDeletedAreaAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Area>(DbContext);
+        [Test]
+        public async Task DeleteAsync_WhenExistArea_ShouldReturnAreaListWithoutDeletedAreaAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Area>(dbContext);
 
-        ////    // Act
-        ////    var allAreas = repository.GetAllAsQueryable().ToList();
-        ////    var lastArea = allAreas.LastOrDefault();
-        ////    await repository.DeleteAsync(lastArea);
+            // Act
+            var allAreas = repository.GetAllAsQueryable().ToList();
+            var lastArea = allAreas.LastOrDefault();
+            await repository.DeleteAsync(lastArea);
 
-        ////    var actual = repository.GetAllAsQueryable();
-        ////    int countAreaWithoutLast = allAreas.ToList().Count - 1;
+            var actual = repository.GetAllAsQueryable();
+            int countAreaWithoutLast = allAreas.ToList().Count - 1;
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(allAreas.Take(countAreaWithoutLast));
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(allAreas.Take(countAreaWithoutLast));
+        }
 
         [Test]
         public void DeleteAsync_WhenIdEqualZeroArea_ShouldThrowInvalidOperationException()
@@ -112,24 +113,25 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             Assert.ThrowsAsync<ArgumentNullException>(async () => await repository.DeleteAsync(null));
         }
 
-        ////[Test]
-        ////public async Task UpdateAsync_WhenExistArea_ShouldUpdateLastAreaAsync()
-        ////{
-        ////    // Arrange
-        ////    var repository = new EfRepository<Area>(DbContext);
-        ////    var expected = new Area { LayoutId = 2, Description = "Updated Area", CoordY = 3, CoordX = 4 };
+        [Test]
+        public async Task UpdateAsync_WhenExistArea_ShouldUpdateLastAreaAsync()
+        {
+            // Arrange
+            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var repository = new EfRepository<Area>(dbContext);
+            var expected = new Area { LayoutId = 2, Description = "Updated Area", CoordY = 3, CoordX = 4 };
 
-        ////    // Act
-        ////    var lastArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-        ////    var idLastArea = lastArea.Id;
-        ////    expected.Id = idLastArea;
+            // Act
+            var lastArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
+            var idLastArea = lastArea.Id;
+            expected.Id = idLastArea;
 
-        ////    await repository.UpdateAsync(expected);
-        ////    var actual = repository.GetAllAsQueryable().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
 
-        ////    // Assert
-        ////    actual.Should().BeEquivalentTo(expected);
-        ////}
+            // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
 
         [Test]
         public void UpdateAsync_WhenNullArea_ShouldThrowArgumentNullException()
