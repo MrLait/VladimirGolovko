@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -197,19 +198,22 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
 
             Events = new List<Event>
             {
-                new Event { Id = 1, Name = "Footbal match.", Description = "Netherlands - Russia", LayoutId = 1, DateTime = new DateTime(3021, 03, 01, 00, 00, 00) },
-                new Event { Id = 2, Name = "Football match.", Description = "Netherlands - Belarus", LayoutId = 1, DateTime = new DateTime(3021, 04, 01) },
-                new Event { Id = 3, Name = "Event to test.", Description = "Netherlands - Belarus", LayoutId = 2, DateTime = new DateTime(3021, 04, 01) },
+                new Event { Id = 1, Name = "Footbal match.", Description = "Netherlands - Russia", LayoutId = 1, StartDateTime = new DateTime(3021, 03, 01, 00, 00, 00) },
+                new Event
+                {
+                    Id = 2, Name = "Football match.", Description = "Netherlands - Belarus", LayoutId = 1, StartDateTime = new DateTime(3021, 04, 01), EndDateTime = new DateTime(3031, 04, 01),
+                    ImageUrl = "Test",
+                },
             };
 
             Mock = new Mock<IDbContext>();
-            Mock.Setup(x => x.Venues.GetAll()).Returns(Venues);
-            Mock.Setup(x => x.Seats.GetAll()).Returns(Seats);
-            Mock.Setup(x => x.Layouts.GetAll()).Returns(Layouts);
-            Mock.Setup(x => x.Areas.GetAll()).Returns(Areas);
-            Mock.Setup(x => x.EventAreas.GetAll()).Returns(EventAreas);
-            Mock.Setup(x => x.EventSeats.GetAll()).Returns(EventSeats);
-            Mock.Setup(x => x.Events.GetAll()).Returns(Events);
+            Mock.Setup(x => x.Venues.GetAllAsQueryable()).Returns(Venues.AsQueryable());
+            Mock.Setup(x => x.Seats.GetAllAsQueryable()).Returns(Seats.AsQueryable());
+            Mock.Setup(x => x.Layouts.GetAllAsQueryable()).Returns(Layouts.AsQueryable());
+            Mock.Setup(x => x.Areas.GetAllAsQueryable()).Returns(Areas.AsQueryable());
+            Mock.Setup(x => x.EventAreas.GetAllAsQueryable()).Returns(EventAreas.AsQueryable());
+            Mock.Setup(x => x.EventSeats.GetAllAsQueryable()).Returns(EventSeats.AsQueryable());
+            Mock.Setup(x => x.Events.GetAllAsQueryable()).Returns(Events.AsQueryable());
         }
     }
 }

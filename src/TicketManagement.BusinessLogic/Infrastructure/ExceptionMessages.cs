@@ -22,10 +22,9 @@
         /// </summary>
         public const string IdIsZero = "Id can't be Zero. The current Id is: '{0}'.";
 
-        /// <summary>
-        /// {0} - Price.
-        /// </summary>
-        public const string PriceIsNegative = "Price can't be negative. The current price is: '{0}'.";
+        public const string PriceIsNegative = "Price can't negative.";
+
+        public const string PriceIsZero = "Price can't equal zero.";
 
         /// <summary>
         /// {0} - State.
@@ -63,6 +62,14 @@
         /// {0} - Description.
         /// </summary>
         public const string VenueExist = "The Venue with a description: '{0}' - already exists.";
+
+        public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the event.";
+
+        /// <summary>
+        /// {0} - Start data time.
+        /// {0} - End data time.
+        /// </summary>
+        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event '{0}' cannot be after the end of the event '{1}'.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMessages"/> class.

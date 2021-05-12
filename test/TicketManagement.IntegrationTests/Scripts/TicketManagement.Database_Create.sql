@@ -249,10 +249,11 @@ CREATE TABLE [dbo].[Event] (
     [Name]        NVARCHAR (120) NOT NULL,
     [Description] NVARCHAR (MAX) NOT NULL,
     [LayoutId]    INT            NOT NULL,
-    [DateTime]    DATETIME       NOT NULL,
+    [StartDateTime] DATETIME NOT NULL, 
+    [EndDateTime] DATETIME NOT NULL, 
+    [ImageUrl] nvarchar(MAX) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
 
 GO
 PRINT N'Creating [dbo].[EventArea]...';
@@ -389,10 +390,12 @@ CREATE PROCEDURE [dbo].[CreateEvent]
 	@Name           varchar(120),
 	@Description    varchar(max),
 	@LayoutId       int,
-    @DateTime       Datetime
+    @StartDateTime  Datetime,
+    @EndDateTime    Datetime,
+    @ImageUrl       varchar(max)
 AS
-    INSERT INTO [dbo].[Event] (Name, Description, LayoutId, DateTime)
-    VALUES (@Name, @Description, @LayoutId, @DateTime)
+    INSERT INTO [dbo].[Event] (Name, Description, LayoutId, StartDateTime, EndDateTime, ImageUrl)
+    VALUES (@Name, @Description, @LayoutId, @StartDateTime, @EndDateTime, @ImageUrl)
 
     SELECT SCOPE_IDENTITY()
 GO
@@ -432,10 +435,12 @@ CREATE PROCEDURE [dbo].[UpdateEvent]
 	@Name           varchar(120),
 	@Description    varchar(max),
 	@LayoutId       int,
-	@DateTime		DateTime
+	@StartDateTime	DateTime,
+	@EndDateTime	DateTime,
+	@ImageUrl		varchar(max)
 AS
     UPDATE [dbo].[Event]
-	SET Name = @Name, Description = @Description, LayoutId = @LayoutId, DateTime = @DateTime
+	SET Name = @Name, Description = @Description, LayoutId = @LayoutId, StartDateTime = @StartDateTime, EndDateTime = @EndDateTime, ImageUrl = @ImageUrl
 	WHERE Id = @Id
 	SELECT * FROM [dbo].[Event] WHERE Id = @Id
 GO
@@ -501,9 +506,9 @@ values
 ----- Event
 insert into dbo.Event
 values
-('Footbal match.', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00'),
-('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00'),
-('Event to test.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00')
+('Footbal match.', 'Netherlands - Russia', 1, N'2021-03-01 00:00:00', N'2021-03-01 01:00:00', 'Pics/FootballPicOne.PNG'),
+('Football match.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00', N'2021-04-01 02:00:00', 'Pics/FootballPicTwo.PNG'),
+('Event to test.', 'Netherlands - Belarus', 1, N'2021-04-01 00:00:00', N'2021-04-01 03:00:00', 'Pics/FootballPicOne.PNG')
 
 INSERT INTO [dbo].[EventArea] ([EventId], [Description], [CoordX], [CoordY], [Price]) 
 VALUES

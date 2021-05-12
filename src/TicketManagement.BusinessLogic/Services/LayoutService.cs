@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -26,7 +27,7 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
-        public void Create(LayoutDto dto)
+        public async Task CreateAsync(LayoutDto dto)
         {
             if (dto == null)
             {
@@ -41,11 +42,11 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             Layout layout = new Layout { VenueId = dto.VenueId, Description = dto.Description };
-            DbContext.Layouts.Create(layout);
+            await DbContext.Layouts.CreateAsync(layout);
         }
 
         /// <inheritdoc/>
-        public void Delete(LayoutDto dto)
+        public async Task DeleteAsync(LayoutDto dto)
         {
             if (dto == null)
             {
@@ -62,13 +63,13 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            DbContext.Layouts.Delete(new Layout { Id = dto.Id });
+            await DbContext.Layouts.DeleteAsync(new Layout { Id = dto.Id });
         }
 
         /// <inheritdoc/>
         public IEnumerable<LayoutDto> GetAll()
         {
-            var layouts = DbContext.Layouts.GetAll();
+            var layouts = DbContext.Layouts.GetAllAsQueryable();
             List<LayoutDto> layoutDto = new List<LayoutDto>();
             foreach (var layout in layouts)
             {
@@ -82,7 +83,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public LayoutDto GetByID(int id)
+        public async Task<LayoutDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -94,7 +95,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var layout = DbContext.Layouts.GetByID(id);
+            var layout = await DbContext.Layouts.GetByIDAsync(id);
             var layoutDto = new LayoutDto
             {
                 Id = layout.Id,
@@ -106,7 +107,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public void Update(LayoutDto dto)
+        public async Task UpdateAsync(LayoutDto dto)
         {
             if (dto == null)
             {
@@ -130,12 +131,12 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.LayoutForTheVenueExist, dto.Description);
             }
 
-            DbContext.Layouts.Update(new Layout { Id = dto.Id, VenueId = dto.VenueId, Description = dto.Description });
+            await DbContext.Layouts.UpdateAsync(new Layout { Id = dto.Id, VenueId = dto.VenueId, Description = dto.Description });
         }
 
         private bool CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(LayoutDto dto)
         {
-            var allLayoutByVenueId = DbContext.Layouts.GetAll().Where(x => x.VenueId == dto.VenueId).ToList();
+            var allLayoutByVenueId = DbContext.Layouts.GetAllAsQueryable().Where(x => x.VenueId == dto.VenueId).ToList();
             var isLayoutContain = allLayoutByVenueId.Any(x => x.Description.Contains(dto.Description));
             return isLayoutContain;
         }

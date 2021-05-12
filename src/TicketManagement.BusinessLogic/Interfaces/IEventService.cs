@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -6,32 +7,40 @@ namespace TicketManagement.BusinessLogic.Interfaces
     /// <summary>
     /// Event service interface.
     /// </summary>
-    internal interface IEventService : IService
+    public interface IEventService : IService
     {
         /// <summary>
         /// Create object in database.
         /// </summary>
         /// <param name="dto">Event data object transfer.</param>
-        void Create(EventDto dto);
+        Task CreateAsync(EventDto dto);
 
         /// <summary>
         /// Create object in database.
         /// </summary>
         /// <param name="dto">Event data object transfer.</param>
-        void Delete(EventDto dto);
+        Task DeleteAsync(EventDto dto);
 
         /// <summary>
         /// Create object in database.
         /// </summary>
         /// <param name="dto">Event data object transfer.</param>
-        void Update(EventDto dto);
+        Task UpdateAsync(EventDto dto);
+
+        /// <summary>
+        /// Update object in database.
+        /// </summary>
+        /// <param name="dto">Event data object transfer.</param>
+        Task UpdateLayoutIdAsync(EventDto dto);
 
         /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        EventDto GetByID(int id);
+        Task<EventDto> GetByIDAsync(int id);
+
+        EventDto Last();
 
         /// <summary>
         /// Method to get all objects from database table.

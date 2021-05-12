@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace TicketManagement.DataAccess.Interfaces
 {
@@ -13,30 +15,30 @@ namespace TicketManagement.DataAccess.Interfaces
         /// </summary>
         /// <param name="byId">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        T GetByID(int byId);
+        Task<T> GetByIDAsync(int byId);
 
         /// <summary>
         /// Add object to database.
         /// </summary>
         /// <param name="entity">Object to add in database.</param>
-        void Create(T entity);
+        Task CreateAsync(T entity);
 
         /// <summary>
         /// Delete object from table by Id.
         /// </summary>
         /// <param name="entity">Entity.</param>
-        void Delete(T entity);
+        Task DeleteAsync(T entity);
 
         /// <summary>
         /// Modify an existing object.
         /// </summary>
         /// <param name="entity">Object with parameters to be changed.</param>
-        void Update(T entity);
+        Task UpdateAsync(T entity);
 
         /// <summary>
         /// Method to get all objects from database table.
         /// </summary>
         /// <returns>Returns list of objects.</returns>
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetAllAsQueryable();
     }
 }

@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 
@@ -10,13 +12,13 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event area service class.
     /// </summary>
-    internal class EventAreaService : IEventAreaService
+    public class EventAreaService : IEventAreaService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventAreaService"/> class.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        internal EventAreaService(IDbContext dbContext) => DbContext = dbContext;
+        public EventAreaService(IDbContext dbContext) => DbContext = dbContext;
 
         /// <summary>
         /// Gets property database context.
@@ -26,7 +28,20 @@ namespace TicketManagement.BusinessLogic.Services
         /// <inheritdoc/>
         public IEnumerable<EventAreaDto> GetAll()
         {
-            var eventAreas = DbContext.EventAreas.GetAll();
+            var eventAreas = DbContext.EventAreas.GetAllAsQueryable();
+            List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
+            foreach (var item in eventAreas)
+            {
+                eventAreasDto.Add(new EventAreaDto { Id = item.Id, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY, EventId = item.EventId, Price = item.Price });
+            }
+
+            return eventAreasDto;
+        }
+
+        public IEnumerable<EventAreaDto> GetByEventId(EventDto dto)
+        {
+            var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
+
             List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)
             {
@@ -37,7 +52,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public EventAreaDto GetByID(int id)
+        public async Task<EventAreaDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -49,7 +64,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var eventArea = DbContext.EventAreas.GetByID(id);
+            var eventArea = await DbContext.EventAreas.GetByIDAsync(id);
             var eventAreaDto = new EventAreaDto
             {
                 Id = eventArea.Id,
@@ -64,7 +79,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public void UpdatePrice(EventAreaDto dto)
+        public async Task UpdatePriceAsync(EventAreaDto dto)
         {
             if (dto == null)
             {
@@ -83,12 +98,66 @@ namespace TicketManagement.BusinessLogic.Services
 
             if (dto.Price < 0)
             {
-                throw new ValidationException(ExceptionMessages.PriceIsNegative, dto.Price);
+                throw new ValidationException(ExceptionMessages.PriceIsNegative);
             }
 
-            var currentEventAreas = DbContext.EventAreas.GetByID(dto.Id);
+            if (dto.Price == 0)
+            {
+                throw new ValidationException(ExceptionMessages.PriceIsZero);
+            }
+
+            var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);
             currentEventAreas.Price = dto.Price;
-            DbContext.EventAreas.Update(currentEventAreas);
+            await DbContext.EventAreas.UpdateAsync(currentEventAreas);
+        }
+
+        public async Task UpdatePriceAsync(IEnumerable<EventAreaDto> dto)
+        {
+            foreach (var item in dto)
+            {
+                await UpdatePriceAsync(item);
+            }
+        }
+
+        public IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto)
+        {
+            var allEventAreasForEvent = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
+            var eventAreasDto = new List<EventAreaDto>();
+
+            foreach (var item in allEventAreasForEvent)
+            {
+                eventAreasDto.Add(new EventAreaDto
+                {
+                    Id = item.Id,
+                    CoordX = item.CoordX,
+                    CoordY = item.CoordY,
+                    Description = item.Description,
+                    EventId = item.EventId,
+                    Price = item.Price,
+                });
+            }
+
+            return eventAreasDto;
+        }
+
+        public async Task DeleteAsync(EventAreaDto dto)
+        {
+            if (dto == null)
+            {
+                throw new ValidationException(ExceptionMessages.NullReference);
+            }
+
+            if (dto.Id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            await DbContext.EventAreas.DeleteAsync(new EventArea { Id = dto.Id });
         }
     }
 }

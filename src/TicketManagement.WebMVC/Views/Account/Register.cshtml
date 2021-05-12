@@ -1,0 +1,41 @@
+﻿@model TicketManagement.WebMVC.ViewModels.AccountViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["NewUserRegistration"]</h2>
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label><br />
+        <input asp-for="FirstName" />
+    </div>
+    <input type="hidden" asp-for="Language" value="en" />
+    <input type="hidden" asp-for="TimeZoneOffset" value="0" />
+    <div>
+        <label asp-for="Surname"></label><br />
+        <input asp-for="Surname" />
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div>
+        <input type="submit" value="@Localizer["RegisterNow"]" />
+    </div>
+</form>

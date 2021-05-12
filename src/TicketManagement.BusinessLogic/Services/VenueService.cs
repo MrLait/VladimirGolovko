@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Domain.Models;
@@ -26,14 +27,14 @@ namespace TicketManagement.BusinessLogic.Services
         public IDbContext DbContext { get; private set; }
 
         /// <inheritdoc/>
-        public void Create(VenueDto dto)
+        public async Task CreateAsync(VenueDto dto)
         {
             if (dto == null)
             {
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            var allVenues = DbContext.Venues.GetAll().ToList();
+            var allVenues = DbContext.Venues.GetAllAsQueryable().ToList();
             var isVenueContain = allVenues.Any(x => x.Description.Contains(dto.Description));
 
             if (isVenueContain)
@@ -42,11 +43,11 @@ namespace TicketManagement.BusinessLogic.Services
             }
 
             Venue venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
-            DbContext.Venues.Create(venue);
+            await DbContext.Venues.CreateAsync(venue);
         }
 
         /// <inheritdoc/>
-        public void Delete(VenueDto dto)
+        public async Task DeleteAsync(VenueDto dto)
         {
             if (dto == null)
             {
@@ -63,13 +64,13 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            DbContext.Venues.Delete(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
+            await DbContext.Venues.DeleteAsync(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
         }
 
         /// <inheritdoc/>
         public IEnumerable<VenueDto> GetAll()
         {
-            var venues = DbContext.Venues.GetAll();
+            var venues = DbContext.Venues.GetAllAsQueryable();
             List<VenueDto> venuesDto = new List<VenueDto>();
             foreach (var item in venues)
             {
@@ -80,7 +81,7 @@ namespace TicketManagement.BusinessLogic.Services
         }
 
         /// <inheritdoc/>
-        public VenueDto GetByID(int id)
+        public async Task<VenueDto> GetByIDAsync(int id)
         {
             if (id == 0)
             {
@@ -92,12 +93,12 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var venue = DbContext.Venues.GetByID(id);
+            var venue = await DbContext.Venues.GetByIDAsync(id);
             return new VenueDto { Id = venue.Id, Address = venue.Address, Description = venue.Description, Phone = venue.Phone };
         }
 
         /// <inheritdoc/>
-        public void Update(VenueDto dto)
+        public async Task UpdateAsync(VenueDto dto)
         {
             if (dto == null)
             {
@@ -114,7 +115,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            DbContext.Venues.Update(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
+            await DbContext.Venues.UpdateAsync(new Venue { Id = dto.Id, Description = dto.Description, Address = dto.Address, Phone = dto.Phone });
         }
     }
 }

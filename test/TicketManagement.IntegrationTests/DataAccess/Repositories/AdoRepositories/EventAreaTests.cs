@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -14,81 +15,81 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         private readonly List<EventArea> _eventAreas = new List<EventArea>();
 
         [OneTimeSetUp]
-        public void InitEventAreas()
+        public async Task InitEventAreasAsync()
         {
             var eventAreaRepository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
-            var countAllEventAreas = eventAreaRepository.GetAll().Last().Id;
+            var countAllEventAreas = eventAreaRepository.GetAllAsQueryable().Last().Id;
 
             for (int i = 1; i <= countAllEventAreas; i++)
             {
-                _eventAreas.Add(eventAreaRepository.GetByID(i));
+                _eventAreas.Add(await eventAreaRepository.GetByIDAsync(i));
             }
         }
 
         [Test]
-        public void GetAll_WhenEventAreasExist_ShouldReturnEventAreaList()
+        public void GetAllAsQueryable_WhenEventAreasExist_ShouldReturnEventAreaList()
         {
             // Arrange
             var expected = _eventAreas;
 
             // Act
-            var actual = new AdoUsingParametersRepository<EventArea>(MainConnectionString).GetAll();
+            var actual = new AdoUsingParametersRepository<EventArea>(MainConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetAll_WhenEventAreasIncorrectConnectionSting_ShouldThrowArgumentException()
+        public void GetAllAsQueryable_WhenEventAreasIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<EventArea>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => actual.GetAll());
+            Assert.Throws<ArgumentException>(() => actual.GetAllAsQueryable());
         }
 
         [Test]
-        public void Create_WhenAddEventArea_ShouldReturnEventAreaWithNewEventArea()
+        public async Task CreateAsync_WhenAddEventArea_ShouldReturnEventAreaWithNewEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
-            EventArea eventArea = new EventArea { Id = repository.GetAll().ToList().Count + 1, CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
+            EventArea eventArea = new EventArea { Id = repository.GetAllAsQueryable().ToList().Count + 1, CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
             List<EventArea> expected = new List<EventArea>(_eventAreas)
             {
                 eventArea,
             };
 
             // Act
-            repository.Create(eventArea);
-            var actual = repository.GetAll();
+            await repository.CreateAsync(eventArea);
+            var actual = repository.GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenEventAreaEmpty_ShouldThrowArgumentException()
+        public void CreateAsync_WhenEventAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Create(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
         }
 
         [Test]
-        public void Delete_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventArea()
+        public async Task DeleteAsync_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act
-            var allEventAreas = repository.GetAll();
+            var allEventAreas = repository.GetAllAsQueryable();
             var lastEventArea = allEventAreas.Last();
-            repository.Delete(lastEventArea);
+            await repository.DeleteAsync(lastEventArea);
 
-            var actual = repository.GetAll();
+            var actual = repository.GetAllAsQueryable();
             int countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
 
             // Assert
@@ -96,85 +97,85 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Delete_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventArea));
         }
 
         [Test]
-        public void Delete_WhenNullEventArea_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIncorrectConnectionStringEventArea_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIncorrectConnectionStringEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 3 };
             var repository = new AdoUsingParametersRepository<EventArea>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventArea));
         }
 
         [Test]
-        public void Update_WhenExistEventArea_ShouldUpdateLastEventArea()
+        public async Task UpdateAsync_WhenExistEventArea_ShouldUpdateLastEventArea()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
             var expected = new EventArea { Price = 2, EventId = 2, Description = "Updated", CoordY = 2, CoordX = 2 };
 
             // Act
-            var lastEventArea = repository.GetAll().Last();
+            var lastEventArea = repository.GetAllAsQueryable().Last();
             var idLastEventArea = lastEventArea.Id;
             expected.Id = idLastEventArea;
 
-            repository.Update(expected);
-            var actual = repository.GetAll().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenNullEventArea_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventArea));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventArea));
         }
 
         [Test]
-        public void GetById_WhenExistEventArea_ShouldReturnEventArea()
+        public async Task GetByIdAsync_WhenExistEventArea_ShouldReturnEventAreaAsync()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act
-            var lastEventArea = repository.GetAll().Last();
+            var lastEventArea = repository.GetAllAsQueryable().Last();
             EventArea expectedEventArea = new EventArea
             {
                 Id = lastEventArea.Id,
@@ -186,70 +187,70 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             };
 
             int actualId = expectedEventArea.Id;
-            var actual = repository.GetByID(actualId);
+            var actual = await repository.GetByIDAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEventArea);
         }
 
         [Test]
-        public void GetById_WhenNonExistEventArea_ShouldReturnNull()
+        public async Task GetByIdAsync_WhenNonExistEventArea_ShouldReturnNull()
         {
             // Arrange
             EventArea expected = null;
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act
-            var lastEventArea = repository.GetAll().Last();
+            var lastEventArea = repository.GetAllAsQueryable().Last();
             int nonExistId = lastEventArea.Id + 1;
-            var actual = repository.GetByID(nonExistId);
+            var actual = await repository.GetByIDAsync(nonExistId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventArea.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
         }
 
         [Test]
-        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventArea.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
         }
 
         [Test]
-        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventArea));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventArea));
         }
 
         [Test]
-        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventArea));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventArea));
         }
     }
 }

@@ -16,6 +16,8 @@ namespace TicketManagement.DataAccess.Ado
         private AdoUsingParametersRepository<Layout> _layoutRepository;
         private AdoUsingParametersRepository<Seat> _seatRepository;
         private AdoUsingParametersRepository<Venue> _venueRepository;
+        private AdoUsingParametersRepository<Basket> _basketRepository;
+        private AdoUsingParametersRepository<PurchaseHistory> _purchaseHistoryRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoDbContext"/> class.
@@ -35,6 +37,16 @@ namespace TicketManagement.DataAccess.Ado
         /// Gets area table property.
         /// </summary>
         public IRepository<Area> Areas => _areaRepository ??= new AdoUsingParametersRepository<Area>(ConnectionString);
+
+        /// <summary>
+        /// Gets Basket table property.
+        /// </summary>
+        public IRepository<Basket> Baskets => _basketRepository ??= new AdoUsingParametersRepository<Basket>(ConnectionString);
+
+        /// <summary>
+        /// Gets PurchaseHistory table property.
+        /// </summary>
+        public IRepository<PurchaseHistory> PurchaseHistories => _purchaseHistoryRepository ??= new AdoUsingParametersRepository<PurchaseHistory>(ConnectionString);
 
         /// <summary>
         /// Gets event table property.

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
+using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
 namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositories
@@ -14,81 +16,81 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         private readonly List<EventSeat> _eventSeats = new List<EventSeat>();
 
         [OneTimeSetUp]
-        public void InitEventSeats()
+        public async Task InitEventSeatsAsync()
         {
             var eventSeatsRepository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            var countAllEventSeats = eventSeatsRepository.GetAll().Last().Id;
+            var countAllEventSeats = eventSeatsRepository.GetAllAsQueryable().Last().Id;
 
             for (var i = 1; i <= countAllEventSeats; i++)
             {
-                _eventSeats.Add(eventSeatsRepository.GetByID(i));
+                _eventSeats.Add(await eventSeatsRepository.GetByIDAsync(i));
             }
         }
 
         [Test]
-        public void GetAll_WhenEventSeatsExist_ShouldReturnEventSeatList()
+        public void GetAllAsQueryable_WhenEventSeatsExist_ShouldReturnEventSeatList()
         {
             // Arrange
             var expected = _eventSeats;
 
             // Act
-            var actual = new AdoUsingParametersRepository<EventSeat>(MainConnectionString).GetAll();
+            var actual = new AdoUsingParametersRepository<EventSeat>(MainConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetAll_WhenEventSeatsIncorrectConnectionSting_ShouldThrowArgumentException()
+        public void GetAllAsQueryable_WhenEventSeatsIncorrectConnectionSting_ShouldThrowArgumentException()
         {
             // Arrange
             var actual = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => actual.GetAll());
+            Assert.Throws<ArgumentException>(() => actual.GetAllAsQueryable());
         }
 
         [Test]
-        public void Create_WhenAddEventSeat_ShouldReturnEventSeatWithNewEventSeat()
+        public async Task CreateAsync_WhenAddEventSeat_ShouldReturnEventSeatWithNewEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            EventSeat eventSeat = new EventSeat { Id = repository.GetAll().ToList().Count + 1, EventAreaId = 2, Number = 2, Row = 2, State = 2 };
+            EventSeat eventSeat = new EventSeat { Id = repository.GetAllAsQueryable().ToList().Count + 1, EventAreaId = 2, Number = 2, Row = 2, State = (int)States.Booked };
             List<EventSeat> expected = new List<EventSeat>(_eventSeats)
             {
                 eventSeat,
             };
 
             // Act
-            repository.Create(eventSeat);
-            var actual = repository.GetAll();
+            await repository.CreateAsync(eventSeat);
+            var actual = repository.GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Create_WhenEventSeatEmpty_ShouldThrowArgumentException()
+        public void CreateAsync_WhenEventSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Create(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
         }
 
         [Test]
-        public void Delete_WhenExistEventSeat_ShouldReturnEventSeatListWithoutDeletedEventSeat()
+        public async Task DeleteAsync_WhenExistEventSeat_ShouldReturnEventSeatListWithoutDeletedEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            var allEventSeats = repository.GetAll();
+            var allEventSeats = repository.GetAllAsQueryable();
             var lastEventSeat = allEventSeats.Last();
-            repository.Delete(lastEventSeat);
+            await repository.DeleteAsync(lastEventSeat);
 
-            var actual = repository.GetAll();
+            var actual = repository.GetAllAsQueryable();
             int countEventSeatWithoutLast = allEventSeats.ToList().Count - 1;
 
             // Assert
@@ -96,85 +98,85 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         }
 
         [Test]
-        public void Delete_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventSeat));
         }
 
         [Test]
-        public void Delete_WhenNullEventSeat_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenNullEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
         }
 
         [Test]
-        public void Delete_WhenIncorrectConnectionStringEventSeat_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIncorrectConnectionStringEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 3 };
             var repository = new AdoUsingParametersRepository<EventSeat>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventSeat));
         }
 
         [Test]
-        public void Update_WhenExistEventSeat_ShouldUpdateLastEventSeat()
+        public async Task UpdateAsync_WhenExistEventSeat_ShouldUpdateLastEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
-            var expected = new EventSeat { EventAreaId = 2, State = 1, Row = 2, Number = 2 };
+            var expected = new EventSeat { EventAreaId = 2, State = (int)States.Purchased, Row = 2, Number = 2 };
 
             // Act
-            var lastEventSeat = repository.GetAll().Last();
+            var lastEventSeat = repository.GetAllAsQueryable().Last();
             var idLastEventSeat = lastEventSeat.Id;
             expected.Id = idLastEventSeat;
 
-            repository.Update(expected);
-            var actual = repository.GetAll().Last();
+            await repository.UpdateAsync(expected);
+            var actual = repository.GetAllAsQueryable().Last();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void Update_WhenNullEventSeat_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenNullEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
         }
 
         [Test]
-        public void Update_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventSeat));
         }
 
         [Test]
-        public void GetById_WhenExistEventSeat_ShouldReturnEventSeat()
+        public async Task GetByIdAsync_WhenExistEventSeat_ShouldReturnEventSeat()
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            var lastEventSeat = repository.GetAll().Last();
+            var lastEventSeat = repository.GetAllAsQueryable().Last();
             EventSeat expectedEventSeat = new EventSeat
             {
                 Id = lastEventSeat.Id,
@@ -185,70 +187,70 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             };
 
             int actualId = expectedEventSeat.Id;
-            var actual = repository.GetByID(actualId);
+            var actual = await repository.GetByIDAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEventSeat);
         }
 
         [Test]
-        public void GetById_WhenNonExistEventSeat_ShouldReturnNull()
+        public async Task GetByIdAsync_WhenNonExistEventSeat_ShouldReturnNull()
         {
             // Arrange
             EventSeat expected = null;
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act
-            var lastEventSeat = repository.GetAll().Last();
+            var lastEventSeat = repository.GetAllAsQueryable().Last();
             int nonExistId = lastEventSeat.Id + 1;
-            var actual = repository.GetByID(nonExistId);
+            var actual = await repository.GetByIDAsync(nonExistId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public void GetById_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdEqualZeroEventSeat_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventSeat.Id));
         }
 
         [Test]
-        public void GetById_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.GetByID(eventSeat.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventSeat.Id));
         }
 
         [Test]
-        public void Update_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Update(eventSeat));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventSeat));
         }
 
         [Test]
-        public void Delete_WhenIdLessThenZero_ShouldThrowArgumentException()
+        public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
             EventSeat eventSeat = new EventSeat { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventSeat>(MainConnectionString);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => repository.Delete(eventSeat));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventSeat));
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{ ViewData["Title"] = "Event manager area"; }
+@{ int rowNumber = 0; }
+
+@if (Model.EventItems.Count() > 0)
+{
+    <table>
+        @foreach (var item in Model.EventItems)
+        {
+            rowNumber++;
+            <tr>
+                <td class="table-number">#@rowNumber.ToString()</td>
+                <td class="table-image">
+                    <div> <img src="@item.ImageUrl" /> </div>
+                </td>
+                <td class="table-event-name">@Localizer["EventName"]: @item.Name</td>
+                <td class="table-event-description">@Localizer["Description"]: @item.Description</td>
+                <td class="table-event-date-time-start">@Localizer["TheEventStartsAt"] @item.StartDateTime</td>
+                <td class="table-event-date-time-end">@Localizer["TheEventEndsAt"] @item.EndDateTime</td>
+                <td class="table-availible-seats">@Localizer["AvailableSeats"]: @item.AvailableSeats</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="UpdateEvent" asp-route-id="@item.Id">@Localizer["Update"]</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="DeleteEvent" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
+<td>
+    <a class="btn btn-sm btn-primary" asp-action="CreateEvent">@Localizer["CreateEvent"]</a>
+</td>

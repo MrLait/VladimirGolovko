@@ -1,11 +1,12 @@
-﻿using TicketManagement.Dto.Interfaces;
+﻿using System.Collections.Generic;
+using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
     /// <summary>
     /// Layout data transfer object class.
     /// </summary>
-    internal class LayoutDto : IDtoEntity
+    public class LayoutDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets Id.
@@ -21,5 +22,7 @@ namespace TicketManagement.Dto
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
+
+        public IEnumerable<EventDto> Events { get; set; }
     }
 }

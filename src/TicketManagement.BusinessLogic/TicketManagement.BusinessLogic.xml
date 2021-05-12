@@ -24,11 +24,6 @@
             {0} - Id.
             </summary>
         </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.PriceIsNegative">
-            <summary>
-            {0} - Price.
-            </summary>
-        </member>
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StateIsNegative">
             <summary>
             {0} - State.
@@ -64,6 +59,12 @@
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.VenueExist">
             <summary>
             {0} - Description.
+            </summary>
+        </member>
+        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StartDataTimeBeforeEndDataTime">
+            <summary>
+            {0} - Start data time.
+            {0} - End data time.
             </summary>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.#ctor">
@@ -106,25 +107,25 @@
             Area service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Create(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.CreateAsync(TicketManagement.Dto.AreaDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Area data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Delete(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.DeleteAsync(TicketManagement.Dto.AreaDto)">
             <summary>
             Delete object in database.
             </summary>
             <param name="dto">Area data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.Update(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.UpdateAsync(TicketManagement.Dto.AreaDto)">
             <summary>
             Update object in database.
             </summary>
             <param name="dto">Area data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IAreaService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -142,13 +143,19 @@
             Event area service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.UpdatePrice(TicketManagement.Dto.EventAreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.UpdatePriceAsync(TicketManagement.Dto.EventAreaDto)">
             <summary>
             Update price object in database.
             </summary>
             <param name="dto">Event area data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.UpdatePriceAsync(System.Collections.Generic.IEnumerable{TicketManagement.Dto.EventAreaDto})">
+            <summary>
+            Update price object in database.
+            </summary>
+            <param name="dto">Event area data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventAreaService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -166,13 +173,13 @@
             Event seat service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.UpdateState(TicketManagement.Dto.EventSeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.UpdateStateAsync(TicketManagement.Dto.EventSeatDto)">
             <summary>
             Update state object in database.
             </summary>
             <param name="dto">Event seat data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventSeatService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -190,25 +197,31 @@
             Event service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Create(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.CreateAsync(TicketManagement.Dto.EventDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Event data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Delete(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.DeleteAsync(TicketManagement.Dto.EventDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Event data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.Update(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.UpdateAsync(TicketManagement.Dto.EventDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Event data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.UpdateLayoutIdAsync(TicketManagement.Dto.EventDto)">
+            <summary>
+            Update object in database.
+            </summary>
+            <param name="dto">Event data object transfer.</param>
+        </member>
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IEventService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -226,25 +239,25 @@
             Layout service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Create(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.CreateAsync(TicketManagement.Dto.LayoutDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Layout data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Delete(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.DeleteAsync(TicketManagement.Dto.LayoutDto)">
             <summary>
             Delete object in database.
             </summary>
             <param name="dto">Layout data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.Update(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.UpdateAsync(TicketManagement.Dto.LayoutDto)">
             <summary>
             Update object in database.
             </summary>
             <param name="dto">Layout data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ILayoutService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -262,25 +275,25 @@
             Seat service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Create(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.CreateAsync(TicketManagement.Dto.SeatDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Seat data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Delete(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.DeleteAsync(TicketManagement.Dto.SeatDto)">
             <summary>
             Delete object in database.
             </summary>
             <param name="dto">Seat data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.Update(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.UpdateAsync(TicketManagement.Dto.SeatDto)">
             <summary>
             Update object in database.
             </summary>
             <param name="dto">Seat data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.ISeatService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -303,25 +316,25 @@
             Venue service interface.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Create(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.CreateAsync(TicketManagement.Dto.VenueDto)">
             <summary>
             Create object in database.
             </summary>
             <param name="dto">Venue data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Delete(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.DeleteAsync(TicketManagement.Dto.VenueDto)">
             <summary>
             Delete object in database.
             </summary>
             <param name="dto">Venue data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.Update(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.UpdateAsync(TicketManagement.Dto.VenueDto)">
             <summary>
             Update object in database.
             </summary>
             <param name="dto">Venue data object transfer.</param>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Interfaces.IVenueService.GetByIDAsync(System.Int32)">
             <summary>
             Get object by Id from table in database.
             </summary>
@@ -350,19 +363,19 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Create(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.CreateAsync(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Delete(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.DeleteAsync(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.Update(TicketManagement.Dto.AreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.AreaService.UpdateAsync(TicketManagement.Dto.AreaDto)">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.EventAreaService">
@@ -384,10 +397,10 @@
         <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.UpdatePrice(TicketManagement.Dto.EventAreaDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventAreaService.UpdatePriceAsync(TicketManagement.Dto.EventAreaDto)">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.EventSeatService">
@@ -409,10 +422,10 @@
         <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.UpdateState(TicketManagement.Dto.EventSeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventSeatService.UpdateStateAsync(TicketManagement.Dto.EventSeatDto)">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.EventService">
@@ -426,21 +439,29 @@
             </summary>
             <param name="dbContext">Database context.</param>
         </member>
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.#ctor(TicketManagement.DataAccess.Interfaces.IDbContext,TicketManagement.BusinessLogic.Interfaces.IEventSeatService,TicketManagement.BusinessLogic.Interfaces.IEventAreaService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Services.EventService"/> class.
+            </summary>
+            <param name="dbContext">Database context.</param>
+            <param name="eventSeatService">Event seat service.</param>
+            <param name="eventAreaService">Event area service.</param>
+        </member>
         <member name="P:TicketManagement.BusinessLogic.Services.EventService.DbContext">
             <summary>
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Create(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.CreateAsync(TicketManagement.Dto.EventDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Delete(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.DeleteAsync(TicketManagement.Dto.EventDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.Update(TicketManagement.Dto.EventDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.UpdateAsync(TicketManagement.Dto.EventDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.EventService.GetAll">
@@ -462,19 +483,19 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Create(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.CreateAsync(TicketManagement.Dto.LayoutDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Delete(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.DeleteAsync(TicketManagement.Dto.LayoutDto)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.Update(TicketManagement.Dto.LayoutDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.LayoutService.UpdateAsync(TicketManagement.Dto.LayoutDto)">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.SeatService">
@@ -493,19 +514,19 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Create(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.CreateAsync(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Delete(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.DeleteAsync(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.Update(TicketManagement.Dto.SeatDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.SeatService.UpdateAsync(TicketManagement.Dto.SeatDto)">
             <inheritdoc/>
         </member>
         <member name="T:TicketManagement.BusinessLogic.Services.VenueService">
@@ -524,19 +545,19 @@
             Gets property database context.
             </summary>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Create(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.CreateAsync(TicketManagement.Dto.VenueDto)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Delete(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.DeleteAsync(TicketManagement.Dto.VenueDto)">
             <inheritdoc/>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetAll">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetByID(System.Int32)">
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.GetByIDAsync(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.Update(TicketManagement.Dto.VenueDto)">
+        <member name="M:TicketManagement.BusinessLogic.Services.VenueService.UpdateAsync(TicketManagement.Dto.VenueDto)">
             <inheritdoc/>
         </member>
     </members>

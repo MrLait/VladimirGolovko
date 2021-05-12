@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketManagement.Dto;
 
 namespace TicketManagement.BusinessLogic.Interfaces
@@ -12,26 +13,26 @@ namespace TicketManagement.BusinessLogic.Interfaces
         /// Create object in database.
         /// </summary>
         /// <param name="dto">Seat data object transfer.</param>
-        void Create(SeatDto dto);
+        Task CreateAsync(SeatDto dto);
 
         /// <summary>
         /// Delete object in database.
         /// </summary>
         /// <param name="dto">Seat data object transfer.</param>
-        void Delete(SeatDto dto);
+        Task DeleteAsync(SeatDto dto);
 
         /// <summary>
         /// Update object in database.
         /// </summary>
         /// <param name="dto">Seat data object transfer.</param>
-        void Update(SeatDto dto);
+        Task UpdateAsync(SeatDto dto);
 
         /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        SeatDto GetByID(int id);
+        Task<SeatDto> GetByIDAsync(int id);
 
         /// <summary>
         /// Method to get all objects from database table.

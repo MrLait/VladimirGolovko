@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="0f0cdaba-7848-4d6c-914b-bd9ff9fe15d0" ChangeDateTime="04/27/2021 14:21:01">
+    <Property Name="ElementName" Value="[dbo].[Event].[DateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Event]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartDateTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="54e9dc7c-a950-4957-a3ff-d9c02b37b655" ChangeDateTime="04/27/2021 14:26:55">
+    <Property Name="ElementName" Value="[dbo].[Event].[Url]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Event]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ImageUrl" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="38b202b0-8c20-4b10-ac99-9a533a556cd4" ChangeDateTime="05/04/2021 13:08:26">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[Year]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FirstName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="047fc7a4-a56e-49cf-b235-76bf92eeedd6" ChangeDateTime="05/04/2021 13:12:15">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[TimeZone]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TimeZoneOffcet" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="be999e7b-cb39-4869-a894-0381daf3273f" ChangeDateTime="05/04/2021 13:13:09">
+    <Property Name="ElementName" Value="[dbo].[AspNetUsers].[TimeZoneOffcet]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AspNetUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TimeZoneOffset" />
+  </Operation>
+</Operations>

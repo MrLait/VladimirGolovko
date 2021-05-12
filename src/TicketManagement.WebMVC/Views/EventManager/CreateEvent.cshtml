@@ -1,0 +1,89 @@
+﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.EventViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<form method="post" asp-controller="EventManager" asp-action="CreateEvent">
+    <div asp-validation-summary="ModelOnly"></div>
+    @if (@Model != null)
+    {
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+    }
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Description"></label><br />
+        <input asp-for="Description" />
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div>
+        <label asp-for="LayoutId"></label><br />
+        <input asp-for="LayoutId" />
+        <span asp-validation-for="LayoutId"></span>
+    </div>
+
+    <div>
+        <label asp-for="StartDateTime"></label><br />
+        <input asp-for="StartDateTime" />
+        <span asp-validation-for="StartDateTime"></span>
+    </div>
+
+    <div>
+        <label asp-for="EndDateTime"></label><br />
+        <input asp-for="EndDateTime" />
+        <span asp-validation-for="EndDateTime"></span>
+    </div>
+    <div>
+        <label asp-for="ImageUrl"></label><br />
+        <input asp-for="ImageUrl" />
+    </div>
+    @if (@Model != null && @Model.EventAreaItems.ToList().Count > 0)
+    {
+        for (int i = 0; i < Model.EventAreaItems.Count(); i++)
+        {
+            <p>
+                <label>@Model.EventAreaItems[@i].Description</label><br />
+
+                <input type="number" name="model.EventAreaItems[@i].Price" value="@Model.EventAreaItems[@i].Price" />
+                @if (@Model.EventAreaItems[@i].Price <= 0)
+                {
+                    @ViewData["PriceRequired"]
+                }
+                <input type="hidden" name="model.EventAreaItems[@i].Price" value="@Model.EventAreaItems[@i].Price" />
+                <input type="hidden" name="model.EventAreaItems[@i].Description" value="@Model.EventAreaItems[@i].Description" />
+                <input type="hidden" name="model.EventAreaItems[@i].Id" value="@Model.EventAreaItems[@i].Id" />
+                <input type="hidden" name="model.EventAreaItems[@i].EventId" value="@Model.EventAreaItems[@i].EventId" />
+            </p>
+        }
+        <input type="hidden" name="model.Id" value="@Model.Id" />
+        <input type="hidden" name="model.Name" value="@Model.Name" />
+        <input type="hidden" name="model.Description" value="@Model.Description" />
+        <input type="hidden" name="model.LayoutId" value="@Model.LayoutId" />
+        <input type="hidden" name="model.StartDateTime" value="@Model.StartDateTime" />
+        <input type="hidden" name="model.EndDateTime" value="@Model.EndDateTime" />
+        <input type="hidden" name="model.ImageUrl" value="@Model.ImageUrl" />
+    }
+
+    @if (Model == null)
+    {
+        <div>
+            <input id="hider" type="submit" value="@Localizer["CreateEvent"]" />
+        </div>
+    }
+    else
+        @if (Model.EventAreaItems.Count() == 0)
+    {
+        <div>
+            <input id="hider" type="submit" value="@Localizer["CreateEvent"]" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <input type="submit" value="@Localizer["PublishEvent"]" />
+        </div>
+    }
+</form>

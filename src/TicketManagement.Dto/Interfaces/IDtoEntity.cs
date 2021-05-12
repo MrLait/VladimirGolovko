@@ -3,7 +3,7 @@
     /// <summary>
     /// Entity interface with id.
     /// </summary>
-    internal interface IDtoEntity
+    public interface IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.

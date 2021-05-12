@@ -1,0 +1,67 @@
+﻿@model TicketManagement.WebMVC.ViewModels.BasketViewModels.BasketViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{ ViewData["Title"] = "Basket"; }
+@{ int rowNumber = 0; }
+
+@if (Model == null)
+{
+    <div class="esh-event-items row">
+        <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">
+            @Localizer["TheBasketIsEmpty"] <br />
+            @Localizer["GoToPurchaseHistory"] <br />
+        </a>
+    </div>
+}
+else
+{
+    @if (@Model.Items.Count > 0)
+    {
+        <table class="table">
+            @foreach (var item in Model.Items)
+            {
+                rowNumber++;
+                <tr>
+                    <td class="table-number">#@rowNumber.ToString()</td>
+                    <td class="table-image">
+                        <div> <img src="@item.PictureUrl" /> </div>
+                    </td>
+                    <td class="table-event-name">@Localizer["EventName"] @item.EventName</td>
+                    <td class="table-event-area-description">@Localizer["AreaDescription"] @item.EventAreaDescription</td>
+                    <td class="table-Row">@Localizer["RowNumber"] @item.Row</td>
+                    <td class="table-number-of-seat">@Localizer["NumberOfSeat"] @item.NumberOfSeat</td>
+                    <td class="table-event-date-time-start">@Localizer["TheEventStartsAt"] @item.EventDateTimeStart</td>
+                    <td class="table-event-date-time-end">@Localizer["TheEventEndsAt"] @item.EventDateTimeEnd</td>
+                    <td class="table-price">@Localizer["Price"] @item.Price</td>
+                </tr>
+            }
+        </table>
+
+        <div> @Localizer["TotalPrice"]:  @Model.TotalPrice.ToString("N2")</div>
+
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly"></div>
+            <table class="table">
+                <tr>
+                    <td>
+                        <h3>@ViewData["NotEnoughMoney"]</h3>
+                        <input type="hidden" asp-for="@Model" name="model" />
+                        <input type="submit" value="@Localizer["Buy"]" name="model" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    }
+    else
+    {
+        <div class="esh-event-items row">
+            <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">
+                @Localizer["TheBasketIsEmpty"] <br />
+                @Localizer["GoToPurchaseHistory"]<br />
+            </a>
+            <br />
+            <a class="esh-basketstatus" asp-area="" asp-controller="EventHomePage" asp-action="Index"> @Localizer["GoToPurchase"]</a>
+        </div>
+    }
+}
