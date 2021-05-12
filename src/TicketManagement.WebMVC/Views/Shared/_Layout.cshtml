@@ -32,6 +32,11 @@
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-link nav-item text-dark">
+                            @await Html.PartialAsync("_SelectLanguagePartial")
+                        </li>
+                        <li class="nav-link nav-item text-dark">
+                        </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             @if (User.IsInRole("eventManager"))

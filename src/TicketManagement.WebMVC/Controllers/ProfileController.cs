@@ -245,6 +245,7 @@ namespace TicketManagement.WebMVC.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {

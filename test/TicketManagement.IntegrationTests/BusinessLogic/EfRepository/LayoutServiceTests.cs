@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
 
