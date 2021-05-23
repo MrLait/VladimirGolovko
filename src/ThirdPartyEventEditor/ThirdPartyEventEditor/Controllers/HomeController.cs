@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using ClassicMvc.Models;
 using ThirdPartyEventEditor.Models;
 
 namespace ThirdPartyEventEditor.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IThirdPartyEventRepository _thirdPartyEventRepository;
+
+        public HomeController(IThirdPartyEventRepository thirdPartyEventRepository)
+        {
+            _thirdPartyEventRepository = thirdPartyEventRepository;
+        }
+
         public async Task<ActionResult> Index()
         {
-            var circusEvent = new ThirdPartyEvent()
+            var circusEvent = new ThirdPartyEvent
             {
                 Name = "Почти серьезно",
                 EndDate = new DateTime(2021, 06, 30, 21, 00, 00),
@@ -20,7 +28,7 @@ namespace ThirdPartyEventEditor.Controllers
                 Description = @"С 15 мая по 1 августа Белгосцирк и Московский цирк Ю.Никулина на
 Цветном бульваре представляют новую цирковую программу «Почти серьезно», посвященную 100-летию со Дня рождения Юрия Никулина!
 В программе- дрессированные лошади, медведи, козы, бразильское колесо смелости,мото-шар,
-эквилибристы на канате, акробаты на мачте, воздушные гимнасты, жонглеры и клоуны! Спешите!"
+эквилибристы на канате, акробаты на мачте, воздушные гимнасты, жонглеры и клоуны! Спешите!",
             };
             return View(new List<ThirdPartyEvent> { circusEvent });
         }
@@ -34,6 +42,24 @@ namespace ThirdPartyEventEditor.Controllers
                 await fileStream.CopyToAsync(memoryStream);
                 return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
             }
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(ThirdPartyEvent thirdPartyEvent)
+        {
+            if (ModelState.IsValid)
+            {
+                _thirdPartyEventRepository.Create(thirdPartyEvent);
+                return RedirectToAction("Index");
+            }
+
+            return View(thirdPartyEvent);
         }
     }
 }
