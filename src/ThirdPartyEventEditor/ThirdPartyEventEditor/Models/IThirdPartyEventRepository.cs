@@ -12,7 +12,7 @@ namespace ClassicMvc.Models
 
         void Delete(int id);
 
-        IEnumerable<ThirdPartyEvent> GetAll();
+        Task<IEnumerable<ThirdPartyEvent>> GetAllAsync();
 
         ThirdPartyEvent GetById(int id);
     }

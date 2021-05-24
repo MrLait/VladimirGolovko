@@ -1,5 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using ClassicMvc.Models;
 using ThirdPartyEventEditor.Models;
@@ -9,27 +14,17 @@ namespace ThirdPartyEventEditor.Controllers
     public class HomeController : Controller
     {
         private readonly IThirdPartyEventRepository _thirdPartyEventRepository;
+        private readonly IJsonSerializer<ThirdPartyEvent> _jsonSerializer;
 
-        public HomeController(IThirdPartyEventRepository thirdPartyEventRepository)
+        public HomeController(IThirdPartyEventRepository thirdPartyEventRepository, IJsonSerializer<ThirdPartyEvent> jsonSerializer)
         {
             _thirdPartyEventRepository = thirdPartyEventRepository;
+            _jsonSerializer = jsonSerializer;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var thirdPartyEvents = _thirdPartyEventRepository.GetAll().ToList();
-            ////            var circusEvent = new ThirdPartyEvent
-            ////            {
-            ////                Id = 1,
-            ////                Name = "Почти серьезно",
-            ////                EndDate = new DateTime(2021, 06, 30, 21, 00, 00),
-            ////                StartDate = new DateTime(2021, 05, 30, 15, 00, 00),
-            ////                PosterImage = await UploadSampleImage(),
-            ////                Description = @"С 15 мая по 1 августа Белгосцирк и Московский цирк Ю.Никулина на
-            ////Цветном бульваре представляют новую цирковую программу «Почти серьезно», посвященную 100-летию со Дня рождения Юрия Никулина!
-            ////В программе- дрессированные лошади, медведи, козы, бразильское колесо смелости,мото-шар,
-            ////эквилибристы на канате, акробаты на мачте, воздушные гимнасты, жонглеры и клоуны! Спешите!",
-            ////            };
+            var thirdPartyEvents = (await _thirdPartyEventRepository.GetAllAsync()).ToList();
             return View(thirdPartyEvents);
         }
 
@@ -75,6 +70,40 @@ namespace ThirdPartyEventEditor.Controllers
         {
             _thirdPartyEventRepository.Delete(id);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult GetJsonContent()
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
+            string fileName = Path.GetFileName(filePath);
+            byte[] filedata = System.IO.File.ReadAllBytes(filePath);
+            string contentType = MimeMapping.GetMimeMapping(filePath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = fileName,
+                Inline = true,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+
+        [HttpGet]
+        public ActionResult Details(int id)
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
+
+            var thirdPartyEvent = _thirdPartyEventRepository.GetById(id);
+            var thirdPartyEventJsonFormat = _jsonSerializer.SerializeObjectToJsonString(thirdPartyEvent);
+
+            byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
+            string contentType = MimeMapping.GetMimeMapping(filePath);
+
+            Response.AppendHeader("Content-Disposition", contentType);
+            return File(stringData, contentType);
         }
     }
 }
