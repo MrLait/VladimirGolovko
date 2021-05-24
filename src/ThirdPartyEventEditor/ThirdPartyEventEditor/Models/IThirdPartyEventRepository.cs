@@ -6,11 +6,11 @@ namespace ClassicMvc.Models
 {
     public interface IThirdPartyEventRepository
     {
-        void Create(ThirdPartyEvent thirdPartyEvent);
+        Task CreateAsync(ThirdPartyEvent thirdPartyEvent);
 
-        void Update(ThirdPartyEvent thirdPartyEvent);
+        Task UpdateAsync(ThirdPartyEvent thirdPartyEvent);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
         Task<IEnumerable<ThirdPartyEvent>> GetAllAsync();
 

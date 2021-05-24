@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ClassicMvc.Models
@@ -13,10 +15,14 @@ namespace ClassicMvc.Models
             return models;
         }
 
-        public void SerializeObjectsToJson(IEnumerable<T> models, string filePath)
+        public async Task SerializeObjectsToJsonAsync(IEnumerable<T> models, string filePath)
         {
             var jsonData = JsonConvert.SerializeObject(models);
-            System.IO.File.WriteAllText(filePath, jsonData);
+
+            using (var sw = new StreamWriter(filePath))
+            {
+                await sw.WriteAsync(jsonData);
+            }
         }
 
         public string SerializeObjectToJsonString(T model)

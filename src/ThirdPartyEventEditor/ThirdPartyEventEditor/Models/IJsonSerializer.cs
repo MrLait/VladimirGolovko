@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ClassicMvc.Models
 {
@@ -7,7 +8,7 @@ namespace ClassicMvc.Models
     {
         IEnumerable<T> DeserializeObjectsFromJson(string filePath);
 
-        void SerializeObjectsToJson(IEnumerable<T> models, string filePath);
+        Task SerializeObjectsToJsonAsync(IEnumerable<T> models, string filePath);
 
         string SerializeObjectToJsonString(T model);
     }

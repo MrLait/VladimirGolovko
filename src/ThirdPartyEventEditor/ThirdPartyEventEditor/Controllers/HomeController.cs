@@ -35,11 +35,11 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ThirdPartyEvent thirdPartyEvent)
+        public async Task<ActionResult> Create(ThirdPartyEvent thirdPartyEvent)
         {
             if (ModelState.IsValid)
             {
-                _thirdPartyEventRepository.Create(thirdPartyEvent);
+                await _thirdPartyEventRepository.CreateAsync(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -54,11 +54,11 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ThirdPartyEvent thirdPartyEvent)
+        public async Task<ActionResult> Edit(ThirdPartyEvent thirdPartyEvent)
         {
             if (ModelState.IsValid)
             {
-                _thirdPartyEventRepository.Update(thirdPartyEvent);
+                await _thirdPartyEventRepository.UpdateAsync(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -66,9 +66,9 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpGet]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _thirdPartyEventRepository.Delete(id);
+            await _thirdPartyEventRepository.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 

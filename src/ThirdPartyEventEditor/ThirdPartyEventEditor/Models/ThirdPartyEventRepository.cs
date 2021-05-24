@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using ThirdPartyEventEditor.Models;
@@ -11,6 +12,7 @@ namespace ClassicMvc.Models
 {
     public class ThirdPartyEventRepository : IThirdPartyEventRepository
     {
+        private static readonly Mutex _mutexObj = new Mutex();
         private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
         private readonly IJsonSerializer<ThirdPartyEvent> _jsonSerializer;
 
@@ -19,20 +21,24 @@ namespace ClassicMvc.Models
             _jsonSerializer = jsonSerializer;
         }
 
-        public void Create(ThirdPartyEvent thirdPartyEvent)
+        public async Task CreateAsync(ThirdPartyEvent thirdPartyEvent)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             thirdPartyEvent.Id = deserThirdPartyEvent.LastOrDefault()?.Id + 1 ?? 1;
             deserThirdPartyEvent.Add(thirdPartyEvent);
-            _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
+            _mutexObj.WaitOne();
+            await _jsonSerializer.SerializeObjectsToJsonAsync(deserThirdPartyEvent, _filePath);
+            _mutexObj.ReleaseMutex();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == id);
             deserThirdPartyEvent.RemoveAt(thirdPartyEventIndex);
-            _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
+            _mutexObj.WaitOne();
+            await _jsonSerializer.SerializeObjectsToJsonAsync(deserThirdPartyEvent, _filePath);
+            _mutexObj.ReleaseMutex();
         }
 
         public async Task<IEnumerable<ThirdPartyEvent>> GetAllAsync()
@@ -53,12 +59,14 @@ namespace ClassicMvc.Models
             return deserThirdPartyEvent;
         }
 
-        public void Update(ThirdPartyEvent thirdPartyEvent)
+        public async Task UpdateAsync(ThirdPartyEvent thirdPartyEvent)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == thirdPartyEvent.Id);
             deserThirdPartyEvent[thirdPartyEventIndex] = thirdPartyEvent;
-            _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
+            _mutexObj.WaitOne();
+            await _jsonSerializer.SerializeObjectsToJsonAsync(deserThirdPartyEvent, _filePath);
+            _mutexObj.ReleaseMutex();
         }
 
         public ThirdPartyEvent GetById(int id)
