@@ -10,8 +10,10 @@ namespace ClassicMvc.Models
 
         void Update(ThirdPartyEvent thirdPartyEvent);
 
-        Task<bool> Delete(string id);
+        void Delete(int id);
 
-        Task<IEnumerable<ThirdPartyEvent>> GetAll();
+        IEnumerable<ThirdPartyEvent> GetAll();
+
+        ThirdPartyEvent GetById(int id);
     }
 }

@@ -5,6 +5,8 @@ namespace ThirdPartyEventEditor.Models
 {
     public class ThirdPartyEvent
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         [DataType(DataType.Date)]

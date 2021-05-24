@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,34 +12,57 @@ namespace ClassicMvc.Models
 {
     public class ThirdPartyEventRepository : IThirdPartyEventRepository
     {
+        private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
+
         public void Create(ThirdPartyEvent thirdPartyEvent)
         {
-#pragma warning disable S1075 // URIs should not be hardcoded
-            var filePath = @"e:\VS\GitHub\.NET-GSTU-Winter-2021\VladimirGolovko\src\ThirdPartyEventEditor\ThirdPartyEventEditor\App_Data\ThirdPartyEvent.json";
-#pragma warning restore S1075 // URIs should not be hardcoded
+            DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList);
 
-            var jsonData = System.IO.File.ReadAllText(filePath);
-            var employeeList = JsonConvert.DeserializeObject<List<ThirdPartyEvent>>(jsonData) ?? new List<ThirdPartyEvent>();
-
-            // Add any new employees
-            employeeList.Add(thirdPartyEvent);
-            jsonData = JsonConvert.SerializeObject(employeeList);
-            System.IO.File.WriteAllText(filePath, jsonData);
+            thirdPartyEvent.Id = thirdPartyEventList.LastOrDefault()?.Id + 1 ?? 1;
+            thirdPartyEventList.Add(thirdPartyEvent);
+            SerializeObjectsToJson(thirdPartyEventList);
         }
 
-        public Task<bool> Delete(string id)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList);
+            var thirdPartyEventIndex = thirdPartyEventList.FindIndex(x => x.Id == id);
+            thirdPartyEventList.RemoveAt(thirdPartyEventIndex);
+            SerializeObjectsToJson(thirdPartyEventList);
         }
 
-        public Task<IEnumerable<ThirdPartyEvent>> GetAll()
+        public IEnumerable<ThirdPartyEvent> GetAll()
         {
-            throw new NotImplementedException();
+            DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList);
+            return thirdPartyEventList;
         }
 
         public void Update(ThirdPartyEvent thirdPartyEvent)
         {
-            throw new NotImplementedException();
+            DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList);
+            var thirdPartyEventIndex = thirdPartyEventList.FindIndex(x => x.Id == thirdPartyEvent.Id);
+            thirdPartyEventList[thirdPartyEventIndex] = thirdPartyEvent;
+            SerializeObjectsToJson(thirdPartyEventList);
+        }
+
+        public ThirdPartyEvent GetById(int id)
+        {
+            DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList);
+            var thirdPartyEventIndex = thirdPartyEventList.FindIndex(x => x.Id == id);
+            var thirdPartyEvent = thirdPartyEventList.ElementAt(thirdPartyEventIndex);
+            return thirdPartyEvent;
+        }
+
+        private void DeserializeObjectsFromJson(out List<ThirdPartyEvent> thirdPartyEventList)
+        {
+            var jsonData = System.IO.File.ReadAllText(_filePath);
+            thirdPartyEventList = JsonConvert.DeserializeObject<List<ThirdPartyEvent>>(jsonData) ?? new List<ThirdPartyEvent>();
+        }
+
+        private void SerializeObjectsToJson(IEnumerable<ThirdPartyEvent> thirdPartyEventList)
+        {
+            var jsonData = JsonConvert.SerializeObject(thirdPartyEventList);
+            System.IO.File.WriteAllText(_filePath, jsonData);
         }
     }
 }
