@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ClassicMvc.Infrastructure.Filters;
+using ClassicMvc.Infrastructure.Loggers;
 using ClassicMvc.Models;
 using ThirdPartyEventEditor.Models;
 
@@ -22,6 +24,7 @@ namespace ThirdPartyEventEditor.Controllers
             _jsonSerializer = jsonSerializer;
         }
 
+        [ActionExecutionTime]
         public async Task<ActionResult> Index()
         {
             var thirdPartyEvents = (await _thirdPartyEventRepository.GetAllAsync()).ToList();

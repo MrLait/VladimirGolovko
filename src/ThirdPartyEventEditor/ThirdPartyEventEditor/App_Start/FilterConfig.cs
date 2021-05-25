@@ -1,12 +1,18 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using ClassicMvc.Infrastructure.Filters;
 
 namespace ThirdPartyEventEditor
 {
     public class FilterConfig
     {
-        ////public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        ////{
-        ////}
+        protected FilterConfig()
+        {
+        }
+
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new ControllerExceptionFilter());
+            filters.Add(new ActionExecutionTimeAttribute());
+        }
     }
 }
