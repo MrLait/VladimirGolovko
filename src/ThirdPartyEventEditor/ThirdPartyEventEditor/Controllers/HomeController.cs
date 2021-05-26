@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ClassicMvc.Infrastructure.Filters;
-using ClassicMvc.Infrastructure.Loggers;
+using ClassicMvc.Infrastructure.Utils;
 using ClassicMvc.Models;
 using ThirdPartyEventEditor.Models;
 
@@ -24,10 +24,9 @@ namespace ThirdPartyEventEditor.Controllers
             _jsonSerializer = jsonSerializer;
         }
 
-        [ActionExecutionTime]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var thirdPartyEvents = (await _thirdPartyEventRepository.GetAllAsync()).ToList();
+            var thirdPartyEvents = _thirdPartyEventRepository.GetAllAsync().ToList();
             return View(thirdPartyEvents);
         }
 
@@ -37,12 +36,18 @@ namespace ThirdPartyEventEditor.Controllers
             return View();
         }
 
+        [ActionExecutionTime]
         [HttpPost]
-        public async Task<ActionResult> Create(ThirdPartyEvent thirdPartyEvent)
+        public ActionResult Create(ThirdPartyEvent thirdPartyEvent, HttpPostedFileBase file)
         {
+            if (file != null)
+            {
+                thirdPartyEvent.PosterImage = FileUtil.ConvertImageToBase64(file);
+            }
+
             if (ModelState.IsValid)
             {
-                await _thirdPartyEventRepository.CreateAsync(thirdPartyEvent);
+                _thirdPartyEventRepository.CreateAsync(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -57,11 +62,11 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(ThirdPartyEvent thirdPartyEvent)
+        public ActionResult Edit(ThirdPartyEvent thirdPartyEvent)
         {
             if (ModelState.IsValid)
             {
-                await _thirdPartyEventRepository.UpdateAsync(thirdPartyEvent);
+                _thirdPartyEventRepository.UpdateAsync(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -69,14 +74,24 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            await _thirdPartyEventRepository.DeleteAsync(id);
+            _thirdPartyEventRepository.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public ActionResult GetJsonContent()
+        public ActionResult ViewEventsJsonDetails()
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
+            byte[] filedata = System.IO.File.ReadAllBytes(filePath);
+            string contentType = MimeMapping.GetMimeMapping(filePath);
+
+            return File(filedata, contentType);
+        }
+
+        [HttpGet]
+        public ActionResult DownloadEventsJsonDetails()
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
             string fileName = Path.GetFileName(filePath);
@@ -86,7 +101,7 @@ namespace ThirdPartyEventEditor.Controllers
             var cd = new System.Net.Mime.ContentDisposition
             {
                 FileName = fileName,
-                Inline = true,
+                Inline = false,
             };
 
             Response.AppendHeader("Content-Disposition", cd.ToString());
@@ -95,7 +110,19 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int id)
+        public ActionResult ViewEventJsonDetails(int id)
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
+            var thirdPartyEvent = _thirdPartyEventRepository.GetById(id);
+            var thirdPartyEventJsonFormat = _jsonSerializer.SerializeObjectToJsonString(thirdPartyEvent);
+            byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
+            string contentType = MimeMapping.GetMimeMapping(filePath);
+
+            return File(stringData, contentType);
+        }
+
+        [HttpGet]
+        public ActionResult DownloadEventJsonDetails(int id)
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
 
@@ -105,7 +132,13 @@ namespace ThirdPartyEventEditor.Controllers
             byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
             string contentType = MimeMapping.GetMimeMapping(filePath);
 
-            Response.AppendHeader("Content-Disposition", contentType);
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
             return File(stringData, contentType);
         }
     }

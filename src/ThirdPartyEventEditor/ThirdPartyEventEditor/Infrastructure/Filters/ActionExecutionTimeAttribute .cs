@@ -6,7 +6,7 @@ namespace ClassicMvc.Infrastructure.Filters
 {
     public class ActionExecutionTimeAttribute : ActionFilterAttribute
     {
-        private static ILogger _logger = new FileLogger();
+        private static readonly ILogger _logger = new FileLogger();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

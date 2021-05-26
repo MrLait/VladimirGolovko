@@ -4,11 +4,14 @@
     ViewBag.Title = "View";
 }
 
-<h2>Events</h2>
+<p>
+    <h2>Events</h2>
+    @Html.ActionLink("Details", "ViewEventsJsonDetails");
+    @Html.ActionLink("Download", "DownloadEventsJsonDetails");
+</p>
 
 <p>
     @Html.ActionLink("Create New", "Create")
-    @Html.ActionLink("Open json details", "GetJsonContent");
 </p>
 <table class="table">
     <tr>
@@ -50,8 +53,9 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Details", "ViewEventJsonDetails", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Download", "DownloadEventJsonDetails", new { id = item.Id })
             </td>
         </tr>
     }

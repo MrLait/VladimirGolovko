@@ -1,0 +1,36 @@
+26.05.2021 12:12:28 - ExceptionMessage: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+    Controller name: Home
+    ActionName: Index
+    Error message: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+26.05.2021 12:13:22 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 25978 ms
+26.05.2021 12:13:22 - ExceptionMessage: Для не синхронизированного блока кода вызван метод синхронизации объектов.
+    Controller name: Home
+    ActionName: Create
+    Error message: Для не синхронизированного блока кода вызван метод синхронизации объектов.
+26.05.2021 12:27:19 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 24227 ms
+26.05.2021 12:27:21 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 26347 ms
+26.05.2021 12:27:21 - ExceptionMessage: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+    Controller name: Home
+    ActionName: Index
+    Error message: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+26.05.2021 12:56:27 - ExceptionMessage: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+    Controller name: Home
+    ActionName: Index
+    Error message: Слишком длинный путь или имя файла. Полное имя файла должно содержать меньше 260 знаков, а имя каталога - меньше 248 знаков.
+26.05.2021 13:20:43 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 5 ms
+26.05.2021 13:20:43 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 10 ms

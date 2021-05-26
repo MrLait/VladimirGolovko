@@ -6,7 +6,7 @@ namespace ClassicMvc.Infrastructure.Filters
 {
     public class ControllerExceptionFilter : IExceptionFilter
     {
-        private static ILogger _logger = new FileLogger();
+        private static readonly ILogger _logger = new FileLogger();
 
         public void OnException(ExceptionContext filterContext)
         {

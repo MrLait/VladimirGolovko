@@ -117,6 +117,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Utils\FileUtil.cs" />
     <Compile Include="Infrastructure\Filters\ActionExecutionTimeAttribute .cs" />
     <Compile Include="Infrastructure\Filters\ControllerExceptionFilter.cs" />
     <Compile Include="Infrastructure\Loggers\ILogger.cs" />
@@ -170,8 +171,6 @@
     <Content Include="App_Data\ThirdPartyEvent.json" />
     <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
-    <Content Include="Views\Home\GetJsonContent.cshtml" />
-    <Content Include="Views\Home\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -226,6 +225,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties app_3data_4thirdpartyevent_1json__JsonSchema="https://beaujs.com/schema.json" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

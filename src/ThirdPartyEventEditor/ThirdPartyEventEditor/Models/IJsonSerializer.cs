@@ -8,7 +8,7 @@ namespace ClassicMvc.Models
     {
         IEnumerable<T> DeserializeObjectsFromJson(string filePath);
 
-        Task SerializeObjectsToJsonAsync(IEnumerable<T> models, string filePath);
+        void SerializeObjectsToJson(IEnumerable<T> models, string filePath);
 
         string SerializeObjectToJsonString(T model);
     }
