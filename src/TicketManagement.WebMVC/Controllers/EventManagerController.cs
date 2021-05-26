@@ -8,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.Dto;
-using TicketManagement.WebMVC.ViewModels;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers

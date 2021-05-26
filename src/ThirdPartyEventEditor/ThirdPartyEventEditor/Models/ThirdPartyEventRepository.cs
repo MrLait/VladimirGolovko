@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using ClassicMvc.Infrastructure.Utils;
 using ThirdPartyEventEditor.Models;
 
-namespace ClassicMvc.Models
+namespace ClassicMvc.Services
 {
     public class ThirdPartyEventRepository : IThirdPartyEventRepository
     {
         private static readonly Mutex _mutexObj = new Mutex();
         private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
-        private readonly IJsonSerializer<ThirdPartyEvent> _jsonSerializer;
+        private readonly IJsonSerializerService<ThirdPartyEvent> _jsonSerializer;
 
-        public ThirdPartyEventRepository(IJsonSerializer<ThirdPartyEvent> jsonSerializer)
+        public ThirdPartyEventRepository(IJsonSerializerService<ThirdPartyEvent> jsonSerializer)
         {
             _jsonSerializer = jsonSerializer;
         }

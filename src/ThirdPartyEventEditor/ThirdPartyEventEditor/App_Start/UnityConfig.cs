@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using ClassicMvc.Infrastructure.Loggers;
-using ClassicMvc.Models;
+using ClassicMvc.Services;
 using ThirdPartyEventEditor.Models;
 using Unity;
 using Unity.Mvc5;
@@ -13,7 +13,7 @@ namespace ClassicMvc.App_Start
         {
             var container = new UnityContainer();
             container.RegisterType<IThirdPartyEventRepository, ThirdPartyEventRepository>();
-            container.RegisterType<IJsonSerializer<ThirdPartyEvent>, JsonSerializer<ThirdPartyEvent>>();
+            container.RegisterType<IJsonSerializerService<ThirdPartyEvent>, JsonSerializerService<ThirdPartyEvent>>();
             container.RegisterType<ILogger, FileLogger>();
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

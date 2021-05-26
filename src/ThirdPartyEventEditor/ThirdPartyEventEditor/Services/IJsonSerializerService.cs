@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace ClassicMvc.Models
+namespace ClassicMvc.Services
 {
-    public interface IJsonSerializer<T>
+    public interface IJsonSerializerService<T>
         where T : class
     {
         IEnumerable<T> DeserializeObjectsFromJson(string filePath);

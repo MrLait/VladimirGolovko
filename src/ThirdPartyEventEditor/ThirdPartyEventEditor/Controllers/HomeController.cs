@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ClassicMvc.Infrastructure.Filters;
 using ClassicMvc.Infrastructure.Utils;
-using ClassicMvc.Models;
+using ClassicMvc.Services;
 using ThirdPartyEventEditor.Models;
 
 namespace ThirdPartyEventEditor.Controllers
@@ -16,9 +16,9 @@ namespace ThirdPartyEventEditor.Controllers
     public class HomeController : Controller
     {
         private readonly IThirdPartyEventRepository _thirdPartyEventRepository;
-        private readonly IJsonSerializer<ThirdPartyEvent> _jsonSerializer;
+        private readonly IJsonSerializerService<ThirdPartyEvent> _jsonSerializer;
 
-        public HomeController(IThirdPartyEventRepository thirdPartyEventRepository, IJsonSerializer<ThirdPartyEvent> jsonSerializer)
+        public HomeController(IThirdPartyEventRepository thirdPartyEventRepository, IJsonSerializerService<ThirdPartyEvent> jsonSerializer)
         {
             _thirdPartyEventRepository = thirdPartyEventRepository;
             _jsonSerializer = jsonSerializer;

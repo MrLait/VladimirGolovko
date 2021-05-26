@@ -2,14 +2,14 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace ClassicMvc.Models
+namespace ClassicMvc.Services
 {
-    public class JsonSerializer<T> : IJsonSerializer<T>
+    public class JsonSerializerService<T> : IJsonSerializerService<T>
         where T : class
     {
         public IEnumerable<T> DeserializeObjectsFromJson(string filePath)
         {
-            var jsonData = System.IO.File.ReadAllText(filePath);
+            var jsonData = File.ReadAllText(filePath);
             var models = JsonConvert.DeserializeObject<List<T>>(jsonData) ?? new List<T>();
             return models;
         }

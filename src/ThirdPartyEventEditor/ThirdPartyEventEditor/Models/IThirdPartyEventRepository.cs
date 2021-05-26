@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ThirdPartyEventEditor.Models;
 
-namespace ClassicMvc.Models
+namespace ClassicMvc.Services
 {
     public interface IThirdPartyEventRepository
     {
