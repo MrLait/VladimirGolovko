@@ -34,3 +34,87 @@
     Controller name: Home
     ActionName: Create
     Execution time: 10 ms
+26.05.2021 13:26:24 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 13:26:24 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 14 ms
+26.05.2021 13:31:47 - ExceptionMessage: e:\VS\GitHub\.NET-GSTU-Winter-2021\VladimirGolovko\src\ThirdPartyEventEditor\ThirdPartyEventEditor\Views\Home\Create.cshtml(51): error CS0103: The name 'item' does not exist in the current context
+    Controller name: Home
+    ActionName: Create
+    Error message: e:\VS\GitHub\.NET-GSTU-Winter-2021\VladimirGolovko\src\ThirdPartyEventEditor\ThirdPartyEventEditor\Views\Home\Create.cshtml(51): error CS0103: The name 'item' does not exist in the current context
+26.05.2021 13:58:13 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 17 ms
+26.05.2021 13:58:13 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 23 ms
+26.05.2021 13:58:23 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 0 ms
+26.05.2021 13:58:23 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 5 ms
+26.05.2021 14:29:44 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 14:29:44 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 18 ms
+26.05.2021 14:30:17 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 5093 ms
+26.05.2021 14:30:17 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 5095 ms
+26.05.2021 14:30:27 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 4999 ms
+26.05.2021 14:30:27 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 5003 ms
+26.05.2021 14:36:37 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 14:36:37 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 17 ms
+26.05.2021 14:39:17 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 14:39:17 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 18 ms
+26.05.2021 14:41:00 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 14:41:00 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 18 ms
+26.05.2021 14:47:55 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+26.05.2021 14:47:55 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 16 ms
