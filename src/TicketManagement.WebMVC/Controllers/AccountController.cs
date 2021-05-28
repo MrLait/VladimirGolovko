@@ -1,9 +1,11 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
@@ -15,14 +17,16 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
+        private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper)
+            IMapper mapper, IStringLocalizer<AccountController> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _localizer = localizer;
         }
 
         [HttpGet]
@@ -40,7 +44,7 @@ namespace TicketManagement.WebMVC.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "user");
+                    await _userManager.AddToRoleAsync(user, UserRoles.User);
                     await _signInManager.SignInAsync(user, false);
                     await _userManager.AddClaimAsync(user, CreateClaim("TimeZoneOffset", user.TimeZoneOffset));
                     await _userManager.AddClaimAsync(user, CreateClaim("Language", user.Language));
@@ -49,6 +53,24 @@ namespace TicketManagement.WebMVC.Controllers
 
                 foreach (var error in result.Errors)
                 {
+                    switch (error.Code)
+                    {
+                        case "PasswordTooShort":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordTooShort"]);
+                            continue;
+                        case "PasswordRequiresNonAlphanumeric":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresNonAlphanumeric"]);
+                            continue;
+                        case "PasswordRequiresDigit":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresDigit"]);
+                            continue;
+                        case "PasswordRequiresUpper":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresUpper"]);
+                            continue;
+                        default:
+                            break;
+                    }
+
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
@@ -80,7 +102,7 @@ namespace TicketManagement.WebMVC.Controllers
                     return RedirectToAction("Index", "EventHomePage");
                 }
 
-                ModelState.AddModelError("", "Incorrect username and(or) password");
+                ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
             }
 
             return View(model);

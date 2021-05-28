@@ -129,6 +129,9 @@
   <data name="FirstName" xml:space="preserve">
     <value>Імя</value>
   </data>
+  <data name="Invalid address" xml:space="preserve">
+    <value>Некарэктны адрас</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
   </data>

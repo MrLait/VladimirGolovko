@@ -8,11 +8,12 @@ using Microsoft.Extensions.Localization;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.Dto;
+using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    [Authorize(Roles = "eventManager")]
+    [Authorize(Roles = UserRoles.EventManager)]
     public class EventManagerController : Controller
     {
         private readonly IEventService _eventService;

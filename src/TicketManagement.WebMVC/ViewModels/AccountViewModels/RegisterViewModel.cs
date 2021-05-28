@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TicketManagement.WebMVC.Atributtes;
 
 namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 {
@@ -19,17 +20,16 @@ namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
         public string TimeZoneOffset { get; set; }
 
         [Required(ErrorMessage = "EmailRequired")]
+        [EmailAddress(ErrorMessage = "Invalid address")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "PasswordRequired")]
-        [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "PasswordConfirmRequired")]
         [Compare("Password", ErrorMessage = "PasswordMismatch")]
-        [DataType(DataType.Password)]
         [Display(Name = "ConfirmPassword")]
         public string PasswordConfirm { get; set; }
     }

@@ -117,40 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm the password</value>
+  <data name="Incorrect username and(or) password" xml:space="preserve">
+    <value>Incorrect username and(or) password</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Passwords must have at least one digit ('0'-'9')</value>
   </data>
-  <data name="EmailRequired" xml:space="preserve">
-    <value>Enter your email</value>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Passwords must have at least one non alphanumeric character</value>
   </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>FirstName</value>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Passwords must have at least one uppercase ('A'-'Z')</value>
   </data>
-  <data name="Invalid address" xml:space="preserve">
-    <value>Invalid address</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="PasswordConfirmRequired" xml:space="preserve">
-    <value>Password confirmation required</value>
-  </data>
-  <data name="PasswordMismatch" xml:space="preserve">
-    <value>Password mismatch</value>
-  </data>
-  <data name="PasswordRequired" xml:space="preserve">
-    <value>Password required</value>
-  </data>
-  <data name="Surname" xml:space="preserve">
-    <value>Surname</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Username</value>
-  </data>
-  <data name="UserNameRequired" xml:space="preserve">
-    <value>Username required</value>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>Passwords must be at least 6 characters</value>
   </data>
 </root>

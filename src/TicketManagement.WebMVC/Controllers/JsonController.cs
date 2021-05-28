@@ -19,7 +19,7 @@ using EventViewModel = TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    [Authorize(Roles = "eventManager")]
+    [Authorize(Roles = UserRoles.EventManager)]
     public class JsonController : Controller
     {
         private readonly IJsonSerializerService<ThirdPartyEvent> _jsonSerializerService;
