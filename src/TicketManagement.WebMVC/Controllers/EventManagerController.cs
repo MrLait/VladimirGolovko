@@ -63,8 +63,8 @@ namespace TicketManagement.WebMVC.Controllers
                         return View(model);
                     }
 
-                    var testMap = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
-                    await _eventAreaService.UpdatePriceAsync(testMap);
+                    var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
+                    await _eventAreaService.UpdatePriceAsync(eventAreas);
                     return RedirectToAction("Index", "EventManager");
                 }
                 else
@@ -82,6 +82,11 @@ namespace TicketManagement.WebMVC.Controllers
                 if (ve.Message == ExceptionMessages.PriceIsNegative)
                 {
                     ViewData["PriceRequired"] = _localizer["PriceRequired"];
+                }
+
+                if (ve.Message == ExceptionMessages.CantBeCreatedInThePast)
+                {
+                    ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past"]);
                 }
 
                 return View(model);

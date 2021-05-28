@@ -16,7 +16,17 @@ namespace TicketManagement.WebMVC.Services
 
         public IEnumerable<T> DeserializeObjectsFromString(string data)
         {
-            var models = JsonConvert.DeserializeObject<List<T>>(data) ?? new List<T>();
+            var models = new List<T>();
+            try
+            {
+                models = JsonConvert.DeserializeObject<List<T>>(data) ?? new List<T>();
+            }
+            catch (JsonSerializationException)
+            {
+                var model = JsonConvert.DeserializeObject<T>(data);
+                models.Add(model);
+            }
+
             return models;
         }
 

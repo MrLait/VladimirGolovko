@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Models;
-using TicketManagement.WebMVC.ViewModels;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 using TicketManagement.WebMVC.ViewModels.ProfileViewModels;

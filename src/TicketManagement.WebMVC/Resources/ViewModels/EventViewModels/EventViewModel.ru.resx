@@ -150,4 +150,7 @@
   <data name="StartTimeRequired" xml:space="preserve">
     <value>Требуется указать время начала мероприятия</value>
   </data>
+  <data name="The event can't be created in the past" xml:space="preserve">
+    <value>The event can't be created in the past</value>
+  </data>
 </root>

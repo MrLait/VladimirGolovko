@@ -124,9 +124,9 @@
     <Compile Include="Infrastructure\Loggers\ILogger.cs" />
     <Compile Include="Infrastructure\Loggers\FileLogger.cs" />
     <Compile Include="Infrastructure\Loggers\StreamFileIO.cs" />
-    <Compile Include="Models\IJsonSerializer.cs" />
+    <Compile Include="Services\IJsonSerializerService.cs" />
     <Compile Include="Models\IThirdPartyEventRepository.cs" />
-    <Compile Include="Models\JsonSerializer.cs" />
+    <Compile Include="Services\JsonSerializerService.cs" />
     <Compile Include="Models\ThirdPartyEvent.cs" />
     <Compile Include="Models\ThirdPartyEventRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,9 +170,7 @@
     <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
