@@ -57,19 +57,19 @@ namespace TicketManagement.BusinessLogic.Services
             bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
-                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
+                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
             }
 
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
             if (isEventContainSameVenueInSameTime)
             {
-                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
+                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime);
             }
 
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
@@ -155,13 +155,13 @@ namespace TicketManagement.BusinessLogic.Services
             var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
-                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
+                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
             }
 
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
@@ -202,7 +202,7 @@ namespace TicketManagement.BusinessLogic.Services
             var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
-                throw new ValidationException(ExceptionMessages.EventDateTimeValidation, dto.StartDateTime);
+                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
             }
 
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
@@ -214,7 +214,7 @@ namespace TicketManagement.BusinessLogic.Services
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
@@ -371,7 +371,8 @@ namespace TicketManagement.BusinessLogic.Services
                 {
                     var isdtoStartTimeBetwenItem = item.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= item.EndDateTime && item.LayoutId == dto.LayoutId;
                     var isEndDtoTimeBetwenItem = dto.StartDateTime <= item.StartDateTime && item.StartDateTime <= dto.EndDateTime && item.LayoutId == dto.LayoutId;
-                    isEventContainSameVenueInSameTime = isdtoStartTimeBetwenItem || isEndDtoTimeBetwenItem;
+                    var isEndDtoOrStartDtoEqualItem = dto.StartDateTime == item.StartDateTime | item.StartDateTime == dto.EndDateTime && item.LayoutId == dto.LayoutId;
+                    isEventContainSameVenueInSameTime = isdtoStartTimeBetwenItem | isEndDtoTimeBetwenItem | isEndDtoOrStartDtoEqualItem;
                 }
             }
 

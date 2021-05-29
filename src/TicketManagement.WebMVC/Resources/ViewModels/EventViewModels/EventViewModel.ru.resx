@@ -124,7 +124,7 @@
     <value>Требуется описание</value>
   </data>
   <data name="EndDateTime" xml:space="preserve">
-    <value>Время начала мероприятия</value>
+    <value>Время завершения мероприятия</value>
   </data>
   <data name="EndTimeRequired" xml:space="preserve">
     <value>Требуется указать время конца мероприятия</value>
@@ -149,5 +149,8 @@
   </data>
   <data name="StartTimeRequired" xml:space="preserve">
     <value>Требуется указать время начала мероприятия</value>
+  </data>
+  <data name="The event can't be created in the past" xml:space="preserve">
+    <value>The event can't be created in the past</value>
   </data>
 </root>

@@ -14,6 +14,7 @@ using TicketManagement.DataAccess.Ado;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
+using TicketManagement.WebMVC.Services.FileServices;
 
 namespace TicketManagement.WebMVC
 {
@@ -36,7 +37,9 @@ namespace TicketManagement.WebMVC
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
             services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
+            services.AddScoped<IJsonSerializerService<ThirdPartyEvent>, JsonSerializerService<ThirdPartyEvent>>();
             services.AddScoped<IDbContext, EfDbContext>();
+            services.AddScoped<IFileService, FileService>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.Configure<RequestLocalizationOptions>(options =>
             {

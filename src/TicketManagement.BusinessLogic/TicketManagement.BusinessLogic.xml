@@ -34,12 +34,6 @@
             {0} - DateTime.
             </summary>
         </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.EventForTheSameVenueInTheSameDateTime">
-            <summary>
-            {0} - Description.
-            {1} - DateTime.
-            </summary>
-        </member>
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.ThereAreNoSeatsInTheEvent">
             <summary>
             {0} - Description.
@@ -59,12 +53,6 @@
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.VenueExist">
             <summary>
             {0} - Description.
-            </summary>
-        </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StartDataTimeBeforeEndDataTime">
-            <summary>
-            {0} - Start data time.
-            {0} - End data time.
             </summary>
         </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.#ctor">

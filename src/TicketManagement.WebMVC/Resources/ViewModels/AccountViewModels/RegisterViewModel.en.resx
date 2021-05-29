@@ -129,6 +129,9 @@
   <data name="FirstName" xml:space="preserve">
     <value>FirstName</value>
   </data>
+  <data name="Invalid address" xml:space="preserve">
+    <value>Invalid address</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>

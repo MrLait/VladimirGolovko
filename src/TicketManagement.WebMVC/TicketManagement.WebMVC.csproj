@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <Content Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <EmbeddedResource Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <None Remove="Resources\ViewModels\JsonEventViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\Pics\FootballPicOne.PNG" />
   </ItemGroup>
 
@@ -24,6 +31,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

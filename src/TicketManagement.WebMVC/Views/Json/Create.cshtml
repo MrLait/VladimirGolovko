@@ -1,0 +1,82 @@
+﻿@model TicketManagement.WebMVC.ViewModels.JsonEventViewModels.IndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{ ViewData["Title"] = "Create"; }
+
+<form asp-controller="Json" asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-horizontal">
+        @if (@Model != null && @Model.EventItems.ToList().Count > 0)
+        {
+            @for (int i = 0; i < Model.EventItems.Count(); i++)
+            {
+                <input type="hidden" asp-for="@Model.EventItems[@i].Id " value="@Model.EventItems[@i].Id" />
+
+                <div class="form-group">
+                    <label asp-for="@Model.EventItems[@i].Name" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="@Model.EventItems[@i].Name" class="form-control" />
+                        <span asp-validation-for="@Model.EventItems[@i].Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.EventItems[@i].Description" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="@Model.EventItems[@i].Description" />
+                        <span asp-validation-for="@Model.EventItems[@i].Description"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.EventItems[@i].StartDateTime" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="@Model.EventItems[@i].StartDateTime" />
+                        <span asp-validation-for="@Model.EventItems[@i].StartDateTime"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.EventItems[@i].EndDateTime" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="@Model.EventItems[@i].EndDateTime" />
+                        <span asp-validation-for="@Model.EventItems[@i].EndDateTime"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.EventItems[@i].LayoutId" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="@Model.EventItems[@i].LayoutId" />
+                        <span asp-validation-for="@Model.EventItems[@i].LayoutId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model.EventItems[@i].ImageUrl" />
+                </div>
+
+                @if (@Model.EventItems[@i].EventAreaItems.Count() > 0)
+                {
+                    <div class="form-group">
+                        @for (int e = 0; e < @Model.EventItems[@i].EventAreaItems.Count(); e++)
+                        {
+                            <label asp-for="@Model.EventItems[@i].EventAreaItems[@e].Price" class="control-label col-md-2"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.EventItems[@i].EventAreaItems[@e].Price" />
+                                <span asp-validation-for="@Model.EventItems[@i].EventAreaItems[@e].Price"></span>
+                            </div>
+
+                            <input type="hidden" asp-for="@Model.EventItems[@i].EventAreaItems[@e].Price " value="@Model.EventItems[@i].EventAreaItems[@e].Price" />
+                            <input type="hidden" asp-for="@Model.EventItems[@i].EventAreaItems[@e].Description " value="@Model.EventItems[@i].EventAreaItems[@e].Description" />
+                            <input type="hidden" asp-for="@Model.EventItems[@i].EventAreaItems[@e].Id " value="@Model.EventItems[@i].EventAreaItems[@e].Id" />
+                            <input type="hidden" asp-for="@Model.EventItems[@i].EventAreaItems[@e].EventId " value="@Model.EventItems[@i].EventAreaItems[@e].EventId" />
+
+                        }
+                    </div>
+                }
+            }
+        }
+    </div>
+    @if (Model != null)
+    {
+        <div>
+            <input id="hider" type="submit" value="@Localizer["Create event"]" />
+        </div>
+    }
+</form>
