@@ -7,6 +7,7 @@ namespace ThirdPartyEventEditor.Models
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Name required")]
         public string Name { get; set; }
 
         [DataType(DataType.Date)]
@@ -15,8 +16,10 @@ namespace ThirdPartyEventEditor.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
+        [Required(ErrorMessage = "Description required")]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = "Image required")]
         public string PosterImage { get; set; }
     }
 }

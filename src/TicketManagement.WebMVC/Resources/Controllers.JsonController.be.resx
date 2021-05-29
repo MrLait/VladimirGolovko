@@ -117,40 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
+  <data name="Choose a file" xml:space="preserve">
+    <value>Выберыце файл</value>
   </data>
-  <data name="DescriptionRequired" xml:space="preserve">
-    <value>Description required</value>
+  <data name="Event for the Venue with the dateTime already exist" xml:space="preserve">
+    <value>Падзея для гэтага месца ў гэты ж час ужо існуе</value>
   </data>
-  <data name="EndDateTime" xml:space="preserve">
-    <value>Start time of the event</value>
-  </data>
-  <data name="EndTimeRequired" xml:space="preserve">
-    <value>It is required to indicate the end time of the event</value>
-  </data>
-  <data name="ImageUrl" xml:space="preserve">
-    <value>The path to the picture for the event</value>
-  </data>
-  <data name="LayoutId" xml:space="preserve">
-    <value>Layout ID</value>
-  </data>
-  <data name="LayoutRequired" xml:space="preserve">
-    <value>Layout ID required</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Event name</value>
-  </data>
-  <data name="NameRequired" xml:space="preserve">
-    <value>Event name required</value>
-  </data>
-  <data name="StartDateTime" xml:space="preserve">
-    <value>Start time of the event</value>
-  </data>
-  <data name="StartTimeRequired" xml:space="preserve">
-    <value>It is required to indicate the start time of the event</value>
+  <data name="The beginning of the event cannot be after the end of the event" xml:space="preserve">
+    <value>Начало событие не может быть посзе завершения события</value>
   </data>
   <data name="The event can't be created in the past" xml:space="preserve">
-    <value>The event can't be created in the past</value>
+    <value>Падзея не можа быць створана ў мінулым</value>
   </data>
 </root>

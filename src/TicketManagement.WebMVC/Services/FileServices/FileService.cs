@@ -30,7 +30,7 @@ namespace TicketManagement.WebMVC.Services.FileServices
         public string SaveImageToFolder(string base64String)
         {
             var image = ConvertBase64ToImage(base64String);
-            var imageName = string.Format($"{_picsPath}{image.FrameDimensionsList[0]}.{ImageFormat.Png}");
+            var imageName = string.Format($"{_picsPath}{Guid.NewGuid()}.{ImageFormat.Png}");
             image.Save(string.Format($"{_wwwrootPath}{imageName}"));
             return imageName;
         }

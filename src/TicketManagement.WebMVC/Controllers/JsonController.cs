@@ -49,6 +49,12 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost]
         public IActionResult ImportJson(IFormFile file)
         {
+            if (file == null)
+            {
+                ModelState.AddModelError(string.Empty, _localizer["Choose a file"]);
+                return View();
+            }
+
             var fileToString = _fileService.ConvertFileToString(file);
             var thirdPartyEvents = _jsonSerializerService.DeserializeObjectsFromString(fileToString);
             var eventsDto = new List<EventViewModel.EventViewModel>();
@@ -134,6 +140,11 @@ namespace TicketManagement.WebMVC.Controllers
             if (ve.Message == ExceptionMessages.EventForTheSameVenueInTheSameDateTime)
             {
                 ModelState.AddModelError(string.Empty, _localizer["Event for the Venue with the dateTime already exist"]);
+            }
+
+            if (ve.Message == ExceptionMessages.StartDataTimeBeforeEndDataTime)
+            {
+                ModelState.AddModelError(string.Empty, _localizer["The beginning of the event cannot be after the end of the event"]);
             }
         }
     }

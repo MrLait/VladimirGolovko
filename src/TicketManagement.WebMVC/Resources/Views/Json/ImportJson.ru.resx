@@ -117,40 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value>Описание</value>
+  <data name="Choose json file" xml:space="preserve">
+    <value>Выберите JSON файл</value>
   </data>
-  <data name="DescriptionRequired" xml:space="preserve">
-    <value>Требуется описание</value>
+  <data name="Create event" xml:space="preserve">
+    <value>Создать событие</value>
   </data>
-  <data name="EndDateTime" xml:space="preserve">
-    <value>Время завершения мероприятия</value>
+  <data name="Upload" xml:space="preserve">
+    <value>Загрузить</value>
   </data>
-  <data name="EndTimeRequired" xml:space="preserve">
-    <value>Требуется указать время конца мероприятия</value>
-  </data>
-  <data name="ImageUrl" xml:space="preserve">
-    <value>Путь к картинке для события</value>
-  </data>
-  <data name="LayoutId" xml:space="preserve">
-    <value>Идентификатор макета</value>
-  </data>
-  <data name="LayoutRequired" xml:space="preserve">
-    <value>Требуется идентификатор макета</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Имя мероприятия</value>
-  </data>
-  <data name="NameRequired" xml:space="preserve">
-    <value>Требуется ввести имя мероприятия</value>
-  </data>
-  <data name="StartDateTime" xml:space="preserve">
-    <value>Время начала мероприятия</value>
-  </data>
-  <data name="StartTimeRequired" xml:space="preserve">
-    <value>Требуется указать время начала мероприятия</value>
-  </data>
-  <data name="The event can't be created in the past" xml:space="preserve">
-    <value>The event can't be created in the past</value>
+  <data name="Upload a JSON file:" xml:space="preserve">
+    <value>Загрузить JSON файл:</value>
   </data>
 </root>

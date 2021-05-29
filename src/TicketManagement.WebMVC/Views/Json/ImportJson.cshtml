@@ -5,11 +5,11 @@
 
 @if (@Model == null)
 {
-    <form asp-controller="Json" asp-action="ImportJson" class="form-horizontal" enctype="multipart/form-data">
-        <label>Upload a profile image:</label>
-        <input type="File" name="file" id="file" value="Choose json file" class="form-control" />
-        <input type="submit" class="btn btn-primary" value="Upload" />
-    </form>
+<form asp-controller="Json" asp-action="ImportJson" class="form-horizontal" enctype="multipart/form-data">
+    <label>@Localizer["Upload a JSON file:"]</label>
+    <input type="File" name="file" id="file" value= @Localizer["Choose json file"] class="form-control" accept="application/JSON"/>
+    <input type="submit" class="btn btn-primary" value=@Localizer["Upload"] />
+</form>
 }
 
 <form asp-controller="Json" asp-action="Create" enctype="multipart/form-data">
@@ -65,7 +65,7 @@
                     <input type="hidden" asp-for="@Model.EventItems[@i].ImageUrl" />
                 </div>
 
-               
+
             }
         }
     </div>

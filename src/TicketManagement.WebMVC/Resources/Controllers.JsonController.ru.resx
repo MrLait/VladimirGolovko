@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Choose a file" xml:space="preserve">
+    <value>Выберите файл</value>
+  </data>
   <data name="Event for the Venue with the dateTime already exist" xml:space="preserve">
     <value>Событие для этого места в это же время уже существует</value>
+  </data>
+  <data name="The beginning of the event cannot be after the end of the event" xml:space="preserve">
+    <value>Начало событие не может быть после завершения события</value>
   </data>
   <data name="The event can't be created in the past" xml:space="preserve">
     <value>Событие не может быть создано в прошлом</value>

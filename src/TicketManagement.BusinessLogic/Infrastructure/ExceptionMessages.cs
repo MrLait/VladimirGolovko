@@ -61,11 +61,7 @@
 
         public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the event.";
 
-        /// <summary>
-        /// {0} - Start data time.
-        /// {0} - End data time.
-        /// </summary>
-        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event '{0}' cannot be after the end of the event '{1}'.";
+        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event cannot be after the end of the event.";
 
         public const string CantBeCreatedInThePast = "The Event can't be created in the past.";
 

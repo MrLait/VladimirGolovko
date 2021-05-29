@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <Content Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <EmbeddedResource Remove="Resources\ViewModels\JsonEventViewModels\**" />
+    <None Remove="Resources\ViewModels\JsonEventViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\Pics\FootballPicOne.PNG" />
   </ItemGroup>
 

@@ -55,12 +55,6 @@
             {0} - Description.
             </summary>
         </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.StartDataTimeBeforeEndDataTime">
-            <summary>
-            {0} - Start data time.
-            {0} - End data time.
-            </summary>
-        </member>
         <member name="M:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages"/> class.

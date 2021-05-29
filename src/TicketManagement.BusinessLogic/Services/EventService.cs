@@ -63,7 +63,7 @@ namespace TicketManagement.BusinessLogic.Services
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
@@ -161,7 +161,7 @@ namespace TicketManagement.BusinessLogic.Services
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
@@ -214,7 +214,7 @@ namespace TicketManagement.BusinessLogic.Services
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
             if (!isStartDataTimeBeforeEndTadaTime)
             {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime, dto.StartDateTime, dto.EndDateTime);
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
             var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
