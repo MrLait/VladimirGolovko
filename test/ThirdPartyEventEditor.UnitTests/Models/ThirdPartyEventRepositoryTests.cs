@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ClassicMvc.Services;
 using FluentAssertions;
@@ -160,23 +158,11 @@ namespace ThirdPartyEventEditor.UnitTests.Models
                 StartDate = new DateTime(3021, 02, 01, 00, 00, 00),
             };
 
+            // Clear
+            thirdPartyEventRepository.Delete(expected.Id);
+
             // Assert
             actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Test]
-        public void Update_WhenModelNotExist_ShouldReturnArgumentOutOfRangeException()
-        {
-            // Arrange
-            var serializer = new JsonSerializerService<ThirdPartyEvent>();
-            var thirdPartyEventRepository = new ThirdPartyEventRepository(serializer);
-
-            // Act
-            var expected = thirdPartyEventRepository.GetAll().Last();
-            expected.Id += 100;
-
-            // Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => thirdPartyEventRepository.Update(expected));
         }
 
         [Test]
@@ -203,23 +189,11 @@ namespace ThirdPartyEventEditor.UnitTests.Models
 
             var actual = thirdPartyEventRepository.GetById(lastId);
 
+            // Clear
+            thirdPartyEventRepository.Delete(lastId);
+
             // Assert
             actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Test]
-        public void GetById_WhenModelNotExist_ShouldReturnArgumentOutOfRangeException()
-        {
-            // Arrange
-            var serializer = new JsonSerializerService<ThirdPartyEvent>();
-            var thirdPartyEventRepository = new ThirdPartyEventRepository(serializer);
-
-            // Act
-            var expected = thirdPartyEventRepository.GetAll().Last();
-            expected.Id += 100;
-
-            // Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => thirdPartyEventRepository.GetById(expected.Id));
         }
     }
 }

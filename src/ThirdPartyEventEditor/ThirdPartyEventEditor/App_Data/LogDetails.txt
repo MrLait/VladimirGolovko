@@ -760,3 +760,35 @@
     Controller name: Home
     ActionName: Create
     Execution time: 16,9765 ms
+31.05.2021 16:10:31 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2 ms
+31.05.2021 16:10:31 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 17,0032 ms
+31.05.2021 16:10:33 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 14,9982 ms
+31.05.2021 16:10:33 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 18,9998 ms
+31.05.2021 16:13:38 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 2,9992 ms
+31.05.2021 16:13:38 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 22,0068 ms
+31.05.2021 16:13:39 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 42,0012 ms
+31.05.2021 16:13:39 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 46,9978 ms

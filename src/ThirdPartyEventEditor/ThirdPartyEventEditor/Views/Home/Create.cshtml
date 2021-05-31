@@ -48,7 +48,7 @@
         </div>
 
         <div class="form-group">
-            <input type="File" name="file" id="file" value="Choose png file" accept="image/png" />
+            <input type="File" name="file" id="file" value="Choose png file" accept="image/png" onchange="this.form.submit();" />
             @if (Model != null)
             {
                 @Html.Image(@Model.PosterImage)

@@ -16,6 +16,7 @@ namespace ThirdPartyEventEditor.Controllers
     {
         private readonly IThirdPartyEventRepository _thirdPartyEventRepository;
         private readonly IJsonSerializerService<ThirdPartyEvent> _jsonSerializer;
+        private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
 
         public HomeController(IThirdPartyEventRepository thirdPartyEventRepository, IJsonSerializerService<ThirdPartyEvent> jsonSerializer)
         {
@@ -82,9 +83,8 @@ namespace ThirdPartyEventEditor.Controllers
         [HttpGet]
         public ActionResult ViewEventsJsonDetails()
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
-            byte[] filedata = System.IO.File.ReadAllBytes(filePath);
-            string contentType = MimeMapping.GetMimeMapping(filePath);
+            byte[] filedata = System.IO.File.ReadAllBytes(_filePath);
+            string contentType = MimeMapping.GetMimeMapping(_filePath);
 
             return File(filedata, contentType);
         }
@@ -92,10 +92,9 @@ namespace ThirdPartyEventEditor.Controllers
         [HttpGet]
         public ActionResult DownloadEventsJsonDetails()
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
-            string fileName = Path.GetFileName(filePath);
-            byte[] filedata = System.IO.File.ReadAllBytes(filePath);
-            string contentType = MimeMapping.GetMimeMapping(filePath);
+            string fileName = Path.GetFileName(_filePath);
+            byte[] filedata = System.IO.File.ReadAllBytes(_filePath);
+            string contentType = MimeMapping.GetMimeMapping(_filePath);
 
             var cd = new System.Net.Mime.ContentDisposition
             {
@@ -111,11 +110,10 @@ namespace ThirdPartyEventEditor.Controllers
         [HttpGet]
         public ActionResult ViewEventJsonDetails(int id)
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
             var thirdPartyEvent = _thirdPartyEventRepository.GetById(id);
             var thirdPartyEventJsonFormat = _jsonSerializer.SerializeObjectToJsonString(thirdPartyEvent);
             byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
-            string contentType = MimeMapping.GetMimeMapping(filePath);
+            string contentType = MimeMapping.GetMimeMapping(_filePath);
 
             return File(stringData, contentType);
         }
@@ -123,13 +121,11 @@ namespace ThirdPartyEventEditor.Controllers
         [HttpGet]
         public ActionResult DownloadEventJsonDetails(int id)
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ThirdPartyEventJson"]);
-
             var thirdPartyEvent = _thirdPartyEventRepository.GetById(id);
             var thirdPartyEventJsonFormat = _jsonSerializer.SerializeObjectToJsonString(thirdPartyEvent);
 
             byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
-            string contentType = MimeMapping.GetMimeMapping(filePath);
+            string contentType = MimeMapping.GetMimeMapping(_filePath);
 
             var cd = new System.Net.Mime.ContentDisposition
             {
