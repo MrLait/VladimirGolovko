@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ClassicMvc.Services;
@@ -158,6 +159,97 @@ namespace ThirdPartyEventEditor.UnitTests.Controllers
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void Delete_WhenObjectExist_ShouldDeleteObject()
+        {
+            // Arrange
+            var serializer = new JsonSerializerService<ThirdPartyEvent>();
+            var thirdPartyEventRepository = new ThirdPartyEventRepository(serializer);
+            var controller = new HomeController(thirdPartyEventRepository, Mock.Of<IJsonSerializerService<ThirdPartyEvent>>());
+
+            var model = new ThirdPartyEvent
+            {
+                Description = "actual",
+                EndDate = new DateTime(3021, 03, 01, 00, 00, 00),
+                Name = "Name",
+                PosterImage = "Image",
+                StartDate = new DateTime(3021, 02, 01, 00, 00, 00),
+            };
+
+            // Act
+            var expected = thirdPartyEventRepository.GetAll().Count();
+            thirdPartyEventRepository.Create(model);
+            model.Id = thirdPartyEventRepository.GetAll().Last().Id;
+            controller.Delete(model.Id);
+            var actual = thirdPartyEventRepository.GetAll().Count();
+
+            // Assert
+            actual.Should().Be(expected);
+        }
+
+        [Test]
+        public void ViewEventsJsonDetails_WhenFileExist_ShouldNotBeEquivalentFileContentsLength()
+        {
+            // Arrange
+            var serializer = new JsonSerializerService<ThirdPartyEvent>();
+            var thirdPartyEventRepository = new ThirdPartyEventRepository(serializer);
+
+            var controller = new HomeController(thirdPartyEventRepository, Mock.Of<IJsonSerializerService<ThirdPartyEvent>>());
+            var model = new ThirdPartyEvent
+            {
+                Description = "actual",
+                EndDate = new DateTime(3021, 03, 01, 00, 00, 00),
+                Name = "Name",
+                PosterImage = "Image",
+                StartDate = new DateTime(3021, 02, 01, 00, 00, 00),
+            };
+
+            // Act
+            var expected = controller.ViewEventsJsonDetails() as FileContentResult;
+            thirdPartyEventRepository.Create(model);
+            var actual = controller.ViewEventsJsonDetails() as FileContentResult;
+
+            // Clear
+            thirdPartyEventRepository.Delete(thirdPartyEventRepository.GetAll().Last().Id);
+
+            // Assert
+            actual.FileContents.Length.Should().NotBe(expected.FileContents.Length);
+        }
+
+        [Test]
+        public void ViewEventJsonDetails_WhenIdExist_ShouldBeEquivalentFileContents()
+        {
+            // Arrange
+            var serializer = new JsonSerializerService<ThirdPartyEvent>();
+            var thirdPartyEventRepository = new ThirdPartyEventRepository(serializer);
+
+            var controller = new HomeController(thirdPartyEventRepository, serializer);
+            var model = new ThirdPartyEvent
+            {
+                Description = "actual",
+                EndDate = new DateTime(3021, 03, 01, 00, 00, 00),
+                Name = "Name",
+                PosterImage = "Image",
+                StartDate = new DateTime(3021, 02, 01, 00, 00, 00),
+            };
+
+            // Act
+            thirdPartyEventRepository.Create(model);
+            model.Id = thirdPartyEventRepository.GetAll().Last().Id;
+
+            var thirdPartyEventJsonFormat = serializer.SerializeObjectToJsonString(model);
+            byte[] stringData = Encoding.UTF8.GetBytes(thirdPartyEventJsonFormat);
+
+            var expected = stringData;
+            var actual = controller.ViewEventJsonDetails(model.Id) as FileContentResult;
+
+            // Clear
+            thirdPartyEventRepository.Delete(thirdPartyEventRepository.GetAll().Last().Id);
+
+            // Assert
+            actual.FileContents.Should().BeEquivalentTo(expected);
         }
     }
 }

@@ -67,6 +67,7 @@ namespace ThirdPartyEventEditor.UnitTests.Models
             // Act
             var expected = thirdPartyEventRepository.GetAll().Count();
             thirdPartyEventRepository.Create(model);
+            model.Id = thirdPartyEventRepository.GetAll().Last().Id;
             thirdPartyEventRepository.Delete(model.Id);
             var actual = thirdPartyEventRepository.GetAll().Count();
 
