@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using ClassicMvc.App_Start;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using ClassicMvc.App_Start;
 using ThirdPartyEventEditor;
 
 namespace ClassicMvc

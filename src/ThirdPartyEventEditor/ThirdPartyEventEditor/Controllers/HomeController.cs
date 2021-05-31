@@ -24,6 +24,7 @@ namespace ThirdPartyEventEditor.Controllers
             _jsonSerializer = jsonSerializer;
         }
 
+        [ActionExecutionTime]
         public ActionResult Index()
         {
             var thirdPartyEvents = _thirdPartyEventRepository.GetAll().ToList();
@@ -36,7 +37,6 @@ namespace ThirdPartyEventEditor.Controllers
             return View();
         }
 
-        [ActionExecutionTime]
         [HttpPost]
         public ActionResult Create(ThirdPartyEvent thirdPartyEvent, HttpPostedFileBase file)
         {
