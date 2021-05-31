@@ -19,7 +19,7 @@ namespace ClassicMvc.Services
             _jsonSerializer = jsonSerializer;
         }
 
-        public void CreateAsync(ThirdPartyEvent thirdPartyEvent)
+        public void Create(ThirdPartyEvent thirdPartyEvent)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             thirdPartyEvent.Id = deserThirdPartyEvent.LastOrDefault()?.Id + 1 ?? 1;
@@ -29,7 +29,7 @@ namespace ClassicMvc.Services
             _mutexObj.ReleaseMutex();
         }
 
-        public void DeleteAsync(int id)
+        public void Delete(int id)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == id);
@@ -39,13 +39,13 @@ namespace ClassicMvc.Services
             _mutexObj.ReleaseMutex();
         }
 
-        public IEnumerable<ThirdPartyEvent> GetAllAsync()
+        public IEnumerable<ThirdPartyEvent> GetAll()
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             return deserThirdPartyEvent;
         }
 
-        public void UpdateAsync(ThirdPartyEvent thirdPartyEvent)
+        public void Update(ThirdPartyEvent thirdPartyEvent)
         {
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == thirdPartyEvent.Id);

@@ -25,7 +25,7 @@ namespace ThirdPartyEventEditor.Controllers
 
         public ActionResult Index()
         {
-            var thirdPartyEvents = _thirdPartyEventRepository.GetAllAsync().ToList();
+            var thirdPartyEvents = _thirdPartyEventRepository.GetAll().ToList();
             return View(thirdPartyEvents);
         }
 
@@ -46,7 +46,7 @@ namespace ThirdPartyEventEditor.Controllers
 
             if (ModelState.IsValid)
             {
-                _thirdPartyEventRepository.CreateAsync(thirdPartyEvent);
+                _thirdPartyEventRepository.Create(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +65,7 @@ namespace ThirdPartyEventEditor.Controllers
         {
             if (ModelState.IsValid)
             {
-                _thirdPartyEventRepository.UpdateAsync(thirdPartyEvent);
+                _thirdPartyEventRepository.Update(thirdPartyEvent);
                 return RedirectToAction("Index");
             }
 
@@ -75,7 +75,7 @@ namespace ThirdPartyEventEditor.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            _thirdPartyEventRepository.DeleteAsync(id);
+            _thirdPartyEventRepository.Delete(id);
             return RedirectToAction("Index");
         }
 

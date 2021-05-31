@@ -6,13 +6,13 @@ namespace ClassicMvc.Services
 {
     public interface IThirdPartyEventRepository
     {
-        void CreateAsync(ThirdPartyEvent thirdPartyEvent);
+        void Create(ThirdPartyEvent thirdPartyEvent);
 
-        void UpdateAsync(ThirdPartyEvent thirdPartyEvent);
+        void Update(ThirdPartyEvent thirdPartyEvent);
 
-        void DeleteAsync(int id);
+        void Delete(int id);
 
-        IEnumerable<ThirdPartyEvent> GetAllAsync();
+        IEnumerable<ThirdPartyEvent> GetAll();
 
         ThirdPartyEvent GetById(int id);
     }
