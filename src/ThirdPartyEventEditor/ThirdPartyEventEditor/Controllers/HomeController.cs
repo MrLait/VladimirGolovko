@@ -38,11 +38,11 @@ namespace ThirdPartyEventEditor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ThirdPartyEvent thirdPartyEvent, HttpPostedFileBase file)
+        public ActionResult Create(ThirdPartyEvent thirdPartyEvent, HttpPostedFileBase posterImage)
         {
-            if (file != null)
+            if (posterImage != null)
             {
-                thirdPartyEvent.PosterImage = FileUtil.ConvertImageToBase64(file);
+                thirdPartyEvent.PosterImage = FileUtil.ConvertImageToBase64(posterImage);
             }
 
             if (ModelState.IsValid)
