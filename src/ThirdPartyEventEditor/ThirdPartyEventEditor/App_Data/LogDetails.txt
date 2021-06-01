@@ -222,3 +222,11 @@
     Controller name: Home
     ActionName: Index
     Execution time: 30,9752 ms
+01.06.2021 14:30:38 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 115,0008 ms
+01.06.2021 14:30:39 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1065,2275 ms
