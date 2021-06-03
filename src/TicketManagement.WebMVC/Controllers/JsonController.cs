@@ -146,6 +146,16 @@ namespace TicketManagement.WebMVC.Controllers
             {
                 ModelState.AddModelError(string.Empty, _localizer["The beginning of the event cannot be after the end of the event"]);
             }
+
+            if (ve.Message == ExceptionMessages.ThereIsNoSuchLayout)
+            {
+                ModelState.AddModelError(string.Empty, _localizer["There is no such layout"]);
+            }
+
+            if (ve.Message == ExceptionMessages.ThereAreNoSeatsInTheEvent)
+            {
+                ModelState.AddModelError(string.Empty, _localizer["There are no seats in the event"]);
+            }
         }
     }
 }

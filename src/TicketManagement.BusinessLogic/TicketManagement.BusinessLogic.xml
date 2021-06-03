@@ -34,11 +34,6 @@
             {0} - DateTime.
             </summary>
         </member>
-        <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.ThereAreNoSeatsInTheEvent">
-            <summary>
-            {0} - Description.
-            </summary>
-        </member>
         <member name="F:TicketManagement.BusinessLogic.Infrastructure.ExceptionMessages.LayoutForTheVenueExist">
             <summary>
             {0} - Description.

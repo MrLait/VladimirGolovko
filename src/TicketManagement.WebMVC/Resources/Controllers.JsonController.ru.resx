@@ -129,4 +129,10 @@
   <data name="The event can't be created in the past" xml:space="preserve">
     <value>Событие не может быть создано в прошлом</value>
   </data>
+  <data name="There are no seats in the event" xml:space="preserve">
+    <value>Для это события не созданы места</value>
+  </data>
+  <data name="There is no such layout" xml:space="preserve">
+    <value>Такой идентификатор макета не сущестует</value>
+  </data>
 </root>

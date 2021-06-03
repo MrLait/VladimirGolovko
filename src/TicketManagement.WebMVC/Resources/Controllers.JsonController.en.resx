@@ -129,4 +129,10 @@
   <data name="The event can't be created in the past" xml:space="preserve">
     <value>The event can't be created in the past</value>
   </data>
+  <data name="There are no seats in the event" xml:space="preserve">
+    <value>There are no seats in the event</value>
+  </data>
+  <data name="There is no such layout" xml:space="preserve">
+    <value>There is no such layout</value>
+  </data>
 </root>

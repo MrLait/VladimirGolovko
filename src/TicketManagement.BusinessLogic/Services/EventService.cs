@@ -72,10 +72,16 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime);
             }
 
+            var atLeastOneLayoutIdExistInArea = CheckThatLayoutIdExistAtLeastInOneArea(dto);
+            if (!atLeastOneLayoutIdExistInArea)
+            {
+                throw new ValidationException(ExceptionMessages.ThereIsNoSuchLayout);
+            }
+
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
             if (!atLeastOneAreaContainsSeats)
             {
-                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
+                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent);
             }
 
             var allAreasInLayout = GetAllAreasInLayout(dto);
@@ -205,10 +211,16 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
             }
 
+            var atLeastOneLayoutIdExistInArea = CheckThatLayoutIdExistAtLeastInOneArea(dto);
+            if (!atLeastOneLayoutIdExistInArea)
+            {
+                throw new ValidationException(ExceptionMessages.ThereIsNoSuchLayout);
+            }
+
             var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
             if (!atLeastOneAreaContainsSeats)
             {
-                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent, dto.Description);
+                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent);
             }
 
             var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
@@ -389,6 +401,13 @@ namespace TicketManagement.BusinessLogic.Services
         {
             bool isDataTimeValid = dto.StartDateTime > DateTime.Now;
             return isDataTimeValid;
+        }
+
+        private bool CheckThatLayoutIdExistAtLeastInOneArea(EventDto dto)
+        {
+            var layoutIdExistAtLeastInOneArea = DbContext.Areas.GetAllAsQueryable().Any(x => x.LayoutId == dto.LayoutId);
+
+            return layoutIdExistAtLeastInOneArea;
         }
 
         private bool CheckThatAtLeastOneAreaContainsSeats(EventDto dto)
