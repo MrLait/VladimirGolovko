@@ -17,7 +17,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         [OneTimeSetUp]
         public async Task InitEventsAsync()
         {
-            var eventModelRepository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var eventModelRepository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
             var countAllEvents = eventModelRepository.GetAllAsQueryable().Last().Id;
 
             for (int i = 1; i <= countAllEvents; i++)
@@ -33,7 +33,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var expected = _eventModels;
 
             // Act
-            var actual = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString).GetAllAsQueryable();
+            var actual = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -53,7 +53,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task CreateAsync_WhenAddEvent_ShouldReturnEventWithNewEvent()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
             Event eventModel = new Event
             {
                 Id = repository.GetAllAsQueryable().ToList().Count + 1,
@@ -81,7 +81,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void CreateAsync_WhenEventEmpty_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
@@ -91,7 +91,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task DeleteAsync_WhenExistEvent_ShouldReturnEventListWithoutDeletedEvent()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act
             var allEvents = repository.GetAllAsQueryable();
@@ -110,7 +110,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventModel));
@@ -120,7 +120,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
@@ -141,7 +141,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task UpdateAsync_WhenExistEvent_ShouldUpdateLastEvent()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
             var expected = new Event
             {
                 LayoutId = 2,
@@ -168,7 +168,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenNullEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
@@ -179,7 +179,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventModel));
@@ -189,7 +189,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenExistEvent_ShouldReturnEvent()
         {
             // Arrange
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().Last();
@@ -216,7 +216,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event expected = null;
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().Last();
@@ -232,7 +232,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = 0 };
-            var repository = new AdoUsingStoredProcedureRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
@@ -243,7 +243,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
@@ -254,7 +254,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventModel));
@@ -265,7 +265,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Event eventModel = new Event { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Event>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventModel));

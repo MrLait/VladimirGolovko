@@ -21,8 +21,8 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            _layoutRepository = new AdoUsingParametersRepository<Layout>(MainConnectionString);
-            _adoDbContext = new AdoDbContext(MainConnectionString);
+            _layoutRepository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
+            _adoDbContext = new AdoDbContext(DefaultConnectionString);
         }
 
         [Test]

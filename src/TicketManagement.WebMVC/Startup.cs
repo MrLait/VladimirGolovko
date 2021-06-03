@@ -55,7 +55,7 @@ namespace TicketManagement.WebMVC
                 options.SupportedUICultures = supportedCultures;
             });
 
-            var connectionString = Configuration.GetConnectionString("TestConnection");
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<EfDbContext>(options =>
             {
                 options.UseSqlServer(connectionString)

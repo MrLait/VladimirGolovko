@@ -23,7 +23,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             _eventAreaRepository = new EfRepository<EventArea>(DbContext);
         }
 

@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace TicketManagement.IntegrationTests
@@ -16,29 +14,29 @@ namespace TicketManagement.IntegrationTests
         public DatabaseConnectionFactory()
             : base()
         {
-            DefaultConnection = Configuration.GetConnectionString("MainConnection");
-            SnapshotConnection = Configuration.GetConnectionString("SnapshotConnection");
-            MasterConnection = Configuration.GetConnectionString("MasterConnection");
+            IntegrationTestDefaultConnection = Configuration.GetConnectionString("IntegrationTestDefaultConnection");
+            IntegrationTestSnapshotConnection = Configuration.GetConnectionString("IntegrationTestSnapshotConnection");
+            IntegrationTestMasterConnection = Configuration.GetConnectionString("IntegrationTestMasterConnection");
 
-            DefaultDatabaseName = GetDatabaseName(DefaultConnection);
-            SnapshotDatabaseName = GetDatabaseName(SnapshotConnection);
+            DefaultDatabaseName = GetDatabaseName(IntegrationTestDefaultConnection);
+            SnapshotDatabaseName = GetDatabaseName(IntegrationTestSnapshotConnection);
         }
 
-        public string DefaultConnection { get; }
+        public string IntegrationTestDefaultConnection { get; }
 
         public string DefaultDatabaseName { get; private set; }
 
-        public string SnapshotConnection { get; }
+        public string IntegrationTestSnapshotConnection { get; }
 
         public string SnapshotDatabaseName { get; private set; }
 
-        public string MasterConnection { get; }
+        public string IntegrationTestMasterConnection { get; }
 
-        public string CreateDefaultConnection() => DefaultConnection;
+        public string CreateIntegrationTestDefaultConnection() => IntegrationTestDefaultConnection;
 
-        public string CreateSnapshotConnection() => SnapshotConnection;
+        public string CreateIntegrationTestSnapshotConnection() => IntegrationTestSnapshotConnection;
 
-        public string CreateMasterConnection() => MasterConnection;
+        public string CreateIntegrationTestMasterConnection() => IntegrationTestMasterConnection;
 
         private static string GetDatabaseName(string databaseConnection)
         {

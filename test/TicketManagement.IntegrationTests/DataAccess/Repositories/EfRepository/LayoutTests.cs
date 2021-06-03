@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitLayoutsAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Layout>(DbContext);
             var countAllLayouts = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
@@ -77,7 +77,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task DeleteAsync_WhenExistLayout_ShouldReturnLayoutListWithoutDeletedLayoutAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Layout>(dbContext);
 
             // Act
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistLayout_ShouldUpdateLastLayoutAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Layout>(dbContext);
             var expected = new Layout { VenueId = 2, Description = "Updated Layout" };
 

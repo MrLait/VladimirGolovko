@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitEventsAsync()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
             var countAllEvents = repository.GetAllAsQueryable().AsEnumerable().Last().Id;
 
@@ -48,7 +48,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task CreateAsync_WhenAddEvent_ShouldReturnEventWithNewEvent()
         {
             // Arrange
-            var dbContext = new EfDbContext(MainConnectionString);
+            var dbContext = new EfDbContext(DefaultConnectionString);
             var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
             var lastItem = repository.GetAllAsQueryable().AsEnumerable().Last();
             Event eventModel = new Event
@@ -86,7 +86,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task DeleteAsync_WhenExistEvent_ShouldReturnEventListWithoutDeletedEventAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
 
             // Act
@@ -115,7 +115,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistEvent_ShouldUpdateLastEventAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
             var expected = new Event
             {
