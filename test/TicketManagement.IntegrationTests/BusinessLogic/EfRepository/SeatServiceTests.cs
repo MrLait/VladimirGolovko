@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             _seatRepository = new EfRepository<Seat>(DbContext);
         }
 
@@ -112,7 +112,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenSeatExist_ShouldUpdateLastSeat()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var seatLast = _seatRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             var expected = new Seat { Id = seatLast.Id, Row = seatLast.Row + 1, Number = seatLast.Number + 1, AreaId = seatLast.AreaId };
             var seatService = new SeatService(dbContext);

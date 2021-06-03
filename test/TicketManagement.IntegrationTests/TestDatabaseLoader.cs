@@ -15,9 +15,9 @@ namespace TicketManagement.IntegrationTests
             DatabaseConnectionFactory = new DatabaseConnectionFactory();
             DefaultDatabaseName = DatabaseConnectionFactory.DefaultDatabaseName;
             SnapshotDatabaseName = DatabaseConnectionFactory.SnapshotDatabaseName;
-            MainConnectionString = DatabaseConnectionFactory.CreateDefaultConnection();
-            MasterConnectionString = DatabaseConnectionFactory.CreateMasterConnection();
-            SnapshotConnectionString = DatabaseConnectionFactory.CreateSnapshotConnection();
+            DefaultConnectionString = DatabaseConnectionFactory.CreateIntegrationTestDefaultConnection();
+            MasterConnectionString = DatabaseConnectionFactory.CreateIntegrationTestMasterConnection();
+            SnapshotConnectionString = DatabaseConnectionFactory.CreateIntegrationTestSnapshotConnection();
     }
 
         public DatabaseConnectionFactory DatabaseConnectionFactory { get; set; }
@@ -26,7 +26,7 @@ namespace TicketManagement.IntegrationTests
 
         public string SnapshotDatabaseName { get; set; }
 
-        public string MainConnectionString { get; set; }
+        public string DefaultConnectionString { get; set; }
 
         public string MasterConnectionString { get; set; }
 
@@ -38,7 +38,7 @@ namespace TicketManagement.IntegrationTests
             string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Scripts", _scriptCreateDatabaseName));
             _databaseHelper.CreateDatabase(scriptPath, MasterConnectionString);
             string snapshotsDirectoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Snapshots"));
-            _databaseHelper.CreateSnapshot(SnapshotDatabaseName, DefaultDatabaseName, snapshotsDirectoryPath, MainConnectionString);
+            _databaseHelper.CreateSnapshot(SnapshotDatabaseName, DefaultDatabaseName, snapshotsDirectoryPath, DefaultConnectionString);
         }
 
         [TearDown]

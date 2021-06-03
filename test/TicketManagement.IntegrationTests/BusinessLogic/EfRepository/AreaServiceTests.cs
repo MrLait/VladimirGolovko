@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             _areaRepository = new EfRepository<Area>(DbContext);
         }
 
@@ -111,7 +111,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenAreaExist_ShouldUpdateLastArea()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var areaLast = _areaRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             var expected = new Area { Id = areaLast.Id, Description = "Updated Description", CoordX = areaLast.CoordX + 1, CoordY = areaLast.CoordY + 1, LayoutId = areaLast.LayoutId };
             var areaService = new AreaService(dbContext);

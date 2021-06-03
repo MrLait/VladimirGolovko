@@ -19,13 +19,13 @@ namespace TicketManagement.WebMVC.Models
             string eventManagerEmail = "eventManager@gmail.com";
             string firstUserEmail = "firstUser@gmail.com";
             string password = "_Aa123456";
-            await AddRole(roleManager, "admin");
-            await AddRole(roleManager, "eventManager");
-            await AddRole(roleManager, "user");
+            await AddRole(roleManager, UserRoles.Admin);
+            await AddRole(roleManager, UserRoles.EventManager);
+            await AddRole(roleManager, UserRoles.User);
 
-            await AddUser(userManager, roleName: "admin", adminEmail, password);
-            await AddUser(userManager, roleName: "eventManager", eventManagerEmail, password);
-            await AddUser(userManager, roleName: "user", firstUserEmail, password);
+            await AddUser(userManager, roleName: UserRoles.Admin, adminEmail, password);
+            await AddUser(userManager, roleName: UserRoles.EventManager, eventManagerEmail, password);
+            await AddUser(userManager, roleName: UserRoles.User, firstUserEmail, password);
         }
 
         private static async Task AddUser(UserManager<ApplicationUser> userManager, string roleName, string adminEmail, string password)

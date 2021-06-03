@@ -17,7 +17,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         [OneTimeSetUp]
         public async Task InitEventAreasAsync()
         {
-            var eventAreaRepository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var eventAreaRepository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
             var countAllEventAreas = eventAreaRepository.GetAllAsQueryable().Last().Id;
 
             for (int i = 1; i <= countAllEventAreas; i++)
@@ -33,7 +33,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var expected = _eventAreas;
 
             // Act
-            var actual = new AdoUsingParametersRepository<EventArea>(MainConnectionString).GetAllAsQueryable();
+            var actual = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -53,7 +53,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task CreateAsync_WhenAddEventArea_ShouldReturnEventAreaWithNewEventArea()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
             EventArea eventArea = new EventArea { Id = repository.GetAllAsQueryable().ToList().Count + 1, CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
             List<EventArea> expected = new List<EventArea>(_eventAreas)
             {
@@ -72,7 +72,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void CreateAsync_WhenEventAreaEmpty_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
@@ -82,7 +82,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task DeleteAsync_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventArea()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act
             var allEventAreas = repository.GetAllAsQueryable();
@@ -101,7 +101,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventArea));
@@ -111,7 +111,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
@@ -132,7 +132,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task UpdateAsync_WhenExistEventArea_ShouldUpdateLastEventArea()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
             var expected = new EventArea { Price = 2, EventId = 2, Description = "Updated", CoordY = 2, CoordX = 2 };
 
             // Act
@@ -151,7 +151,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenNullEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
@@ -162,7 +162,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventArea));
@@ -172,7 +172,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenExistEventArea_ShouldReturnEventAreaAsync()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act
             var lastEventArea = repository.GetAllAsQueryable().Last();
@@ -198,7 +198,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea expected = null;
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act
             var lastEventArea = repository.GetAllAsQueryable().Last();
@@ -214,7 +214,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = 0 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
@@ -225,7 +225,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
@@ -236,7 +236,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(eventArea));
@@ -247,7 +247,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             EventArea eventArea = new EventArea { Id = -1 };
-            var repository = new AdoUsingParametersRepository<EventArea>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(eventArea));

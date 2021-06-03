@@ -22,7 +22,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitEventSeatsAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<EventSeat>(DbContext);
             var countAllEventSeats = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistEventSeat_ShouldUpdateLastEventSeatAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<EventSeat>(dbContext);
             var expected = new EventSeat { EventAreaId = 2, State = (int)States.Purchased, Row = 2, Number = 2 };
 

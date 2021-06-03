@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitEventAreasAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<EventArea>(DbContext);
             var countAllEventAreas = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
@@ -77,7 +77,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task DeleteAsync_WhenExistEventArea_ShouldReturnEventAreaListWithoutDeletedEventAreaAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<EventArea>(dbContext);
 
             // Act
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistEventArea_ShouldUpdateLastEventAreaAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<EventArea>(dbContext);
             var expected = new EventArea { Price = 2, EventId = 2, Description = "Updated", CoordY = 2, CoordX = 2 };
 

@@ -27,7 +27,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             _layoutRepository = new EfRepository<Layout>(DbContext);
             _eventRepository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
         }
@@ -36,7 +36,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var firstLayoutId = _layoutRepository.GetAllAsQueryable().AsEnumerable().First().Id;
             var expected = new Event
             {
@@ -113,7 +113,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task CreateAsync_WhenEventExist_ShouldCreateEventSeats()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var firstLayoutId = _layoutRepository.GetAllAsQueryable().OrderBy(x => x.Id).First().Id;
             var eventService = new EventService(dbContext);
             var areaService = new AreaService(dbContext);
@@ -301,7 +301,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenEventExist_ShouldUpdateEvent()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var eventLast = _eventRepository.GetAllAsQueryable().AsEnumerable().Last();
             var expected = new Event
             {
@@ -379,7 +379,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenLayoutChanged_ShouldUpdateLastEvent()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var eventLast = _eventRepository.GetAllAsQueryable().AsEnumerable().Last();
             var layoutIdChanged = eventLast.Id + 1;
             var expected = new Event

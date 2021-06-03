@@ -23,7 +23,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             };
 
             // Act
-            var actual = new AdoUsingParametersRepository<Venue>(MainConnectionString).GetAllAsQueryable();
+            var actual = new AdoUsingParametersRepository<Venue>(DefaultConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -51,7 +51,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
                 new Venue { Id = 4, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
             };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
             await repository.CreateAsync(venue);
@@ -65,7 +65,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void CreateAsync_WhenVenueEmpty_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
@@ -81,7 +81,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
                 new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
             };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
             await repository.DeleteAsync(venue);
@@ -96,7 +96,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(venue));
@@ -106,7 +106,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenNullVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
@@ -134,7 +134,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
                 new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" },
             };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
             await repository.UpdateAsync(venue);
@@ -148,7 +148,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenNullVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
@@ -159,7 +159,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(venue));
@@ -170,7 +170,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue expectedVenue = new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
             int actualId = expectedVenue.Id;
@@ -186,7 +186,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             Venue venue = new Venue { Id = 5, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
             Venue expected = null;
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
             int actualId = venue.Id;
@@ -201,7 +201,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(venue.Id));
@@ -212,7 +212,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(venue.Id));
@@ -223,7 +223,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(venue));
@@ -234,7 +234,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Venue venue = new Venue { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Venue>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(venue));

@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitVenuesAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Venue>(DbContext);
             var countAllVenues = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
@@ -77,7 +77,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task DeleteAsync_WhenExistVenue_ShouldReturnVenueListWithoutDeletedVenueAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Venue>(dbContext);
 
             // Act
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistVenue_ShouldUpdateLastVenueAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Venue>(dbContext);
             var expected = new Venue { Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
 

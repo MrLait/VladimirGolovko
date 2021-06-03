@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         [OneTimeSetUp]
         public async Task InitSeatsAsync()
         {
-            DbContext = new EfDbContext(connectionString: MainConnectionString);
+            DbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Seat>(DbContext);
             var countAllSeats = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
@@ -77,7 +77,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task DeleteAsync_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeatAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Seat>(dbContext);
 
             // Act
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task UpdateAsync_WhenExistSeat_ShouldUpdateLastSeatAsync()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var repository = new EfRepository<Seat>(dbContext);
             var expected = new Seat { Number = 2, AreaId = 2, Row = 2 };
 

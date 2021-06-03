@@ -17,7 +17,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         [OneTimeSetUp]
         public async Task InitSeatsAsync()
         {
-            var seatRepository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var seatRepository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
             var countAllSeats = seatRepository.GetAllAsQueryable().Last().Id;
 
             for (int i = 1; i <= countAllSeats; i++)
@@ -33,7 +33,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var expected = _seats;
 
             // Act
-            var actual = new AdoUsingParametersRepository<Seat>(MainConnectionString).GetAllAsQueryable();
+            var actual = new AdoUsingParametersRepository<Seat>(DefaultConnectionString).GetAllAsQueryable();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -53,7 +53,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task CreateAsync_WhenAddSeat_ShouldReturnSeatWithNewSeat()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
             Seat seat = new Seat { Id = repository.GetAllAsQueryable().ToList().Count + 1, Row = 2, AreaId = 2, Number = 2 };
             List<Seat> expected = new List<Seat>(_seats)
             {
@@ -72,7 +72,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void CreateAsync_WhenSeatEmpty_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.CreateAsync(null));
@@ -82,7 +82,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task DeleteAsync_WhenExistSeat_ShouldReturnSeatListWithoutDeletedSeat()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act
             var allSeats = repository.GetAllAsQueryable();
@@ -101,7 +101,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(seat));
@@ -111,7 +111,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenNullSeat_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(null));
@@ -132,7 +132,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task UpdateAsync_WhenExistSeat_ShouldUpdateLastSeat()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
             var expected = new Seat { Number = 2, AreaId = 2, Row = 2 };
 
             // Act
@@ -151,7 +151,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenNullSeat_ShouldThrowArgumentException()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(null));
@@ -162,7 +162,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(seat));
@@ -172,7 +172,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenExistSeat_ShouldReturnSeat()
         {
             // Arrange
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act
             var lastSeat = repository.GetAllAsQueryable().Last();
@@ -190,7 +190,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat expected = null;
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act
             var lastSeat = repository.GetAllAsQueryable().Last();
@@ -206,7 +206,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = 0 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(seat.Id));
@@ -217,7 +217,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(seat.Id));
@@ -228,7 +228,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.UpdateAsync(seat));
@@ -239,7 +239,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             Seat seat = new Seat { Id = -1 };
-            var repository = new AdoUsingParametersRepository<Seat>(MainConnectionString);
+            var repository = new AdoUsingParametersRepository<Seat>(DefaultConnectionString);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () => await repository.DeleteAsync(seat));

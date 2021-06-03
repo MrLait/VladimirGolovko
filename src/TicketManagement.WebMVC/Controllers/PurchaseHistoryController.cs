@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Models;
@@ -14,16 +9,12 @@ namespace TicketManagement.WebMVC.Controllers
     [Authorize]
     public class PurchaseHistoryController : Controller
     {
-        private readonly IBasketService _basketService;
-        private readonly IApplicationUserService _applicationUserService;
         private readonly IPurchaseHistoryService _purchaseHistoryService;
         private readonly IIdentityParser<ApplicationUser> _identityParser;
 
-        public PurchaseHistoryController(IBasketService basketService, IApplicationUserService applicationUserService, IPurchaseHistoryService purchaseHistoryService,
+        public PurchaseHistoryController(IPurchaseHistoryService purchaseHistoryService,
             IIdentityParser<ApplicationUser> identityParser)
         {
-            _basketService = basketService;
-            _applicationUserService = applicationUserService;
             _purchaseHistoryService = purchaseHistoryService;
             _identityParser = identityParser;
         }

@@ -132,6 +132,9 @@
   <data name="EventName" xml:space="preserve">
     <value>Event name</value>
   </data>
+  <data name="Import json" xml:space="preserve">
+    <value>Import JSON</value>
+  </data>
   <data name="TheEventEndsAt" xml:space="preserve">
     <value>Event ends at</value>
   </data>

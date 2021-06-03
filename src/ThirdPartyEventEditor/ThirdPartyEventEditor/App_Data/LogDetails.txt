@@ -1,0 +1,232 @@
+01.06.2021 00:19:19 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 40 ms
+01.06.2021 00:19:21 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1837,4945 ms
+01.06.2021 00:19:23 - Action execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 0 ms
+01.06.2021 00:19:23 - Action result execution time message:
+    Controller name: Home
+    ActionName: Create
+    Execution time: 73,052 ms
+01.06.2021 00:19:52 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 41,9978 ms
+01.06.2021 00:19:54 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1809,0004 ms
+01.06.2021 10:24:09 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 50,0013 ms
+01.06.2021 10:24:12 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 3034,0518 ms
+01.06.2021 10:25:12 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 119,0017 ms
+01.06.2021 10:25:13 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1101,2269 ms
+01.06.2021 10:25:41 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 26,0047 ms
+01.06.2021 10:25:41 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 46,0003 ms
+01.06.2021 10:25:46 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 24,9981 ms
+01.06.2021 10:25:46 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 38,0016 ms
+01.06.2021 10:29:00 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 49,491 ms
+01.06.2021 10:29:02 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 2125,0013 ms
+01.06.2021 10:31:32 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 119,0025 ms
+01.06.2021 10:31:33 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1087,2032 ms
+01.06.2021 10:32:19 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 124,9679 ms
+01.06.2021 10:32:20 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1159,3704 ms
+01.06.2021 10:32:39 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 119,0052 ms
+01.06.2021 10:32:40 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1065,1523 ms
+01.06.2021 10:35:27 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 129,0028 ms
+01.06.2021 10:35:28 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1188,9992 ms
+01.06.2021 10:46:40 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 51,001 ms
+01.06.2021 10:46:43 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 2398,0001 ms
+01.06.2021 10:47:32 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 129,0274 ms
+01.06.2021 10:47:33 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1074,0003 ms
+01.06.2021 10:48:32 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 133,9706 ms
+01.06.2021 10:48:33 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1104,9716 ms
+01.06.2021 10:48:50 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 122,0272 ms
+01.06.2021 10:48:51 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1149,9464 ms
+01.06.2021 10:48:58 - ExceptionMessage: The view 'AddImage' or its master was not found or no view engine supports the searched locations. The following locations were searched:
+~/Views/Home/AddImage.aspx
+~/Views/Home/AddImage.ascx
+~/Views/Shared/AddImage.aspx
+~/Views/Shared/AddImage.ascx
+~/Views/Home/AddImage.cshtml
+~/Views/Home/AddImage.vbhtml
+~/Views/Shared/AddImage.cshtml
+~/Views/Shared/AddImage.vbhtml
+    Controller name: Home
+    ActionName: AddImage
+    Error message: The view 'AddImage' or its master was not found or no view engine supports the searched locations. The following locations were searched:
+~/Views/Home/AddImage.aspx
+~/Views/Home/AddImage.ascx
+~/Views/Shared/AddImage.aspx
+~/Views/Shared/AddImage.ascx
+~/Views/Home/AddImage.cshtml
+~/Views/Home/AddImage.vbhtml
+~/Views/Shared/AddImage.cshtml
+~/Views/Shared/AddImage.vbhtml
+01.06.2021 10:49:52 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 44,9967 ms
+01.06.2021 10:50:19 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 120,2605 ms
+01.06.2021 10:50:21 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 2053,4844 ms
+01.06.2021 10:50:58 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 127,0138 ms
+01.06.2021 10:50:59 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1108,0259 ms
+01.06.2021 13:12:02 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 50,0183 ms
+01.06.2021 13:12:05 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 2940,6207 ms
+01.06.2021 13:18:30 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 45,7572 ms
+01.06.2021 13:18:33 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 2136,5574 ms
+01.06.2021 13:19:00 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 9,9996 ms
+01.06.2021 13:19:00 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 20,0042 ms
+01.06.2021 13:20:06 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 118,0035 ms
+01.06.2021 13:20:07 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1108,0031 ms
+01.06.2021 13:20:09 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 21,0011 ms
+01.06.2021 13:20:09 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 33,9973 ms
+01.06.2021 13:20:45 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 48,9982 ms
+01.06.2021 13:20:45 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 59,9974 ms
+01.06.2021 13:20:54 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 22,9762 ms
+01.06.2021 13:20:54 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 30,9752 ms
+01.06.2021 14:30:38 - Action execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 115,0008 ms
+01.06.2021 14:30:39 - Action result execution time message:
+    Controller name: Home
+    ActionName: Index
+    Execution time: 1065,2275 ms

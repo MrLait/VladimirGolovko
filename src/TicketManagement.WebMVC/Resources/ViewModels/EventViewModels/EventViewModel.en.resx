@@ -124,7 +124,7 @@
     <value>Description required</value>
   </data>
   <data name="EndDateTime" xml:space="preserve">
-    <value>Start time of the event</value>
+    <value>End time of the event</value>
   </data>
   <data name="EndTimeRequired" xml:space="preserve">
     <value>It is required to indicate the end time of the event</value>
@@ -149,5 +149,8 @@
   </data>
   <data name="StartTimeRequired" xml:space="preserve">
     <value>It is required to indicate the start time of the event</value>
+  </data>
+  <data name="The event can't be created in the past" xml:space="preserve">
+    <value>The event can't be created in the past</value>
   </data>
 </root>

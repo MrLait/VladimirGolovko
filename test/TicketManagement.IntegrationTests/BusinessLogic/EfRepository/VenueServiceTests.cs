@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             _venueRepository = new EfRepository<Venue>(DbContext);
         }
 
@@ -117,7 +117,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenVenueExist_ShouldUpdateLastVenue()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var venueLast = _venueRepository.GetAllAsQueryable().OrderBy(x=> x.Id).Last();
             var expected = new Venue { Id = venueLast.Id, Address = "Added Address", Description = "Added Description", Phone = "+375293094300" };
             var venueService = new VenueService(dbContext);

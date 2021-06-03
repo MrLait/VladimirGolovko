@@ -21,7 +21,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         [OneTimeSetUp]
         public void InitRepositories()
         {
-            DbContext = new EfDbContext(MainConnectionString);
+            DbContext = new EfDbContext(DefaultConnectionString);
             _layoutRepository = new EfRepository<Layout>(DbContext);
         }
 
@@ -111,7 +111,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         public async Task UpdateAsync_WhenLayoutExist_ShouldUpdateLastLayout()
         {
             // Arrange
-            var dbContext = new EfDbContext(connectionString: MainConnectionString);
+            var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var layoutLast = _layoutRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
             var expected = new Layout { Id = layoutLast.Id, Description = "Updated Description", VenueId = layoutLast.VenueId };
             var layoutService = new LayoutService(dbContext);

@@ -36,16 +36,9 @@
         /// </summary>
         public const string EventDateTimeValidation = "The Event with date time: '{0}' - can't be created in the past.";
 
-        /// <summary>
-        /// {0} - Description.
-        /// {1} - DateTime.
-        /// </summary>
-        public const string EventForTheSameVenueInTheSameDateTime = "Event with description: '{0}' for the Venue with the dateTime: '{1}' - already exist";
+        public const string EventForTheSameVenueInTheSameDateTime = "Event for the Venue with the dateTime already exist";
 
-        /// <summary>
-        /// {0} - Description.
-        /// </summary>
-        public const string ThereAreNoSeatsInTheEvent = "Event with description: '{0}' - cannot exist without seats.";
+        public const string ThereAreNoSeatsInTheEvent = "The Event cannot exist without seats.";
 
         /// <summary>
         /// {0} - Description.
@@ -65,11 +58,11 @@
 
         public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the event.";
 
-        /// <summary>
-        /// {0} - Start data time.
-        /// {0} - End data time.
-        /// </summary>
-        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event '{0}' cannot be after the end of the event '{1}'.";
+        public const string StartDataTimeBeforeEndDataTime = "The beginning of the event cannot be after the end of the event.";
+
+        public const string CantBeCreatedInThePast = "The Event can't be created in the past.";
+
+        public const string ThereIsNoSuchLayout = "There is no such Layout.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMessages"/> class.

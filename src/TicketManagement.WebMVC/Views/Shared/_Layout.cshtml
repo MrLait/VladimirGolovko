@@ -39,7 +39,7 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (User.IsInRole("eventManager"))
+                            @if (User.IsInRole(UserRoles.EventManager))
                             {
                                 <li class="nav-link nav-item text-dark">
                                     <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">@Localizer["EventManagerArea"]</a>
