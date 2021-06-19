@@ -1,4 +1,6 @@
-﻿namespace TicketManagement.WebMVC.Clients.EventFlowClient
+﻿using System;
+
+namespace TicketManagement.WebMVC.Clients.EventFlowClient
 {
     public static class EventFlowApiRequestUries
     {
@@ -13,6 +15,12 @@
         /// {0} - user id.
         /// </summary>
         public const string BasketGetAllByUserId = "/Basket/getAllByUserId?id={0}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// {1} - item id.
+        /// </summary>
+        public const string BasketAddToBasket = "/Basket/addToBasket?userId={0}&itemId={1}";
 
         /// <summary>
         /// {0} - user id.

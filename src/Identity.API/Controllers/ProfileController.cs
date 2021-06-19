@@ -14,17 +14,14 @@ namespace TicketManagement.Services.Identity.API.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public ProfileController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+        public ProfileController(SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
             UserManager<ApplicationUser> applicationUserManager)
         {
             _applicationUserManager = applicationUserManager;
-            _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
         }
@@ -42,6 +39,145 @@ namespace TicketManagement.Services.Identity.API.Controllers
             user.Balance = balance;
             await _applicationUserManager.UpdateAsync(user);
             return Ok();
+        }
+
+        [HttpGet("getUserProfile")]
+        public async Task<IActionResult> GetUserProfile(string userId)
+        {
+            var user = await _applicationUserManager.FindByIdAsync(userId);
+            return Ok(user);
+        }
+
+        [HttpGet("editFirstName")]
+        public async Task<IActionResult> EditFirstName(string userId, string firstName)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.FirstName = firstName;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("editSurname")]
+        public async Task<IActionResult> EditSurname(string userId, string surname)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.Surname = surname;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("editEmail")]
+        public async Task<IActionResult> EditEmail(string userId, string email)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.Email = email;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("editPassword")]
+        public async Task<IActionResult> EditPassword(string userId, string oldPassword, string newPassword)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var result = await _applicationUserManager.ChangePasswordAsync(user, oldPassword, newPassword);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("editTimeZoneOffset")]
+        public async Task<IActionResult> EditTimeZoneOffset(string userId, string timeZoneOffset)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.TimeZoneOffset = timeZoneOffset;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("deposite")]
+        public async Task<IActionResult> Deposite(string userId, decimal balance)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.Balance += balance;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("setLanguage")]
+        public async Task<IActionResult> SetLanguage(string userId, string culture)
+        {
+            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.Language += culture;
+                var result = await _applicationUserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+
+            return NotFound();
         }
     }
 }

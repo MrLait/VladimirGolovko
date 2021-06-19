@@ -27,7 +27,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         public async Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.PurchaseHistoryAddItem, userId, itemId);
+            var address = string.Format(EventFlowApiRequestUries.BasketAddToBasket, userId, itemId);
             var message = await _httpClient.GetAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }
