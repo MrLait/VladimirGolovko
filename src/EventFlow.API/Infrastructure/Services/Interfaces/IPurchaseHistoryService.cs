@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 {
@@ -12,7 +13,8 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
 
         ////Task AddFromBasketAsync(IQueryable<Basket> baskets);
 
-        ////Task<PurchaseHistoryViewModel> GetAllByUserAsync(ApplicationUser user);
+        Task<PurchaseHistoryModel> GetAllByUserIdAsync(string userId);
+
         Task AddAsync(string userId, int itemId);
     }
 }

@@ -30,5 +30,10 @@
         /// {1} - item id.
         /// </summary>
         public const string PurchaseHistoryAddItem = "/PurchaseHistory/addItem?userId={0}&itemId={1}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// </summary>
+        public const string PurchaseHistoryGetAllByUserId = "/PurchaseHistory/getAllByUserId?userId={0}";
     }
 }

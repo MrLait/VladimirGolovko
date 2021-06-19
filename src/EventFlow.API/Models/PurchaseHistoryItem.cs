@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketManagement.WebMVC.ViewModels
+namespace TicketManagement.Services.EventFlow.API.Models
 {
     public class PurchaseHistoryItem
     {

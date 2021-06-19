@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using TicketManagement.DataAccess.Enums;
-using TicketManagement.WebMVC.Clients.Basket;
 
 namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 {

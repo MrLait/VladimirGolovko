@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TicketManagement.WebMVC.Clients.Basket
+namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 {
     public class BasketModel
     {

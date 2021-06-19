@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
-using TicketManagement.WebMVC.Clients.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
