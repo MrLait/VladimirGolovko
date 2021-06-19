@@ -59,6 +59,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 basketModel.Items.Add(
                     new BasketItem
                     {
+                        Id = seatItem.Id.ToString(),
                         EventName = eventItem.Name,
                         EventAreaDescription = areaItem.Description,
                         Row = seatItem.Row,
@@ -93,13 +94,13 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.Baskets.DeleteAsync(new Basket { Id = basketId, ProductId = productId, UserId = userId });
         }
 
-        ////public async Task DeleteAsync(ApplicationUser user)
-        ////{
-        ////    var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == user.Id);
-        ////    foreach (var item in basketItems.ToList())
-        ////    {
-        ////        await DeleteAsync(item);
-        ////    }
-        ////}
+        public async Task DeleteAllByUserIdAsync(string id)
+        {
+            var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == id);
+            foreach (var item in basketItems.ToList())
+            {
+                await DbContext.Baskets.DeleteAsync(new Basket { Id = item.Id, ProductId = item.ProductId, UserId = item.UserId });
+            }
+        }
     }
 }

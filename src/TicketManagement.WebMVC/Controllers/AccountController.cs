@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Clients.IdentityClient;
+using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
 namespace TicketManagement.WebMVC.Controllers

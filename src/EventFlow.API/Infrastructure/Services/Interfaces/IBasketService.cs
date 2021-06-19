@@ -17,5 +17,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
 
         ////Task<BasketViewModel> GetAllByUserAsync(ApplicationUser user);
         Task<BasketModel> GetAllByUserIdAsync(string id);
+
+        Task DeleteAllByUserIdAsync(string id);
     }
 }

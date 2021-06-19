@@ -1,9 +1,8 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using RestEase;
 
-namespace TicketManagement.WebMVC.Clients.IdentityClient
+namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
 {
     public interface IUserClient
     {

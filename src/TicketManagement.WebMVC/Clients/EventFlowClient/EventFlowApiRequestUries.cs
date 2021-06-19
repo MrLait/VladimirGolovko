@@ -18,12 +18,17 @@
         /// {0} - user id.
         /// {1} - item id.
         /// </summary>
-        public const string BasketAddToBasket = "/Basket/addToBasket?userId={0}&itemId={1}";
+        public const string BasketRemoveFromBasket = "/Basket/removeFromBasket?userId={0}&itemId={1}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// </summary>
+        public const string BasketDeleteAllByUserId = "/Basket/deleteAllByUserId?id={0}";
 
         /// <summary>
         /// {0} - user id.
         /// {1} - item id.
         /// </summary>
-        public const string BasketRemoveFromBasket = "/Basket/removeFromBasket?userId={0}&itemId={1}";
+        public const string PurchaseHistoryAddItem = "/PurchaseHistory/addItem?userId={0}&itemId={1}";
     }
 }

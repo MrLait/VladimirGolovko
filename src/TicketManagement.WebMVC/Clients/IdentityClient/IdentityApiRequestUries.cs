@@ -9,5 +9,16 @@
         /// {0} - token.
         /// </summary>
         public const string ValidateToken = "AccountUser/validate?token={0}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// </summary>
+        public const string GetBalance = "Profile/getBalance?userId={0}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// {1} - new balance.
+        /// </summary>
+        public const string UpdateBalance = "Profile/updateBalance?userId={0}&balance={1}";
     }
 }

@@ -10,7 +10,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class BasketController : ControllerBase
+    public class PurchaseHistoryController : ControllerBase
     {
         private readonly IBasketService _basketService;
         ////private readonly IApplicationUserService _applicationUserService;
@@ -19,7 +19,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         ////private readonly IIdentityParser<ApplicationUser> _identityParser;
         ////private readonly IStringLocalizer<BasketController> _localizer;
 
-        public BasketController(IBasketService basketService,
+        public PurchaseHistoryController(IBasketService basketService,
         IEventSeatService eventSeatService,
         IPurchaseHistoryService purchaseHistoryService)
         ////IApplicationUserService applicationUserService,
@@ -34,41 +34,11 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             ////_localizer = localizer;
         }
 
-        [HttpGet("getAllByUserId")]
-        public async Task<IActionResult> GetAllByUserIdAsync(string id)
+        [HttpGet("addItem")]
+        public async Task<IActionResult> AddItemAsync(string userId, int itemId)
         {
-            var vm = await _basketService.GetAllByUserIdAsync(id);
-            return Ok(vm);
-        }
-
-        [HttpGet("addToBasket")]
-        public async Task<IActionResult> AddToBasketAsync(string userId, int itemId)
-        {
-            await _basketService.AddAsync(userId, itemId);
-            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
-
-            return Ok();
-        }
-
-        [HttpGet("removeFromBasket")]
-        public async Task<IActionResult> RemoveFromBasketAsync(string userId, int itemId)
-        {
-            try
-            {
-                await _basketService.DeleteAsync(userId, itemId);
-                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
-                return Ok();
-            }
-            catch (ValidationException ve)
-            {
-                return BadRequest(ve.Message);
-            }
-        }
-
-        [HttpDelete("deleteAllByUserId")]
-        public async Task<IActionResult> DeleteAllByUserIdAsync(string id)
-        {
-            await _basketService.DeleteAllByUserIdAsync(id);
+            await _purchaseHistoryService.AddAsync(userId, itemId);
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Purchased });
             return Ok();
         }
 

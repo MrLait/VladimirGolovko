@@ -20,7 +20,10 @@ using TicketManagement.WebMVC.Clients.EventFlowClient;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
+using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient;
+using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
+using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
 using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
@@ -47,11 +50,7 @@ namespace TicketManagement.WebMVC
             services.AddAuthentication(JwtAutheticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
-            services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
-            {
-                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
-                client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
-            });
+            AddIdentityClients(services);
             services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
             {
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
@@ -67,6 +66,11 @@ namespace TicketManagement.WebMVC
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
             });
+            services.AddHttpClient<IPurchaseHistoryClient, PurchaseHistoryClient>((provider, client) =>
+            {
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
+                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
+            });
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddControllersWithViews()
@@ -74,18 +78,32 @@ namespace TicketManagement.WebMVC
                 .AddViewLocalization();
 
             services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
                 {
-                    var supportedCultures = new[]
-                    {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
                     new CultureInfo("be"),
-                    };
+                };
 
-                    options.DefaultRequestCulture = new RequestCulture("ru");
-                    options.SupportedCultures = supportedCultures;
-                    options.SupportedUICultures = supportedCultures;
-                });
+                options.DefaultRequestCulture = new RequestCulture("ru");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+        }
+
+        private static void AddIdentityClients(IServiceCollection services)
+        {
+            services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
+            {
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
+                client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
+            });
+            services.AddHttpClient<IProfileClient, ProfileClient>((provider, client) =>
+            {
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
+                client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

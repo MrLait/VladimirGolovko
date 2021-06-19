@@ -27,7 +27,6 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> Index(EventDto dto)
         {
-            //////var token = Request.Cookies["secret_jwt_key"].ToString();
             var evntArea = await _evenAreaClient.GetAllByEventIdAsync(dto.Id);
             var vm = new IndexViewModel { EvenAreatItems = evntArea };
             return View(vm);
@@ -51,45 +50,6 @@ namespace TicketManagement.WebMVC.Controllers
         ////    }
         ////    catch (ValidationException)
         ////    {
-        ////        return RedirectToAction("Index", "EventHomePage");
-        ////    }
-        ////}
-
-        ////public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
-        ////{
-        ////    try
-        ////    {
-        ////        var user = _identityParser.Parse(HttpContext.User);
-        ////        await _basketService.AddAsync(user, itemId);
-        ////        await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
-
-        ////        return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
-        ////    }
-        ////    catch (ValidationException ve)
-        ////    {
-        ////        ModelState.AddModelError("", ve.Message);
-        ////        return RedirectToAction("Index", "EventHomePage");
-        ////    }
-        ////}
-
-        ////public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
-        ////{
-        ////    if (itemState == States.Purchased)
-        ////    {
-        ////        return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
-        ////    }
-
-        ////    try
-        ////    {
-        ////        var user = _identityParser.Parse(HttpContext.User);
-        ////        await _basketService.DeleteAsync(new Basket { ProductId = itemId, UserId = user.Id });
-        ////        await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
-
-        ////        return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
-        ////    }
-        ////    catch (ValidationException ve)
-        ////    {
-        ////        ModelState.AddModelError("", ve.Message);
         ////        return RedirectToAction("Index", "EventHomePage");
         ////    }
         ////}

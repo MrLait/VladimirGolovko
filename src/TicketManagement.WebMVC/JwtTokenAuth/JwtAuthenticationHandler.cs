@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TicketManagement.WebMVC.Clients.IdentityClient;
+using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 
 namespace TicketManagement.WebMVC.JwtTokenAuth
 {

@@ -42,6 +42,8 @@ namespace TicketManagement.Services.EventFlow.API
             services.AddScoped<IEventAreaService, EventAreaService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
+
             services.AddScoped<IDbContext, EfDbContext>();
 
             AddDbContext(services);
