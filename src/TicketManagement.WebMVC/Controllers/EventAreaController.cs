@@ -13,7 +13,6 @@ using TicketManagement.WebMVC.ViewModels.EventAreaViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    [Authorize]
     public class EventAreaController : Controller
     {
         private readonly IEventAreaService _eventAreaService;

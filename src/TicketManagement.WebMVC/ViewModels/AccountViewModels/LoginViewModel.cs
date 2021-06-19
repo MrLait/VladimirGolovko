@@ -15,7 +15,5 @@ namespace TicketManagement.WebMVC.ViewModels.AccountViewModels
 
         [Display(Name = "RememberMe")]
         public bool RememberMe { get; set; }
-
-        public string ReturnUrl { get; set; }
     }
 }

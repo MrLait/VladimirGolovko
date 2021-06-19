@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.DataAccess.Repositories.EfRepositories;

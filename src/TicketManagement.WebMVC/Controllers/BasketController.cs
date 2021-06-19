@@ -14,7 +14,6 @@ using TicketManagement.WebMVC.ViewModels.BasketViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    [Authorize]
     public class BasketController : Controller
     {
         private readonly IBasketService _basketService;

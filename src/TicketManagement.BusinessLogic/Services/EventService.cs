@@ -14,7 +14,7 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event service class.
     /// </summary>
-    internal class EventService : IEventService
+    public class EventService : IEventService
     {
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;

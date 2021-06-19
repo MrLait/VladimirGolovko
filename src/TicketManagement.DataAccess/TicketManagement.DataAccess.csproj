@@ -50,5 +50,9 @@
       <_Parameter1>TicketManagement.Dto</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Ado\" />
+  </ItemGroup>
   
 </Project>

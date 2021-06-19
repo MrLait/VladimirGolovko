@@ -3,7 +3,7 @@ using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
-namespace TicketManagement.DataAccess.Ado
+namespace TicketManagement.DataAccess.DbContexts
 {
     public class EfDbContext : DbContext, IDbContext
     {
