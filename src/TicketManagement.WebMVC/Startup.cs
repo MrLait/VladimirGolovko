@@ -1,8 +1,5 @@
 using System;
 using System.Globalization;
-using System.Text;
-using Identity.API.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using RestEase;
 using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.BusinessLogic.Services;
@@ -45,8 +40,8 @@ namespace TicketManagement.WebMVC
             services.AddOptions().Configure<ApiOptions>(binder => binder.UserApiAddress = Configuration["UserApiAddress"]);
             services.AddOptions().Configure<ApiOptions>(binder => binder.EventFlowApiAddress = Configuration["EventFlowApiAddress"]);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            ConfigureAuthorization(services);
+            services.AddAuthentication(JwtAutheticationConstants.SchemeName)
+                .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
@@ -88,8 +83,9 @@ namespace TicketManagement.WebMVC
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
 
-            app.UseAuthentication();
             app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -104,76 +100,6 @@ namespace TicketManagement.WebMVC
                     pattern: "{controller=EventHomePage}/{action=Index}/{id?}");
             });
         }
-
-#pragma warning disable S1144 // Unused private types or members should be removed
-        private void ConfigureAuthorization(IServiceCollection services)
-        {
-            var tokenSettings = Configuration.GetSection(nameof(JwtTokenSettings));
-            services.AddAuthentication(JwtAutheticationConstants.SchemeName)
-                .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null)
-                .AddJwtBearer(options =>
-                {
-                    var jwtSecurityScheme = new OpenApiSecurityScheme
-                    {
-                        Description = "Jwt Token is required to access the endpoints",
-                        In = ParameterLocation.Header,
-                        Name = "JWT Authentication",
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "bearer",
-                        BearerFormat = "JWT",
-                        Reference = new OpenApiReference
-                        {
-                            Id = JwtBearerDefaults.AuthenticationScheme,
-                            Type = ReferenceType.SecurityScheme,
-                        },
-                    };
-
-                    options.AddSecurityDefinition("Bearer", jwtSecurityScheme);
-                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() },
-                });
-                    ////options.
-                    ////options.RequireHttpsMetadata = false;
-                    ////options.TokenValidationParameters = new TokenValidationParameters
-                    ////{
-                    ////    ValidateIssuer = true,
-                    ////    ValidIssuer = tokenSettings[nameof(JwtTokenSettings.JwtIssuer)],
-                    ////    ValidateAudience = true,
-                    ////    ValidAudience = tokenSettings[nameof(JwtTokenSettings.JwtAudience)],
-                    ////    ValidateIssuerSigningKey = true,
-                    ////    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings[nameof(JwtTokenSettings.JwtSecretKey)])),
-                    ////    ValidateLifetime = false,
-                    ////};
-                });
-            services.Configure<JwtTokenSettings>(tokenSettings);
-
-            ////var tokenSettings = Configuration.GetSection(nameof(JwtTokenSettings));
-            ////services.AddAuthentication(options =>
-            ////{
-            ////    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            ////    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            ////    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            ////})
-            ////    .AddJwtBearer(options =>
-            ////    {
-            ////        options.RequireHttpsMetadata = false;
-            ////        options.TokenValidationParameters = new TokenValidationParameters
-            ////        {
-            ////            ValidateIssuer = true,
-            ////            ValidIssuer = tokenSettings[nameof(JwtTokenSettings.JwtIssuer)],
-            ////            ValidateAudience = true,
-            ////            ValidAudience = tokenSettings[nameof(JwtTokenSettings.JwtAudience)],
-            ////            ValidateIssuerSigningKey = true,
-            ////            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings[nameof(JwtTokenSettings.JwtSecretKey)])),
-            ////            ValidateLifetime = false,
-            ////        };
-            ////    });
-            ////services.Configure<JwtTokenSettings>(tokenSettings);
-            ////services.AddScoped<JwtTokenService>();
-        }
-#pragma warning restore S1144 // Unused private types or members should be removed
-
     }
 }
         //////    // This method gets called by the runtime. Use this method to add services to the container.

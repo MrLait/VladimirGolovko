@@ -8,6 +8,6 @@
         /// <summary>
         /// {0} - token.
         /// </summary>
-        public const string ValidateToken = "AccountUser/validate?token='{0}'";
+        public const string ValidateToken = "AccountUser/validate?token={0}";
     }
 }

@@ -66,13 +66,6 @@ namespace TicketManagement.WebMVC.Controllers
             return RedirectToAction("Index", "EventHomePage");
         }
 
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return View();
-        }
-
         ////[HttpGet]
         ////public IActionResult Register()
         ////{

@@ -28,12 +28,8 @@ namespace TicketManagement.WebMVC.JwtTokenAuth
         /// <inheritdoc />
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
-            {
-                return AuthenticateResult.Fail("Unauthorized");
-            }
+            var token = Request.Cookies["secret_jwt_key"].ToString();
 
-            var token = Request.Headers["Authorization"].ToString()["Bearer ".Length..];
             try
             {
                 await _userClient.ValidateToken(token);
