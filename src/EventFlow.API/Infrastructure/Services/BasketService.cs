@@ -27,15 +27,15 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// </summary>
         public IDbContext DbContext { get; }
 
-        ////public async Task AddAsync(ApplicationUser user, int productId)
-        ////{
-        ////    var basketItem = new Basket
-        ////    {
-        ////        ProductId = productId,
-        ////        UserId = user.Id,
-        ////    };
-        ////    await DbContext.Baskets.CreateAsync(basketItem);
-        ////}
+        public async Task AddAsync(string userId, int productId)
+        {
+            var basketItem = new Basket
+            {
+                ProductId = productId,
+                UserId = userId,
+            };
+            await DbContext.Baskets.CreateAsync(basketItem);
+        }
 
         ////public IQueryable<Basket> GetAll()
         ////{

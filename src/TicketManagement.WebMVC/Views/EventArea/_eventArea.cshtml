@@ -14,7 +14,7 @@
             {
                 @if (item.State == TicketManagement.DataAccess.Enums.States.Available)
                 {
-                    <form asp-controller="EventArea" asp-action="AddToBasket">
+                    <form asp-controller="Basket" asp-action="AddToBasket">
                         <input type="hidden" asp-for="@Model.Id" name="id" />
                         <input type="hidden" asp-for="@item.Id" name="itemId" />
                         <input type="hidden" asp-for="@item.State" name="itemState" />

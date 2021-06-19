@@ -5,7 +5,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
 {
     public interface IBasketService
     {
-        ////Task AddAsync(ApplicationUser user, int productId);
+        Task AddAsync(string userId, int productId);
 
         ////Task DeleteAsync(Basket basketItem);
 

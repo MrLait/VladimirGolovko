@@ -1,15 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
-using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
-using TicketManagement.WebMVC.Models;
-using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.EventAreaViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
