@@ -21,12 +21,5 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             var events = _eventService.GetAll();
             return Ok(events);
         }
-
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return Ok("gf");
-        }
     }
 }

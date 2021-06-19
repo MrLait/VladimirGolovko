@@ -10,13 +10,13 @@ namespace TicketManagement.WebMVC.Controllers
     [Route("[controller]")]
     public class AccountController : Controller
     {
-        private readonly IUserClient _userRestClient;
+        private readonly IUserClient _applicationUserClient;
         ////private readonly UserManager<ApplicationUser> _userManager;
         ////private readonly SignInManager<ApplicationUser> _signInManager;
         ////private readonly IMapper _mapper;
         ////private readonly IStringLocalizer<AccountController> _localizer;
 
-        public AccountController(IUserClient userRestClient)
+        public AccountController(IUserClient applicationUserClient)
             ////UserManager<ApplicationUser> userManager,
             ////SignInManager<ApplicationUser> signInManager,
             ////IMapper mapper, IStringLocalizer<AccountController> localizer
@@ -25,7 +25,7 @@ namespace TicketManagement.WebMVC.Controllers
             ////_signInManager = signInManager;
             ////_mapper = mapper;
             ////_localizer = localizer;
-            _userRestClient = userRestClient;
+            _applicationUserClient = applicationUserClient;
         }
 
         [HttpGet("register")]
@@ -37,7 +37,7 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] RegisterModel user)
         {
-            var token = await _userRestClient.Register(user);
+            var token = await _applicationUserClient.Register(user);
             HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
             {
                 HttpOnly = true,
@@ -56,7 +56,7 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] LoginModel user)
         {
-            var token = await _userRestClient.Login(user);
+            var token = await _applicationUserClient.Login(user);
             HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
             {
                 HttpOnly = true,

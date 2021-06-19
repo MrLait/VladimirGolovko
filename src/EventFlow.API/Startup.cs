@@ -67,7 +67,7 @@ namespace TicketManagement.Services.EventFlow.API
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "User API v1");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "EventFlow API v1");
             });
 
             app.UseAuthentication();

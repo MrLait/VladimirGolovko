@@ -105,7 +105,7 @@ namespace TicketManagement.WebMVC.Controllers
                         await _eventService.CreateAsync(eventDto);
                         var lastAddedEvent = _eventService.Last();
                         indexViewModel.EventItems[i] = _mapper.Map<EventDto, EventViewModel.EventViewModel>(lastAddedEvent);
-                        var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent).ToList();
+                        var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent.Id).ToList();
                         indexViewModel.EventItems[i].EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventViewModel.EventAreaItem>>(eventsDto);
                     }
                 }

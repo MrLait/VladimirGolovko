@@ -18,6 +18,7 @@ using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Clients;
 using TicketManagement.WebMVC.Clients.EventFlowClient;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
+using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.Models;
@@ -50,6 +51,11 @@ namespace TicketManagement.WebMVC
             });
 
             services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
+            {
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
+                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
+            });
+            services.AddHttpClient<IEventAreaClient, EventAreaClient>((provider, client) =>
             {
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);

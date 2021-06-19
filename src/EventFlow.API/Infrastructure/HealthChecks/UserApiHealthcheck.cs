@@ -35,34 +35,6 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.HealthChecks
             {
                 return HealthCheckResult.Unhealthy("User API is not healthy");
             }
-
-            //// await CheckHealthViaRegularEndpoints(cancellationToken);
         }
-
-        //////private async Task<HealthCheckResult> CheckHealthViaRegularEndpoints(CancellationToken cancellationToken)
-        //////{
-        //////    try
-        //////    {
-        //////        await _userClient.Login(new UserModel
-        //////        {
-        //////            Login = "consumerApiUser",
-        //////            Password = "consumerApiPassword",
-        //////        }, cancellationToken);
-        //////        return HealthCheckResult.Healthy(UserApiHealthyText);
-        //////    }
-        //////    catch (HttpRequestException httpRequestException)
-        //////    {
-        //////        var unAuthorized = httpRequestException.StatusCode == HttpStatusCode.Unauthorized;
-        //////        var badRequest = httpRequestException.StatusCode == HttpStatusCode.BadRequest;
-        //////        var notFound = httpRequestException.StatusCode == HttpStatusCode.NotFound;
-        //////        var forbidden = httpRequestException.StatusCode == HttpStatusCode.Forbidden;
-        //////        if (unAuthorized || badRequest || notFound || forbidden)
-        //////        {
-        //////            return HealthCheckResult.Healthy(UserApiHealthyText);
-        //////        }
-
-        //////        return HealthCheckResult.Unhealthy(UserApiUnhealthyText + httpRequestException.Message);
-        //////    }
-        //////}
     }
 }

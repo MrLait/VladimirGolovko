@@ -122,7 +122,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var allEventAreas = _eventAreaService.GetByEventId(dto).ToList();
+            var allEventAreas = _eventAreaService.GetByEventId(dto.Id).ToList();
             bool isSeatPurchased = false;
             foreach (var item in allEventAreas)
             {

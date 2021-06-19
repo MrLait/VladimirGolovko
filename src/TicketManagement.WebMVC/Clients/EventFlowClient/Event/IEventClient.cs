@@ -30,21 +30,3 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
         }
     }
 }
-
-////public interface IEventRestClient
-////{
-////    [Get("/health/live")]
-////    public Task HealthCheck();
-
-////    [Get("Event/getAll")]
-////    public Task<string> GetAll([Body] HttpContent content);
-////}
-
-////public static class EventClientExtensions
-////{
-////    public static async Task<string> GetAll(this IEventRestClient eventClient)
-////    {
-////        var result = await eventClient.GetAll();
-////        return result;
-////    }
-////}

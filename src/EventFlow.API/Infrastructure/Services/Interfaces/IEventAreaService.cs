@@ -34,7 +34,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         /// <returns>Returns list of objects.</returns>
         IEnumerable<EventAreaDto> GetAll();
 
-        IEnumerable<EventAreaDto> GetByEventId(EventDto dto);
+        IEnumerable<EventAreaDto> GetByEventId(int id);
 
         IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto);
 

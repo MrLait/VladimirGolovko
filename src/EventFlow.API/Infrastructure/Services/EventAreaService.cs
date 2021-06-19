@@ -38,9 +38,9 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return eventAreasDto;
         }
 
-        public IEnumerable<EventAreaDto> GetByEventId(EventDto dto)
+        public IEnumerable<EventAreaDto> GetByEventId(int id)
         {
-            var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
+            var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == id);
 
             List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)

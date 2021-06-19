@@ -59,7 +59,7 @@ namespace TicketManagement.WebMVC.Controllers
                         await _eventService.CreateAsync(eventDto);
                         var lastAddedEvent = _eventService.Last();
                         model = _mapper.Map<EventDto, EventViewModel>(lastAddedEvent);
-                        var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent).ToList();
+                        var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent.Id).ToList();
                         model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
                         return View(model);
                     }
