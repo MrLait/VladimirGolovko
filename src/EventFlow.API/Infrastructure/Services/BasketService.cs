@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 using TicketManagement.Services.EventFlow.API.Models;
 
@@ -37,10 +39,10 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.Baskets.CreateAsync(basketItem);
         }
 
-        ////public IQueryable<Basket> GetAll()
-        ////{
-        ////    return DbContext.Baskets.GetAllAsQueryable();
-        ////}
+        public IQueryable<Basket> GetAll()
+        {
+            return DbContext.Baskets.GetAllAsQueryable();
+        }
 
         public async Task<BasketModel> GetAllByUserIdAsync(string id)
         {
@@ -71,24 +73,25 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return basketModel;
         }
 
-        ////public async Task DeleteAsync(Basket basketItem)
-        ////{
-        ////    if (basketItem.Id == 0)
-        ////    {
-        ////        var currentSeatState = (await _eventSeatService.GetByIDAsync(basketItem.ProductId)).State;
-        ////        if (currentSeatState == States.Purchased)
-        ////        {
-        ////            return;
-        ////        }
+        public async Task DeleteAsync(string userId, int productId)
+        {
+            var currentSeatState = (await _eventSeatService.GetByIDAsync(productId)).State;
+            if (currentSeatState == States.Purchased)
+            {
+                return;
+            }
 
-        ////        var productId = GetAll().Where(x => x.ProductId == basketItem.ProductId && x.UserId == basketItem.UserId).FirstOrDefault().Id;
-        ////        basketItem.Id = productId;
-        ////        await DbContext.Baskets.DeleteAsync(basketItem);
-        ////        return;
-        ////    }
+            var products = GetAll().Where(x => x.ProductId == productId && x.UserId == userId);
 
-        ////    await DbContext.Baskets.DeleteAsync(basketItem);
-        ////}
+            var productInCurrentUserBasket = products.Count() == 0;
+            if (productInCurrentUserBasket)
+            {
+                throw new ValidationException(ExceptionMessages.ProductInAnotherUserBusket);
+            }
+
+            var basketId = products.FirstOrDefault().Id;
+            await DbContext.Baskets.DeleteAsync(new Basket { Id = basketId, ProductId = productId, UserId = userId });
+        }
 
         ////public async Task DeleteAsync(ApplicationUser user)
         ////{

@@ -14,6 +14,8 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
         public Task<BasketModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
 
         public Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
+
+        public Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
     }
 
     internal class BasketClient : IBasketClient
@@ -28,6 +30,13 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
         public async Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
             var address = string.Format(EventFlowApiRequestUries.BasketAddToBasket, userId, itemId);
+            var message = await _httpClient.GetAsync(address, cancellationToken);
+            message.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
+        {
+            var address = string.Format(EventFlowApiRequestUries.BasketRemoveFromBasket, userId, itemId);
             var message = await _httpClient.GetAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }

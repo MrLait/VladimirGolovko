@@ -64,6 +64,8 @@
 
         public const string ThereIsNoSuchLayout = "There is no such Layout.";
 
+        public const string ProductInAnotherUserBusket = "Product in another user busket.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMessages"/> class.
         /// </summary>

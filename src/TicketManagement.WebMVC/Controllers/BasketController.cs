@@ -64,8 +64,27 @@ namespace TicketManagement.WebMVC.Controllers
             {
                 var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
                 await _basketClient.AddToBasketAsync(userId, itemId);
-                ////await _basketService.AddAsync(user, itemId);
-                ////await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
+
+                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+            }
+            catch (ValidationException ve)
+            {
+                ModelState.AddModelError("", ve.Message);
+                return RedirectToAction("Index", "EventHomePage");
+            }
+        }
+
+        public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
+        {
+            if (itemState == States.Purchased)
+            {
+                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+            }
+
+            try
+            {
+                var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
+                await _basketClient.RemoveFromBasketAsync(userId, itemId);
 
                 return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
             }

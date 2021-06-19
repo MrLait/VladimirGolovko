@@ -46,26 +46,6 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             }
         }
 
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            try
-            {
-                var eventAreaDto = _eventAreaService.GetByEventId(Convert.ToInt32("1"));
-
-                for (int i = 0; i < eventAreaDto.Count(); i++)
-                {
-                    var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
-                    eventAreaDto.ToList()[i].EvenSeats = eventSeatDto;
-                }
-
-                return Ok(eventAreaDto);
-            }
-            catch (ValidationException)
-            {
-                return RedirectToAction("Index", "EventHomePage");
-            }
-        }
         ////public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         ////{
         ////    try

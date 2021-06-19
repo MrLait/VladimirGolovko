@@ -23,7 +23,7 @@
                 }
                 else
                 {
-                    <form asp-controller="EventArea" asp-action="RemoveFromBasket">
+                    <form asp-controller="Basket" asp-action="RemoveFromBasket">
                         <input type="hidden" asp-for="@Model.Id" name="id" />
                         <input type="hidden" asp-for="@item.Id" name="itemId" />
                         <input type="hidden" asp-for="@item.State" name="itemState" />

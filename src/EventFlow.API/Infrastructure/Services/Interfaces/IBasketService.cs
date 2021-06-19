@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
@@ -7,11 +9,11 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
     {
         Task AddAsync(string userId, int productId);
 
-        ////Task DeleteAsync(Basket basketItem);
+        Task DeleteAsync(string userId, int productId);
 
         ////Task DeleteAsync(ApplicationUser user);
 
-        ////IQueryable<Basket> GetAll();
+        IQueryable<Basket> GetAll();
 
         ////Task<BasketViewModel> GetAllByUserAsync(ApplicationUser user);
         Task<BasketModel> GetAllByUserIdAsync(string id);

@@ -19,5 +19,11 @@
         /// {1} - item id.
         /// </summary>
         public const string BasketAddToBasket = "/Basket/addToBasket?userId={0}&itemId={1}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// {1} - item id.
+        /// </summary>
+        public const string BasketRemoveFromBasket = "/Basket/removeFromBasket?userId={0}&itemId={1}";
     }
 }

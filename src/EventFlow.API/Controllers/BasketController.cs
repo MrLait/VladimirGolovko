@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
@@ -26,12 +27,12 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         ////IStringLocalizer<BasketController> localizer
         {
             _basketService = basketService;
-        ////_applicationUserService = applicationUserService;
-        ////_purchaseHistoryService = purchaseHistoryService;
+            ////_applicationUserService = applicationUserService;
+            ////_purchaseHistoryService = purchaseHistoryService;
             _eventSeatService = eventSeatService;
-        ////_identityParser = identityParser;
-        ////_localizer = localizer;
-    }
+            ////_identityParser = identityParser;
+            ////_localizer = localizer;
+        }
 
         [HttpGet("getAllByUserId")]
         public async Task<IActionResult> GetAllByUserIdAsync(string id)
@@ -43,10 +44,25 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         [HttpGet("addToBasket")]
         public async Task<IActionResult> AddToBasketAsync(string userId, int itemId)
         {
-                await _basketService.AddAsync(userId, itemId);
-                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
+            await _basketService.AddAsync(userId, itemId);
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
 
+            return Ok();
+        }
+
+        [HttpGet("removeFromBasket")]
+        public async Task<IActionResult> RemoveFromBasketAsync(string userId, int itemId)
+        {
+            try
+            {
+                await _basketService.DeleteAsync(userId, itemId);
+                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
                 return Ok();
+            }
+            catch (ValidationException ve)
+            {
+                return BadRequest(ve.Message);
+            }
         }
 
         ////public async Task<IActionResult> Index()
