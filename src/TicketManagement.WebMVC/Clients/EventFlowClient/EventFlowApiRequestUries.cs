@@ -8,5 +8,10 @@
         /// {0} - event id.
         /// </summary>
         public const string EventAreaGetAllByEventId = "/EventArea/getAllByEventId?id={0}";
+
+        /// <summary>
+        /// {0} - user id.
+        /// </summary>
+        public const string BasketGetAllByUserId = "/Basket/getAllByUserId?id={0}";
     }
 }

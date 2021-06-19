@@ -17,6 +17,7 @@ using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.WebMVC.Clients;
 using TicketManagement.WebMVC.Clients.EventFlowClient;
+using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
 using TicketManagement.WebMVC.Clients.IdentityClient;
@@ -40,7 +41,9 @@ namespace TicketManagement.WebMVC
         {
             services.AddOptions().Configure<ApiOptions>(binder => binder.UserApiAddress = Configuration["UserApiAddress"]);
             services.AddOptions().Configure<ApiOptions>(binder => binder.EventFlowApiAddress = Configuration["EventFlowApiAddress"]);
+            services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication(JwtAutheticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
@@ -49,13 +52,17 @@ namespace TicketManagement.WebMVC
                 var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
-
             services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
             {
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
             });
             services.AddHttpClient<IEventAreaClient, EventAreaClient>((provider, client) =>
+            {
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
+                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
+            });
+            services.AddHttpClient<IBasketClient, BasketClient>((provider, client) =>
             {
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
