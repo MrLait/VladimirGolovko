@@ -31,7 +31,9 @@ using TicketManagement.WebMVC.Services.FileServices;
 
 namespace TicketManagement.WebMVC
 {
+#pragma warning disable S1200 // Classes should not be coupled to too many other classes (Single Responsibility Principle)
     public class Startup
+#pragma warning restore S1200 // Classes should not be coupled to too many other classes (Single Responsibility Principle)
     {
         public Startup(IConfiguration configuration)
         {

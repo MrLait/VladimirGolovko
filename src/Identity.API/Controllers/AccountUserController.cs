@@ -52,7 +52,8 @@ namespace TicketManagement.Services.Identity.API.Controllers
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.Email);
-                    return Ok(_jwtTokenService.GetToken(user, new List<string>()));
+                    var roles = await _userManager.GetRolesAsync(user);
+                    return Ok(_jwtTokenService.GetToken(user, roles));
                 }
             }
 

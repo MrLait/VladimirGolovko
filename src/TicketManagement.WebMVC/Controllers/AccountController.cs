@@ -1,9 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
+using TicketManagement.WebMVC.JwtTokenAuth;
+using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -13,17 +16,14 @@ namespace TicketManagement.WebMVC.Controllers
     {
         private readonly IUserClient _applicationUserClient;
         ////private readonly UserManager<ApplicationUser> _userManager;
-        ////private readonly SignInManager<ApplicationUser> _signInManager;
         ////private readonly IMapper _mapper;
         ////private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(IUserClient applicationUserClient)
-            ////UserManager<ApplicationUser> userManager,
             ////SignInManager<ApplicationUser> signInManager,
             ////IMapper mapper, IStringLocalizer<AccountController> localizer
         {
             ////_userManager = userManager;
-            ////_signInManager = signInManager;
             ////_mapper = mapper;
             ////_localizer = localizer;
             _applicationUserClient = applicationUserClient;
@@ -64,6 +64,14 @@ namespace TicketManagement.WebMVC.Controllers
                 SameSite = SameSiteMode.Strict,
             });
 
+            return RedirectToAction("Index", "EventHomePage");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Append("secret_jwt_key", "");
             return RedirectToAction("Index", "EventHomePage");
         }
 
@@ -144,14 +152,6 @@ namespace TicketManagement.WebMVC.Controllers
         ////    }
 
         ////    return View(model);
-        ////}
-
-        ////[HttpPost]
-        ////[ValidateAntiForgeryToken]
-        ////public async Task<IActionResult> Logout()
-        ////{
-        ////    await _signInManager.SignOutAsync();
-        ////    return RedirectToAction("Index", "EventHomePage");
         ////}
 
         ////private static Claim CreateClaim(string type, string value)
