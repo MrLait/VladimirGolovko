@@ -1,15 +1,15 @@
-﻿using System;
-
-namespace TicketManagement.WebMVC.Clients.EventFlowClient
+﻿namespace TicketManagement.WebMVC.Clients.EventFlowClient
 {
     public static class EventFlowApiRequestUries
     {
         public const string EventGetAll = "/Event/getAll";
+        public const string EventGetLast = "/Event/getLast";
 
         /// <summary>
         /// {0} - event id.
         /// </summary>
         public const string EventAreaGetAllByEventId = "/EventArea/getAllByEventId?id={0}";
+        public const string EventAreaUpdatePrices = "EventArea/updatePrices";
 
         /// <summary>
         /// {0} - user id.
@@ -43,5 +43,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient
         /// {0} - user id.
         /// </summary>
         public const string PurchaseHistoryGetAllByUserId = "/PurchaseHistory/getAllByUserId?userId={0}";
+
+        public const string EventManagerCreateEvent = "EventManager/createEvent";
     }
 }

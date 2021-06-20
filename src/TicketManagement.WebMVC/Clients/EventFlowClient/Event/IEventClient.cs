@@ -11,6 +11,8 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
     public interface IEventClient
     {
         public Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default);
+
+        public Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default);
     }
 
     internal class EventClient : IEventClient
@@ -27,6 +29,13 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
             var result = await _httpClient.GetStringAsync(EventFlowApiRequestUries.EventGetAll, cancellationToken);
             var events = JsonConvert.DeserializeObject<List<EventDto>>(result);
             return events;
+        }
+
+        public async Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await _httpClient.GetStringAsync(EventFlowApiRequestUries.EventGetLast, cancellationToken);
+            var eventDto = JsonConvert.DeserializeObject<EventDto>(result);
+            return eventDto;
         }
     }
 }

@@ -20,6 +20,7 @@ using TicketManagement.WebMVC.Clients.EventFlowClient;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
+using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
@@ -53,6 +54,32 @@ namespace TicketManagement.WebMVC
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
             AddIdentityClients(services);
+            AddEventFlowClients(services);
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddControllersWithViews()
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization();
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ru"),
+                    new CultureInfo("be"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("ru");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+        }
+
+#pragma warning disable S1541 // Methods and properties should not be too complex
+        private static void AddEventFlowClients(IServiceCollection services)
+#pragma warning restore S1541 // Methods and properties should not be too complex
+        {
             services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
             {
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
@@ -73,24 +100,10 @@ namespace TicketManagement.WebMVC
                 var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
             });
-
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddControllersWithViews()
-                .AddDataAnnotationsLocalization()
-                .AddViewLocalization();
-
-            services.Configure<RequestLocalizationOptions>(options =>
+            services.AddHttpClient<IEventManagerClient, EventManagerClient>((provider, client) =>
             {
-                var supportedCultures = new[]
-                {
-                    new CultureInfo("en"),
-                    new CultureInfo("ru"),
-                    new CultureInfo("be"),
-                };
-
-                options.DefaultRequestCulture = new RequestCulture("ru");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
+                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
             });
         }
 

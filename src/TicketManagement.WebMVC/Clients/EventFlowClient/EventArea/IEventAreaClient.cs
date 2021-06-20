@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -10,6 +11,8 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.EventArea
     public interface IEventAreaClient
     {
         public Task<List<EventAreaDto>> GetAllByEventIdAsync(int id, CancellationToken cancellationToken = default);
+
+        public Task UpdatePricesAsync(List<EventAreaDto> eventAreaDtos, CancellationToken cancellationToken = default);
     }
 
     internal class EventAreaClient : IEventAreaClient
@@ -27,6 +30,15 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.EventArea
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var eventAreas = JsonConvert.DeserializeObject<List<EventAreaDto>>(result);
             return eventAreas;
+        }
+
+        public async Task UpdatePricesAsync(List<EventAreaDto> eventAreaDtos, CancellationToken cancellationToken = default)
+        {
+            var url = EventFlowApiRequestUries.EventAreaUpdatePrices;
+            string json = JsonConvert.SerializeObject(eventAreaDtos);
+            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
+            result.EnsureSuccessStatusCode();
         }
     }
 }

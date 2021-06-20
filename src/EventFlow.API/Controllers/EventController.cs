@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
@@ -20,6 +19,13 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         {
             var events = _eventService.GetAll();
             return Ok(events);
+        }
+
+        [HttpGet("getLast")]
+        public IActionResult GetLast()
+        {
+            var eventDto = _eventService.Last();
+            return Ok(eventDto);
         }
     }
 }

@@ -9,16 +9,16 @@ namespace TicketManagement.WebMVC.Controllers
     [AllowAnonymous]
     public class EventHomePageController : Controller
     {
-        private readonly IEventClient _eventRestClient;
+        private readonly IEventClient _eventClient;
 
-        public EventHomePageController(IEventClient eventRestClient)
+        public EventHomePageController(IEventClient eventClient)
         {
-            _eventRestClient = eventRestClient;
+            _eventClient = eventClient;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var eventCatalog = await _eventRestClient.GetAllAsync();
+            var eventCatalog = await _eventClient.GetAllAsync();
             var vm = new IndexViewModel
             {
                 EventItems = eventCatalog,
