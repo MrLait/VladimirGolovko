@@ -34,6 +34,7 @@ namespace TicketManagement.WebMVC.Services
             CreateMap<ClientPurchaseHistoryItem, ViewPurchaseHistoryItem>();
             CreateMap<ViewPurchaseHistoryItem, ClientPurchaseHistoryItem>();
             CreateMap<RegisterViewModel, RegisterModel>();
+            CreateMap<LoginViewModel, LoginModel>();
         }
     }
 }

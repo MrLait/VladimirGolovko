@@ -26,11 +26,11 @@ namespace Identity.API.Models
             await AddUser(userManager, roleName: UserRoles.User, firstUserEmail, password);
         }
 
-        private static async Task AddUser(UserManager<ApplicationUser> userManager, string roleName, string adminEmail, string password)
+        private static async Task AddUser(UserManager<ApplicationUser> userManager, string roleName, string email, string password)
         {
-            if (await userManager.FindByNameAsync(adminEmail) == null)
+            if (await userManager.FindByNameAsync(email) == null)
             {
-                ApplicationUser user = new ApplicationUser { Email = adminEmail, UserName = adminEmail };
+                ApplicationUser user = new ApplicationUser { Email = email, UserName = email };
                 IdentityResult result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {

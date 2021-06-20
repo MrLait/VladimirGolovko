@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
@@ -38,22 +39,23 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var token = string.Empty;
                 try
                 {
                     var user = _mapper.Map<RegisterViewModel, RegisterModel>(vm);
-                    token = await _applicationUserClient.Register(user);
+                    var token = await _applicationUserClient.Register(user);
 
                     HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
                     {
                         HttpOnly = true,
                         SameSite = SameSiteMode.Strict,
                     });
+
+                    return RedirectToAction("Index", "EventHomePage");
                 }
                 catch (HttpRequestException e)
                 {
-                    var test = e.Message.Split(',');
-                    foreach (var error in test)
+                    var erorrMessages = e.Message.Split(',');
+                    foreach (var error in erorrMessages)
                     {
 #pragma warning disable S134 // Control flow statements "if", "switch", "for", "foreach", "while", "do"  and "try" should not be nested too deeply
                         switch (error)
@@ -88,22 +90,33 @@ namespace TicketManagement.WebMVC.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginModel user)
+        public async Task<IActionResult> Login([FromForm] LoginViewModel vm)
         {
-            var token = string.Empty;
             if (ModelState.IsValid)
             {
-                token = await _applicationUserClient.Login(user);
-                HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
+                try
                 {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.Strict,
-                });
+                    var user = _mapper.Map<LoginViewModel, LoginModel>(vm);
+                    var token = await _applicationUserClient.Login(user);
+                    HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                    });
 
-                return RedirectToAction("Index", "EventHomePage");
+                    return RedirectToAction("Index", "EventHomePage");
+                }
+                catch (HttpRequestException e)
+                {
+                    var result = JsonConvert.DeserializeObject<Microsoft.AspNetCore.Identity.SignInResult>(e.Message);
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
+                    }
+                }
             }
 
-            return View(user);
+            return View(vm);
         }
 
         [HttpPost]
