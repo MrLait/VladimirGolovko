@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using TicketManagement.Services.Identity.Domain.Models;
 
-namespace TicketManagement.WebMVC.Models
+namespace Identity.API.Models
 {
     public class RoleInitializerModel
     {
@@ -28,11 +26,11 @@ namespace TicketManagement.WebMVC.Models
             await AddUser(userManager, roleName: UserRoles.User, firstUserEmail, password);
         }
 
-        private static async Task AddUser(UserManager<ApplicationUser> userManager, string roleName, string email, string password)
+        private static async Task AddUser(UserManager<ApplicationUser> userManager, string roleName, string adminEmail, string password)
         {
-            if (await userManager.FindByNameAsync(email) == null)
+            if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                ApplicationUser user = new ApplicationUser { Email = email, UserName = email, FirstName = email };
+                ApplicationUser user = new ApplicationUser { Email = adminEmail, UserName = adminEmail };
                 IdentityResult result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
