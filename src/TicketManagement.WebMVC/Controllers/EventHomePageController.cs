@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TicketManagement.BusinessLogic.Interfaces;
+using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -8,16 +9,16 @@ namespace TicketManagement.WebMVC.Controllers
     [AllowAnonymous]
     public class EventHomePageController : Controller
     {
-        private readonly IEventService _eventService;
+        private readonly IEventClient _eventClient;
 
-        public EventHomePageController(IEventService eventService)
+        public EventHomePageController(IEventClient eventClient)
         {
-            _eventService = eventService;
+            _eventClient = eventClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            var eventCatalog = _eventService.GetAll();
+            var eventCatalog = await _eventClient.GetAllAsync();
             var vm = new IndexViewModel
             {
                 EventItems = eventCatalog,

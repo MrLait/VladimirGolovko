@@ -2,7 +2,7 @@
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 
-namespace TicketManagement.DataAccess.Ado
+namespace TicketManagement.DataAccess.DbContexts
 {
     /// <summary>
     /// Database context with tables.

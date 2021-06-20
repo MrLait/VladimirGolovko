@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.IntegrationTests

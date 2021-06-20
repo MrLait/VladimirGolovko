@@ -14,7 +14,7 @@ namespace TicketManagement.BusinessLogic.Services
     /// <summary>
     /// Event service class.
     /// </summary>
-    internal class EventService : IEventService
+    public class EventService : IEventService
     {
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
@@ -122,7 +122,7 @@ namespace TicketManagement.BusinessLogic.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var allEventAreas = _eventAreaService.GetByEventId(dto).ToList();
+            var allEventAreas = _eventAreaService.GetByEventId(dto.Id).ToList();
             bool isSeatPurchased = false;
             foreach (var item in allEventAreas)
             {

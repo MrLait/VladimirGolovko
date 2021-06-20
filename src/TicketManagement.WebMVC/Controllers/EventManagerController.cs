@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Interfaces;
 using TicketManagement.Dto;
+using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
+using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
+using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
@@ -16,27 +18,34 @@ namespace TicketManagement.WebMVC.Controllers
     [Authorize(Roles = UserRoles.EventManager)]
     public class EventManagerController : Controller
     {
-        private readonly IEventService _eventService;
-        private readonly IEventAreaService _eventAreaService;
+        private readonly IEventClient _eventClient;
+        private readonly IEventAreaClient _eventAreaClient;
+        private readonly IEventManagerClient _eventManagerClient;
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<EventManagerController> _localizer;
 
-        public EventManagerController(IEventService eventService, IEventAreaService eventAreaService, IMapper mapper,
+        public EventManagerController(
+            IEventClient eventClient,
+            IEventManagerClient eventManagerClient,
+            IEventAreaClient eventAreaClient,
+            IMapper mapper,
             IStringLocalizer<EventManagerController> localizer)
         {
-            _eventService = eventService;
-            _eventAreaService = eventAreaService;
+            _eventAreaClient = eventAreaClient;
+            _eventManagerClient = eventManagerClient;
+            _eventClient = eventClient;
             _mapper = mapper;
             _localizer = localizer;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var eventCatalog = _eventService.GetAll();
+            var eventCatalog = await _eventClient.GetAllAsync();
             var vm = new IndexViewModel
             {
                 EventItems = eventCatalog,
             };
+
             return View(vm);
         }
 
@@ -54,23 +63,20 @@ namespace TicketManagement.WebMVC.Controllers
                 if (ModelState.IsValid)
                 {
                     var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+
                     if (model.Id == 0)
                     {
-                        await _eventService.CreateAsync(eventDto);
-                        var lastAddedEvent = _eventService.Last();
+                        await _eventManagerClient.CreateEvent(eventDto);
+                        var lastAddedEvent = await _eventClient.GetLastAsync();
                         model = _mapper.Map<EventDto, EventViewModel>(lastAddedEvent);
-                        var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent).ToList();
+                        var eventsDto = (await _eventAreaClient.GetAllByEventIdAsync(lastAddedEvent.Id)).ToList();
                         model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
                         return View(model);
                     }
 
                     var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
-                    await _eventAreaService.UpdatePriceAsync(eventAreas);
+                    await _eventAreaClient.UpdatePricesAsync(eventAreas);
                     return RedirectToAction("Index", "EventManager");
-                }
-                else
-                {
-                    ViewData["PriceRequired"] = _localizer["PriceRequired"];
                 }
             }
             catch (ValidationException ve)
@@ -94,66 +100,111 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             return View(model);
+            ////try
+            ////{
+            ////    if (ModelState.IsValid)
+            ////    {
+            ////        var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+            ////        if (model.Id == 0)
+            ////        {
+            ////            await _eventService.CreateAsync(eventDto);
+            ////            var lastAddedEvent = _eventService.Last();
+            ////            model = _mapper.Map<EventDto, EventViewModel>(lastAddedEvent);
+            ////            var eventsDto = _eventAreaService.GetByEventId(lastAddedEvent.Id).ToList();
+            ////            model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
+            ////            return View(model);
+            ////        }
+
+            ////        var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
+            ////        await _eventAreaService.UpdatePriceAsync(eventAreas);
+            ////        return RedirectToAction("Index", "EventManager");
+            ////    }
+            ////    else
+            ////    {
+            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
+            ////    }
+            ////}
+            ////catch (ValidationException ve)
+            ////{
+            ////    if (ve.Message == ExceptionMessages.PriceIsZero)
+            ////    {
+            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
+            ////    }
+
+            ////    if (ve.Message == ExceptionMessages.PriceIsNegative)
+            ////    {
+            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
+            ////    }
+
+            ////    if (ve.Message == ExceptionMessages.CantBeCreatedInThePast)
+            ////    {
+            ////        ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past"]);
+            ////    }
+
+            ////    return View(model);
+            ////}
+
+            ////return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UpdateEventAsync(int id)
-        {
-            var eventItem = await _eventService.GetByIDAsync(id);
-            if (eventItem == null)
-            {
-                return NotFound();
-            }
+        ////[HttpGet]
+        ////public async Task<IActionResult> UpdateEventAsync(int id)
+        ////{
+        ////    var eventItem = await _eventService.GetByIDAsync(id);
+        ////    if (eventItem == null)
+        ////    {
+        ////        return NotFound();
+        ////    }
 
-            var model = _mapper.Map<EventDto, EventViewModel>(eventItem);
-            return View(model);
-        }
+        ////    var model = _mapper.Map<EventDto, EventViewModel>(eventItem);
+        ////    return View(model);
+        ////}
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateEvent(EventViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+        ////[HttpPost]
+        ////public async Task<IActionResult> UpdateEvent(EventViewModel model)
+        ////{
+        ////    if (ModelState.IsValid)
+        ////    {
+        ////        var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
 
-                await _eventService.UpdateAsync(eventDto);
-                return RedirectToAction("Index", "EventManager");
-            }
+        ////        await _eventService.UpdateAsync(eventDto);
+        ////        return RedirectToAction("Index", "EventManager");
+        ////    }
 
-            return View(model);
-        }
+        ////    return View(model);
+        ////}
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+        ////[HttpPost]
+        ////public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
+        ////{
+        ////    if (ModelState.IsValid)
+        ////    {
+        ////        var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
 
-                await _eventService.UpdateLayoutIdAsync(eventDto);
-                return RedirectToAction("Index", "EventManager");
-            }
+        ////        await _eventService.UpdateLayoutIdAsync(eventDto);
+        ////        return RedirectToAction("Index", "EventManager");
+        ////    }
 
-            return View(model);
-        }
+        ////    return View(model);
+        ////}
 
-        [HttpGet]
-        public async Task<IActionResult> DeleteEventAsync(int id)
-        {
-            try
-            {
-                await _eventService.DeleteAsync(new EventDto { Id = id });
-                return RedirectToAction("Index", "EventManager");
-            }
-            catch (ValidationException ex)
-            {
-                if (ex.Message == ExceptionMessages.SeatsHaveAlreadyBeenPurchased)
-                {
-                    return Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
-                }
+        ////[HttpGet]
+        ////public async Task<IActionResult> DeleteEventAsync(int id)
+        ////{
+        ////    try
+        ////    {
+        ////        await _eventService.DeleteAsync(new EventDto { Id = id });
+        ////        return RedirectToAction("Index", "EventManager");
+        ////    }
+        ////    catch (ValidationException ex)
+        ////    {
+        ////        if (ex.Message == ExceptionMessages.SeatsHaveAlreadyBeenPurchased)
+        ////        {
+        ////            return Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
+        ////        }
 
-                return RedirectToAction("Index", "EventManager");
-            }
-        }
+        ////        return RedirectToAction("Index", "EventManager");
+        ////    }
+        ////}
     }
 }

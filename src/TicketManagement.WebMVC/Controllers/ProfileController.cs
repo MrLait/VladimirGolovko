@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.ProfileViewModels;
@@ -15,15 +16,15 @@ namespace TicketManagement.WebMVC.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        private readonly UserManager<ApplicationUser> _applicationUserManager;
+        private readonly IProfileClient _profileClient;
         private readonly IIdentityParser<ApplicationUser> _identityParser;
         private readonly IMapper _mapper;
 
-        public ProfileController(UserManager<ApplicationUser> applicationUser,
+        public ProfileController(IProfileClient profileClient,
             IIdentityParser<ApplicationUser> identityParser,
             IMapper mapper)
         {
-            _applicationUserManager = applicationUser;
+            _profileClient = profileClient;
             _identityParser = identityParser;
             _mapper = mapper;
         }
@@ -31,7 +32,7 @@ namespace TicketManagement.WebMVC.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             var userId = _identityParser.Parse(HttpContext.User).Id;
-            var user = await _applicationUserManager.FindByIdAsync(userId);
+            var user = await _profileClient.GetUserProfile(userId);
             var vm = _mapper.Map<ApplicationUser, ProfileViewModel>(user);
 
             return View(vm);
@@ -39,7 +40,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> EditFirstName(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
@@ -54,22 +55,14 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
+                ApplicationUser user = await _profileClient.GetUserProfile(model.Id);
                 if (user != null)
                 {
-                    user.FirstName = model.FirstName;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    await _profileClient.EditFirstName(model.Id, model.FirstName);
+                    return RedirectToAction("Index");
                 }
+
+                return NotFound();
             }
 
             return View(model);
@@ -77,7 +70,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> EditSurname(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
@@ -92,21 +85,11 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
+                ApplicationUser user = await _profileClient.GetUserProfile(model.Id);
                 if (user != null)
                 {
-                    user.Surname = model.Surname;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    await _profileClient.EditSurname(user.Id, model.Surname);
+                    return RedirectToAction("Index");
                 }
             }
 
@@ -115,7 +98,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> EditEmail(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
@@ -130,21 +113,11 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
+                ApplicationUser user = await _profileClient.GetUserProfile(model.Id);
                 if (user != null)
                 {
-                    user.Email = model.Email;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    await _profileClient.EditEmail(model.Id, model.Email);
+                    return RedirectToAction("Index");
                 }
             }
 
@@ -153,7 +126,7 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> EditPassword(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
@@ -168,20 +141,12 @@ namespace TicketManagement.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
+                ApplicationUser user = await _profileClient.GetUserProfile(model.Id);
                 if (user != null)
                 {
-                    IdentityResult result =
-                        await _applicationUserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
+                    await _profileClient.EditPassword(user.Id.ToString(), model.OldPassword, model.NewPassword);
 
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    return RedirectToAction("Index");
                 }
 
                 ModelState.AddModelError(string.Empty, "User is not found");
@@ -192,57 +157,28 @@ namespace TicketManagement.WebMVC.Controllers
 
         public async Task<IActionResult> EditTimeZoneOffset(string id, string timeZoneOffset, string returnUrl)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                user.TimeZoneOffset = timeZoneOffset;
-
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
+            await _profileClient.EditTimeZoneOffset(id, timeZoneOffset);
             return LocalRedirect(returnUrl);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Deposite(string id, decimal balance)
+        public async Task<IActionResult> Deposite(string id, decimal balance, string returnUrl)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            ApplicationUser user = await _profileClient.GetUserProfile(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                user.Balance += balance;
+            await _profileClient.Deposite(id, balance);
 
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
-            return View();
+            return RedirectToAction("Index");
         }
 
         [AllowAnonymous]

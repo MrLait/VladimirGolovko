@@ -55,7 +55,7 @@
                                 <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">@Localizer["PurchaseHistory"]</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
-                                @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Email).Value
+                                @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Name).Value
                             </li>
                             <li class="nav-item">
                                 <form class="nav-link text-dark" asp-area="" method="post" asp-controller="Account" asp-action="Logout">
