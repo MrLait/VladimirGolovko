@@ -2,7 +2,9 @@
 
 To deploy the database, you should follow these steps:
 1. Publish TicketManagement.Database;
-2. Change the connectionstring in VladimirGolovko\src\TicketManagement.WebMVC\appsettings.json.
+2. Change the connectionstrings in:
+	VladimirGolovko\src\EventFlow.API\appsettings.json; 
+	VladimirGolovko\src\Identity.API\appsettings.json.
 
 To run tests, you should follow these steps:
 1. Open VladimirGolovko\TicketManagement.sln;
