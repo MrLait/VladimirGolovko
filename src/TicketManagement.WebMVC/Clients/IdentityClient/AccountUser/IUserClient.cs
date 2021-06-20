@@ -52,9 +52,6 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
             }
         }
 
-        ////public async Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default)
-        ////    => await AuthorizeInternal(userModel, IdentityApiRequestUries.Login, cancellationToken);
-
         public async Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default)
         {
             var url = IdentityApiRequestUries.Login;
