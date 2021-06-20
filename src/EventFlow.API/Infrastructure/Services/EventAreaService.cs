@@ -29,7 +29,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         public IEnumerable<EventAreaDto> GetAll()
         {
             var eventAreas = DbContext.EventAreas.GetAllAsQueryable();
-            List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
+            var eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)
             {
                 eventAreasDto.Add(new EventAreaDto { Id = item.Id, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY, EventId = item.EventId, Price = item.Price });
@@ -42,7 +42,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         {
             var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == id);
 
-            List<EventAreaDto> eventAreasDto = new List<EventAreaDto>();
+            var eventAreasDto = new List<EventAreaDto>();
             foreach (var item in eventAreas)
             {
                 eventAreasDto.Add(new EventAreaDto { Id = item.Id, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY, EventId = item.EventId, Price = item.Price });

@@ -14,15 +14,10 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     public class EventManagerController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly IEventAreaService _eventAreaService;
-        ////private readonly IMapper _mapper;
 
         public EventManagerController(IEventService eventService, IEventAreaService eventAreaService)
-            //////, IMapper mapper)
         {
             _eventService = eventService;
-            _eventAreaService = eventAreaService;
-            ////_mapper = mapper;
         }
 
         [HttpPost("createEvent")]
@@ -36,10 +31,6 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
                     await _eventService.CreateAsync(eventDto);
                     return Ok();
                 }
-
-                ////var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
-                ////await _eventAreaService.UpdatePriceAsync(eventAreas);
-                ////return RedirectToAction("Index", "EventManager");
             }
 
             return Ok(model);

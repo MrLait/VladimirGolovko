@@ -6,7 +6,7 @@ namespace TicketManagement.Dto
     /// <summary>
     /// Area data transfer object class.
     /// </summary>
-    internal class AreaDto : IDtoEntity
+    public class AreaDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.

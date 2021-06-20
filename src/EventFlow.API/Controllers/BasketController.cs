@@ -13,25 +13,13 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;
-        ////private readonly IApplicationUserService _applicationUserService;
-        private readonly IPurchaseHistoryService _purchaseHistoryService;
         private readonly IEventSeatService _eventSeatService;
-        ////private readonly IIdentityParser<ApplicationUser> _identityParser;
-        ////private readonly IStringLocalizer<BasketController> _localizer;
 
         public BasketController(IBasketService basketService,
-        IEventSeatService eventSeatService,
-        IPurchaseHistoryService purchaseHistoryService)
-        ////IApplicationUserService applicationUserService,
-        ////IIdentityParser<ApplicationUser> identityParser,
-        ////IStringLocalizer<BasketController> localizer
+        IEventSeatService eventSeatService)
         {
             _basketService = basketService;
-            ////_applicationUserService = applicationUserService;
-            _purchaseHistoryService = purchaseHistoryService;
             _eventSeatService = eventSeatService;
-            ////_identityParser = identityParser;
-            ////_localizer = localizer;
         }
 
         [HttpGet("getAllByUserId")]

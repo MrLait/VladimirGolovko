@@ -5,11 +5,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
+using TicketManagement.WebMVC.Infrastructure.ExceptionsMessages;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 

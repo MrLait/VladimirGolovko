@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using TicketManagement.BusinessLogic.Infrastructure;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Infrastructure.ExceptionsMessages;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.BasketViewModels;
@@ -24,22 +24,12 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IPurchaseHistoryClient _purchaseHistoryClient;
         private readonly IStringLocalizer<BasketController> _localizer;
 
-        ////private readonly IBasketService _basketService;
-        ////private readonly IApplicationUserService _applicationUserService;
-        ////private readonly IPurchaseHistoryService _purchaseHistoryService;
-        ////private readonly IEventSeatService _eventSeatService;
-
         public BasketController(IBasketClient basketClient,
             IIdentityParser<ApplicationUser> identityParser,
             IMapper mapper,
             IProfileClient profileClient,
             IPurchaseHistoryClient purchaseHistoryClient,
             IStringLocalizer<BasketController> localizer)
-            ////IBasketService basketService,
-            ////IApplicationUserService applicationUserService,
-            ////IPurchaseHistoryService purchaseHistoryService,
-            ////IEventSeatService eventSeatService,
-            ////IIdentityParser<ApplicationUser> identityParser,
         {
             _purchaseHistoryClient = purchaseHistoryClient;
             _profileClient = profileClient;
@@ -47,10 +37,6 @@ namespace TicketManagement.WebMVC.Controllers
             _identityParser = identityParser;
             _mapper = mapper;
             _localizer = localizer;
-            ////_basketService = basketService;
-            ////_applicationUserService = applicationUserService;
-            ////_purchaseHistoryService = purchaseHistoryService;
-            ////_eventSeatService = eventSeatService;
         }
 
         public async Task<IActionResult> IndexAsync()

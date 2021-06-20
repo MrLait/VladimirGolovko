@@ -5,7 +5,7 @@ namespace TicketManagement.Dto
     /// <summary>
     /// Seat data transfer object class.
     /// </summary>
-    internal class SeatDto : IDtoEntity
+    public class SeatDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets Id.

@@ -15,17 +15,11 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     {
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
-        ////private readonly IBasketService _basketService;
-        ////private readonly IIdentityParser<ApplicationUser> _identityParser;
 
         public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService)
-            ////IBasketService basketService,
-            ////IIdentityParser<ApplicationUser> identityParser
         {
             _eventAreaService = eventAreaService;
             _eventSeatService = eventSeatService;
-            ////_basketService = basketService;
-            ////_identityParser = identityParser;
         }
 
         [HttpGet("getAllByEventId")]

@@ -130,7 +130,6 @@ namespace TicketManagement.Services.EventFlow.API
                 options.UseSqlServer(connectionString)
                 .EnableSensitiveDataLogging();
             });
-            ////services.AddDbContext<ApplicationUserDbContext>(options => options.UseSqlServer(connectionString));
         }
     }
 }

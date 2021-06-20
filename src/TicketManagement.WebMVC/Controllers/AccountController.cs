@@ -1,13 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
-using TicketManagement.WebMVC.JwtTokenAuth;
-using TicketManagement.WebMVC.Models;
-using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
@@ -15,17 +10,9 @@ namespace TicketManagement.WebMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IUserClient _applicationUserClient;
-        ////private readonly UserManager<ApplicationUser> _userManager;
-        ////private readonly IMapper _mapper;
-        ////private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(IUserClient applicationUserClient)
-            ////SignInManager<ApplicationUser> signInManager,
-            ////IMapper mapper, IStringLocalizer<AccountController> localizer
         {
-            ////_userManager = userManager;
-            ////_mapper = mapper;
-            ////_localizer = localizer;
             _applicationUserClient = applicationUserClient;
         }
 
