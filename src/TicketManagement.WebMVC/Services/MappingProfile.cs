@@ -2,6 +2,7 @@
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
+using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 using TicketManagement.WebMVC.ViewModels.BasketViewModels;
@@ -32,6 +33,7 @@ namespace TicketManagement.WebMVC.Services
             CreateMap<PurchaseHistoryModel, PurchaseHistoryViewModel>();
             CreateMap<ClientPurchaseHistoryItem, ViewPurchaseHistoryItem>();
             CreateMap<ViewPurchaseHistoryItem, ClientPurchaseHistoryItem>();
+            CreateMap<RegisterViewModel, RegisterModel>();
         }
     }
 }

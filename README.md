@@ -18,16 +18,3 @@ To import the "JSON" file in task two, you need to perform the following steps:
 4. Go to tab Event manager area;
 5. Press the "import Json" button;
 6. Upload the received JSON file and create an event/events. 
-
-
-# Description of the template:
-Requirements:
-1. Create a new ASP.NET Core WebAPI project that will expose service contacts for the following operations: - Done
-• Event Management - Done
-• Add documentation for API (swagger) Done
-2. Create a new ASP.Net Core WebAPI project. This service should be close to RESTful API. - Done
-3. Almost done
-4. As a requirement you should create or amend existing README.md with details on: -  Not yet completed.
-5. All unit, integration should be able to run and should be all passed. - Done
-6. All components should have logging in place. - Not yet completed.
-7. Not yet completed.

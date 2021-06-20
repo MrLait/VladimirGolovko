@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
 {
@@ -31,7 +33,24 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
         }
 
         public async Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default)
-            => await AuthorizeInternal(userModel, IdentityApiRequestUries.Register, cancellationToken);
+        {
+            var url = IdentityApiRequestUries.Register;
+            string json = JsonConvert.SerializeObject(userModel);
+            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
+
+            try
+            {
+                result.EnsureSuccessStatusCode();
+                return await result.Content.ReadAsStringAsync(cancellationToken);
+            }
+            catch (HttpRequestException)
+            {
+                var errorMessages = await result.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorMessages);
+            }
+        }
 
         public async Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default)
             => await AuthorizeInternal(userModel, IdentityApiRequestUries.Login, cancellationToken);
@@ -41,24 +60,6 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
             var address = string.Format(IdentityApiRequestUries.ValidateToken, token);
             var message = await _httpClient.GetAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
-        }
-
-        private async Task<string> AuthorizeInternal(RegisterModel userModel, string path, CancellationToken cancellationToken)
-        {
-            var form = new MultipartFormDataContent
-            {
-                { new StringContent(userModel.Language), nameof(RegisterModel.Language) },
-                { new StringContent(userModel.FirstName), nameof(RegisterModel.FirstName) },
-                { new StringContent(userModel.Surname), nameof(RegisterModel.Surname) },
-                { new StringContent(userModel.TimeZoneOffset), nameof(RegisterModel.TimeZoneOffset) },
-                { new StringContent(userModel.UserName), nameof(RegisterModel.UserName) },
-                { new StringContent(userModel.Email), nameof(RegisterModel.Email) },
-                { new StringContent(userModel.Password), nameof(RegisterModel.Password) },
-                { new StringContent(userModel.PasswordConfirm), nameof(RegisterModel.PasswordConfirm) },
-            };
-            var result = await _httpClient.PostAsync(path, form, cancellationToken);
-            result.EnsureSuccessStatusCode();
-            return await result.Content.ReadAsStringAsync(cancellationToken);
         }
 
         private async Task<string> AuthorizeInternal(LoginModel userModel, string path, CancellationToken cancellationToken)

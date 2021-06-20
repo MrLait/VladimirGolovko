@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Identity.API.Models;
@@ -28,19 +30,33 @@ namespace TicketManagement.Services.Identity.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var user = _mapper.Map<RegisterModel, ApplicationUser>(model);
-            user.UserName = model.Email;
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
-                var roles = await _userManager.GetRolesAsync(user);
-                return Ok(_jwtTokenService.GetToken(user, roles));
+                var user = _mapper.Map<RegisterModel, ApplicationUser>(model);
+                user.UserName = model.Email;
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, UserRoles.User);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    return Ok(_jwtTokenService.GetToken(user, roles));
+                }
+
+                var errorList = new List<string>();
+                foreach (var error in result.Errors)
+                {
+                    errorList.Add(error.Code);
+                }
+
+                var resultError = string.Empty;
+                resultError += string.Join(',', errorList);
+
+                return BadRequest(resultError);
             }
 
-            return BadRequest(result.Errors);
+            return BadRequest("ModelState is not valid");
         }
 
         [HttpPost("login")]

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
-using Identity.API.Models;
-using Identity.API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Services.Identity.Domain.Models;
@@ -14,16 +11,12 @@ namespace TicketManagement.Services.Identity.API.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMapper _mapper;
 
         public ProfileController(SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
             UserManager<ApplicationUser> applicationUserManager)
         {
             _applicationUserManager = applicationUserManager;
-            _signInManager = signInManager;
-            _mapper = mapper;
         }
 
         [HttpGet("getBalance")]
