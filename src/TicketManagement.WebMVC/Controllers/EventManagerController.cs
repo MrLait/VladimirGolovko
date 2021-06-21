@@ -60,24 +60,26 @@ namespace TicketManagement.WebMVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
-                    var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-
-                    if (model.Id == 0)
-                    {
-                        await _eventManagerClient.CreateEvent(eventDto);
-                        var lastAddedEvent = await _eventClient.GetLastAsync();
-                        model = _mapper.Map<EventDto, EventViewModel>(lastAddedEvent);
-                        var eventsDto = (await _eventAreaClient.GetAllByEventIdAsync(lastAddedEvent.Id)).ToList();
-                        model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
-                        return View(model);
-                    }
-
-                    var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
-                    await _eventAreaClient.UpdatePricesAsync(eventAreas);
-                    return RedirectToAction("Index", "EventManager");
+                    return View(model);
                 }
+
+                var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+
+                if (model.Id == 0)
+                {
+                    await _eventManagerClient.CreateEvent(eventDto);
+                    var lastAddedEvent = await _eventClient.GetLastAsync();
+                    model = _mapper.Map<EventDto, EventViewModel>(lastAddedEvent);
+                    var eventsDto = (await _eventAreaClient.GetAllByEventIdAsync(lastAddedEvent.Id)).ToList();
+                    model.EventAreaItems = _mapper.Map<List<EventAreaDto>, List<EventAreaItem>>(eventsDto);
+                    return View(model);
+                }
+
+                var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
+                await _eventAreaClient.UpdatePricesAsync(eventAreas);
+                return RedirectToAction("Index", "EventManager");
             }
             catch (ValidationException ve)
             {
@@ -98,8 +100,6 @@ namespace TicketManagement.WebMVC.Controllers
 
                 return View(model);
             }
-
-            return View(model);
         }
 
         [HttpGet]
@@ -118,29 +118,27 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateEvent(EventViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-
-                await _eventClient.UpdateEventAsync(eventDto);
-                return RedirectToAction("Index", "EventManager");
+                return View(model);
             }
 
-            return View(model);
+            var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+            await _eventClient.UpdateEventAsync(eventDto);
+            return RedirectToAction("Index", "EventManager");
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-
-                await _eventClient.UpdateLayoutIdAsync(eventDto);
-                return RedirectToAction("Index", "EventManager");
+                return View(model);
             }
 
-            return View(model);
+            var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
+            await _eventClient.UpdateLayoutIdAsync(eventDto);
+            return RedirectToAction("Index", "EventManager");
         }
 
         [HttpGet]

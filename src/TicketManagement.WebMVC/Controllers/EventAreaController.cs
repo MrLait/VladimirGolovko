@@ -38,25 +38,3 @@ namespace TicketManagement.WebMVC.Controllers
         }
     }
 }
-
-////public IActionResult Index(EventDto dto)
-////{
-////    try
-////    {
-////        var eventAreaDto = _eventAreaService.GetByEventId(dto);
-
-////        var vm = new IndexViewModel { EvenAreatItems = eventAreaDto };
-
-////        for (int i = 0; i < eventAreaDto.Count(); i++)
-////        {
-////            var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
-////            vm.EvenAreatItems.ToList()[i].EvenSeats = eventSeatDto;
-////        }
-
-////        return View(vm);
-////    }
-////    catch (ValidationException)
-////    {
-////        return RedirectToAction("Index", "EventHomePage");
-////    }
-////}

@@ -36,45 +36,45 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var user = _mapper.Map<RegisterViewModel, RegisterModel>(vm);
-                    var token = await _applicationUserClient.Register(user);
+                return View(vm);
+            }
 
-                    HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
-                    {
-                        HttpOnly = true,
-                        SameSite = SameSiteMode.Strict,
-                    });
+            try
+            {
+                var user = _mapper.Map<RegisterViewModel, RegisterModel>(vm);
+                var token = await _applicationUserClient.Register(user);
 
-                    return RedirectToAction("Index", "EventHomePage");
-                }
-                catch (HttpRequestException e)
+                HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
                 {
-                    var erorrMessages = e.Message.Split(',');
-                    foreach (var error in erorrMessages)
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                });
+
+                return RedirectToAction("Index", "EventHomePage");
+            }
+            catch (HttpRequestException e)
+            {
+                var erorrMessages = e.Message.Split(',');
+                foreach (var error in erorrMessages)
+                {
+                    switch (error)
                     {
-#pragma warning disable S134 // Control flow statements "if", "switch", "for", "foreach", "while", "do"  and "try" should not be nested too deeply
-                        switch (error)
-#pragma warning restore S134 // Control flow statements "if", "switch", "for", "foreach", "while", "do"  and "try" should not be nested too deeply
-                        {
-                            case "PasswordTooShort":
-                                ModelState.AddModelError(string.Empty, _localizer["PasswordTooShort"]);
-                                continue;
-                            case "PasswordRequiresNonAlphanumeric":
-                                ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresNonAlphanumeric"]);
-                                continue;
-                            case "PasswordRequiresDigit":
-                                ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresDigit"]);
-                                continue;
-                            case "PasswordRequiresUpper":
-                                ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresUpper"]);
-                                continue;
-                            default:
-                                break;
-                        }
+                        case "PasswordTooShort":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordTooShort"]);
+                            continue;
+                        case "PasswordRequiresNonAlphanumeric":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresNonAlphanumeric"]);
+                            continue;
+                        case "PasswordRequiresDigit":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresDigit"]);
+                            continue;
+                        case "PasswordRequiresUpper":
+                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresUpper"]);
+                            continue;
+                        default:
+                            break;
                     }
                 }
             }
@@ -91,27 +91,29 @@ namespace TicketManagement.WebMVC.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] LoginViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var user = _mapper.Map<LoginViewModel, LoginModel>(vm);
-                    var token = await _applicationUserClient.Login(user);
-                    HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
-                    {
-                        HttpOnly = true,
-                        SameSite = SameSiteMode.Strict,
-                    });
+                return View(vm);
+            }
 
-                    return RedirectToAction("Index", "EventHomePage");
-                }
-                catch (HttpRequestException e)
+            try
+            {
+                var user = _mapper.Map<LoginViewModel, LoginModel>(vm);
+                var token = await _applicationUserClient.Login(user);
+                HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
                 {
-                    var result = JsonConvert.DeserializeObject<Microsoft.AspNetCore.Identity.SignInResult>(e.Message);
-                    if (!result.Succeeded)
-                    {
-                        ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
-                    }
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                });
+
+                return RedirectToAction("Index", "EventHomePage");
+            }
+            catch (HttpRequestException e)
+            {
+                var result = JsonConvert.DeserializeObject<Microsoft.AspNetCore.Identity.SignInResult>(e.Message);
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
                 }
             }
 
