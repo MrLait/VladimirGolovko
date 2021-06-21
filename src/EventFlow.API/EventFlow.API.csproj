@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>TicketManagement.Services.EventFlow.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,18 @@
   <ItemGroup>
     <ProjectReference Include="..\Identity.Models\Identity.Domain.csproj" />
     <ProjectReference Include="..\TicketManagement.Dto\TicketManagement.Dto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>TicketManagement.UnitTests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

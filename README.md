@@ -1,7 +1,7 @@
 # SolutionTemplate
 
 To deploy the database, you should follow these steps:
-1. Publish TicketManagement.Database;
+1. Publish EventFlow.Database and Identity.Database;
 2. Change the connectionstrings in:
 	VladimirGolovko\src\EventFlow.API\appsettings.json; 
 	VladimirGolovko\src\Identity.API\appsettings.json.
