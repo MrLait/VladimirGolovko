@@ -32,7 +32,7 @@ namespace TicketManagement.WebMVC
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions().Configure<ApiOptions>(binder => binder.UserApiAddress = Configuration["UserApiAddress"]);
+            services.AddOptions().Configure<ApiOptions>(binder => binder.IdentityApiAddress = Configuration["IdentityApiAddress"]);
             services.AddOptions().Configure<ApiOptions>(binder => binder.EventFlowApiAddress = Configuration["EventFlowApiAddress"]);
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

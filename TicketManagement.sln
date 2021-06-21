@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{3629
 		Directory.Build.props = Directory.Build.props
 		EPAM.Trainings.ruleset = EPAM.Trainings.ruleset
 		nuget.config = nuget.config
+		scripts\RunTicketManagementUI.bat = scripts\RunTicketManagementUI.bat
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject

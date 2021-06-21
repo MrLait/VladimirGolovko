@@ -2,6 +2,6 @@
 {
     public class UserApiOptions
     {
-        public string UserApiAddress { get; set; }
+        public string IdentityApiAddress { get; set; }
     }
 }

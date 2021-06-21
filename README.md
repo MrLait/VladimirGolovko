@@ -1,20 +1,32 @@
 # SolutionTemplate
 
-To deploy the database, you should follow these steps:
+## To deploy the database, you should follow these steps:
+1. Open VladimirGolovko\TicketManagement.sln
 1. Publish EventFlow.Database and Identity.Database;
 2. Change the connectionstrings in:
 	VladimirGolovko\src\EventFlow.API\appsettings.json; 
 	VladimirGolovko\src\Identity.API\appsettings.json.
 
-To run tests, you should follow these steps:
+## To run the whole solution, with all services necessary to correct application work.
+Run bat file \VladimirGolovko\scripts\RunTicketManagementUI.bat
+
+Url addresses:
+TicketManagement.WebMVC : "https://localhost:5001",
+Identity.API : "https://localhost:44370",
+EventFlow.API :"https://localhost:44300"
+
+## To run the whole solution in debug mode, you need to configure the project to run in <Multiple startup Projects> mode.
+You should follow these steps
+1. Choose - Debug => Set sturtup projects => Common Proporties => Startup Project => Set the flag to Multiple startup Projects:
+2. For projects: Identity.Api, EventFlow.Api and TicketManagement.WebMVC - set actions to Start
+3. Click start.
+
+Url addresses:
+TicketManagement.WebMVC : "https://localhost:5001",
+Identity.API : "https://localhost:5004",
+EventFlow.API :"https://localhost:5003"
+
+## To run tests, you should follow these steps:
 1. Open VladimirGolovko\TicketManagement.sln;
 2. You don't need to change connection string in VladimirGolovko\test\TicketManagement.IntegrationTests\appsettings.json..
 2. Run tests.
-
-To import the "JSON" file in task two, you need to perform the following steps:
-1. Get a JSON file from task three by clicking on the download button or detail, save the received data to a json file;
-2. Open the application from task two and deploy the database see;
-3. Run the application and login under eventManager;
-4. Go to tab Event manager area;
-5. Press the "import Json" button;
-6. Upload the received JSON file and create an event/events. 

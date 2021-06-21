@@ -43,14 +43,14 @@ namespace TicketManagement.Services.EventFlow.API
 
             services.AddCustomDbContext(Configuration);
 
-            services.AddOptions().Configure<UserApiOptions>(binder => binder.UserApiAddress = Configuration["UserApiAddress"]);
+            services.AddOptions().Configure<UserApiOptions>(binder => binder.IdentityApiAddress = Configuration["IdentityApiAddress"]);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthentication(JwtAutheticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<UserApiOptions>>()?.Value.UserApiAddress;
+                var userApiAddress = provider.GetService<IOptions<UserApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
             services.AddControllers();

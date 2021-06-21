@@ -51,12 +51,12 @@ namespace TicketManagement.WebMVC.Extensions
         {
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
             services.AddHttpClient<IProfileClient, ProfileClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
 
