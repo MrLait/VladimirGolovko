@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TicketManagement.DataAccess.DbContexts;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Filters;
 
 namespace TicketManagement.Services.EventFlow.API.Extensions
 {
@@ -35,7 +36,8 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
-                var jwtSecurityScheme = new OpenApiSecurityScheme
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Jwt Token is required to access the endpoints",
                     In = ParameterLocation.Header,
@@ -48,13 +50,9 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
                         Id = JwtBearerDefaults.AuthenticationScheme,
                         Type = ReferenceType.SecurityScheme,
                     },
-                };
-
-                options.AddSecurityDefinition("Bearer", jwtSecurityScheme);
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() },
                 });
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
             return services;
