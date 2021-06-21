@@ -49,7 +49,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         /// <summary>
         /// Delete event are.
         /// </summary>
-        /// <param name="dto">Event area dto</param>
+        /// <param name="dto">Event area dto.</param>
         Task DeleteAsync(EventAreaDto dto);
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Exception messages conainer.
     /// </summary>
-    internal class ExceptionMessages
+    internal static class ExceptionMessages
     {
         /// <summary>
         /// Object reference not set to an instance of an object.
@@ -90,12 +90,5 @@
         /// There is no such Layout.
         /// </summary>
         public const string ThereIsNoSuchLayout = "There is no such Layout.";
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExceptionMessages"/> class.
-        /// </summary>
-        protected ExceptionMessages()
-        {
-        }
     }
 }
