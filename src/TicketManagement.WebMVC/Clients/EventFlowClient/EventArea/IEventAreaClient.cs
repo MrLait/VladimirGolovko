@@ -10,9 +10,9 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.EventArea
 {
     public interface IEventAreaClient
     {
-        public Task<List<EventAreaDto>> GetAllByEventIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<List<EventAreaDto>> GetAllByEventIdAsync(int id, CancellationToken cancellationToken = default);
 
-        public Task UpdatePricesAsync(List<EventAreaDto> eventAreaDtos, CancellationToken cancellationToken = default);
+        Task UpdatePricesAsync(List<EventAreaDto> eventAreaDtos, CancellationToken cancellationToken = default);
     }
 
     internal class EventAreaClient : IEventAreaClient
@@ -37,7 +37,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.EventArea
             var url = EventFlowApiRequestUries.EventAreaUpdatePrices;
             string json = JsonConvert.SerializeObject(eventAreaDtos);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
+            var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
             result.EnsureSuccessStatusCode();
         }
     }

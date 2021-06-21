@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Event area service class.
     /// </summary>
-    public class EventAreaService : IEventAreaService
+    internal class EventAreaService : IEventAreaService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventAreaService"/> class.
@@ -38,6 +38,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return eventAreasDto;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<EventAreaDto> GetByEventId(int id)
         {
             var eventAreas = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == id);
@@ -111,6 +112,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.EventAreas.UpdateAsync(currentEventAreas);
         }
 
+        /// <inheritdoc/>
         public async Task UpdatePriceAsync(IEnumerable<EventAreaDto> dto)
         {
             foreach (var item in dto)
@@ -119,6 +121,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto)
         {
             var allEventAreasForEvent = DbContext.EventAreas.GetAllAsQueryable().Where(x => x.EventId == dto.Id);
@@ -140,6 +143,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return eventAreasDto;
         }
 
+        /// <inheritdoc/>
         public async Task DeleteAsync(EventAreaDto dto)
         {
             if (dto == null)

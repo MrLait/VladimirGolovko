@@ -5,6 +5,9 @@
     /// </summary>
     internal class ExceptionMessages
     {
+        /// <summary>
+        /// Object reference not set to an instance of an object.
+        /// </summary>
         public const string NullReference = "Object reference not set to an instance of an object";
 
         /// <summary>
@@ -22,8 +25,14 @@
         /// </summary>
         public const string IdIsZero = "Id can't be Zero. The current Id is: '{0}'.";
 
+        /// <summary>
+        /// Price can't negative.
+        /// </summary>
         public const string PriceIsNegative = "Price can't negative.";
 
+        /// <summary>
+        /// Price can't equal zero.
+        /// </summary>
         public const string PriceIsZero = "Price can't equal zero.";
 
         /// <summary>
@@ -36,8 +45,14 @@
         /// </summary>
         public const string EventDateTimeValidation = "The Event with date time: '{0}' - can't be created in the past.";
 
+        /// <summary>
+        /// Event for the Venue with the dateTime already exist.
+        /// </summary>
         public const string EventForTheSameVenueInTheSameDateTime = "Event for the Venue with the dateTime already exist";
 
+        /// <summary>
+        /// The Event cannot exist without seats.
+        /// </summary>
         public const string ThereAreNoSeatsInTheEvent = "The Event cannot exist without seats.";
 
         /// <summary>
@@ -56,12 +71,24 @@
         /// </summary>
         public const string VenueExist = "The Venue with a description: '{0}' - already exists.";
 
+        /// <summary>
+        /// Unable to delete because seats have already been purchased for the event.
+        /// </summary>
         public const string SeatsHaveAlreadyBeenPurchased = "Unable to delete because seats have already been purchased for the event.";
 
+        /// <summary>
+        /// The beginning of the event cannot be after the end of the event.
+        /// </summary>
         public const string StartDataTimeBeforeEndDataTime = "The beginning of the event cannot be after the end of the event.";
 
+        /// <summary>
+        /// The Event can't be created in the past.
+        /// </summary>
         public const string CantBeCreatedInThePast = "The Event can't be created in the past.";
 
+        /// <summary>
+        /// There is no such Layout.
+        /// </summary>
         public const string ThereIsNoSuchLayout = "There is no such Layout.";
 
         /// <summary>

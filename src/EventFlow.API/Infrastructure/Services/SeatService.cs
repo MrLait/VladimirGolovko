@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Seat service class.
     /// </summary>
-    public class SeatService : ISeatService
+    internal class SeatService : ISeatService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SeatService"/> class.

@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
-using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
@@ -15,112 +12,29 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     {
         private readonly IEventService _eventService;
 
-        public EventManagerController(IEventService eventService, IEventAreaService eventAreaService)
+        public EventManagerController(IEventService eventService)
         {
             _eventService = eventService;
         }
 
+        /// <summary>
+        /// Create event.
+        /// </summary>
+        /// <param name="model">Event dto.</param>
+        /// <returns>Return status code.</returns>
         [HttpPost("createEvent")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var eventDto = model;
-                if (model.Id == 0)
-                {
-                    await _eventService.CreateAsync(eventDto);
-                    return Ok();
-                }
+                return BadRequest();
             }
 
-            return Ok(model);
+            var eventDto = model;
+            await _eventService.CreateAsync(eventDto);
+            return Ok();
         }
-
-            ////    else
-            ////    {
-            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
-            ////    }
-            ////}
-            ////catch (ValidationException ve)
-            ////{
-            ////    if (ve.Message == ExceptionMessages.PriceIsZero)
-            ////    {
-            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
-            ////    }
-
-            ////    if (ve.Message == ExceptionMessages.PriceIsNegative)
-            ////    {
-            ////        ViewData["PriceRequired"] = _localizer["PriceRequired"];
-            ////    }
-
-            ////    if (ve.Message == ExceptionMessages.CantBeCreatedInThePast)
-            ////    {
-            ////        ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past"]);
-            ////    }
-
-            ////    return View(model);
-            ////}
-
-            ////return View(model);
-
-            ////[HttpGet]
-            ////public async Task<IActionResult> UpdateEventAsync(int id)
-            ////{
-            ////    var eventItem = await _eventService.GetByIDAsync(id);
-            ////    if (eventItem == null)
-            ////    {
-            ////        return NotFound();
-            ////    }
-
-            ////    var model = _mapper.Map<EventDto, EventViewModel>(eventItem);
-            ////    return View(model);
-            ////}
-
-            ////[HttpPost]
-            ////public async Task<IActionResult> UpdateEvent(EventViewModel model)
-            ////{
-            ////    if (ModelState.IsValid)
-            ////    {
-            ////        var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-
-            ////        await _eventService.UpdateAsync(eventDto);
-            ////        return RedirectToAction("Index", "EventManager");
-            ////    }
-
-            ////    return View(model);
-            ////}
-
-            ////[HttpPost]
-            ////public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
-            ////{
-            ////    if (ModelState.IsValid)
-            ////    {
-            ////        var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-
-            ////        await _eventService.UpdateLayoutIdAsync(eventDto);
-            ////        return RedirectToAction("Index", "EventManager");
-            ////    }
-
-            ////    return View(model);
-            ////}
-
-            ////[HttpGet]
-            ////public async Task<IActionResult> DeleteEventAsync(int id)
-            ////{
-            ////    try
-            ////    {
-            ////        await _eventService.DeleteAsync(new EventDto { Id = id });
-            ////        return RedirectToAction("Index", "EventManager");
-            ////    }
-            ////    catch (ValidationException ex)
-            ////    {
-            ////        if (ex.Message == ExceptionMessages.SeatsHaveAlreadyBeenPurchased)
-            ////        {
-            ////            return Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
-            ////        }
-
-            ////        return RedirectToAction("Index", "EventManager");
-            ////    }
-            ////}
-        }
+    }
 }

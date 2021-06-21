@@ -1,176 +1,269 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
+using Identity.API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.Identity.API.Controllers
 {
+    /// <summary>
+    /// User profile controller.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _applicationUserManager;
 
-        public ProfileController(SignInManager<ApplicationUser> signInManager,
-            IMapper mapper,
-            UserManager<ApplicationUser> applicationUserManager)
+        public ProfileController(UserManager<ApplicationUser> applicationUserManager)
         {
             _applicationUserManager = applicationUserManager;
         }
 
+        /// <summary>
+        /// Get user balance.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <returns>Return balance.</returns>
         [HttpGet("getBalance")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetBalanceAsync(string userId)
         {
-            return Ok((await _applicationUserManager.FindByIdAsync(userId)).Balance);
+            var user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            return Ok(user.Balance);
         }
 
-        [HttpGet("updateBalance")]
-        public async Task<ActionResult> UpdateBalanceAsync(string userId, decimal balance)
+        /// <summary>
+        /// Update user balance.
+        /// </summary>
+        /// <param name="model">Balance model.</param>
+        /// <returns>Returns balance.</returns>
+        [HttpPut("updateBalance")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateBalanceAsync([FromBody] BalanceModel model)
         {
-            var user = await _applicationUserManager.FindByIdAsync(userId);
-            user.Balance = balance;
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            user.Balance = model.Balance;
             await _applicationUserManager.UpdateAsync(user);
             return Ok();
         }
 
+        /// <summary>
+        /// Get user profile.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <returns>Rerurns user.</returns>
         [HttpGet("getUserProfile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUserProfile(string userId)
         {
             var user = await _applicationUserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
             return Ok(user);
         }
 
-        [HttpGet("editFirstName")]
-        public async Task<IActionResult> EditFirstName(string userId, string firstName)
+        /// <summary>
+        /// Edit first name.
+        /// </summary>
+        /// <param name="model"> First name model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("editFirstName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> EditFirstName([FromBody] FirstNameModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.FirstName = firstName;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.FirstName = model.FirstName;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("editSurname")]
-        public async Task<IActionResult> EditSurname(string userId, string surname)
+        /// <summary>
+        /// Edit surname model.
+        /// </summary>
+        /// <param name="model">Surname model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("editSurname")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> EditSurname([FromBody] SurnameModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.Surname = surname;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.Surname = model.Surname;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("editEmail")]
-        public async Task<IActionResult> EditEmail(string userId, string email)
+        /// <summary>
+        /// Edit email.
+        /// </summary>
+        /// <param name="model">Edit email model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("editEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> EditEmail([FromBody] EmailModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.Email = email;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.Email = model.Email;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("editPassword")]
-        public async Task<IActionResult> EditPassword(string userId, string oldPassword, string newPassword)
+        /// <summary>
+        /// Edit password.
+        /// </summary>
+        /// <param name="model">Password model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("editPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> EditPassword([FromBody] PasswordModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                var result = await _applicationUserManager.ChangePasswordAsync(user, oldPassword, newPassword);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            var result = await _applicationUserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("editTimeZoneOffset")]
-        public async Task<IActionResult> EditTimeZoneOffset(string userId, string timeZoneOffset)
+        /// <summary>
+        /// Edit time zone.
+        /// </summary>
+        /// <param name="model">Time zone model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("editTimeZoneOffset")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> EditTimeZoneOffset([FromBody] TimeZoneOffsetModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.TimeZoneOffset = timeZoneOffset;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.TimeZoneOffset = model.TimeZoneOffset;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("deposite")]
-        public async Task<IActionResult> Deposite(string userId, decimal balance)
+        /// <summary>
+        /// Deposite.
+        /// </summary>
+        /// <param name="model">Deposite model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("deposite")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Deposite([FromBody] DepositeModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.Balance += balance;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.Balance += model.Balance;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        [HttpGet("setLanguage")]
-        public async Task<IActionResult> SetLanguage(string userId, string culture)
+        /// <summary>
+        /// Set language.
+        /// </summary>
+        /// <param name="model">Language model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPut("setLanguage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> SetLanguage([FromBody] LanguageModel model)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(userId);
-            if (user != null)
+            var user = await _applicationUserManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
-                user.Language += culture;
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok();
-                }
-
-                return BadRequest();
+                return NotFound("User not found");
             }
 
-            return NotFound();
+            user.Language = model.Culture;
+            var result = await _applicationUserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Layout service class.
     /// </summary>
-    public class LayoutService : ILayoutService
+    internal class LayoutService : ILayoutService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LayoutService"/> class.

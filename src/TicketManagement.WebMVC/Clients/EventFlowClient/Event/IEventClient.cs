@@ -4,24 +4,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RestEase;
 using TicketManagement.Dto;
 
 namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 {
     public interface IEventClient
     {
-        public Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        public Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default);
+        Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default);
 
-        public Task<EventDto> GetByIDAsync(int id, CancellationToken cancellationToken = default);
+        Task<EventDto> GetByIDAsync(int id, CancellationToken cancellationToken = default);
 
-        public Task UpdateEventAsync(EventDto eventDto, CancellationToken cancellationToken = default);
+        Task UpdateEventAsync(EventDto eventDto, CancellationToken cancellationToken = default);
 
-        public Task UpdateLayoutIdAsync(EventDto eventDto, CancellationToken cancellationToken = default);
+        Task UpdateLayoutIdAsync(EventDto eventDto, CancellationToken cancellationToken = default);
 
-        public Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default);
     }
 
     internal class EventClient : IEventClient
@@ -67,7 +66,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
             var url = EventFlowApiRequestUries.EventUpdateEvent;
             string json = JsonConvert.SerializeObject(eventDto);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
+            var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
             result.EnsureSuccessStatusCode();
         }
 
@@ -76,7 +75,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
             var url = EventFlowApiRequestUries.EventUpdateLayoutId;
             string json = JsonConvert.SerializeObject(eventDto);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
+            var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
             result.EnsureSuccessStatusCode();
         }
     }

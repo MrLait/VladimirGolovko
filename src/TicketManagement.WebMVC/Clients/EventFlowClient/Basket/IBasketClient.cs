@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -7,13 +8,13 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 {
     public interface IBasketClient
     {
-        public Task<BasketModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<BasketModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
 
-        public Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
+        Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
 
-        public Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
+        Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
 
-        public Task DeleteAllByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+        Task DeleteAllByUserIdAsync(string userId, CancellationToken cancellationToken = default);
     }
 
     internal class BasketClient : IBasketClient
@@ -27,15 +28,16 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         public async Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.BasketAddToBasket, userId, itemId);
-            var message = await _httpClient.GetAsync(address, cancellationToken);
-            message.EnsureSuccessStatusCode();
+            var address = string.Format(EventFlowApiRequestUries.BasketAddToBasket);
+            var model = new { userId, itemId };
+            var json = JsonConvert.SerializeObject(model);
+            await PostAsync(json, address);
         }
 
         public async Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
             var address = string.Format(EventFlowApiRequestUries.BasketRemoveFromBasket, userId, itemId);
-            var message = await _httpClient.GetAsync(address, cancellationToken);
+            var message = await _httpClient.DeleteAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }
 
@@ -51,6 +53,13 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
         {
             var address = string.Format(EventFlowApiRequestUries.BasketDeleteAllByUserId, userId);
             var message = await _httpClient.DeleteAsync(address, cancellationToken);
+            message.EnsureSuccessStatusCode();
+        }
+
+        private async Task PostAsync(string json, string address)
+        {
+            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var message = await _httpClient.PostAsync(address, queryString);
             message.EnsureSuccessStatusCode();
         }
     }

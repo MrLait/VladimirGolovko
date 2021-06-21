@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Event seat service class.
     /// </summary>
-    public class EventSeatService : IEventSeatService
+    internal class EventSeatService : IEventSeatService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventSeatService"/> class.
@@ -66,6 +66,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return eventSeatDto;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<EventSeatDto> GetByEventAreaId(EventAreaDto dto)
         {
             var eventSeats = DbContext.EventSeats.GetAllAsQueryable().OrderBy(x => x.EventAreaId).Where(x => x.EventAreaId == dto.Id);

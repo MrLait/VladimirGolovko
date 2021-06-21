@@ -34,10 +34,22 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         /// <returns>Returns list of objects.</returns>
         IEnumerable<EventAreaDto> GetAll();
 
+        /// <summary>
+        /// Get by event id.
+        /// </summary>
+        /// <returns>Returns list of objects.</returns>
         IEnumerable<EventAreaDto> GetByEventId(int id);
 
+        /// <summary>
+        /// Get by event area.
+        /// </summary>
+        /// <returns>Returns list of objects.</returns>
         IEnumerable<EventAreaDto> GetAllEventAreasForEvent(EventDto dto);
 
+        /// <summary>
+        /// Delete event are.
+        /// </summary>
+        /// <param name="dto">Event area dto</param>
         Task DeleteAsync(EventAreaDto dto);
     }
 }

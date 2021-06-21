@@ -14,7 +14,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Event service class.
     /// </summary>
-    public class EventService : IEventService
+    internal class EventService : IEventService
     {
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
@@ -188,6 +188,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             });
         }
 
+        /// <inheritdoc/>
         public async Task UpdateLayoutIdAsync(EventDto dto)
         {
             if (dto == null)
@@ -285,6 +286,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return eventDto;
         }
 
+        /// <inheritdoc/>
         public EventDto Last()
         {
             var item = DbContext.Events.GetAllAsQueryable().AsEnumerable().Last();

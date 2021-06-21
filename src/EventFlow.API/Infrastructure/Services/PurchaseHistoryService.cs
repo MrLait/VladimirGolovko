@@ -8,7 +8,7 @@ using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 {
-    public class PurchaseHistoryService : IPurchaseHistoryService
+    internal class PurchaseHistoryService : IPurchaseHistoryService
     {
         private readonly IEventSeatService _eventSeatService;
         private readonly IEventAreaService _eventAreaService;
@@ -27,6 +27,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// </summary>
         public IDbContext DbContext { get; }
 
+        /// <inheritdoc/>
         public async Task AddAsync(string userId, int itemId)
         {
             var purchaseHistoryItem = new PurchaseHistory
@@ -38,6 +39,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.PurchaseHistories.CreateAsync(purchaseHistoryItem);
         }
 
+        /// <inheritdoc/>
         public async Task<PurchaseHistoryModel> GetAllByUserIdAsync(string userId)
         {
             var purchaseHistoryItems = DbContext.PurchaseHistories.GetAllAsQueryable().Where(x => x.UserId == userId);
@@ -66,58 +68,5 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
             return purchaseHistoryViewModel;
         }
-
-        ////public async Task<PurchaseHistoryViewModel> GetAllByUserAsync(ApplicationUser user)
-        ////{
-        ////    var purchaseHistoryItems = DbContext.PurchaseHistories.GetAllAsQueryable().Where(x => x.UserId == user.Id);
-        ////    var purchaseHistoryViewModel = new PurchaseHistoryViewModel
-        ////    {
-        ////        UserId = user.Id,
-        ////    };
-        ////    foreach (var item in purchaseHistoryItems.ToList())
-        ////    {
-        ////        var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
-        ////        var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
-        ////        var eventItem = await _eventService.GetByIDAsync(areaItem.EventId);
-        ////        purchaseHistoryViewModel.Items.Add(
-        ////            new PurchaseHistoryItem
-        ////            {
-        ////                EventName = eventItem.Name,
-        ////                EventAreaDescription = areaItem.Description,
-        ////                Row = seatItem.Row,
-        ////                NumberOfSeat = seatItem.Number,
-        ////                EventDateTimeStart = eventItem.StartDateTime,
-        ////                EventDateTimeEnd = eventItem.EndDateTime,
-        ////                Price = areaItem.Price,
-        ////                PictureUrl = eventItem.ImageUrl,
-        ////            });
-        ////    }
-
-        ////    return purchaseHistoryViewModel;
-        ////}
-
-        ////public async Task AddFromBasketAsync(IQueryable<Basket> baskets)
-        ////{
-        ////    foreach (var item in baskets.ToList())
-        ////    {
-        ////        var purchaseHistoryItem = new PurchaseHistory
-        ////        {
-        ////            ProductId = item.ProductId,
-        ////            UserId = item.UserId,
-        ////        };
-
-        ////        await DbContext.PurchaseHistories.CreateAsync(purchaseHistoryItem);
-        ////    }
-        ////}
-
-        ////public Task DeleteAsync(PurchaseHistory purchaseHistory)
-        ////{
-        ////    throw new NotImplementedException();
-        ////}
-
-        ////public Task<IQueryable<PurchaseHistory>> GetAllAsync()
-        ////{
-        ////    throw new NotImplementedException();
-        ////}
     }
 }

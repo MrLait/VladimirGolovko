@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
@@ -22,7 +22,14 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             _eventSeatService = eventSeatService;
         }
 
+        /// <summary>
+        /// Get all event are by event id.
+        /// </summary>
+        /// <param name="id">Event id.</param>
+        /// <returns>Returns event areas dto.</returns>
         [HttpGet("getAllByEventId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAllByEventId(int id)
         {
             try
@@ -37,13 +44,20 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
 
                 return Ok(eventAreaDto);
             }
-            catch (ValidationException)
+            catch (ValidationException e)
             {
-                return RedirectToAction("Index", "EventHomePage");
+                return BadRequest(e.Message);
             }
         }
 
-        [HttpPost("updatePrices")]
+        /// <summary>
+        /// Update prices.
+        /// </summary>
+        /// <param name="eventAreaDto">Event areas dto.</param>
+        /// <returns>Returns status codes.</returns>
+        [HttpPut("updatePrices")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePrices([FromBody] List<EventAreaDto> eventAreaDto)
         {
             try
@@ -51,9 +65,9 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
                 await _eventAreaService.UpdatePriceAsync(eventAreaDto);
                 return Ok();
             }
-            catch (ValidationException)
+            catch (ValidationException e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
     }

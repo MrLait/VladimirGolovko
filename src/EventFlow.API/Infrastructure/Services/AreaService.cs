@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Area service class.
     /// </summary>
-    public class AreaService : IAreaService
+    internal class AreaService : IAreaService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AreaService"/> class.

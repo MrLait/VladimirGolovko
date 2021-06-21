@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
+using EventFlow.API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
-using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
@@ -22,101 +22,60 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             _eventSeatService = eventSeatService;
         }
 
+        /// <summary>
+        /// Get all items from user basket.
+        /// </summary>
+        /// <param name="id">User id.</param>
+        /// <returns>Returns basket items.</returns>
         [HttpGet("getAllByUserId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllByUserIdAsync(string id)
         {
-            var vm = await _basketService.GetAllByUserIdAsync(id);
-            return Ok(vm);
+            var basketModel = await _basketService.GetAllByUserIdAsync(id);
+            return Ok(basketModel);
         }
 
-        [HttpGet("addToBasket")]
-        public async Task<IActionResult> AddToBasketAsync(string userId, int itemId)
+        /// <summary>
+        /// Add item to basket.
+        /// </summary>
+        /// <param name="model">Add to basket model.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpPost("addToBasket")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddToBasketAsync([FromBody] AddToBasketModel model)
         {
-            await _basketService.AddAsync(userId, itemId);
-            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Booked });
+            await _basketService.AddAsync(model.UserId, model.ItemId);
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = model.ItemId, State = States.Booked });
 
             return Ok();
         }
 
-        [HttpGet("removeFromBasket")]
+        /// <summary>
+        /// Delete item from basket.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="itemId">Item id.</param>
+        /// <returns>Returns status code.</returns>
+        [HttpDelete("removeFromBasket")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> RemoveFromBasketAsync(string userId, int itemId)
         {
-            try
-            {
-                await _basketService.DeleteAsync(userId, itemId);
-                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
-                return Ok();
-            }
-            catch (ValidationException ve)
-            {
-                return BadRequest(ve.Message);
-            }
+            await _basketService.DeleteAsync(userId, itemId);
+            await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = itemId, State = States.Available });
+            return Ok();
         }
 
+        /// <summary>
+        /// Delete all items by user id.
+        /// </summary>
+        /// <param name="id">User id.</param>
+        /// <returns>Returns status code.</returns>
         [HttpDelete("deleteAllByUserId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteAllByUserIdAsync(string id)
         {
             await _basketService.DeleteAllByUserIdAsync(id);
             return Ok();
         }
-
-        ////public async Task<IActionResult> Index()
-        ////{
-        ////    try
-        ////    {
-        ////        var user = _identityParser.Parse(HttpContext.User);
-        ////        var vm = await _basketService.GetAllByUserAsync(user);
-        ////        return View(vm);
-        ////    }
-        ////    catch (ArgumentException ex)
-        ////    {
-        ////        ModelState.AddModelError("", ex.Message);
-        ////        return View();
-        ////    }
-        ////}
-
-        ////[HttpPost]
-        ////public async Task<IActionResult> Index(BasketViewModel model)
-        ////{
-        ////    try
-        ////    {
-        ////        var user = _identityParser.Parse(HttpContext.User);
-        ////        var vm = await _basketService.GetAllByUserAsync(user);
-        ////        var currentBalance = await _applicationUserService.GetBalanceAsync(user);
-        ////        var totalPrice = vm.TotalPrice;
-
-        ////        if (currentBalance >= totalPrice)
-        ////        {
-        ////            user.Balance = currentBalance - totalPrice;
-        ////            await _applicationUserService.UpdateBalanceAsync(user);
-        ////            var basketItems = _basketService.GetAll().Where(x => x.UserId == user.Id);
-        ////            await _purchaseHistoryService.AddFromBasketAsync(basketItems);
-        ////            foreach (var item in basketItems.ToList())
-        ////            {
-        ////                await _eventSeatService.UpdateStateAsync(new EventSeatDto { Id = item.ProductId, State = States.Purchased });
-        ////            }
-
-        ////            await _basketService.DeleteAsync(user);
-
-        ////            return RedirectToAction("Index");
-        ////        }
-        ////        else
-        ////        {
-        ////            ViewData["NotEnoughMoney"] = _localizer["NotEnoughMoney"];
-        ////        }
-
-        ////        return View(vm);
-        ////    }
-        ////    catch (ArgumentException ex)
-        ////    {
-        ////        ModelState.AddModelError("", ex.Message);
-        ////        return View();
-        ////    }
-        ////    catch (ValidationException ve)
-        ////    {
-        ////        ModelState.AddModelError("", ve.Message);
-        ////        return View();
-        ////    }
-        ////}
     }
 }

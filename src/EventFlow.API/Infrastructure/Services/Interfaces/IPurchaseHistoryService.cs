@@ -5,16 +5,18 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
 {
     public interface IPurchaseHistoryService
     {
-        ////Task AddAsync(ApplicationUser user, int productId);
-
-        ////Task DeleteAsync(PurchaseHistory purchaseHistory);
-
-        ////Task<IQueryable<PurchaseHistory>> GetAllAsync();
-
-        ////Task AddFromBasketAsync(IQueryable<Basket> baskets);
-
+        /// <summary>
+        /// Get all by user id.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <returns>Returns purchase history model.</returns>
         Task<PurchaseHistoryModel> GetAllByUserIdAsync(string userId);
 
+        /// <summary>
+        /// Add to purchase history.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="itemId">Item id.</param>
         Task AddAsync(string userId, int itemId);
     }
 }

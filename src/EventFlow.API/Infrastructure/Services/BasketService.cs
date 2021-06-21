@@ -1,16 +1,16 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
-using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 {
-    public class BasketService : IBasketService
+    internal class BasketService : IBasketService
     {
         private readonly IEventSeatService _eventSeatService;
         private readonly IEventAreaService _eventAreaService;
@@ -29,6 +29,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// </summary>
         public IDbContext DbContext { get; }
 
+        /// <inheritdoc/>
         public async Task AddAsync(string userId, int productId)
         {
             var basketItem = new Basket
@@ -39,11 +40,13 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.Baskets.CreateAsync(basketItem);
         }
 
-        public IQueryable<Basket> GetAll()
+        /// <inheritdoc/>
+        public IEnumerable<Basket> GetAll()
         {
             return DbContext.Baskets.GetAllAsQueryable();
         }
 
+        /// <inheritdoc/>
         public async Task<BasketModel> GetAllByUserIdAsync(string id)
         {
             var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == id);
@@ -74,6 +77,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             return basketModel;
         }
 
+        /// <inheritdoc/>
         public async Task DeleteAsync(string userId, int productId)
         {
             var currentSeatState = (await _eventSeatService.GetByIDAsync(productId)).State;
@@ -84,7 +88,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
             var products = GetAll().Where(x => x.ProductId == productId && x.UserId == userId);
 
-            var productInCurrentUserBasket = products.Count() == 0;
+            var productInCurrentUserBasket = !products.Any();
             if (productInCurrentUserBasket)
             {
                 throw new ValidationException(ExceptionMessages.ProductInAnotherUserBusket);
@@ -94,6 +98,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.Baskets.DeleteAsync(new Basket { Id = basketId, ProductId = productId, UserId = userId });
         }
 
+        /// <inheritdoc/>
         public async Task DeleteAllByUserIdAsync(string id)
         {
             var basketItems = DbContext.Baskets.GetAllAsQueryable().Where(x => x.UserId == id);

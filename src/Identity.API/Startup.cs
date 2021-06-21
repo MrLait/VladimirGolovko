@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Services.Identity.API.Extensions;
 using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.Identity.API
@@ -45,52 +46,17 @@ namespace TicketManagement.Services.Identity.API
             services.AddScoped<IDbContext, EfDbContext>();
             services.AddAutoMapper(typeof(MappingProfile));
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<EfDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString)
-                .EnableSensitiveDataLogging();
-            });
-            services.AddDbContext<ApplicationUserDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddCustomDbContext(Configuration);
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationUserDbContext>()
                 .AddDefaultTokenProviders();
 
-            JwtTokenAuthService(services);
+            services.JwtTokenAuthService(Configuration);
 
             services.AddControllers();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Internal lab Demo 2",
-                    Version = "v1",
-                });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-                var jwtSecurityScheme = new OpenApiSecurityScheme
-                {
-                    Description = "Jwt Token is required to access the endpoints",
-                    In = ParameterLocation.Header,
-                    Name = "JWT Authentication",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme,
-                    },
-                };
-
-                options.AddSecurityDefinition("Bearer", jwtSecurityScheme);
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() },
-                });
-            });
+            services.AddCustomSwagger(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,33 +82,6 @@ namespace TicketManagement.Services.Identity.API
                     Predicate = check => check.Tags.Contains("live"),
                 }).WithMetadata(new AllowAnonymousAttribute());
             });
-        }
-
-        private void JwtTokenAuthService(IServiceCollection services)
-        {
-            var tokenSettings = Configuration.GetSection(nameof(JwtTokenSettings));
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = tokenSettings[nameof(JwtTokenSettings.JwtIssuer)],
-                        ValidateAudience = true,
-                        ValidAudience = tokenSettings[nameof(JwtTokenSettings.JwtAudience)],
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings[nameof(JwtTokenSettings.JwtSecretKey)])),
-                        ValidateLifetime = false,
-                    };
-                });
-            services.Configure<JwtTokenSettings>(tokenSettings);
-            services.AddScoped<JwtTokenService>();
         }
     }
 }

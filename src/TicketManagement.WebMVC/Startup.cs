@@ -14,15 +14,14 @@ using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Extensions;
 using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 
 namespace TicketManagement.WebMVC
 {
-#pragma warning disable S1200 // Classes should not be coupled to too many other classes (Single Responsibility Principle)
     public class Startup
-#pragma warning restore S1200 // Classes should not be coupled to too many other classes (Single Responsibility Principle)
     {
         public Startup(IConfiguration configuration)
         {
@@ -41,8 +40,8 @@ namespace TicketManagement.WebMVC
             services.AddAuthentication(JwtAutheticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
 
-            AddIdentityClients(services);
-            AddEventFlowClients(services);
+            services.AddIdentityClients(Configuration);
+            services.AddEventFlowClients(Configuration);
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddControllersWithViews()
@@ -61,51 +60,6 @@ namespace TicketManagement.WebMVC
                 options.DefaultRequestCulture = new RequestCulture("ru");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
-            });
-        }
-
-#pragma warning disable S1541 // Methods and properties should not be too complex
-        private static void AddEventFlowClients(IServiceCollection services)
-#pragma warning restore S1541 // Methods and properties should not be too complex
-        {
-            services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
-            {
-                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
-                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
-            services.AddHttpClient<IEventAreaClient, EventAreaClient>((provider, client) =>
-            {
-                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
-                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
-            services.AddHttpClient<IBasketClient, BasketClient>((provider, client) =>
-            {
-                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
-                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
-            services.AddHttpClient<IPurchaseHistoryClient, PurchaseHistoryClient>((provider, client) =>
-            {
-                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
-                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
-            services.AddHttpClient<IEventManagerClient, EventManagerClient>((provider, client) =>
-            {
-                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
-                client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
-        }
-
-        private static void AddIdentityClients(IServiceCollection services)
-        {
-            services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
-            {
-                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
-                client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
-            });
-            services.AddHttpClient<IProfileClient, ProfileClient>((provider, client) =>
-            {
-                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.UserApiAddress;
-                client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
         }
 

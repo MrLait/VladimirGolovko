@@ -9,7 +9,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.HealthChecks
     internal class UserApiHealthcheck : IHealthCheck
     {
         private const string UserApiHealthyText = "User API is healthy";
-        //// private const string UserApiUnhealthyText = "User API is unhealthy. Reason: ";
+        private const string UserApiUnhealthyText = "User API is unhealthy. Reason: ";
         private readonly IUserClient _userClient;
 
         /// <inheritdoc cref="IHealthCheck"/>
@@ -33,7 +33,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.HealthChecks
             }
             catch (HttpRequestException)
             {
-                return HealthCheckResult.Unhealthy("User API is not healthy");
+                return HealthCheckResult.Unhealthy(UserApiUnhealthyText);
             }
         }
     }

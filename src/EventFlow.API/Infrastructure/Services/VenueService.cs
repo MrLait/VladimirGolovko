@@ -12,7 +12,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
     /// <summary>
     /// Venue service class.
     /// </summary>
-    public class VenueService : IVenueService
+    internal class VenueService : IVenueService
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VenueService"/> class.

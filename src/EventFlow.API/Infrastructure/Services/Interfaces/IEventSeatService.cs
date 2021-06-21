@@ -22,6 +22,11 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         /// <returns>Returns object by id.</returns>
         Task<EventSeatDto> GetByIDAsync(int id);
 
+        /// <summary>
+        /// Get by event areaId.
+        /// </summary>
+        /// <param name="dto">Event area dto.</param>
+        /// <returns>Returns event seats.</returns>
         IEnumerable<EventSeatDto> GetByEventAreaId(EventAreaDto dto);
 
         /// <summary>

@@ -2,72 +2,73 @@
 {
     public static class IdentityApiRequestUries
     {
+        /// <summary>
+        /// Acaunt user register url.
+        /// </summary>
         public const string Register = "AccountUser/register";
+
+        /// <summary>
+        /// Acaunt user login url.
+        /// </summary>
         public const string Login = "AccountUser/login";
 
         /// <summary>
+        /// Validate token url.
         /// {0} - token.
         /// </summary>
         public const string ValidateToken = "AccountUser/validate?token={0}";
 
         /// <summary>
+        /// Get user balance url.
         /// {0} - user id.
         /// </summary>
         public const string ProfileGetBalance = "Profile/getBalance?userId={0}";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - new balance.
+        /// Update balance url.
         /// </summary>
-        public const string ProfileUpdateBalance = "Profile/updateBalance?userId={0}&balance={1}";
+        public const string ProfileUpdateBalance = "Profile/updateBalance";
 
         /// <summary>
+        /// Get user profile url.
         /// {0} - user id.
         /// {1} - new balance.
         /// </summary>
         public const string ProfileGetUserProfile = "Profile/getUserProfile?userId={0}";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - culture.
+        /// Set language url.
         /// </summary>
-        public const string ProfileSetLanguage = "Profile/setLanguage?userId={0}&culture={1}";
+        public const string ProfileSetLanguage = "Profile/setLanguage";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - balance.
+        /// Deposite url.
         /// </summary>
-        public const string ProfileDeposite = "Profile/deposite?userId={0}&balance={1}";
+        public const string ProfileDeposite = "Profile/deposite";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - email.
+        /// Edit email url.
         /// </summary>
-        public const string ProfileEditEmail = "Profile/editEmail?userId={0}&email={1}";
+        public const string ProfileEditEmail = "Profile/editEmail";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - new firstName.
+        /// Edit first name url.
         /// </summary>
-        public const string ProfileEditFirstName = "Profile/editFirstName?userId={0}&firstName={1}";
+        public const string ProfileEditFirstName = "Profile/editFirstName";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - old password.
-        /// {2} - new password.
+        /// Edit password url.
         /// </summary>
-        public const string ProfileEditPassword = "Profile/editPassword?userId={0}&oldPassword={1}&newPassword={2}";
+        public const string ProfileEditPassword = "Profile/editPassword";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - new surname.
+        /// Edit surname url.
         /// </summary>
-        public const string ProfileEditSurname = "Profile/editSurname?userId={0}&surname={1}";
+        public const string ProfileEditSurname = "Profile/editSurname";
 
         /// <summary>
-        /// {0} - user id.
-        /// {1} - new time zone off set.
+        /// Edit time zone offset url.
         /// </summary>
-        public const string ProfileEditTimeZoneOffset = "Profile/editTimeZoneOffse?userId={0}&timeZoneOffset={1}";
+        public const string ProfileEditTimeZoneOffset = "Profile/editTimeZoneOffset";
     }
 }

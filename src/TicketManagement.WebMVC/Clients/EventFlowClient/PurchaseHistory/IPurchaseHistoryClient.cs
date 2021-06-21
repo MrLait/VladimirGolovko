@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -7,9 +8,9 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 {
     public interface IPurchaseHistoryClient
     {
-        public Task AddItemAsync(string userId, string itemId, CancellationToken cancellationToken = default);
+        Task AddItemAsync(string userId, string itemId, CancellationToken cancellationToken = default);
 
-        public Task<PurchaseHistoryModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<PurchaseHistoryModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
     }
 
     internal class PurchaseHistoryClient : IPurchaseHistoryClient
@@ -23,9 +24,10 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 
         public async Task AddItemAsync(string userId, string itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.PurchaseHistoryAddItem, userId, itemId);
-            var message = await _httpClient.GetAsync(address, cancellationToken);
-            message.EnsureSuccessStatusCode();
+            var address = string.Format(EventFlowApiRequestUries.PurchaseHistoryAddItem);
+            var model = new { userId, itemId };
+            var json = JsonConvert.SerializeObject(model);
+            await PostAsync(json, address);
         }
 
         public async Task<PurchaseHistoryModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default)
@@ -34,6 +36,13 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var purchaseHistory = JsonConvert.DeserializeObject<PurchaseHistoryModel>(result);
             return purchaseHistory;
+        }
+
+        private async Task PostAsync(string json, string address)
+        {
+            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var message = await _httpClient.PostAsync(address, queryString);
+            message.EnsureSuccessStatusCode();
         }
     }
 }

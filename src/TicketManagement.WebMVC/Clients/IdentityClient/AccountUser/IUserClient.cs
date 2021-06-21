@@ -8,13 +8,13 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
 {
     public interface IUserClient
     {
-        public Task HealthCheck(CancellationToken cancellationToken = default);
+        Task HealthCheck(CancellationToken cancellationToken = default);
 
-        public Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default);
+        Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default);
 
-        public Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default);
+        Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default);
 
-        public Task ValidateToken(string token, CancellationToken cancellationToken = default);
+        Task ValidateToken(string token, CancellationToken cancellationToken = default);
     }
 
     internal class UserClient : IUserClient
