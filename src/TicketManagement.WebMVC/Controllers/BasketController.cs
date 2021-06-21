@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
@@ -15,6 +16,9 @@ using TicketManagement.WebMVC.ViewModels.BasketViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Basket controller.
+    /// </summary>
     public class BasketController : Controller
     {
         private readonly IBasketClient _basketClient;
@@ -23,13 +27,25 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IProfileClient _profileClient;
         private readonly IPurchaseHistoryClient _purchaseHistoryClient;
         private readonly IStringLocalizer<BasketController> _localizer;
+        private readonly ILogger<BasketController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasketController"/> class.
+        /// </summary>
+        /// <param name="basketClient">Basket client.</param>
+        /// <param name="identityParser">Identity parser.</param>
+        /// <param name="mapper">Mapper.</param>
+        /// <param name="profileClient">Profile client.</param>
+        /// <param name="purchaseHistoryClient">Purchase history client.</param>
+        /// <param name="localizer">Localizer.</param>
+        /// <param name="logger">Logger.</param>
         public BasketController(IBasketClient basketClient,
             IIdentityParser<ApplicationUser> identityParser,
             IMapper mapper,
             IProfileClient profileClient,
             IPurchaseHistoryClient purchaseHistoryClient,
-            IStringLocalizer<BasketController> localizer)
+            IStringLocalizer<BasketController> localizer,
+            ILogger<BasketController> logger)
         {
             _purchaseHistoryClient = purchaseHistoryClient;
             _profileClient = profileClient;
@@ -37,6 +53,7 @@ namespace TicketManagement.WebMVC.Controllers
             _identityParser = identityParser;
             _mapper = mapper;
             _localizer = localizer;
+            _logger = logger;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -84,11 +101,13 @@ namespace TicketManagement.WebMVC.Controllers
             catch (ArgumentException ex)
             {
                 ModelState.AddModelError("", ex.Message);
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ex);
                 return View();
             }
             catch (ValidationException ve)
             {
                 ModelState.AddModelError("", ve.Message);
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
                 return View();
             }
         }
@@ -105,6 +124,7 @@ namespace TicketManagement.WebMVC.Controllers
             catch (ValidationException ve)
             {
                 ModelState.AddModelError("", ve.Message);
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
                 return RedirectToAction("Index", "EventHomePage");
             }
         }
@@ -126,6 +146,7 @@ namespace TicketManagement.WebMVC.Controllers
             catch (ValidationException ve)
             {
                 ModelState.AddModelError("", ve.Message);
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
                 return RedirectToAction("Index", "EventHomePage");
             }
         }

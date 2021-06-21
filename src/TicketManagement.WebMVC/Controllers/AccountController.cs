@@ -1,10 +1,13 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
@@ -17,14 +20,17 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IUserClient _applicationUserClient;
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<AccountController> _localizer;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(IUserClient applicationUserClient,
             IMapper mapper,
-            IStringLocalizer<AccountController> localizer)
+            IStringLocalizer<AccountController> localizer,
+            ILogger<AccountController> logger)
         {
             _mapper = mapper;
             _applicationUserClient = applicationUserClient;
             _localizer = localizer;
+            _logger = logger;
         }
 
         [HttpGet("register")]
@@ -77,6 +83,8 @@ namespace TicketManagement.WebMVC.Controllers
                             break;
                     }
                 }
+
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, e);
             }
 
             return View(vm);
@@ -115,6 +123,8 @@ namespace TicketManagement.WebMVC.Controllers
                 {
                     ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
                 }
+
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, e);
             }
 
             return View(vm);

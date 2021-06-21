@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
@@ -23,19 +25,22 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IEventManagerClient _eventManagerClient;
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<EventManagerController> _localizer;
+        private readonly ILogger<EventManagerController> _logger;
 
         public EventManagerController(
             IEventClient eventClient,
             IEventManagerClient eventManagerClient,
             IEventAreaClient eventAreaClient,
             IMapper mapper,
-            IStringLocalizer<EventManagerController> localizer)
+            IStringLocalizer<EventManagerController> localizer,
+            ILogger<EventManagerController> logger)
         {
             _eventAreaClient = eventAreaClient;
             _eventManagerClient = eventManagerClient;
             _eventClient = eventClient;
             _mapper = mapper;
             _localizer = localizer;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -98,6 +103,7 @@ namespace TicketManagement.WebMVC.Controllers
                     ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past"]);
                 }
 
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
                 return View(model);
             }
         }
@@ -156,6 +162,7 @@ namespace TicketManagement.WebMVC.Controllers
                     return Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
                 }
 
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ex);
                 return RedirectToAction("Index", "EventManager");
             }
         }

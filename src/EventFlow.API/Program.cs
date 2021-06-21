@@ -1,8 +1,12 @@
+using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Exceptions;
 
 namespace TicketManagement.Services.EventFlow.API
 {
@@ -14,7 +18,16 @@ namespace TicketManagement.Services.EventFlow.API
 
         public static async Task Main(string[] args)
         {
-            await CreateHostBuilder(args).Build().RunAsync();
+            ConfigureLogging();
+            try
+            {
+                await CreateHostBuilder(args).Build().RunAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal($"Failed to start {Assembly.GetExecutingAssembly().GetName().Name}", e);
+                throw;
+            }
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
@@ -25,11 +38,34 @@ namespace TicketManagement.Services.EventFlow.API
                 .AddCommandLine(args)
                 .Build();
 
-            return Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
+            return Host.CreateDefaultBuilder(args)
+                .UseSerilog()
+                .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
                 webBuilder.UseUrls("https://*:5000").UseConfiguration(config);
             });
+        }
+
+        private static void ConfigureLogging()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configeration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile(
+                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .Enrich.WithMachineName()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .WriteTo.File(@"logs\log.txt", rollingInterval: RollingInterval.Day)
+                .Enrich.WithProperty("Environment", environment)
+                .ReadFrom.Configuration(configeration)
+                .CreateLogger();
         }
     }
 }
