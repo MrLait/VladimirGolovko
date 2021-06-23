@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
@@ -57,7 +59,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var eventDto = await _eventService.GetByIDAsync(id);
+            var eventDto = await _eventService.GetByIdAsync(id);
             return Ok(eventDto);
         }
 
@@ -68,23 +70,19 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// <returns>Return status code.</returns>
         [HttpPut("updateEvent")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateEvent([FromBody] EventDto eventDto)
         {
-            await _eventService.UpdateAsync(eventDto);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Update layout id.
-        /// </summary>
-        /// <param name="eventDto">Event dto.</param>
-        /// <returns>Return status code.</returns>
-        [HttpPut("updateLayoutId")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateLayoutId([FromBody] EventDto eventDto)
-        {
-            await _eventService.UpdateLayoutIdAsync(eventDto);
-            return Ok();
+            try
+            {
+                await _eventService.UpdateAsync(eventDto);
+                return Ok();
+            }
+            catch (ValidationException e)
+            {
+                var validationExceptionSerialized = JsonConvert.SerializeObject(e);
+                return BadRequest(validationExceptionSerialized);
+            }
         }
 
         /// <summary>
@@ -94,10 +92,19 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// <returns>Return status code.</returns>
         [HttpDelete("deleteById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteById(int id)
         {
-            await _eventService.DeleteAsync(new EventDto { Id = id });
-            return Ok();
+            try
+            {
+                await _eventService.DeleteAsync(new EventDto { Id = id });
+                return Ok();
+            }
+            catch (ValidationException e)
+            {
+                var validationExceptionSerialized = JsonConvert.SerializeObject(e);
+                return BadRequest(validationExceptionSerialized);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -44,8 +43,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
 
             try
             {
-                var eventDto = model;
-                await _eventService.CreateAsync(eventDto);
+                await _eventService.CreateAsync(model);
                 return Ok();
             }
             catch (ValidationException e)

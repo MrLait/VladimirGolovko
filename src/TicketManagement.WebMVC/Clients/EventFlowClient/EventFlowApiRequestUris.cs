@@ -21,11 +21,6 @@
         public const string EventUpdateEvent = "/Event/updateEvent";
 
         /// <summary>
-        /// Event update layout id url.
-        /// </summary>
-        public const string EventUpdateLayoutId = "/Event/UpdateLayoutId";
-
-        /// <summary>
         /// {0} - event id.
         /// </summary>
         public const string EventGetById = "/Event/getById?id={0}";

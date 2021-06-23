@@ -5,21 +5,46 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TicketManagement.Dto;
+using TicketManagement.WebMVC.Infrastructure.ExceptionsMessages;
 
 namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 {
+    /// <summary>
+    /// Event client.
+    /// </summary>
     public interface IEventClient
     {
+        /// <summary>
+        /// Get all.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Get last.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Get by id.
+        /// </summary>
+        /// <param name="id">Event id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task<EventDto> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Update event.
+        /// </summary>
+        /// <param name="eventDto">Event dto.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task UpdateEventAsync(EventDto eventDto, CancellationToken cancellationToken = default);
 
-        Task UpdateLayoutIdAsync(EventDto eventDto, CancellationToken cancellationToken = default);
-
+        /// <summary>
+        /// Delete by id.
+        /// </summary>
+        /// <param name="id">Event id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default);
     }
 
@@ -35,8 +60,18 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
         public async Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var uri = string.Format(EventFlowApiRequestUris.EventDeleteById, id);
-            var result = await _httpClient.DeleteAsync(uri, cancellationToken);
-            result.EnsureSuccessStatusCode();
+
+            var result = new HttpResponseMessage();
+            try
+            {
+                result = await _httpClient.DeleteAsync(uri, cancellationToken);
+                result.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                var validationException = JsonConvert.DeserializeObject<ValidationException>(result.Content.ReadAsStringAsync(cancellationToken).Result) ?? new ValidationException();
+                throw new ValidationException(validationException.Message);
+            }
         }
 
         public async Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -65,18 +100,19 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
         {
             var url = EventFlowApiRequestUris.EventUpdateEvent;
             string json = JsonConvert.SerializeObject(eventDto);
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
-            result.EnsureSuccessStatusCode();
-        }
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
 
-        public async Task UpdateLayoutIdAsync(EventDto eventDto, CancellationToken cancellationToken = default)
-        {
-            var url = EventFlowApiRequestUris.EventUpdateLayoutId;
-            string json = JsonConvert.SerializeObject(eventDto);
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
-            result.EnsureSuccessStatusCode();
+            var result = new HttpResponseMessage();
+            try
+            {
+                result = await _httpClient.PutAsync(url, queryString, cancellationToken);
+                result.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                var validationException = JsonConvert.DeserializeObject<ValidationException>(result.Content.ReadAsStringAsync(cancellationToken).Result) ?? new ValidationException();
+                throw new ValidationException(validationException.Message);
+            }
         }
     }
 }

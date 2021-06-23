@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.VisualBasic;
 using Moq;
 using NUnit.Framework;
 using TicketManagement.DataAccess.Domain.Models;
@@ -194,14 +195,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var expected = new Event
             {
                 Id = eventLast.Id,
-                StartDateTime = eventLast.StartDateTime,
-                EndDateTime = eventLast.EndDateTime,
+                StartDateTime = eventLast.EndDateTime.AddDays(3),
+                EndDateTime = eventLast.EndDateTime.AddDays(5),
                 Description = "Updated Description",
                 LayoutId = eventLast.LayoutId,
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(Mock.Object);
+
+            var eventArea = new EventAreaService(Mock.Object);
+            var eventSeat = new EventSeatService(Mock.Object);
+            var eventService = new EventService(Mock.Object, eventSeat, eventArea);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -273,18 +277,21 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var eventLast = Events.Last();
-            var layoutIdChanged = eventLast.Id + 1;
+            var layoutIdChanged = eventLast.LayoutId + 1;
             var expected = new Event
             {
                 Id = eventLast.Id,
-                StartDateTime = eventLast.StartDateTime,
-                EndDateTime = eventLast.EndDateTime,
+                StartDateTime = eventLast.EndDateTime.AddDays(3),
+                EndDateTime = eventLast.EndDateTime.AddDays(5),
                 Description = "Updated Description",
                 LayoutId = layoutIdChanged,
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(Mock.Object);
+
+            var eventArea = new EventAreaService(Mock.Object);
+            var eventSeat = new EventSeatService(Mock.Object);
+            var eventService = new EventService(Mock.Object, eventSeat, eventArea);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -406,7 +413,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act
-            var actual = await eventService.GetByIDAsync(expectedId);
+            var actual = await eventService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -419,7 +426,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIdAsync(0));
         }
 
         [Test]
@@ -429,7 +436,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIdAsync(-1));
         }
     }
 }

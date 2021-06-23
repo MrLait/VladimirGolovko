@@ -28,17 +28,11 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         Task UpdateAsync(EventDto dto);
 
         /// <summary>
-        /// Update object in database.
-        /// </summary>
-        /// <param name="dto">Event data object transfer.</param>
-        Task UpdateLayoutIdAsync(EventDto dto);
-
-        /// <summary>
         /// Get object by Id from table in database.
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        Task<EventDto> GetByIDAsync(int id);
+        Task<EventDto> GetByIdAsync(int id);
 
         /// <summary>
         /// Get last event.

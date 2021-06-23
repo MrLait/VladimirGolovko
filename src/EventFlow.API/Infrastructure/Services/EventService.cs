@@ -54,19 +54,19 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
             if (!isDataTimeValid)
             {
                 throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
             }
 
-            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
-            if (!isStartDataTimeBeforeEndTadaTime)
+            var isStartDataTimeBeforeEndDataTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
+            if (!isStartDataTimeBeforeEndDataTime)
             {
                 throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
             }
 
-            bool isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
+            var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
             if (isEventContainSameVenueInSameTime)
             {
                 throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime);
@@ -85,9 +85,10 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             }
 
             var allAreasInLayout = GetAllAreasInLayout(dto);
-            var allSeatsForAllAreas = GetAllSeatsForThisAreas(allAreasInLayout);
+            var areasInLayout = allAreasInLayout.ToList();
+            var allSeatsForAllAreas = GetAllSeatsForThisAreas(areasInLayout);
 
-            Event eventEntity = new Event
+            var eventEntity = new Event
             {
                 LayoutId = dto.LayoutId,
                 Description = dto.Description,
@@ -99,9 +100,10 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             await DbContext.Events.CreateAsync(eventEntity);
 
             var allEvent = DbContext.Events.GetAllAsQueryable().AsEnumerable();
-            var incrementedEventId = allEvent.Any()? allEvent.Last().Id : 1;
+            var enumerable = allEvent.ToList();
+            var incrementedEventId = enumerable.Any() ? enumerable.Last().Id : 1;
 
-            await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, incrementedEventId);
+            await CreateEventAreasAndThenEventSeatsAsync(areasInLayout, allSeatsForAllAreas, incrementedEventId);
         }
 
         /// <inheritdoc/>
@@ -123,11 +125,10 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             }
 
             var allEventAreas = _eventAreaService.GetByEventId(dto.Id).ToList();
-            bool isSeatPurchased = false;
             foreach (var item in allEventAreas)
             {
                 var eventSeats = _eventSeatService.GetByEventAreaId(item);
-                isSeatPurchased = eventSeats.Any(x => x.State == States.Purchased);
+                var isSeatPurchased = eventSeats.Any(x => x.State == States.Purchased);
                 if (isSeatPurchased)
                 {
                     throw new ValidationException(ExceptionMessages.SeatsHaveAlreadyBeenPurchased, dto.Id);
@@ -143,102 +144,29 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// <inheritdoc/>
         public async Task UpdateAsync(EventDto dto)
         {
-            if (dto == null)
-            {
-                throw new ValidationException(ExceptionMessages.NullReference);
-            }
+            ValidateEventDto(dto);
 
-            if (dto.Id == 0)
-            {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
+            var byIdEvent = await DbContext.Events.GetByIDAsync(dto.Id);
 
-            if (dto.Id < 0)
+            if (byIdEvent.LayoutId == dto.LayoutId)
             {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
-
-            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
-            if (!isDataTimeValid)
-            {
-                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
-            }
-
-            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
-            if (!isStartDataTimeBeforeEndTadaTime)
-            {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
-            }
-
-            var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
-            if (isEventContainSameVenueInSameTime)
-            {
-                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
-            }
-
-            await DbContext.Events.UpdateAsync(new Event
-            {
-                Id = dto.Id,
-                LayoutId = dto.LayoutId,
-                Description = dto.Description,
-                Name = dto.Name,
-                StartDateTime = dto.StartDateTime,
-                EndDateTime = dto.EndDateTime,
-                ImageUrl = dto.ImageUrl,
-            });
-        }
-
-        /// <inheritdoc/>
-        public async Task UpdateLayoutIdAsync(EventDto dto)
-        {
-            if (dto == null)
-            {
-                throw new ValidationException(ExceptionMessages.NullReference);
-            }
-
-            if (dto.Id == 0)
-            {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
-
-            if (dto.Id < 0)
-            {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
-
-            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
-            if (!isDataTimeValid)
-            {
-                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
-            }
-
-            var atLeastOneLayoutIdExistInArea = CheckThatLayoutIdExistAtLeastInOneArea(dto);
-            if (!atLeastOneLayoutIdExistInArea)
-            {
-                throw new ValidationException(ExceptionMessages.ThereIsNoSuchLayout);
-            }
-
-            var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
-            if (!atLeastOneAreaContainsSeats)
-            {
-                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent);
-            }
-
-            var isStartDataTimeBeforeEndTadaTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
-            if (!isStartDataTimeBeforeEndTadaTime)
-            {
-                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
-            }
-
-            var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
-            if (isEventContainSameVenueInSameTime)
-            {
-                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
+                await DbContext.Events.UpdateAsync(new Event
+                {
+                    Id = dto.Id,
+                    LayoutId = dto.LayoutId,
+                    Description = dto.Description,
+                    Name = dto.Name,
+                    StartDateTime = dto.StartDateTime,
+                    EndDateTime = dto.EndDateTime,
+                    ImageUrl = dto.ImageUrl,
+                });
+                return;
             }
 
             var allEventAreasInEvent = _eventAreaService.GetAllEventAreasForEvent(dto);
             var allAreasInLayout = GetAllAreasInLayout(dto);
-            var allSeatsForAllAreas = GetAllSeatsForThisAreas(allAreasInLayout);
+            var areasInLayout = allAreasInLayout.ToList();
+            var allSeatsForAllAreas = GetAllSeatsForThisAreas(areasInLayout);
             foreach (var item in allEventAreasInEvent)
             {
                 await _eventAreaService.DeleteAsync(item);
@@ -255,11 +183,11 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                     EndDateTime = dto.EndDateTime,
                     ImageUrl = dto.ImageUrl,
                 });
-            await CreateEventAreasAndThenEventSeatsAsync(allAreasInLayout, allSeatsForAllAreas, dto.Id);
+            await CreateEventAreasAndThenEventSeatsAsync(areasInLayout, allSeatsForAllAreas, dto.Id);
         }
 
         /// <inheritdoc/>
-        public async Task<EventDto> GetByIDAsync(int id)
+        public async Task<EventDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -317,7 +245,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
                     if (allEventSeatsForAllAreas.Count != 0)
                     {
-                        var avalibleSeats = allEventSeatsForAllAreas.Where(x => x.State == (int)States.Available);
+                        var availableSeats = allEventSeatsForAllAreas.Where(x => x.State == (int)States.Available);
                         eventDto.Add(new EventDto
                         {
                             Id = item.Id,
@@ -327,7 +255,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                             ImageUrl = item.ImageUrl,
                             Description = item.Description,
                             Name = item.Name,
-                            AvailableSeats = avalibleSeats.Count(),
+                            AvailableSeats = availableSeats.Count(),
                             PriceFrom = allEventAreasInLayout.Min(x => x.Price),
                             PriceTo = allEventAreasInLayout.Max(x => x.Price),
                         });
@@ -378,19 +306,25 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         private bool CheckThatEventNotCreatedInTheSameTimeForVenue(EventDto dto)
         {
             var allEvents = DbContext.Events.GetAllAsQueryable().ToList();
-            var isEventContainSameVenueInSameTime = false;
-            foreach (var item in allEvents)
+            foreach (var item in allEvents.Where(item => item.LayoutId == dto.LayoutId))
             {
-                if (item.StartDateTime != dto.StartDateTime && item.EndDateTime != dto.EndDateTime)
+                if (item.StartDateTime == dto.StartDateTime || item.EndDateTime == dto.EndDateTime)
                 {
-                    var isdtoStartTimeBetwenItem = item.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= item.EndDateTime && item.LayoutId == dto.LayoutId;
-                    var isEndDtoTimeBetwenItem = dto.StartDateTime <= item.StartDateTime && item.StartDateTime <= dto.EndDateTime && item.LayoutId == dto.LayoutId;
-                    var isEndDtoOrStartDtoEqualItem = dto.StartDateTime == item.StartDateTime | item.StartDateTime == dto.EndDateTime && item.LayoutId == dto.LayoutId;
-                    isEventContainSameVenueInSameTime = isdtoStartTimeBetwenItem | isEndDtoTimeBetwenItem | isEndDtoOrStartDtoEqualItem;
+                    return true;
+                }
+
+                var isDtoStartTimeBetweenItem = item.StartDateTime <= dto.StartDateTime && dto.StartDateTime <= item.EndDateTime;
+                var isEndDtoTimeBetweenItem = dto.StartDateTime <= item.StartDateTime && item.StartDateTime <= dto.EndDateTime;
+                var isEndDtoOrStartDtoEqualItem = dto.StartDateTime == item.StartDateTime | item.StartDateTime == dto.EndDateTime;
+                var isEventContainSameVenueInSameTime = isDtoStartTimeBetweenItem | isEndDtoTimeBetweenItem | isEndDtoOrStartDtoEqualItem;
+
+                if (isEventContainSameVenueInSameTime)
+                {
+                    return true;
                 }
             }
 
-            return isEventContainSameVenueInSameTime;
+            return false;
         }
 
         private bool CheckThatStartDataTimeBeforeEndDadaTime(EventDto dto)
@@ -401,7 +335,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
         private bool CheckThatEventNotCreatedInThePast(EventDto dto)
         {
-            bool isDataTimeValid = dto.StartDateTime > DateTime.Now;
+            var isDataTimeValid = dto.StartDateTime > DateTime.Now;
             return isDataTimeValid;
         }
 
@@ -427,23 +361,73 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
         private async Task CreateEventAreasAndThenEventSeatsAsync(IEnumerable<Area> allAreasInLayout, IEnumerable<Seat> allSeatsForAllAreas, int eventId)
         {
-            foreach (var item in allAreasInLayout.ToList())
+            var areasInLayout = allAreasInLayout.ToList();
+            foreach (var item in areasInLayout)
             {
                 await DbContext.EventAreas.CreateAsync(new EventArea { Description = item.Description, EventId = eventId, CoordX = item.CoordX, CoordY = item.CoordY, Price = default });
             }
 
-            var lastEventAreaId = (DbContext.EventAreas.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault()?.Id ?? 0) - allAreasInLayout.Count();
+            var lastEventAreaId = (DbContext.EventAreas.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault()?.Id ?? 0) - areasInLayout.Count;
 
-            int currSateId = allSeatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
-            foreach (var item in allSeatsForAllAreas)
+            var seatsForAllAreas = allSeatsForAllAreas.ToList();
+            var curSateId = seatsForAllAreas.FirstOrDefault()?.AreaId ?? 0;
+            foreach (var item in seatsForAllAreas)
             {
-                if (currSateId != item.AreaId)
+                if (curSateId != item.AreaId)
                 {
-                    currSateId = item.AreaId;
+                    curSateId = item.AreaId;
                     lastEventAreaId++;
                 }
 
                 await DbContext.EventSeats.CreateAsync(new EventSeat { EventAreaId = lastEventAreaId + 1, Number = item.Number, Row = item.Row, State = (int)States.Available });
+            }
+        }
+
+        private void ValidateEventDto(EventDto dto)
+        {
+            if (dto == null)
+            {
+                throw new ValidationException(ExceptionMessages.NullReference);
+            }
+
+            if (dto.Id == 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            if (dto.Id < 0)
+            {
+                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+            }
+
+            var isDataTimeValid = CheckThatEventNotCreatedInThePast(dto);
+            if (!isDataTimeValid)
+            {
+                throw new ValidationException(ExceptionMessages.CantBeCreatedInThePast);
+            }
+
+            var isStartDataTimeBeforeEndDataTime = CheckThatStartDataTimeBeforeEndDadaTime(dto);
+            if (!isStartDataTimeBeforeEndDataTime)
+            {
+                throw new ValidationException(ExceptionMessages.StartDataTimeBeforeEndDataTime);
+            }
+
+            var isEventContainSameVenueInSameTime = CheckThatEventNotCreatedInTheSameTimeForVenue(dto);
+            if (isEventContainSameVenueInSameTime)
+            {
+                throw new ValidationException(ExceptionMessages.EventForTheSameVenueInTheSameDateTime, dto.Description, dto.StartDateTime);
+            }
+
+            var atLeastOneLayoutIdExistInArea = CheckThatLayoutIdExistAtLeastInOneArea(dto);
+            if (!atLeastOneLayoutIdExistInArea)
+            {
+                throw new ValidationException(ExceptionMessages.ThereIsNoSuchLayout);
+            }
+
+            var atLeastOneAreaContainsSeats = CheckThatAtLeastOneAreaContainsSeats(dto);
+            if (!atLeastOneAreaContainsSeats)
+            {
+                throw new ValidationException(ExceptionMessages.ThereAreNoSeatsInTheEvent);
             }
         }
     }

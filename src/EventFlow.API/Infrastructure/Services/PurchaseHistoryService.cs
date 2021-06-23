@@ -51,7 +51,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             {
                 var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
                 var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
-                var eventItem = await _eventService.GetByIDAsync(areaItem.EventId);
+                var eventItem = await _eventService.GetByIdAsync(areaItem.EventId);
                 purchaseHistoryViewModel.Items.Add(
                     new PurchaseHistoryItem
                     {
