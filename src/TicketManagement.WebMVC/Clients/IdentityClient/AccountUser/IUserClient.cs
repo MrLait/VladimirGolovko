@@ -6,14 +6,37 @@ using Newtonsoft.Json;
 
 namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
 {
+    /// <summary>
+    /// User client.
+    /// </summary>
     public interface IUserClient
     {
+        /// <summary>
+        /// Health check.
+        /// </summary>
         Task HealthCheck(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Register.
+        /// </summary>
+        /// <param name="userModel">User model.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>String.</returns>
         Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <param name="userModel">User model.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>String.</returns>
         Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Validate token.
+        /// </summary>
+        /// <param name="token">Token.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task ValidateToken(string token, CancellationToken cancellationToken = default);
     }
 

@@ -3,6 +3,7 @@ using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient;
+using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 using TicketManagement.WebMVC.ViewModels.BasketViewModels;

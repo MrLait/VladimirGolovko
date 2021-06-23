@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
-using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 

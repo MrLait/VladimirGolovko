@@ -5,6 +5,9 @@ using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 {
+    /// <summary>
+    /// Basket service.
+    /// </summary>
     public interface IBasketService
     {
         /// <summary>

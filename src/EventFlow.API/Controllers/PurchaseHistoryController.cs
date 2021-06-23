@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using EventFlow.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,9 @@ using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
+    /// <summary>
+    /// Purchase history api controller.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class PurchaseHistoryController : ControllerBase
@@ -16,6 +18,11 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         private readonly IPurchaseHistoryService _purchaseHistoryService;
         private readonly IEventSeatService _eventSeatService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PurchaseHistoryController"/> class.
+        /// </summary>
+        /// <param name="eventSeatService">Event seat service.</param>
+        /// <param name="purchaseHistoryService">Purchase history service.</param>
         public PurchaseHistoryController(IEventSeatService eventSeatService,
         IPurchaseHistoryService purchaseHistoryService)
         {

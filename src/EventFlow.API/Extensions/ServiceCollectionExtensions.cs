@@ -11,20 +11,31 @@ using TicketManagement.Services.EventFlow.API.Infrastructure.Filters;
 
 namespace TicketManagement.Services.EventFlow.API.Extensions
 {
+    /// <summary>
+    /// Service collection extensions.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+        /// <summary>
+        /// Add custom db context.
+        /// </summary>
+        /// <param name="services">Services.</param>
+        /// <param name="configuration">Configuration.</param>
+        public static void AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<EfDbContext>(options =>
             {
                 options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
             });
-
-            return services;
         }
 
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        /// <summary>
+        /// Add custom swagger.
+        /// </summary>
+        /// <param name="services">Services.</param>
+        /// <param name="configuration">Configuration.</param>
+        public static void AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(options =>
             {
@@ -54,8 +65,6 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
-
-            return services;
         }
     }
 }

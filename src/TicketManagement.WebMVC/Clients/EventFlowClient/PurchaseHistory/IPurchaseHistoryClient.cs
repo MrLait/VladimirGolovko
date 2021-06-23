@@ -6,10 +6,25 @@ using Newtonsoft.Json;
 
 namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 {
+    /// <summary>
+    /// Purchase history client.
+    /// </summary>
     public interface IPurchaseHistoryClient
     {
+        /// <summary>
+        /// Add item.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="itemId">Item id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task AddItemAsync(string userId, string itemId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Get all by user id.
+        /// </summary>
+        /// <param name="id">User id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Purchase history model.</returns>
         Task<PurchaseHistoryModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
     }
 

@@ -8,6 +8,9 @@ using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
+    /// <summary>
+    /// Basket api Controller.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class BasketController : ControllerBase
@@ -15,6 +18,11 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         private readonly IBasketService _basketService;
         private readonly IEventSeatService _eventSeatService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasketController"/> class.
+        /// </summary>
+        /// <param name="basketService">Basket service.</param>
+        /// <param name="eventSeatService">Event seat service.</param>
         public BasketController(IBasketService basketService,
         IEventSeatService eventSeatService)
         {

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
@@ -180,7 +179,7 @@ namespace TicketManagement.WebMVC.Controllers
                 return NotFound();
             }
 
-            await _profileClient.DepositeAsync(id, balance);
+            await _profileClient.DepositAsync(id, balance);
             return RedirectToAction("Index");
         }
 
