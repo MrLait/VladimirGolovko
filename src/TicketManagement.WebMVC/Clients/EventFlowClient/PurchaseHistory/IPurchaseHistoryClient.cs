@@ -24,7 +24,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 
         public async Task AddItemAsync(string userId, string itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.PurchaseHistoryAddItem);
+            var address = string.Format(EventFlowApiRequestUris.PurchaseHistoryAddItem);
             var model = new { userId, itemId };
             var json = JsonConvert.SerializeObject(model);
             await PostAsync(json, address);
@@ -32,7 +32,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 
         public async Task<PurchaseHistoryModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.PurchaseHistoryGetAllByUserId, id);
+            var address = string.Format(EventFlowApiRequestUris.PurchaseHistoryGetAllByUserId, id);
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var purchaseHistory = JsonConvert.DeserializeObject<PurchaseHistoryModel>(result);
             return purchaseHistory;

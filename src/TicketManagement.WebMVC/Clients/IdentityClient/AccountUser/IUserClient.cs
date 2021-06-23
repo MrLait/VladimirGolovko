@@ -34,7 +34,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
 
         public async Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default)
         {
-            var url = IdentityApiRequestUries.Register;
+            var url = IdentityApiRequestUris.Register;
             string json = JsonConvert.SerializeObject(userModel);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -47,14 +47,14 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
             }
             catch (HttpRequestException)
             {
-                var errorMessages = await result.Content.ReadAsStringAsync();
+                var errorMessages = await result.Content.ReadAsStringAsync(cancellationToken);
                 throw new HttpRequestException(errorMessages);
             }
         }
 
         public async Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default)
         {
-            var url = IdentityApiRequestUries.Login;
+            var url = IdentityApiRequestUris.Login;
             string json = JsonConvert.SerializeObject(userModel);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -67,14 +67,14 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
             }
             catch (HttpRequestException)
             {
-                var errorMessages = await result.Content.ReadAsStringAsync();
+                var errorMessages = await result.Content.ReadAsStringAsync(cancellationToken);
                 throw new HttpRequestException(errorMessages);
             }
         }
 
         public async Task ValidateToken(string token, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ValidateToken, token);
+            var address = string.Format(IdentityApiRequestUris.ValidateToken, token);
             var message = await _httpClient.GetAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }

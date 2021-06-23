@@ -17,6 +17,9 @@ using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Event manager controller.
+    /// </summary>
     [Authorize(Roles = UserRoles.EventManager)]
     public class EventManagerController : Controller
     {
@@ -27,6 +30,15 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IStringLocalizer<EventManagerController> _localizer;
         private readonly ILogger<EventManagerController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventManagerController"/> class.
+        /// </summary>
+        /// <param name="eventClient">Event client.</param>
+        /// <param name="eventManagerClient">Event manager client.</param>
+        /// <param name="eventAreaClient">Event area client.</param>
+        /// <param name="mapper">Mapper.</param>
+        /// <param name="localizer">Localizer.</param>
+        /// <param name="logger">Logger.</param>
         public EventManagerController(
             IEventClient eventClient,
             IEventManagerClient eventManagerClient,
@@ -43,6 +55,9 @@ namespace TicketManagement.WebMVC.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// View index.
+        /// </summary>
         public async Task<IActionResult> Index()
         {
             var eventCatalog = await _eventClient.GetAllAsync();
@@ -54,12 +69,18 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Create event view.
+        /// </summary>
         [HttpGet]
         public IActionResult CreateEvent()
         {
             return View();
         }
 
+        /// <summary>
+        /// Create event view.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateEvent(EventViewModel model)
         {
@@ -88,19 +109,31 @@ namespace TicketManagement.WebMVC.Controllers
             }
             catch (ValidationException ve)
             {
-                if (ve.Message == ExceptionMessages.PriceIsZero)
+                switch (ve.Message)
                 {
-                    ViewData["PriceRequired"] = _localizer["PriceRequired"];
-                }
-
-                if (ve.Message == ExceptionMessages.PriceIsNegative)
-                {
-                    ViewData["PriceRequired"] = _localizer["PriceRequired"];
-                }
-
-                if (ve.Message == ExceptionMessages.CantBeCreatedInThePast)
-                {
-                    ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past"]);
+                    case ExceptionMessages.PriceIsZero:
+                        ViewData["PriceRequired"] = _localizer["Price can't equal zero."];
+                        break;
+                    case ExceptionMessages.PriceIsNegative:
+                        ViewData["PriceRequired"] = _localizer["Price can't negative."];
+                        break;
+                    case ExceptionMessages.CantBeCreatedInThePast:
+                        ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past."]);
+                        break;
+                    case ExceptionMessages.StartDataTimeBeforeEndDataTime:
+                        ModelState.AddModelError("StartDateTime", _localizer["The beginning of the event cannot be after the end of the event."]);
+                        break;
+                    case ExceptionMessages.ThereIsNoSuchLayout:
+                        ModelState.AddModelError("StartDateTime", _localizer["There is no such Layout."]);
+                        break;
+                    case ExceptionMessages.ThereAreNoSeatsInTheEvent:
+                        ModelState.AddModelError(string.Empty, _localizer["There are no seats in the event."]);
+                        break;
+                    case ExceptionMessages.EventForTheSameVenueInTheSameDateTime:
+                        ModelState.AddModelError(string.Empty, _localizer["Event for the Venue with the dateTime already exist."]);
+                        break;
+                    default:
+                        break;
                 }
 
                 _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
@@ -108,10 +141,13 @@ namespace TicketManagement.WebMVC.Controllers
             }
         }
 
+        /// <summary>
+        /// Update event view.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> UpdateEventAsync(int id)
         {
-            var eventItem = await _eventClient.GetByIDAsync(id);
+            var eventItem = await _eventClient.GetByIdAsync(id);
             if (eventItem == null)
             {
                 return NotFound();
@@ -121,6 +157,9 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Update view.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> UpdateEvent(EventViewModel model)
         {
@@ -134,6 +173,9 @@ namespace TicketManagement.WebMVC.Controllers
             return RedirectToAction("Index", "EventManager");
         }
 
+        /// <summary>
+        /// Update layout post action.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> UpdateLayoutId(EventViewModel model)
         {
@@ -147,6 +189,9 @@ namespace TicketManagement.WebMVC.Controllers
             return RedirectToAction("Index", "EventManager");
         }
 
+        /// <summary>
+        /// Delete event get action.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> DeleteEventAsync(int id)
         {

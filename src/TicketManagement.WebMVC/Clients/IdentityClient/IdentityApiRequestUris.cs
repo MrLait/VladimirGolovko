@@ -1,14 +1,17 @@
 ﻿namespace TicketManagement.WebMVC.Clients.IdentityClient
 {
-    public static class IdentityApiRequestUries
+    /// <summary>
+    /// Identity api request uris.
+    /// </summary>
+    public static class IdentityApiRequestUris
     {
         /// <summary>
-        /// Acaunt user register url.
+        /// Account user register url.
         /// </summary>
         public const string Register = "AccountUser/register";
 
         /// <summary>
-        /// Acaunt user login url.
+        /// Account user login url.
         /// </summary>
         public const string Login = "AccountUser/login";
 
@@ -42,9 +45,9 @@
         public const string ProfileSetLanguage = "Profile/setLanguage";
 
         /// <summary>
-        /// Deposite url.
+        /// Deposit url.
         /// </summary>
-        public const string ProfileDeposite = "Profile/deposite";
+        public const string ProfileDeposit = "Profile/deposit";
 
         /// <summary>
         /// Edit email url.

@@ -213,15 +213,15 @@ namespace TicketManagement.Services.Identity.API.Controllers
         }
 
         /// <summary>
-        /// Deposite.
+        /// Deposit.
         /// </summary>
-        /// <param name="model">Deposite model.</param>
+        /// <param name="model">Deposit model.</param>
         /// <returns>Returns status code.</returns>
-        [HttpPut("deposite")]
+        [HttpPut("deposit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Deposite([FromBody] DepositeModel model)
+        public async Task<IActionResult> Deposit([FromBody] DepositeModel model)
         {
             var user = await _applicationUserManager.FindByIdAsync(model.UserId);
             if (user == null)

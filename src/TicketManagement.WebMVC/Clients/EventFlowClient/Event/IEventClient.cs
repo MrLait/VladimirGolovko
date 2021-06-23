@@ -14,7 +14,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 
         Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default);
 
-        Task<EventDto> GetByIDAsync(int id, CancellationToken cancellationToken = default);
+        Task<EventDto> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
         Task UpdateEventAsync(EventDto eventDto, CancellationToken cancellationToken = default);
 
@@ -34,21 +34,21 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 
         public async Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var uri = string.Format(EventFlowApiRequestUries.EventDeleteById, id);
+            var uri = string.Format(EventFlowApiRequestUris.EventDeleteById, id);
             var result = await _httpClient.DeleteAsync(uri, cancellationToken);
             result.EnsureSuccessStatusCode();
         }
 
         public async Task<List<EventDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _httpClient.GetStringAsync(EventFlowApiRequestUries.EventGetAll, cancellationToken);
+            var result = await _httpClient.GetStringAsync(EventFlowApiRequestUris.EventGetAll, cancellationToken);
             var events = JsonConvert.DeserializeObject<List<EventDto>>(result);
             return events;
         }
 
-        public async Task<EventDto> GetByIDAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<EventDto> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var uri = string.Format(EventFlowApiRequestUries.EventGetByID, id);
+            var uri = string.Format(EventFlowApiRequestUris.EventGetById, id);
             var result = await _httpClient.GetStringAsync(uri, cancellationToken);
             var eventDto = JsonConvert.DeserializeObject<EventDto>(result);
             return eventDto;
@@ -56,14 +56,14 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 
         public async Task<EventDto> GetLastAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _httpClient.GetStringAsync(EventFlowApiRequestUries.EventGetLast, cancellationToken);
+            var result = await _httpClient.GetStringAsync(EventFlowApiRequestUris.EventGetLast, cancellationToken);
             var eventDto = JsonConvert.DeserializeObject<EventDto>(result);
             return eventDto;
         }
 
         public async Task UpdateEventAsync(EventDto eventDto, CancellationToken cancellationToken = default)
         {
-            var url = EventFlowApiRequestUries.EventUpdateEvent;
+            var url = EventFlowApiRequestUris.EventUpdateEvent;
             string json = JsonConvert.SerializeObject(eventDto);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await _httpClient.PutAsync(url, queryString, cancellationToken);
@@ -72,7 +72,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Event
 
         public async Task UpdateLayoutIdAsync(EventDto eventDto, CancellationToken cancellationToken = default)
         {
-            var url = EventFlowApiRequestUries.EventUpdateLayoutId;
+            var url = EventFlowApiRequestUris.EventUpdateLayoutId;
             string json = JsonConvert.SerializeObject(eventDto);
             StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await _httpClient.PutAsync(url, queryString, cancellationToken);

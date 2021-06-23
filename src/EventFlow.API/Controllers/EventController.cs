@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Dto;
@@ -7,12 +6,19 @@ using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
+    /// <summary>
+    /// Event controller api.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventController"/> class.
+        /// </summary>
+        /// <param name="eventService">Event service.</param>
         public EventController(IEventService eventService)
         {
             _eventService = eventService;
@@ -47,9 +53,9 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="id">Event id.</param>
         /// <returns>Returns event.</returns>
-        [HttpGet("getByID")]
+        [HttpGet("getById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByIDAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var eventDto = await _eventService.GetByIDAsync(id);
             return Ok(eventDto);

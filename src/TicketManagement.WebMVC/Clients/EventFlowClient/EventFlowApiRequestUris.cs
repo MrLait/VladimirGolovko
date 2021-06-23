@@ -1,18 +1,34 @@
-﻿using System;
-
-namespace TicketManagement.WebMVC.Clients.EventFlowClient
+﻿namespace TicketManagement.WebMVC.Clients.EventFlowClient
 {
-    public static class EventFlowApiRequestUries
+    /// <summary>
+    /// Event flow api request uris.
+    /// </summary>
+    public static class EventFlowApiRequestUris
     {
+        /// <summary>
+        /// Event get all url.
+        /// </summary>
         public const string EventGetAll = "/Event/getAll";
+
+        /// <summary>
+        /// Event get last url.
+        /// </summary>
         public const string EventGetLast = "/Event/getLast";
+
+        /// <summary>
+        /// Event update event url.
+        /// </summary>
         public const string EventUpdateEvent = "/Event/updateEvent";
+
+        /// <summary>
+        /// Event update layout id url.
+        /// </summary>
         public const string EventUpdateLayoutId = "/Event/UpdateLayoutId";
 
         /// <summary>
         /// {0} - event id.
         /// </summary>
-        public const string EventGetByID = "/Event/getByID?id={0}";
+        public const string EventGetById = "/Event/getById?id={0}";
 
         /// <summary>
         /// {0} - event id.
@@ -23,6 +39,10 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient
         /// {0} - event id.
         /// </summary>
         public const string EventAreaGetAllByEventId = "/EventArea/getAllByEventId?id={0}";
+
+        /// <summary>
+        /// updatePrices url.
+        /// </summary>
         public const string EventAreaUpdatePrices = "EventArea/updatePrices";
 
         /// <summary>
@@ -31,7 +51,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient
         public const string BasketGetAllByUserId = "/Basket/getAllByUserId?id={0}";
 
         /// <summary>
-        /// Add item to basket.
+        /// Add item to basket url.
         /// </summary>
         public const string BasketAddToBasket = "/Basket/addToBasket";
 
@@ -47,7 +67,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient
         public const string BasketDeleteAllByUserId = "/Basket/deleteAllByUserId?id={0}";
 
         /// <summary>
-        /// Add item to purchase histoty.
+        /// Add item to purchase history url.
         /// </summary>
         public const string PurchaseHistoryAddItem = "/PurchaseHistory/addItem";
 
@@ -56,6 +76,9 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient
         /// </summary>
         public const string PurchaseHistoryGetAllByUserId = "/PurchaseHistory/getAllByUserId?userId={0}";
 
+        /// <summary>
+        /// Create event url.
+        /// </summary>
         public const string EventManagerCreateEvent = "EventManager/createEvent";
     }
 }

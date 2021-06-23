@@ -28,7 +28,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         public async Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.BasketAddToBasket);
+            var address = string.Format(EventFlowApiRequestUris.BasketAddToBasket);
             var model = new { userId, itemId };
             var json = JsonConvert.SerializeObject(model);
             await PostAsync(json, address);
@@ -36,14 +36,14 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         public async Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.BasketRemoveFromBasket, userId, itemId);
+            var address = string.Format(EventFlowApiRequestUris.BasketRemoveFromBasket, userId, itemId);
             var message = await _httpClient.DeleteAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }
 
         public async Task<BasketModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.BasketGetAllByUserId, id);
+            var address = string.Format(EventFlowApiRequestUris.BasketGetAllByUserId, id);
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var eventAreas = JsonConvert.DeserializeObject<BasketModel>(result);
             return eventAreas;
@@ -51,7 +51,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         public async Task DeleteAllByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(EventFlowApiRequestUries.BasketDeleteAllByUserId, userId);
+            var address = string.Format(EventFlowApiRequestUris.BasketDeleteAllByUserId, userId);
             var message = await _httpClient.DeleteAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }

@@ -41,7 +41,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task<decimal> GetBalanceAsync(string userId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileGetBalance, userId);
+            var address = string.Format(IdentityApiRequestUris.ProfileGetBalance, userId);
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var balance = JsonConvert.DeserializeObject<decimal>(result);
             return balance;
@@ -49,7 +49,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task UpdateBalanceAsync(string userId, decimal balance, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileUpdateBalance);
+            var address = string.Format(IdentityApiRequestUris.ProfileUpdateBalance);
             var model = new { userId, balance };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -57,7 +57,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task<ApplicationUser> GetUserProfileAsync(string userId, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileGetUserProfile, userId);
+            var address = string.Format(IdentityApiRequestUris.ProfileGetUserProfile, userId);
             var result = await _httpClient.GetStringAsync(address, cancellationToken);
             var user = JsonConvert.DeserializeObject<ApplicationUser>(result);
             return user;
@@ -65,7 +65,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task SetLanguageAsync(string userId, string culture, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileSetLanguage);
+            var address = string.Format(IdentityApiRequestUris.ProfileSetLanguage);
             var model = new { userId, culture };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -73,7 +73,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task DepositeAsync(string userId, decimal balance, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileDeposite);
+            var address = string.Format(IdentityApiRequestUris.ProfileDeposit);
             var model = new { userId, balance };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -81,7 +81,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task EditEmailAsync(string userId, string email, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileEditEmail);
+            var address = string.Format(IdentityApiRequestUris.ProfileEditEmail);
             var model = new { userId, email };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -89,7 +89,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task EditFirstNameAsync(string userId, string firstName, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileEditFirstName);
+            var address = string.Format(IdentityApiRequestUris.ProfileEditFirstName);
             var model = new { userId, firstName };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -97,7 +97,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task EditPasswordAsync(string userId, string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileEditPassword);
+            var address = string.Format(IdentityApiRequestUris.ProfileEditPassword);
             var model = new { userId, oldPassword, newPassword };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -105,7 +105,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task EditSurnameAsync(string userId, string surname, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileEditSurname);
+            var address = string.Format(IdentityApiRequestUris.ProfileEditSurname);
             var model = new { userId, surname };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);
@@ -113,7 +113,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         public async Task EditTimeZoneOffsetAsync(string userId, string timeZoneOffset, CancellationToken cancellationToken = default)
         {
-            var address = string.Format(IdentityApiRequestUries.ProfileEditTimeZoneOffset);
+            var address = string.Format(IdentityApiRequestUris.ProfileEditTimeZoneOffset);
             var model = new { userId, timeZoneOffset };
             var json = JsonConvert.SerializeObject(model);
             await PutAsync(json, address);

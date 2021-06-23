@@ -3,12 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
+    /// <summary>
+    /// Event area controller api.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class EventAreaController : ControllerBase
@@ -16,6 +20,11 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         private readonly IEventAreaService _eventAreaService;
         private readonly IEventSeatService _eventSeatService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventAreaController"/> class.
+        /// </summary>
+        /// <param name="eventAreaService">Event area <see cref="IEventAreaService"/> service.</param>
+        /// <param name="eventSeatService">Event seat <see cref="IEventSeatService"/> service.</param>
         public EventAreaController(IEventAreaService eventAreaService, IEventSeatService eventSeatService)
         {
             _eventAreaService = eventAreaService;
@@ -34,19 +43,19 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         {
             try
             {
-                var eventAreaDto = _eventAreaService.GetByEventId(id);
-
-                for (int i = 0; i < eventAreaDto.Count(); i++)
+                var eventAreaDtoList = _eventAreaService.GetByEventId(id).ToList();
+                foreach (var item in eventAreaDtoList)
                 {
-                    var eventSeatDto = _eventSeatService.GetByEventAreaId(eventAreaDto.ToList()[i]);
-                    eventAreaDto.ToList()[i].EvenSeats = eventSeatDto;
+                    var eventSeatDto = _eventSeatService.GetByEventAreaId(item);
+                    item.EvenSeats = eventSeatDto;
                 }
 
-                return Ok(eventAreaDto);
+                return Ok(eventAreaDtoList);
             }
             catch (ValidationException e)
             {
-                return BadRequest(e.Message);
+                var validationExceptionSerialized = JsonConvert.SerializeObject(e);
+                return BadRequest(validationExceptionSerialized);
             }
         }
 
@@ -67,7 +76,8 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             }
             catch (ValidationException e)
             {
-                return BadRequest(e.Message);
+                var validationExceptionSerialized = JsonConvert.SerializeObject(e);
+                return BadRequest(validationExceptionSerialized);
             }
         }
     }
