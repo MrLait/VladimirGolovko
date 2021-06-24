@@ -185,7 +185,7 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.Profile
 
         private async Task PutAsync(string json, string address)
         {
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
             var message = await _httpClient.PutAsync(address, queryString);
             message.EnsureSuccessStatusCode();
         }

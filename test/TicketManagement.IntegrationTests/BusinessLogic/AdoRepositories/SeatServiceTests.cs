@@ -188,7 +188,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var seatService = new SeatService(_adoDbContext);
 
             // Act
-            var actual = await seatService.GetByIDAsync(expectedId);
+            var actual = await seatService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -201,7 +201,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var seatService = new SeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIdAsync(0));
         }
 
         [Test]
@@ -211,7 +211,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var seatService = new SeatService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIdAsync(-1));
         }
     }
 }

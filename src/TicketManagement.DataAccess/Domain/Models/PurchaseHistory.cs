@@ -4,6 +4,9 @@ using TicketManagement.DataAccess.Domain.Interfaces;
 
 namespace TicketManagement.DataAccess.Domain.Models
 {
+    /// <summary>
+    /// Purchase history.
+    /// </summary>
     [Table("PurchaseHistory")]
     public class PurchaseHistory : IEntity
     {

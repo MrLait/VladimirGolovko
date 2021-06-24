@@ -1,8 +1,8 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.AccountViewModels.LoginViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
-<h2>@Localizer["LoginToTheApplication"]</h2>
+<h2>@_localizer["LoginToTheApplication"]</h2>
 <form method="post" asp-controller="Account" asp-action="Login">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
@@ -20,12 +20,12 @@
         <input asp-for="RememberMe" />
     </div>
     <div>
-        <input type="submit" value="@Localizer["LogIn"]" />
+        <input type="submit" value="@_localizer["LogIn"]" />
     </div>
 </form>
 
 <p>
-    @Localizer["ListOfTestUsers"]
+    @_localizer["ListOfTestUsers"]
 </p>
 <p>
     eventManager:   <b>eventManager@gmail.com</b>   Password: <b>_Aa123456</b>

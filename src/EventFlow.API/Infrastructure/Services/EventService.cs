@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
@@ -146,7 +146,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         {
             ValidateEventDto(dto);
 
-            var byIdEvent = await DbContext.Events.GetByIDAsync(dto.Id);
+            var byIdEvent = await DbContext.Events.GetByIdAsync(dto.Id);
 
             if (byIdEvent.LayoutId == dto.LayoutId)
             {
@@ -199,7 +199,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var curEvent = await DbContext.Events.GetByIDAsync(id);
+            var curEvent = await DbContext.Events.GetByIdAsync(id);
             var eventDto = new EventDto
             {
                 Id = curEvent.Id,

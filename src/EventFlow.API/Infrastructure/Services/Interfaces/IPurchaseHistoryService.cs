@@ -3,6 +3,9 @@ using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces
 {
+    /// <summary>
+    /// Purchase history service.
+    /// </summary>
     public interface IPurchaseHistoryService
     {
         /// <summary>

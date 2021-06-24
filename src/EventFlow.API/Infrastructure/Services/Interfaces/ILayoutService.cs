@@ -32,7 +32,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interf
         /// </summary>
         /// <param name="id">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        Task<LayoutDto> GetByIDAsync(int id);
+        Task<LayoutDto> GetByIdAsync(int id);
 
         /// <summary>
         /// Method to get all objects from database table.

@@ -1,36 +1,36 @@
 ﻿@model TicketManagement.Dto.EventDto
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 <img class="esh-event-thumbnail" src="@Model.ImageUrl" />
 
 <table class="table">
     <tr>
-        <td>@Localizer["EventName"]</td>
+        <td>@_localizer["EventName"]</td>
         <td>@Model.Name</td>
     </tr>
     <tr>
-        <td>@Localizer["Description"]</td>
+        <td>@_localizer["Description"]</td>
         <td>@Model.Description</td>
     </tr>
     <tr>
-        <td>@Localizer["EventStartsAt"]</td>
+        <td>@_localizer["EventStartsAt"]</td>
         <td>@Model.StartDateTime</td>
     </tr>
     <tr>
-        <td>@Localizer["EventEndsAt"]</td>
+        <td>@_localizer["EventEndsAt"]</td>
         <td>@Model.EndDateTime</td>
     </tr>
     <tr>
-        <td>@Localizer["AvaliableOfSeats"]</td>
+        <td>@_localizer["AvailableOfSeats"]</td>
         <td>@Model.AvailableSeats</td>
     </tr>
     <tr>
-        <td>@Localizer["PricesStartFrom"] @Model.PriceFrom.ToString("N2") </td>
-        <td>@Localizer["To"] @Model.PriceTo.ToString("N2")</td>
+        <td>@_localizer["PricesStartFrom"] @Model.PriceFrom.ToString("N2") </td>
+        <td>@_localizer["To"] @Model.PriceTo.ToString("N2")</td>
     </tr>
 </table>
-<form asp-controller="EventArea" asp-action="GetViewEventArea" class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" data-tooltip="@Localizer["ToGoToThisPageYouNeedToLogin."]">
-    <input class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" type="submit" value="@Localizer["ChooseTickets"]" />
+<form asp-controller="EventArea" asp-action="GetViewEventArea" class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" data-tooltip="@_localizer["ToGoToThisPageYouNeedToLogin"]">
+    <input class="esh-catalog-button @((!User.Identity.IsAuthenticated) ? "is-disabled" : "")" type="submit" value="@_localizer["ChooseTickets"]" />
     <input type="hidden" asp-for="@Model.Id" name="id" />
 </form>

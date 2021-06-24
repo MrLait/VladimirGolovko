@@ -2,24 +2,54 @@
 
 namespace TicketManagement.Services.EventFlow.API.Models
 {
+    /// <summary>
+    /// Basket item.
+    /// </summary>
     public class BasketItem
     {
-        public string Id { get; set; }
+        /// <summary>
+        /// Gets or sets Id.
+        /// </summary>
+        public string Id { get; init; }
 
-        public string EventName { get; set; }
+        /// <summary>
+        /// Gets or sets EventName.
+        /// </summary>
+        public string EventName { get; init; }
 
-        public string EventAreaDescription { get; set; }
+        /// <summary>
+        /// Gets or sets EventAreaDescription.
+        /// </summary>
+        public string EventAreaDescription { get; init; }
 
-        public int Row { get; set; }
+        /// <summary>
+        /// Gets or sets Row.
+        /// </summary>
+        public int Row { get; init; }
 
-        public int NumberOfSeat { get; set; }
+        /// <summary>
+        /// Gets or sets NumberOfSeat.
+        /// </summary>
+        public int NumberOfSeat { get; init; }
 
-        public DateTime EventDateTimeStart { get; set; }
+        /// <summary>
+        /// Gets or sets EventDateTimeStart.
+        /// </summary>
+        public DateTime EventDateTimeStart { get; init; }
 
-        public DateTime EventDateTimeEnd { get; set; }
+        /// <summary>
+        /// Gets or sets EventDateTimeEnd.
+        /// </summary>
+        public DateTime EventDateTimeEnd { get; init; }
 
-        public decimal Price { get; set; }
+        /// <summary>
+        /// Gets or sets Price.
+        /// </summary>
+        public decimal Price { get; init; }
 
-        public string PictureUrl { get; set; }
+        /// <summary>
+        /// Gets or sets PictureUrl.
+        /// </summary>
+        public string PictureUrl { get; init; }
     }
 }

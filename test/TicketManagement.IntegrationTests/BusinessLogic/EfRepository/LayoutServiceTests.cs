@@ -189,7 +189,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var layoutService = new LayoutService(DbContext);
 
             // Act
-            var actual = await layoutService.GetByIDAsync(expectedId);
+            var actual = await layoutService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -202,7 +202,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var layoutService = new LayoutService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIdAsync(0));
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var layoutService = new LayoutService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIdAsync(-1));
         }
     }
 }

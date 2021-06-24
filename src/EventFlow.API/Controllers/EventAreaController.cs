@@ -35,8 +35,8 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// Get all event are by event id.
         /// </summary>
         /// <param name="id">Event id.</param>
-        /// <returns>Returns event areas dto.</returns>
-        [HttpGet("getAllByEventId")]
+        /// <returns>Returns event areas dto or <see cref="ValidationException"/>.</returns>
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAllByEventId(int id)
@@ -64,7 +64,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="eventAreaDto">Event areas dto.</param>
         /// <returns>Returns status codes.</returns>
-        [HttpPut("updatePrices")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePrices([FromBody] List<EventAreaDto> eventAreaDto)

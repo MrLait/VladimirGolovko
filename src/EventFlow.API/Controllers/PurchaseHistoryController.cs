@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using EventFlow.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketManagement.DataAccess.Enums;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
+using TicketManagement.Services.EventFlow.API.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
@@ -35,7 +35,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="model">Purchase history model.</param>
         /// <returns>Returns status code.</returns>
-        [HttpPost("addItem")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> AddItemAsync([FromBody] AddToPurchaseHistoryModel model)
         {
@@ -49,7 +49,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="userId">User id.</param>
         /// <returns>Returns purchase history model.</returns>
-        [HttpGet("getAllByUserId")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllByUserIdAsync(string userId)
         {

@@ -1,10 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using TicketManagement.DataAccess.DbContexts;
-using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.IntegrationTests
 {
@@ -13,24 +9,34 @@ namespace TicketManagement.IntegrationTests
     /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public Startup()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        protected Startup()
         {
-            string jsonPath = GetAppSettingsJsonPath();
+            var jsonPath = GetAppSettingsJsonPath();
             var configurationBuilder = new ConfigurationBuilder().AddJsonFile(jsonPath);
             Configuration = configurationBuilder.Build();
         }
 
-        public IConfiguration Configuration { get; set; }
+        /// <summary>
+        /// Configuration.
+        /// </summary>
+        protected IConfiguration Configuration { get; }
 
         private static string GetAppSettingsJsonPath()
         {
-            var path = Assembly.GetAssembly(typeof(DatabaseConnectionFactory)).Location;
-            var jsonPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path), @"..\..\..\", "appsettings.json"));
+            var path = Assembly.GetAssembly(typeof(DatabaseConnectionFactory))?.Location;
+            var jsonPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path) ?? string.Empty, @"..\..\..\", "appsettings.json"));
             return jsonPath;
         }
     }

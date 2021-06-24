@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
-using Identity.API.Models;
-using Identity.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Services.Identity.API.Extensions;
+using TicketManagement.Services.Identity.API.Infrastructure.Services;
+using TicketManagement.Services.Identity.API.Models;
 using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.Identity.API.Controllers
 {
+    /// <summary>
+    /// Account user api controller.
+    /// </summary>
     [Route("[controller]")]
     public class AccountUserController : ControllerBase
     {
@@ -20,6 +22,13 @@ namespace TicketManagement.Services.Identity.API.Controllers
         private readonly IMapper _mapper;
         private readonly JwtTokenService _jwtTokenService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountUserController"/> class.
+        /// </summary>
+        /// <param name="userManager">User manager.</param>
+        /// <param name="signInManager">Sign in manager.</param>
+        /// <param name="mapper">Mapper.</param>
+        /// <param name="jwtTokenService">Jwt token service.</param>
         public AccountUserController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IMapper mapper, JwtTokenService jwtTokenService)
@@ -39,8 +48,8 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// PasswordTooShort,
         /// PasswordRequiresNonAlphanumeric,
         /// PasswordRequiresDigit,
-        /// PasswordRequiresUpperstring.</returns>
-        [HttpPost("register")]
+        /// PasswordRequiresUpperString.</returns>
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -61,8 +70,8 @@ namespace TicketManagement.Services.Identity.API.Controllers
                 return Ok(_jwtTokenService.GetToken(user, roles));
             }
 
-            string resultError = string.Empty;
-            resultError = resultError.ConverIdentityResultErrorToString(result);
+            var resultError = string.Empty;
+            resultError = resultError.ConvertIdentityResultErrorToString(result);
             return BadRequest(resultError);
         }
 
@@ -70,7 +79,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// Login.
         /// </summary>
         /// <param name="model">Login model.</param>
-        /// <returns>Token or Json witn Identity.SignInResult result.</returns>
+        /// <returns>Token or Json with Identity.SignInResult result.</returns>
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,7 +99,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
                 return Ok(_jwtTokenService.GetToken(user, roles));
             }
 
-            string resultError = JsonConvert.SerializeObject(result);
+            var resultError = JsonConvert.SerializeObject(result);
             return BadRequest(resultError);
         }
 
@@ -99,12 +108,12 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// </summary>
         /// <param name="token">Token.</param>
         /// <returns>Return token.</returns>
-        [HttpGet("validate")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult Validate(string token)
         {
-            return _jwtTokenService.ValidateToken(token) ? Ok() : (IActionResult)Forbid();
+            return _jwtTokenService.ValidateToken(token) ? Ok() : Forbid();
         }
     }
 }

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.API\Identity.API.csproj" />
     <ProjectReference Include="..\Identity.Models\Identity.Domain.csproj" />
     <ProjectReference Include="..\TicketManagement.Dto\TicketManagement.Dto.csproj" />
   </ItemGroup>

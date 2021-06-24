@@ -18,16 +18,16 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             Context = context;
         }
 
-        protected EfDbContext Context { get; set; }
+        protected EfDbContext Context { get; }
 
         public async Task CreateAsync(T entity)
         {
-            string tableName = new T().GetType().Name;
-            List<SqlParameter> param = GetUpdateParameter(entity, true);
+            var tableName = new T().GetType().Name;
+            var param = GetUpdateParameter(entity, true);
             var parameters = param.ToArray();
             var strParam = string.Join(", ", parameters.Select(x => "@" + x.ParameterName));
-            string storedProcedure = $"Create{tableName}";
-            string sqlQuery = $"EXECUTE {storedProcedure} {strParam}";
+            var storedProcedure = $"Create{tableName}";
+            var sqlQuery = $"EXECUTE {storedProcedure} {strParam}";
 
             foreach (var item in param)
             {
@@ -39,38 +39,38 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
 
         public async Task DeleteAsync(T entity)
         {
-            string tableName = new T().GetType().Name;
+            var tableName = new T().GetType().Name;
             var param = new[] { new SqlParameter("@Id", entity.Id) };
-            string storedProcedure = $"Delete{tableName}";
-            string sqlQuery = $"EXECUTE {storedProcedure} @Id";
+            var storedProcedure = $"Delete{tableName}";
+            var sqlQuery = $"EXECUTE {storedProcedure} @Id";
             await Context.Database.ExecuteSqlRawAsync(sqlQuery, param);
         }
 
         public IQueryable<T> GetAllAsQueryable()
         {
-            string tableName = new T().GetType().Name;
-            string storedProcedure = $"GetAll{tableName}";
+            var tableName = new T().GetType().Name;
+            var storedProcedure = $"GetAll{tableName}";
             return Context.Set<T>().FromSqlRaw($"EXECUTE {storedProcedure}");
         }
 
-        public async Task<T> GetByIDAsync(int byId)
+        public async Task<T> GetByIdAsync(int byId)
         {
-            string tableName = new T().GetType().Name;
+            var tableName = new T().GetType().Name;
             var param = new[] { new SqlParameter("@Id", byId) };
-            string storedProcedure = $"GetByID{tableName}";
-            string sqlQuery = $"EXECUTE {storedProcedure} @Id";
+            var storedProcedure = $"GetByID{tableName}";
+            var sqlQuery = $"EXECUTE {storedProcedure} @Id";
 
             return (await Context.Set<T>().FromSqlRaw(sqlQuery, param).ToListAsync()).FirstOrDefault();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            string tableName = new T().GetType().Name;
+            var tableName = new T().GetType().Name;
             var param = GetUpdateParameter(entity, false);
             var parameters = param.ToArray();
             var strParam = string.Join(", ", parameters.Select(x => "@" + x.ParameterName));
-            string storedProcedure = $"Update{tableName}";
-            string sqlQuery = $"EXECUTE {storedProcedure} {strParam}";
+            var storedProcedure = $"Update{tableName}";
+            var sqlQuery = $"EXECUTE {storedProcedure} {strParam}";
 
             await Context.Database.ExecuteSqlRawAsync(sqlQuery, param);
         }
@@ -83,7 +83,7 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
         /// <returns>returns list of sqlParameters.</returns>
         private List<SqlParameter> GetUpdateParameter(object obj, bool removeId)
         {
-            PropertyInfo[] fields = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var fields = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var sqlParams = new List<SqlParameter>();
             foreach (var f in fields)
             {

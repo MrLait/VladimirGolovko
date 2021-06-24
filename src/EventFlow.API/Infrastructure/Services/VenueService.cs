@@ -41,7 +41,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.VenueExist, dto.Description);
             }
 
-            Venue venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
+            var venue = new Venue { Description = dto.Description, Address = dto.Address, Phone = dto.Phone };
             await DbContext.Venues.CreateAsync(venue);
         }
 
@@ -70,7 +70,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         public IEnumerable<VenueDto> GetAll()
         {
             var venues = DbContext.Venues.GetAllAsQueryable();
-            List<VenueDto> venuesDto = new List<VenueDto>();
+            var venuesDto = new List<VenueDto>();
             foreach (var item in venues)
             {
                 venuesDto.Add(new VenueDto { Id = item.Id, Address = item.Address, Description = item.Description, Phone = item.Phone });
@@ -80,7 +80,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<VenueDto> GetByIDAsync(int id)
+        public async Task<VenueDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -92,7 +92,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var venue = await DbContext.Venues.GetByIDAsync(id);
+            var venue = await DbContext.Venues.GetByIdAsync(id);
             return new VenueDto { Id = venue.Id, Address = venue.Address, Description = venue.Description, Phone = venue.Phone };
         }
 

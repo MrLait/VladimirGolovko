@@ -120,7 +120,7 @@
   <data name="PriceRequired" xml:space="preserve">
     <value>Specify a price for this area.</value>
   </data>
-  <data name="SeatsHaveAlreadyBeenPurchased" xml:space="preserve">
+  <data name="Unable to delete because seats have already been purchased for the event." xml:space="preserve">
     <value>Unable to delete because seats have already been purchased for the event.</value>
   </data>
   <data name="The beginning of the event cannot be after the end of the event." xml:space="preserve">

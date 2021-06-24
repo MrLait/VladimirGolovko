@@ -53,7 +53,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<EventAreaDto> GetByIDAsync(int id)
+        public async Task<EventAreaDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -65,7 +65,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var eventArea = await DbContext.EventAreas.GetByIDAsync(id);
+            var eventArea = await DbContext.EventAreas.GetByIdAsync(id);
             var eventAreaDto = new EventAreaDto
             {
                 Id = eventArea.Id,
@@ -107,7 +107,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.PriceIsZero);
             }
 
-            var currentEventAreas = await DbContext.EventAreas.GetByIDAsync(dto.Id);
+            var currentEventAreas = await DbContext.EventAreas.GetByIdAsync(dto.Id);
             currentEventAreas.Price = dto.Price;
             await DbContext.EventAreas.UpdateAsync(currentEventAreas);
         }

@@ -189,7 +189,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var areaService = new AreaService(DbContext);
 
             // Act
-            var actual = await areaService.GetByIDAsync(expectedId);
+            var actual = await areaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -202,7 +202,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var areaService = new AreaService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var areaService = new AreaService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(-1));
         }
     }
 }

@@ -33,14 +33,14 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
+            var isLayoutContain = CheckThatLayoutForThisVenueWithDescriptionAlreadyExist(dto);
 
             if (isLayoutContain)
             {
                 throw new ValidationException(ExceptionMessages.LayoutForTheVenueExist, dto.Description);
             }
 
-            Layout layout = new Layout { VenueId = dto.VenueId, Description = dto.Description };
+            var layout = new Layout { VenueId = dto.VenueId, Description = dto.Description };
             await DbContext.Layouts.CreateAsync(layout);
         }
 
@@ -69,7 +69,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         public IEnumerable<LayoutDto> GetAll()
         {
             var layouts = DbContext.Layouts.GetAllAsQueryable();
-            List<LayoutDto> layoutDto = new List<LayoutDto>();
+            var layoutDto = new List<LayoutDto>();
             foreach (var layout in layouts)
             {
                 layoutDto.Add(new LayoutDto
@@ -82,7 +82,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<LayoutDto> GetByIDAsync(int id)
+        public async Task<LayoutDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -94,7 +94,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var layout = await DbContext.Layouts.GetByIDAsync(id);
+            var layout = await DbContext.Layouts.GetByIdAsync(id);
             var layoutDto = new LayoutDto
             {
                 Id = layout.Id,

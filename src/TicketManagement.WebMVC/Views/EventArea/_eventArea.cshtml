@@ -1,24 +1,25 @@
 ﻿@model TicketManagement.Dto.EventAreaDto
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@using TicketManagement.DataAccess.Domain.Enums
+@inject IViewLocalizer _localizer
 
 <div class="esh-event-area-name">
-    <span>@Localizer["ModelDescription"]: @Model.Description</span>
+    <span>@_localizer["ModelDescription"]: @Model.Description</span>
 </div>
 
 <div class="container">
-    @if (Model.EvenSeats.Count() > 0)
+    @if (Model.EvenSeats.Any())
     {
         <div class="esh-event-seat-item col-md-4">
             @foreach (var item in Model.EvenSeats)
             {
-                @if (item.State == TicketManagement.DataAccess.Enums.States.Available)
+                @if (item.State == States.Available)
                 {
                     <form asp-controller="Basket" asp-action="AddToBasket">
                         <input type="hidden" asp-for="@Model.Id" name="id" />
                         <input type="hidden" asp-for="@item.Id" name="itemId" />
                         <input type="hidden" asp-for="@item.State" name="itemState" />
-                        <input class="button button1" type="submit" value="@Localizer["Row"]: @item.Row @Localizer["Number"]: @item.Number" />
+                        <input class="button button1" type="submit" value="@_localizer["Row"]: @item.Row @_localizer["Number"]: @item.Number" />
                     </form>
                 }
                 else
@@ -27,7 +28,7 @@
                         <input type="hidden" asp-for="@Model.Id" name="id" />
                         <input type="hidden" asp-for="@item.Id" name="itemId" />
                         <input type="hidden" asp-for="@item.State" name="itemState" />
-                        <input class="button button1 clicked" type="submit" value="@Localizer["Row"]: @item.Row @Localizer["Number"]: @item.Number" />
+                        <input class="button button1 clicked" type="submit" value="@_localizer["Row"]: @item.Row @_localizer["Number"]: @item.Number" />
                     </form>
                 }
             }
@@ -36,7 +37,7 @@
     else
     {
         <div class="esh-event-seat-items row">
-            @Localizer["ThereIsNoSuchEvent"]
+            @_localizer["ThereIsNoSuchEvent"]
         </div>
     }
 </div>

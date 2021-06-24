@@ -12,7 +12,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
     [TestFixture]
     internal class EventAreaTests : TestDatabaseLoader
     {
-        private readonly List<EventArea> _eventAreas = new List<EventArea>();
+        private readonly List<EventArea> _eventAreas = new ();
 
         [OneTimeSetUp]
         public async Task InitEventAreasAsync()
@@ -22,7 +22,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             for (int i = 1; i <= countAllEventAreas; i++)
             {
-                _eventAreas.Add(await eventAreaRepository.GetByIDAsync(i));
+                _eventAreas.Add(await eventAreaRepository.GetByIdAsync(i));
             }
         }
 
@@ -54,8 +54,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
-            EventArea eventArea = new EventArea { Id = repository.GetAllAsQueryable().ToList().Count + 1, CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
-            List<EventArea> expected = new List<EventArea>(_eventAreas)
+            var eventArea = new EventArea { Id = repository.GetAllAsQueryable().ToList().Count + 1, CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
+            var expected = new List<EventArea>(_eventAreas)
             {
                 eventArea,
             };
@@ -90,7 +90,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             await repository.DeleteAsync(lastEventArea);
 
             var actual = repository.GetAllAsQueryable();
-            int countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
+            var countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allEventAreas.Take(countEventAreaWithoutLast));
@@ -100,7 +100,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = 0 };
+            var eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
@@ -121,7 +121,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIncorrectConnectionStringEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = 3 };
+            var eventArea = new EventArea { Id = 3 };
             var repository = new AdoUsingParametersRepository<EventArea>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
@@ -161,7 +161,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = 0 };
+            var eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
@@ -176,7 +176,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastEventArea = repository.GetAllAsQueryable().Last();
-            EventArea expectedEventArea = new EventArea
+            var expectedEventArea = new EventArea
             {
                 Id = lastEventArea.Id,
                 CoordX = lastEventArea.CoordX,
@@ -186,8 +186,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 Price = lastEventArea.Price,
             };
 
-            int actualId = expectedEventArea.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedEventArea.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEventArea);
@@ -197,45 +197,44 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenNonExistEventArea_ShouldReturnNull()
         {
             // Arrange
-            EventArea expected = null;
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act
             var lastEventArea = repository.GetAllAsQueryable().Last();
-            int nonExistId = lastEventArea.Id + 1;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastEventArea.Id + 1;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((EventArea) null);
         }
 
         [Test]
         public void GetByIdAsync_WhenIdEqualZeroEventArea_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = 0 };
+            var eventArea = new EventArea { Id = 0 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(eventArea.Id));
         }
 
         [Test]
         public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = -1 };
+            var eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventArea.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(eventArea.Id));
         }
 
         [Test]
         public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = -1 };
+            var eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert
@@ -246,7 +245,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            EventArea eventArea = new EventArea { Id = -1 };
+            var eventArea = new EventArea { Id = -1 };
             var repository = new AdoUsingParametersRepository<EventArea>(DefaultConnectionString);
 
             // Act & Assert

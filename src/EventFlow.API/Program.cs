@@ -7,15 +7,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Settings;
 
 namespace TicketManagement.Services.EventFlow.API
 {
+    /// <summary>
+    /// Program.
+    /// </summary>
     public class Program
     {
+        private const string FailedToStart = "Failed to start";
+        private const string AspnetcoreEnvironment = "ASPNETCORE_ENVIRONMENT";
+        private const string LogFilePath = @"logs\log.txt";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Program"/> class.
+        /// </summary>
         protected Program()
         {
         }
 
+        /// <summary>
+        /// Main.
+        /// </summary>
+        /// <param name="args">String arguments.</param>
         public static async Task Main(string[] args)
         {
             ConfigureLogging();
@@ -25,7 +40,7 @@ namespace TicketManagement.Services.EventFlow.API
             }
             catch (Exception e)
             {
-                Log.Fatal($"Failed to start {Assembly.GetExecutingAssembly().GetName().Name}", e);
+                Log.Fatal($"{FailedToStart} {Assembly.GetExecutingAssembly().GetName().Name}", e);
                 throw;
             }
         }
@@ -34,7 +49,7 @@ namespace TicketManagement.Services.EventFlow.API
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("hostsettings.json", true)
+                .AddJsonFile(JsonSettings.HostsettingsJson, true)
                 .AddCommandLine(args)
                 .Build();
 
@@ -43,17 +58,15 @@ namespace TicketManagement.Services.EventFlow.API
                 .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls("https://*:5000").UseConfiguration(config);
+                webBuilder.UseUrls().UseConfiguration(config);
             });
         }
 
         private static void ConfigureLogging()
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var configeration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile(
-                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(JsonSettings.AppsettingsJson, false, true)
+                .AddJsonFile(string.Format(JsonSettings.AppsettingsEnvironmentJson, Environment.GetEnvironmentVariable(AspnetcoreEnvironment)), true)
                 .Build();
 
             Log.Logger = new LoggerConfiguration()
@@ -62,9 +75,8 @@ namespace TicketManagement.Services.EventFlow.API
                 .Enrich.WithMachineName()
                 .WriteTo.Debug()
                 .WriteTo.Console()
-                .WriteTo.File(@"logs\log.txt", rollingInterval: RollingInterval.Day)
-                .Enrich.WithProperty("Environment", environment)
-                .ReadFrom.Configuration(configeration)
+                .WriteTo.File(LogFilePath, rollingInterval: RollingInterval.Day)
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
     }

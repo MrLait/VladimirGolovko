@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Venue service tests.
     /// </summary>
     [TestFixture]
-    public class VenueServiceTests : MockEntites
+    public class VenueServiceTests : MockEntities
     {
         [Test]
         public async Task CreateAsync_WhenVenueExist_ShouldReturnCreatedVenue()
@@ -111,7 +111,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            Action<Venue> updateLastAction = venues => Venues.RemoveAt(venueLast.Id - 1);
+            Action<Venue> updateLastAction = _ => Venues.RemoveAt(venueLast.Id - 1);
             updateLastAction += v => Venues.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Venues.UpdateAsync(It.IsAny<Venue>())).Callback(updateLastAction);
 
@@ -173,11 +173,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Venues.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Venues.GetByIDAsync(expectedId)).ReturnsAsync(Venues.Last());
+            Mock.Setup(x => x.Venues.GetByIdAsync(expectedId)).ReturnsAsync(Venues.Last());
             var venueService = new VenueService(Mock.Object);
 
             // Act
-            var actual = await venueService.GetByIDAsync(expectedId);
+            var actual = await venueService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -190,7 +190,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIdAsync(0));
         }
 
         [Test]
@@ -200,7 +200,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var venueService = new VenueService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIdAsync(-1));
         }
     }
 }

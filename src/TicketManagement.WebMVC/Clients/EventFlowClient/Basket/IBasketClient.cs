@@ -6,14 +6,40 @@ using Newtonsoft.Json;
 
 namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 {
+    /// <summary>
+    /// Basket client.
+    /// </summary>
     public interface IBasketClient
     {
+        /// <summary>
+        /// Get all by user id.
+        /// </summary>
+        /// <param name="id">User id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Returns basket model.</returns>
         Task<BasketModel> GetAllByUserIdAsync(string id, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Add to basket.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="itemId">Item id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task AddToBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Remove from basket.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="itemId">Item id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task RemoveFromBasketAsync(string userId, int itemId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Delete all by user id.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         Task DeleteAllByUserIdAsync(string userId, CancellationToken cancellationToken = default);
     }
 
@@ -58,7 +84,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.Basket
 
         private async Task PostAsync(string json, string address)
         {
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
             var message = await _httpClient.PostAsync(address, queryString);
             message.EnsureSuccessStatusCode();
         }

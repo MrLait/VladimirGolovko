@@ -55,7 +55,7 @@ namespace TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory
 
         private async Task PostAsync(string json, string address)
         {
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
             var message = await _httpClient.PostAsync(address, queryString);
             message.EnsureSuccessStatusCode();
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicketManagement.DataAccess.Enums;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
@@ -29,20 +29,20 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         public IEnumerable<EventSeatDto> GetAll()
         {
             var eventSeats = DbContext.EventSeats.GetAllAsQueryable().ToList();
-            List<EventSeatDto> eventSeatsDto = new List<EventSeatDto>();
-            foreach (var eventSeat in eventSeats)
-            {
-                eventSeatsDto.Add(new EventSeatDto
-                {
-                    Id = eventSeat.Id, EventAreaId = eventSeat.EventAreaId, Number = eventSeat.Number, Row = eventSeat.Row, State = (States)eventSeat.State,
-                });
-            }
 
-            return eventSeatsDto;
+            return eventSeats.Select(eventSeat => new EventSeatDto
+                {
+                    Id = eventSeat.Id,
+                    EventAreaId = eventSeat.EventAreaId,
+                    Number = eventSeat.Number,
+                    Row = eventSeat.Row,
+                    State = (States) eventSeat.State,
+                })
+                .ToList();
         }
 
         /// <inheritdoc/>
-        public async Task<EventSeatDto> GetByIDAsync(int id)
+        public async Task<EventSeatDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -54,7 +54,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var eventSeat = await DbContext.EventSeats.GetByIDAsync(id);
+            var eventSeat = await DbContext.EventSeats.GetByIdAsync(id);
             var eventSeatDto = new EventSeatDto
             {
                 Id = eventSeat.Id,
@@ -105,7 +105,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
             }
 
-            var currentEventSeat = await DbContext.EventSeats.GetByIDAsync(dto.Id);
+            var currentEventSeat = await DbContext.EventSeats.GetByIdAsync(dto.Id);
             currentEventSeat.State = (int)dto.State;
             await DbContext.EventSeats.UpdateAsync(currentEventSeat);
         }

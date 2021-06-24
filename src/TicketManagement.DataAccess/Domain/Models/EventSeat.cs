@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Enums;
 
 namespace TicketManagement.DataAccess.Domain.Models
 {

@@ -3,8 +3,18 @@
     /// <summary>
     /// Api options.
     /// </summary>
-    public class ApiOptions
+    public class EventFlowApiOptions
     {
+        /// <summary>
+        /// Event flow api address name in appsettings.
+        /// </summary>
+        public const string EventFlowApiAddressName = "EventFlowApiAddress";
+
+        /// <summary>
+        /// Identity api address name in appsettings.
+        /// </summary>
+        public const string IdentityApiAddressName = "IdentityApiAddress";
+
         /// <summary>
         /// Event flow api address property.
         /// </summary>

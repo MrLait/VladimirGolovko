@@ -183,7 +183,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var venueService = new VenueService(DbContext);
 
             // Act
-            var actual = await venueService.GetByIDAsync(expectedId);
+            var actual = await venueService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -196,7 +196,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var venueService = new VenueService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIdAsync(0));
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var venueService = new VenueService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await venueService.GetByIdAsync(-1));
         }
     }
 }

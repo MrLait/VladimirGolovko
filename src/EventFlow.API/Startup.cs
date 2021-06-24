@@ -1,12 +1,7 @@
 using System;
-using System.IO;
-using System.Reflection;
-using EventFlow.API.JwtTokenAuth;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
@@ -17,23 +12,39 @@ using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Services.EventFlow.API.Clients.IdentityClient;
 using TicketManagement.Services.EventFlow.API.Extensions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.HealthChecks;
+using TicketManagement.Services.EventFlow.API.Infrastructure.JwtTokenAuth;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Swagger;
 
 namespace TicketManagement.Services.EventFlow.API
 {
+    /// <summary>
+    /// Startup.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets configuration.
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Configure services.
+        /// </summary>
+        /// <param name="services">Service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks().AddCheck<UserApiHealthcheck>("user_api_check", tags: new[] { "ready" });
+            services.AddHealthChecks().AddCheck<UserApiHealthCheck>(UserApiHealthCheck.UserApiHealthCheckName, tags: new[] { UserApiHealthCheckStatus.Ready });
             services.AddScoped<IEventSeatService, EventSeatService>();
             services.AddScoped<IEventAreaService, EventAreaService>();
             services.AddScoped<IEventService, EventService>();
@@ -43,14 +54,14 @@ namespace TicketManagement.Services.EventFlow.API
 
             services.AddCustomDbContext(Configuration);
 
-            services.AddOptions().Configure<UserApiOptions>(binder => binder.IdentityApiAddress = Configuration["IdentityApiAddress"]);
+            services.AddOptions().Configure<IdentityApiOptions>(binder => binder.IdentityApiAddress = Configuration[IdentityApiOptions.IdentityApiAddressName]);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddAuthentication(JwtAutheticationConstants.SchemeName)
-                .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAutheticationConstants.SchemeName, null);
+            services.AddAuthentication(JwtAuthenticationConstants.SchemeName)
+                .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAuthenticationConstants.SchemeName, null);
 
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<UserApiOptions>>()?.Value.IdentityApiAddress;
+                var userApiAddress = provider.GetService<IOptions<IdentityApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
             services.AddControllers();
@@ -58,14 +69,17 @@ namespace TicketManagement.Services.EventFlow.API
             services.AddCustomSwagger(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Application builder.</param>
         public void Configure(IApplicationBuilder app)
         {
-            app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
+            app.UseRewriter(new RewriteOptions().AddRedirect("^$", SwaggerConstants.Replacement));
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "EventFlow API v1");
+                options.SwaggerEndpoint(SwaggerConstants.Url, SwaggerConstants.Name);
             });
 
             app.UseAuthentication();
@@ -75,9 +89,9 @@ namespace TicketManagement.Services.EventFlow.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions
+                endpoints.MapHealthChecks(UserApiHealthCheckStatus.Pattern, new HealthCheckOptions
                 {
-                    Predicate = check => check.Tags.Contains("live"),
+                    Predicate = check => check.Tags.Contains(UserApiHealthCheckStatus.Live),
                 }).WithMetadata(new AllowAnonymousAttribute());
             });
         }

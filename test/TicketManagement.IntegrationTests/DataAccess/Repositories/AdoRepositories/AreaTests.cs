@@ -12,7 +12,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
     [TestFixture]
     internal class AreaTests : TestDatabaseLoader
     {
-        private readonly List<Area> _areas = new List<Area>();
+        private readonly List<Area> _areas = new ();
 
         [OneTimeSetUp]
         public async Task InitAreasAsync()
@@ -20,9 +20,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var areaRepository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
             var countAllAreas = areaRepository.GetAllAsQueryable().Last().Id;
 
-            for (int i = 1; i <= countAllAreas; i++)
+            for (var i = 1; i <= countAllAreas; i++)
             {
-                _areas.Add(await areaRepository.GetByIDAsync(i));
+                _areas.Add(await areaRepository.GetByIdAsync(i));
             }
         }
 
@@ -54,8 +54,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
-            Area area = new Area { Id = repository.GetAllAsQueryable().ToList().Count + 1, LayoutId = 2, Description = "Created Area", CoordX = 1, CoordY = 1 };
-            List<Area> expected = new List<Area>(_areas)
+            var area = new Area { Id = repository.GetAllAsQueryable().ToList().Count + 1, LayoutId = 2, Description = "Created Area", CoordX = 1, CoordY = 1 };
+            var expected = new List<Area>(_areas)
             {
                 area,
             };
@@ -90,7 +90,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             await repository.DeleteAsync(lastArea);
 
             var actual = repository.GetAllAsQueryable();
-            int countAreaWithoutLast = allAreas.ToList().Count - 1;
+            var countAreaWithoutLast = allAreas.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allAreas.Take(countAreaWithoutLast));
@@ -100,7 +100,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = 0 };
+            var area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Assert
@@ -121,7 +121,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIncorrectConnectionStringArea_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = 3 };
+            var area = new Area { Id = 3 };
             var repository = new AdoUsingParametersRepository<Area>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
@@ -161,7 +161,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = 0 };
+            var area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act & Assert
@@ -176,10 +176,10 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastArea = repository.GetAllAsQueryable().Last();
-            Area expectedArea = new Area { Id = lastArea.Id, LayoutId = lastArea.LayoutId, CoordX = lastArea.CoordX, CoordY = lastArea.CoordY, Description = lastArea.Description };
+            var expectedArea = new Area { Id = lastArea.Id, LayoutId = lastArea.LayoutId, CoordX = lastArea.CoordX, CoordY = lastArea.CoordY, Description = lastArea.Description };
 
-            int actualId = expectedArea.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedArea.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedArea);
@@ -189,45 +189,44 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenNonExistArea_ShouldReturnNullAsync()
         {
             // Arrange
-            Area expected = null;
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act
             var lastArea = repository.GetAllAsQueryable().Last();
-            int nonExistId = lastArea.Id + 1;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastArea.Id + 1;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Area) null);
         }
 
         [Test]
         public void GetByIdAsync_WhenIdEqualZeroArea_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = 0 };
+            var area = new Area { Id = 0 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(area.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(area.Id));
         }
 
         [Test]
         public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = -1 };
+            var area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(area.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(area.Id));
         }
 
         [Test]
         public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = -1 };
+            var area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act & Assert
@@ -238,7 +237,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Area area = new Area { Id = -1 };
+            var area = new Area { Id = -1 };
             var repository = new AdoUsingParametersRepository<Area>(DefaultConnectionString);
 
             // Act & Assert

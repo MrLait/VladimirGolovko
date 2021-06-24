@@ -29,7 +29,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
         {
             // Arrange
             var eventAreaLast = _eventAreaRepository.GetAllAsQueryable().Last();
-            EventArea expected = new EventArea
+            var expected = new EventArea
             {
                 Id = eventAreaLast.Id,
                 EventId = eventAreaLast.EventId,
@@ -120,7 +120,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
-            var actual = await eventAreaService.GetByIDAsync(expectedId);
+            var actual = await eventAreaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -133,7 +133,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(-1));
         }
     }
 }

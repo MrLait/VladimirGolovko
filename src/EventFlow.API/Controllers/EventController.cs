@@ -30,7 +30,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// Get all events.
         /// </summary>
         /// <returns>Returns events.</returns>
-        [HttpGet("getAll")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAll()
         {
@@ -42,7 +42,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// Get last event.
         /// </summary>
         /// <returns>Return event.</returns>
-        [HttpGet("getLast")]
+        [HttpGet("get-last")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetLast()
         {
@@ -55,7 +55,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="id">Event id.</param>
         /// <returns>Returns event.</returns>
-        [HttpGet("getById")]
+        [HttpGet("get-by-id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -68,7 +68,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="eventDto">Event dto.</param>
         /// <returns>Return status code.</returns>
-        [HttpPut("updateEvent")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateEvent([FromBody] EventDto eventDto)
@@ -90,7 +90,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="id">Event id.</param>
         /// <returns>Return status code.</returns>
-        [HttpDelete("deleteById")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteById(int id)

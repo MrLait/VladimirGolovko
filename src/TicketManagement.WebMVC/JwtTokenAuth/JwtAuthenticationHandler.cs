@@ -10,10 +10,21 @@ using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 
 namespace TicketManagement.WebMVC.JwtTokenAuth
 {
+    /// <summary>
+    /// Jwt authentication handler.
+    /// </summary>
     public class JwtAuthenticationHandler : AuthenticationHandler<JwtAuthenticationOptions>
     {
         private readonly IUserClient _userClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JwtAuthenticationHandler"/> class.
+        /// </summary>
+        /// <param name="options">Jwt authentication options.</param>
+        /// <param name="logger">Logger factory.</param>
+        /// <param name="encoder">Url encoder.</param>
+        /// <param name="clock">System clock.</param>
+        /// <param name="userClient">User client.</param>
         public JwtAuthenticationHandler(
             IOptionsMonitor<JwtAuthenticationOptions> options,
             ILoggerFactory logger,
@@ -28,12 +39,12 @@ namespace TicketManagement.WebMVC.JwtTokenAuth
         /// <inheritdoc />
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (Request.Cookies["secret_jwt_key"] == null)
+            if (Request.Cookies[JwtAuthenticationConstants.SecretJwtKey] == null)
             {
-                return AuthenticateResult.Fail("Unauthorized");
+                return AuthenticateResult.Fail(JwtAuthenticationConstants.Unauthorized);
             }
 
-            var token = Request.Cookies["secret_jwt_key"].ToString();
+            var token = Request.Cookies[JwtAuthenticationConstants.SecretJwtKey];
 
             try
             {
@@ -41,7 +52,7 @@ namespace TicketManagement.WebMVC.JwtTokenAuth
             }
             catch (HttpRequestException)
             {
-                return AuthenticateResult.Fail("Unauthorized");
+                return AuthenticateResult.Fail(JwtAuthenticationConstants.Unauthorized);
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();

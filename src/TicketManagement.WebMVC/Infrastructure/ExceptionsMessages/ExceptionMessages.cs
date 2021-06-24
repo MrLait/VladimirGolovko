@@ -1,7 +1,7 @@
 ﻿namespace TicketManagement.WebMVC.Infrastructure.ExceptionsMessages
 {
     /// <summary>
-    /// Exception messages conainer.
+    /// Exception messages container.
     /// </summary>
     internal static class ExceptionMessages
     {
@@ -48,12 +48,12 @@
         /// <summary>
         /// Event for the Venue with the dateTime already exist.
         /// </summary>
-        public const string EventForTheSameVenueInTheSameDateTime = "Event for the Venue with the dateTime already exist";
+        public const string EventForTheSameVenueInTheSameDateTime = "Event for the Venue with the dateTime already exist.";
 
         /// <summary>
         /// The Event cannot exist without seats.
         /// </summary>
-        public const string ThereAreNoSeatsInTheEvent = "The Event cannot exist without seats.";
+        public const string ThereAreNoSeatsInTheEvent = "There are no seats in the event.";
 
         /// <summary>
         /// {0} - Description.
@@ -64,7 +64,7 @@
         /// {0} - Row.
         /// {1} - Number.
         /// </summary>
-        public const string SeatForTheAreaExis = "The Seat for this Area with parameters: Row = '{0}' and Number = '{1}' - already exists.";
+        public const string SeatForTheAreaExist = "The Seat for this Area with parameters: Row = '{0}' and Number = '{1}' - already exists.";
 
         /// <summary>
         /// {0} - Description.
@@ -84,11 +84,16 @@
         /// <summary>
         /// The Event can't be created in the past.
         /// </summary>
-        public const string CantBeCreatedInThePast = "The Event can't be created in the past.";
+        public const string CantBeCreatedInThePast = "The event can't be created in the past.";
 
         /// <summary>
         /// There is no such Layout.
         /// </summary>
         public const string ThereIsNoSuchLayout = "There is no such Layout.";
+
+        /// <summary>
+        /// Product in another user busket.
+        /// </summary>
+        public const string ProductInAnotherUserBusket = "Product in another user busket.";
     }
 }

@@ -28,6 +28,9 @@ namespace TicketManagement.Dto
         /// </summary>
         public string Phone { get; set; }
 
+        /// <summary>
+        /// Gets or sets Layouts.
+        /// </summary>
         public IEnumerable<LayoutDto> Layouts { get; set; }
     }
 }

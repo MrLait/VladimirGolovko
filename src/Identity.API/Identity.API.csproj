@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-Identity.API-521C9E29-F335-44AE-B892-4AEAA04CF499</UserSecretsId>
+    <RootNamespace>TicketManagement.Services.Identity.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

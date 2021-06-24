@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using TicketManagement.Services.EventFlow.API.Infrastructure.JwtTokenAuth;
 
 namespace TicketManagement.Services.EventFlow.API.Infrastructure.Filters
 {
@@ -18,16 +19,16 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Filters
         {
             var jwtSecurityScheme = new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtAuthenticationConstants.Bearer },
             };
 
             operation.Security = new List<OpenApiSecurityRequirement>
+            {
+                new ()
                 {
-                    new ()
-                    {
-                        [jwtSecurityScheme] = new[] { "eventFlowApi" },
-                    },
-                };
+                    [jwtSecurityScheme] = new[] { JwtAuthenticationConstants.JwtSecurityScheme },
+                },
+            };
         }
     }
 }

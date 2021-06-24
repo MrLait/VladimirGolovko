@@ -1,11 +1,11 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 @{ ViewData["Title"] = "Events"; }
 
 <div class="container">
-    @if (Model.EventItems.Count() > 0)
+    @if (Model.EventItems.Any())
     {
         <div class="esh-event-items row">
             @foreach (var eventItem in Model.EventItems)
@@ -19,7 +19,7 @@
     else
     {
         <div class="esh-event-items row">
-            @Localizer["ThereIsNoSuchEvent"]
+            @_localizer["ThereIsNoSuchEvent"]
         </div>
     }
 </div>

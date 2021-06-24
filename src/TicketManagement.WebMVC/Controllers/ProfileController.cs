@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Constants;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.ProfileViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Profile controller.
+    /// </summary>
     [Authorize]
     public class ProfileController : Controller
     {
@@ -19,6 +23,12 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IIdentityParser<ApplicationUser> _identityParser;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProfileController"/> class.
+        /// </summary>
+        /// <param name="profileClient">Profile client.</param>
+        /// <param name="identityParser">Identity parser.</param>
+        /// <param name="mapper">Mapper.</param>
         public ProfileController(IProfileClient profileClient,
             IIdentityParser<ApplicationUser> identityParser,
             IMapper mapper)
@@ -28,6 +38,9 @@ namespace TicketManagement.WebMVC.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// View index.
+        /// </summary>
         public async Task<IActionResult> IndexAsync()
         {
             var userId = _identityParser.Parse(HttpContext.User).Id;
@@ -37,6 +50,10 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Edit first name.
+        /// </summary>
+        [HttpPost]
         public async Task<IActionResult> EditFirstName(string id)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
@@ -49,6 +66,9 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit first name.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditFirstName(ProfileViewModel model)
         {
@@ -64,9 +84,12 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             await _profileClient.EditFirstNameAsync(model.Id, model.FirstName);
-            return RedirectToAction("Index");
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit surname.
+        /// </summary>
         public async Task<IActionResult> EditSurname(string id)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
@@ -79,6 +102,9 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit surname.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditSurname(ProfileViewModel model)
         {
@@ -94,9 +120,12 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             await _profileClient.EditSurnameAsync(user.Id, model.Surname);
-            return RedirectToAction("Index");
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit email.
+        /// </summary>
         public async Task<IActionResult> EditEmail(string id)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
@@ -109,6 +138,9 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit email.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditEmail(ProfileViewModel model)
         {
@@ -124,9 +156,12 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             await _profileClient.EditEmailAsync(model.Id, model.Email);
-            return RedirectToAction("Index");
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit password.
+        /// </summary>
         public async Task<IActionResult> EditPassword(string id)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
@@ -139,6 +174,9 @@ namespace TicketManagement.WebMVC.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit password.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditPassword(ProfileChangePasswordViewModel model)
         {
@@ -150,14 +188,17 @@ namespace TicketManagement.WebMVC.Controllers
             var user = await _profileClient.GetUserProfileAsync(model.Id);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "User is not found");
+                ModelState.AddModelError(string.Empty, LocalizerConst.UserIsNotFound);
                 return View(model);
             }
 
-            await _profileClient.EditPasswordAsync(user.Id.ToString(), model.OldPassword, model.NewPassword);
-            return RedirectToAction("Index");
+            await _profileClient.EditPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit time zone offset.
+        /// </summary>
         public async Task<IActionResult> EditTimeZoneOffset(string id, string timeZoneOffset, string returnUrl)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
@@ -170,8 +211,11 @@ namespace TicketManagement.WebMVC.Controllers
             return LocalRedirect(returnUrl);
         }
 
+        /// <summary>
+        /// Deposit.
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Deposite(string id, decimal balance, string returnUrl)
+        public async Task<IActionResult> Deposit(string id, decimal balance, string returnUrl)
         {
             var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
@@ -180,9 +224,12 @@ namespace TicketManagement.WebMVC.Controllers
             }
 
             await _profileClient.DepositAsync(id, balance);
-            return RedirectToAction("Index");
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Set language.
+        /// </summary>
         [AllowAnonymous]
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)

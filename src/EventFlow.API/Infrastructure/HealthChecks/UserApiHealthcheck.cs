@@ -9,17 +9,18 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.HealthChecks
     /// <summary>
     /// User api health check class.
     /// </summary>
-    internal class UserApiHealthcheck : IHealthCheck
+    internal class UserApiHealthCheck : IHealthCheck
     {
+        public const string UserApiHealthCheckName = "user_api_health_check";
         private const string UserApiHealthyText = "User API is healthy";
         private const string UserApiUnhealthyText = "User API is unhealthy. Reason: ";
         private readonly IUserClient _userClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserApiHealthcheck"/> class.
+        /// Initializes a new instance of the <see cref="UserApiHealthCheck"/> class.
         /// </summary>
         /// <param name="userClient">User client.</param>
-        public UserApiHealthcheck(IUserClient userClient)
+        public UserApiHealthCheck(IUserClient userClient)
         {
             _userClient = userClient;
         }

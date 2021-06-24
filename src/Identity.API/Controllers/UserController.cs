@@ -1,14 +1,17 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
-using Identity.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.Services.Identity.API.Extensions;
+using TicketManagement.Services.Identity.API.Models;
 using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.Identity.API.Controllers
 {
+    /// <summary>
+    /// User api controller.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     [Produces("application/json")]
@@ -17,6 +20,11 @@ namespace TicketManagement.Services.Identity.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="userManager">User manager.</param>
+        /// <param name="mapper">Mapper.</param>
         public UserController(UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
@@ -33,8 +41,8 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// PasswordTooShort,
         /// PasswordRequiresNonAlphanumeric,
         /// PasswordRequiresDigit,
-        /// PasswordRequiresUpperstring.</returns>
-        [HttpPost("createUser")]
+        /// PasswordRequiresUpperString.</returns>
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -55,7 +63,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             }
 
             string resultError = string.Empty;
-            resultError = resultError.ConverIdentityResultErrorToString(result);
+            resultError = resultError.ConvertIdentityResultErrorToString(result);
 
             return BadRequest(resultError);
         }
@@ -65,7 +73,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// </summary>
         /// <param name="model">Register model.</param>
         /// <returns>Returns status code.</returns>
-        [HttpPut("updateUser")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUser([FromForm] RegisterModel model)
@@ -101,7 +109,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// </summary>
         /// <param name="userId">User id.</param>
         /// <returns>Return user or status code.</returns>
-        [HttpGet("getUser")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUserById(string userId)
@@ -120,7 +128,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// </summary>
         /// <param name="userId">User id.</param>
         /// <returns>Return status code.</returns>
-        [HttpDelete("deleteUser")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteUser(string userId)

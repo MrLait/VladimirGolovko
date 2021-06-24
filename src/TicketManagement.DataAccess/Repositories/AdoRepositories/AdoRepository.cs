@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
@@ -48,7 +47,7 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         public abstract IQueryable<T> GetAllAsQueryable();
 
         /// <inheritdoc/>
-        public virtual Task<T> GetByIDAsync(int byId)
+        public virtual Task<T> GetByIdAsync(int byId)
         {
             if (byId <= 0)
             {

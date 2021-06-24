@@ -23,7 +23,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// <summary>
         /// Gets property database context.
         /// </summary>
-        public IDbContext DbContext { get; private set; }
+        public IDbContext DbContext { get; }
 
         /// <inheritdoc/>
         public async Task CreateAsync(AreaDto dto)
@@ -33,14 +33,14 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            var isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {
                 throw new ValidationException(ExceptionMessages.AreaForTheLayoutExist, dto.Description);
             }
 
-            Area area = new Area { LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY };
+            var area = new Area { LayoutId = dto.LayoutId, Description = dto.Description, CoordX = dto.CoordX, CoordY = dto.CoordY };
             await DbContext.Areas.CreateAsync(area);
         }
 
@@ -52,24 +52,23 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id == 0)
+            switch (dto.Id)
             {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                case 0:
+                    throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                case < 0:
+                    throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                default:
+                    await DbContext.Areas.DeleteAsync(new Area { Id = dto.Id });
+                    break;
             }
-
-            if (dto.Id < 0)
-            {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
-
-            await DbContext.Areas.DeleteAsync(new Area { Id = dto.Id });
         }
 
         /// <inheritdoc/>
         public IEnumerable<AreaDto> GetAll()
         {
             var areas = DbContext.Areas.GetAllAsQueryable();
-            List<AreaDto> areasDto = new List<AreaDto>();
+            var areasDto = new List<AreaDto>();
             foreach (var item in areas)
             {
                 areasDto.Add(new AreaDto { Id = item.Id, LayoutId = item.LayoutId, Description = item.Description, CoordX = item.CoordX, CoordY = item.CoordY });
@@ -79,7 +78,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AreaDto> GetByIDAsync(int id)
+        public async Task<AreaDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -91,7 +90,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var area = await DbContext.Areas.GetByIDAsync(id);
+            var area = await DbContext.Areas.GetByIdAsync(id);
             return new AreaDto { Id = area.Id, LayoutId = area.LayoutId, Description = area.Description, CoordX = area.CoordX, CoordY = area.CoordY };
         }
 
@@ -103,17 +102,17 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.NullReference);
             }
 
-            if (dto.Id == 0)
+            switch (dto.Id)
             {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                case 0:
+                    throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                case < 0:
+                    throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
+                default:
+                    break;
             }
 
-            if (dto.Id < 0)
-            {
-                throw new ValidationException(ExceptionMessages.IdIsZero, dto.Id);
-            }
-
-            bool isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
+            var isLayoutContain = CheckThatAreaWithThisDescriptionInLayoutAlreadyExist(dto);
 
             if (isLayoutContain)
             {

@@ -3,20 +3,31 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using TicketManagement.Services.Identity.Domain.Models;
 
-namespace Identity.API.Models
+namespace TicketManagement.Services.Identity.API.Models
 {
+    /// <summary>
+    /// Role initializer model.
+    /// </summary>
     public class RoleInitializerModel
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoleInitializerModel"/> class.
+        /// </summary>
         protected RoleInitializerModel()
         {
         }
 
+        /// <summary>
+        /// Initialize model.
+        /// </summary>
+        /// <param name="userManager">User manager.</param>
+        /// <param name="roleManager">Role manager.</param>
         public static async Task InitializeAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "admin@gmail.com";
-            string eventManagerEmail = "eventManager@gmail.com";
-            string firstUserEmail = "firstUser@gmail.com";
-            string password = "_Aa123456";
+            const string adminEmail = "admin@gmail.com";
+            const string eventManagerEmail = "eventManager@gmail.com";
+            const string firstUserEmail = "firstUser@gmail.com";
+            const string password = "_Aa123456";
             await AddRole(roleManager, UserRoles.Admin);
             await AddRole(roleManager, UserRoles.EventManager);
             await AddRole(roleManager, UserRoles.User);
@@ -30,8 +41,8 @@ namespace Identity.API.Models
         {
             if (await userManager.FindByNameAsync(email) == null)
             {
-                ApplicationUser user = new ApplicationUser { Email = email, UserName = email };
-                IdentityResult result = await userManager.CreateAsync(user, password);
+                var user = new ApplicationUser { Email = email, UserName = email };
+                var result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, roleName);
@@ -51,7 +62,7 @@ namespace Identity.API.Models
 
         private static Claim CreateClaim(string type, string value)
         {
-            return new Claim(type, value, ClaimValueTypes.String, "RemoteClaims");
+            return new (type, value, ClaimValueTypes.String, "RemoteClaims");
         }
     }
 }

@@ -17,7 +17,7 @@ EventFlow.API :"https://localhost:44300"
 
 ## To run the whole solution in debug mode, you need to configure the project to run in <Multiple startup Projects> mode.
 You should follow these steps
-1. Choose - Debug => Set sturtup projects => Common Proporties => Startup Project => Set the flag to Multiple startup Projects:
+1. Choose - Debug or right click on the solution template => Set sturtup projects => Common Proporties => Startup Project => Set the flag to Multiple startup Projects:
 2. For projects: Identity.Api, EventFlow.Api and TicketManagement.WebMVC - set actions to Start
 3. Click start.
 

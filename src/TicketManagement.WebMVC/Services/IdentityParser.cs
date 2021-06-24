@@ -6,18 +6,27 @@ using TicketManagement.WebMVC.Models;
 
 namespace TicketManagement.WebMVC.Services
 {
+    /// <summary>
+    /// Identity parser.
+    /// </summary>
     public class IdentityParser : IIdentityParser<ApplicationUser>
     {
+        private const string Surname = "Surname";
+        private const string Language = "Language";
+        private const string TimeZoneOffset = "TimeZoneOffset";
+        private const string ClaimPrincipleException = "The principal must be a ClaimsPrincipal";
+
+        /// <inheritdoc/>
         public ApplicationUser Parse(IPrincipal principal)
         {
-                return new ApplicationUser
+                return new ()
                 {
-                    Email = GetClaimValue(ClaimTypes.Email.ToString(), principal),
-                    Id = GetClaimValue(ClaimTypes.NameIdentifier.ToString(), principal),
-                    UserName = GetClaimValue(ClaimTypes.Name.ToString(), principal),
-                    Surname = GetClaimValue("Surname", principal),
-                    TimeZoneOffset = GetClaimValue("TimeZoneOffset", principal),
-                    Language = GetClaimValue("Language", principal),
+                    Email = GetClaimValue(ClaimTypes.Email, principal),
+                    Id = GetClaimValue(ClaimTypes.NameIdentifier, principal),
+                    UserName = GetClaimValue(ClaimTypes.Name, principal),
+                    Surname = GetClaimValue(Surname, principal),
+                    TimeZoneOffset = GetClaimValue(TimeZoneOffset, principal),
+                    Language = GetClaimValue(Language, principal),
                 };
         }
 
@@ -28,7 +37,7 @@ namespace TicketManagement.WebMVC.Services
                 return claims.Claims.FirstOrDefault(x => x.Type == claimType)?.Value ?? "";
             }
 
-            throw new ArgumentException(message: "The principal must be a ClaimsPrincipal", paramName: nameof(principal));
+            throw new ArgumentException(message: ClaimPrincipleException, paramName: nameof(principal));
         }
     }
 }

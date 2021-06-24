@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace TicketManagement.DataAccess.Interfaces
@@ -15,7 +14,7 @@ namespace TicketManagement.DataAccess.Interfaces
         /// </summary>
         /// <param name="byId">Object id.</param>
         /// <returns>Returns object by id.</returns>
-        Task<T> GetByIDAsync(int byId);
+        Task<T> GetByIdAsync(int byId);
 
         /// <summary>
         /// Add object to database.

@@ -1,47 +1,52 @@
-using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using Identity.API.DataAccess;
-using Identity.API.Models;
-using Identity.API.Services;
-using Identity.API.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Interfaces;
+using TicketManagement.Services.Identity.API.DataAccess;
 using TicketManagement.Services.Identity.API.Extensions;
+using TicketManagement.Services.Identity.API.Infrastructure.HealthChecks;
+using TicketManagement.Services.Identity.API.Infrastructure.Services;
+using TicketManagement.Services.Identity.API.Infrastructure.Swagger;
 using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.Identity.API
 {
+    /// <summary>
+    /// Startup.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets configuration.
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configure services.
+        /// </summary>
+        /// <param name="services">Service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks().AddCheck(
-                "current_api_check",
-                () => HealthCheckResult.Healthy("User API is alive"),
-                new[] { "live" });
+                UserApiHealthCheckStatus.UserApiHealthCheckName,
+                () => HealthCheckResult.Healthy(UserApiHealthCheckStatus.Description),
+                new[] { UserApiHealthCheckStatus.Live });
 
             services.AddScoped<IDbContext, EfDbContext>();
             services.AddAutoMapper(typeof(MappingProfile));
@@ -59,14 +64,18 @@ namespace TicketManagement.Services.Identity.API
             services.AddCustomSwagger(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Application builder.</param>
+        /// <param name="env">Web host environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
+            app.UseRewriter(new RewriteOptions().AddRedirect("^$", SwaggerConstants.Replacement));
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "User API v1");
+                options.SwaggerEndpoint(SwaggerConstants.Url, SwaggerConstants.Name);
             });
 
             app.UseRouting();
@@ -77,9 +86,9 @@ namespace TicketManagement.Services.Identity.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions
+                endpoints.MapHealthChecks(UserApiHealthCheckStatus.Pattern, new HealthCheckOptions
                 {
-                    Predicate = check => check.Tags.Contains("live"),
+                    Predicate = check => check.Tags.Contains(UserApiHealthCheckStatus.Live),
                 }).WithMetadata(new AllowAnonymousAttribute());
             });
         }

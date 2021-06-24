@@ -8,10 +8,15 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
+using TicketManagement.WebMVC.Constants;
+using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Account controller.
+    /// </summary>
     [Route("[controller]")]
     public class AccountController : Controller
     {
@@ -20,7 +25,15 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IStringLocalizer<AccountController> _localizer;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IUserClient applicationUserClient,
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="applicationUserClient">Application user client.</param>
+        /// <param name="mapper">Mapper.</param>
+        /// <param name="localizer">Localizer.</param>
+        /// <param name="logger">Logger.</param>
+        public AccountController(
+            IUserClient applicationUserClient,
             IMapper mapper,
             IStringLocalizer<AccountController> localizer,
             ILogger<AccountController> logger)
@@ -31,13 +44,19 @@ namespace TicketManagement.WebMVC.Controllers
             _logger = logger;
         }
 
-        [HttpGet("register")]
+        /// <summary>
+        /// Get register action.
+        /// </summary>
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        [HttpPost("register")]
+        /// <summary>
+        /// Post register action.
+        /// </summary>
+        [HttpPost]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel vm)
         {
             if (!ModelState.IsValid)
@@ -50,32 +69,32 @@ namespace TicketManagement.WebMVC.Controllers
                 var user = _mapper.Map<RegisterViewModel, RegisterModel>(vm);
                 var token = await _applicationUserClient.Register(user);
 
-                HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
+                HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, token, new CookieOptions
                 {
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                 });
 
-                return RedirectToAction("Index", "EventHomePage");
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
             }
             catch (HttpRequestException e)
             {
-                var erorrMessages = e.Message.Split(',');
-                foreach (var error in erorrMessages)
+                var errorMessages = e.Message.Split(',');
+                foreach (var error in errorMessages)
                 {
                     switch (error)
                     {
-                        case "PasswordTooShort":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordTooShort"]);
+                        case IdentityErrorConst.PasswordTooShort:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordTooShort]);
                             continue;
-                        case "PasswordRequiresNonAlphanumeric":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresNonAlphanumeric"]);
+                        case IdentityErrorConst.PasswordRequiresNonAlphanumeric:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresNonAlphanumeric]);
                             continue;
-                        case "PasswordRequiresDigit":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresDigit"]);
+                        case IdentityErrorConst.PasswordRequiresDigit:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresDigit]);
                             continue;
-                        case "PasswordRequiresUpper":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresUpper"]);
+                        case IdentityErrorConst.PasswordRequiresUpper:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresUpper]);
                             continue;
                         default:
                             break;
@@ -88,12 +107,18 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Get login action.
+        /// </summary>
         [HttpGet("login")]
         public IActionResult Login()
         {
             return View();
         }
 
+        /// <summary>
+        /// Post login action.
+        /// </summary>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] LoginViewModel vm)
         {
@@ -106,20 +131,20 @@ namespace TicketManagement.WebMVC.Controllers
             {
                 var user = _mapper.Map<LoginViewModel, LoginModel>(vm);
                 var token = await _applicationUserClient.Login(user);
-                HttpContext.Response.Cookies.Append("secret_jwt_key", token, new CookieOptions
+                HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, token, new CookieOptions
                 {
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                 });
 
-                return RedirectToAction("Index", "EventHomePage");
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
             }
             catch (HttpRequestException e)
             {
                 var result = JsonConvert.DeserializeObject<Microsoft.AspNetCore.Identity.SignInResult>(e.Message);
                 if (!result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
+                    ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.IncorrectUsernameAndOrPassword]);
                 }
 
                 _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, e);
@@ -128,12 +153,15 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Post logout action.
+        /// </summary>
+        [HttpPost("logout")]
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            HttpContext.Response.Cookies.Append("secret_jwt_key", "");
-            return RedirectToAction("Index", "EventHomePage");
+            HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, "");
+            return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
         }
     }
 }

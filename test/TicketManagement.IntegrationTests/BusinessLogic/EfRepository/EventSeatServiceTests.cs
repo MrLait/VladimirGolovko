@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using TicketManagement.DataAccess.DbContexts;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
@@ -31,7 +31,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
         {
             // Arrange
             var eventSeatLast = _eventSeatRepository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-            EventSeat expected = new EventSeat
+            var expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
                 EventAreaId = eventSeatLast.EventAreaId,
@@ -100,7 +100,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var eventSeatsService = new EventSeatService(DbContext);
 
             // Act
-            var actual = await eventSeatsService.GetByIDAsync(expectedId);
+            var actual = await eventSeatsService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -113,7 +113,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var eventSeatsService = new EventSeatService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIdAsync(0));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             var eventSeatsService = new EventSeatService(DbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIdAsync(-1));
         }
     }
 }

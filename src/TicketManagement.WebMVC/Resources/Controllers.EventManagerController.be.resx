@@ -120,7 +120,7 @@
   <data name="PriceRequired" xml:space="preserve">
     <value>Пакажыце цану для гэтай галіне.</value>
   </data>
-  <data name="SeatsHaveAlreadyBeenPurchased" xml:space="preserve">
+  <data name="Unable to delete because seats have already been purchased for the event." xml:space="preserve">
     <value>Немагчыма выдаліць, таму што месцы для мерапрыемства ўжо набыты.</value>
   </data>
   <data name="The beginning of the event cannot be after the end of the event." xml:space="preserve">

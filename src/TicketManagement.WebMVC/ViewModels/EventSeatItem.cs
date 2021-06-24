@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TicketManagement.WebMVC.ViewModels
+﻿namespace TicketManagement.WebMVC.ViewModels
 {
+    /// <summary>
+    /// Event seat item.
+    /// </summary>
     public record EventSeatItem
     {
         /// <summary>

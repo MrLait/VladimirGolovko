@@ -2,10 +2,19 @@
 
 namespace TicketManagement.Services.EventFlow.API.Models
 {
+    /// <summary>
+    /// Purchase history model.
+    /// </summary>
     public class PurchaseHistoryModel
     {
-        public List<PurchaseHistoryItem> Items { get; init; } = new List<PurchaseHistoryItem>();
+        /// <summary>
+        /// Gets or sets PurchaseHistoryItem.
+        /// </summary>
+        public List<PurchaseHistoryItem> Items { get; } = new ();
 
-        public string UserId { get; set; }
+        /// <summary>
+        /// Gets or sets UserId.
+        /// </summary>
+        public string UserId { get; init; }
     }
 }

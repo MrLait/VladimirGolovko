@@ -29,12 +29,17 @@ namespace TicketManagement.WebMVC.Infrastructure.ExceptionsMessages
         /// Initializes a new instance of the <see cref="ValidationException"/> class.
         /// </summary>
         /// <param name="message">Validation message.</param>
-        /// <param name="innerException">Inner exceprion.</param>
+        /// <param name="innerException">Inner exception.</param>
         public ValidationException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationException"/> class.
+        /// </summary>
+        /// <param name="format">String format.</param>
+        /// <param name="args">Params object arguments.</param>
         public ValidationException(string format, params object[] args)
             : base(string.Format(format, args))
         {

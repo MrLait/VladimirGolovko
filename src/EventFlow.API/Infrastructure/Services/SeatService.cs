@@ -37,10 +37,10 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
             if (isSeatContain)
             {
-                throw new ValidationException(ExceptionMessages.SeatForTheAreaExis, dto.Row, dto.Number);
+                throw new ValidationException(ExceptionMessages.SeatForTheAreaExist, dto.Row, dto.Number);
             }
 
-            Seat seat = new Seat { AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row };
+            var seat = new Seat { AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row };
             await DbContext.Seats.CreateAsync(seat);
         }
 
@@ -69,7 +69,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         public IEnumerable<SeatDto> GetAll()
         {
             var seats = DbContext.Seats.GetAllAsQueryable();
-            List<SeatDto> seatDto = new List<SeatDto>();
+            var seatDto = new List<SeatDto>();
             foreach (var seat in seats)
             {
                 seatDto.Add(new SeatDto
@@ -85,7 +85,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<SeatDto> GetByIDAsync(int id)
+        public async Task<SeatDto> GetByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -97,7 +97,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
                 throw new ValidationException(ExceptionMessages.IdIsZero, id);
             }
 
-            var seat = await DbContext.Seats.GetByIDAsync(id);
+            var seat = await DbContext.Seats.GetByIdAsync(id);
             var seatDto = new SeatDto
             {
                 Id = seat.Id,
@@ -131,7 +131,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
 
             if (isSeatContain)
             {
-                throw new ValidationException(ExceptionMessages.SeatForTheAreaExis, dto.Row, dto.Number);
+                throw new ValidationException(ExceptionMessages.SeatForTheAreaExist, dto.Row, dto.Number);
             }
 
             await DbContext.Seats.UpdateAsync(new Seat { Id = dto.Id, AreaId = dto.AreaId, Number = dto.Number, Row = dto.Row });

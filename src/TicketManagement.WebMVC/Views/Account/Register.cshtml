@@ -1,8 +1,8 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.AccountViewModels.RegisterViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
-<h2>@Localizer["NewUserRegistration"]</h2>
+<h2>@_localizer["NewUserRegistration"]</h2>
 <form method="post" asp-controller="Account" asp-action="Register">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
@@ -36,6 +36,6 @@
         <span asp-validation-for="PasswordConfirm"></span>
     </div>
     <div>
-        <input type="submit" value="@Localizer["RegisterNow"]" />
+        <input type="submit" value="@_localizer["RegisterNow"]" />
     </div>
 </form>

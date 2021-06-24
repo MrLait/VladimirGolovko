@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Interfaces;
@@ -49,8 +48,8 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             };
             foreach (var item in purchaseHistoryItems.ToList())
             {
-                var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
-                var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
+                var seatItem = await _eventSeatService.GetByIdAsync(item.ProductId);
+                var areaItem = await _eventAreaService.GetByIdAsync(seatItem.EventAreaId);
                 var eventItem = await _eventService.GetByIdAsync(areaItem.EventId);
                 purchaseHistoryViewModel.Items.Add(
                     new PurchaseHistoryItem

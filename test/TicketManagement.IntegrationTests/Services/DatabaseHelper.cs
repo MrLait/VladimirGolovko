@@ -70,13 +70,13 @@ namespace TicketManagement.IntegrationTests.Services
 
         public string ReadFromFile(string path)
         {
-            string script = string.Empty;
+            var script = string.Empty;
 
             if (!File.Exists(path))
             {
                 // Create the file.
                 using FileStream fs = File.Create(path);
-                byte[] info =
+                var info =
                     new UTF8Encoding(true).GetBytes("This is some text in the file.");
 
                 // Add some information to the file.
@@ -84,8 +84,8 @@ namespace TicketManagement.IntegrationTests.Services
             }
 
             // Open the stream and read it back.
-            using StreamReader sr = File.OpenText(path);
-            string s = string.Empty;
+            using var sr = File.OpenText(path);
+            var s = string.Empty;
             while ((s = sr.ReadLine()) != null)
             {
                 script += s + Environment.NewLine;
@@ -96,12 +96,12 @@ namespace TicketManagement.IntegrationTests.Services
 
         public void ExecuteScript(string sqlConnectionString, string script)
         {
-            using SqlConnection sqlConnection = new SqlConnection(sqlConnectionString);
+            using var sqlConnection = new SqlConnection(sqlConnectionString);
             ServerConnection serverConnection = null;
             try
             {
                 serverConnection = new ServerConnection(sqlConnection);
-                Server server = new Server(serverConnection);
+                var server = new Server(serverConnection);
                 server.ConnectionContext.ExecuteNonQuery(script);
             }
             finally

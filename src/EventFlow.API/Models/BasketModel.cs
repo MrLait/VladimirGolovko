@@ -4,12 +4,24 @@ using System.Linq;
 
 namespace TicketManagement.Services.EventFlow.API.Models
 {
+    /// <summary>
+    /// Basket model.
+    /// </summary>
     public class BasketModel
     {
-        public List<BasketItem> Items { get; init; } = new List<BasketItem>();
+        /// <summary>
+        /// Gets or sets basket items.
+        /// </summary>
+        public List<BasketItem> Items { get; } = new ();
 
-        public string UserId { get; set; }
+        /// <summary>
+        /// Gets or sets UserId.
+        /// </summary>
+        public string UserId { get; init; }
 
+        /// <summary>
+        /// Gets TotalPrice.
+        /// </summary>
         public decimal TotalPrice => Math.Round(Items.Sum(x => x.Price), 2);
     }
 }

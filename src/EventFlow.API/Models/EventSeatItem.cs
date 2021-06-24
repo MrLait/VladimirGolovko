@@ -1,5 +1,8 @@
 ﻿namespace TicketManagement.Services.EventFlow.API.Models
 {
+    /// <summary>
+    /// Event seat item.
+    /// </summary>
     public record EventSeatItem
     {
         /// <summary>

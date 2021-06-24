@@ -64,6 +64,9 @@ namespace TicketManagement.Dto
         /// </summary>
         public int AvailableSeats { get; set; }
 
+        /// <summary>
+        /// Gets or sets event areas.
+        /// </summary>
         public IEnumerable<EventAreaDto> EventAreas { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Exstension;
+using TicketManagement.DataAccess.Extensions;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
@@ -81,18 +80,18 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         /// <inheritdoc/>
         public override IQueryable<T> GetAllAsQueryable()
         {
-            var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
-            string strCol = string.Join(", ", poropertyNames);
-            string tableName = new T().GetType().Name;
-            string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName}";
+            var propertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            var strCol = string.Join(", ", propertyNames);
+            var tableName = new T().GetType().Name;
+            var sqlExpressionSelect = $"SELECT {strCol} FROM {tableName}";
 
-            using SqlConnection sqlConnection = new SqlConnection(DbConString);
-            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            using var sqlConnection = new SqlConnection(DbConString);
+            using var sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
+            var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
                 sqlDataAdapter.Fill(ds);
                 return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
@@ -103,22 +102,22 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override async Task<T> GetByIDAsync(int byId)
+        public override async Task<T> GetByIdAsync(int byId)
         {
-            await base.GetByIDAsync(byId);
+            await base.GetByIdAsync(byId);
 
-            var poropertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
-            string strCol = string.Join(", ", poropertyNames);
-            string tableName = new T().GetType().Name;
-            string sqlExpressionSelect = $"SELECT {strCol} FROM {tableName} WHERE Id = {byId}";
+            var propertyNames = typeof(T).GetProperties().Select(x => x.Name).ToList();
+            var strCol = string.Join(", ", propertyNames);
+            var tableName = new T().GetType().Name;
+            var sqlExpressionSelect = $"SELECT {strCol} FROM {tableName} WHERE Id = {byId}";
 
-            using SqlConnection sqlConnection = new SqlConnection(DbConString);
-            using SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            await using SqlConnection sqlConnection = new SqlConnection(DbConString);
+            await using SqlCommand sqlCommand = new SqlCommand(sqlExpressionSelect, sqlConnection);
+            var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
                 await Task.Run(() => sqlDataAdapter.Fill(ds));
                 return ds.Tables[0].ToEnumerable<T>().SingleOrDefault();
             }
@@ -133,10 +132,10 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         {
             await base.UpdateAsync(entity);
 
-            SqlParameter[] parameters = GetAddParameter(entity).ToArray();
+            var parameters = GetAddParameter(entity).ToArray();
 
-            string tableName = entity.GetType().Name;
-            string setStr = string.Join(", ", parameters.Select(x => $"{x.ParameterName} = @{x.ParameterName}").ToList());
+            var tableName = entity.GetType().Name;
+            var setStr = string.Join(", ", parameters.Select(x => $"{x.ParameterName} = @{x.ParameterName}").ToList());
 
             var sqlExpressionInsert = $"UPDATE [{tableName}] SET {setStr} WHERE Id = {entity.Id}";
 

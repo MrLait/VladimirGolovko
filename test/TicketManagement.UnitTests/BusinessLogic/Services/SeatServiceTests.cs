@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Seat service tests.
     /// </summary>
     [TestFixture]
-    public class SeatServiceTests : MockEntites
+    public class SeatServiceTests : MockEntities
     {
         [Test]
         public async Task CreateAsync_WhenSeatExist_ShouldReturnCreatedSeat()
@@ -112,7 +112,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            Action<Seat> updateLastAction = venues => Seats.RemoveAt(seatLast.Id - 1);
+            Action<Seat> updateLastAction = _ => Seats.RemoveAt(seatLast.Id - 1);
             updateLastAction += v => Seats.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Seats.UpdateAsync(It.IsAny<Seat>())).Callback(updateLastAction);
 
@@ -187,11 +187,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Seats.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Seats.GetByIDAsync(expectedId)).ReturnsAsync(Seats.Last());
+            Mock.Setup(x => x.Seats.GetByIdAsync(expectedId)).ReturnsAsync(Seats.Last());
             var seatService = new SeatService(Mock.Object);
 
             // Act
-            var actual = await seatService.GetByIDAsync(expectedId);
+            var actual = await seatService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -204,7 +204,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIdAsync(0));
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var seatService = new SeatService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await seatService.GetByIdAsync(-1));
         }
     }
 }

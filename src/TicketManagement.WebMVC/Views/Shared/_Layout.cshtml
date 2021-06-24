@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EventHomePage" asp-action="Index">@Localizer["Home"]</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="EventHomePage" asp-action="Index">@_localizer["Home"]</a>
                         </li>
                     </ul>
                 </div>
@@ -42,34 +42,34 @@
                             @if (User.IsInRole(UserRoles.EventManager))
                             {
                                 <li class="nav-link nav-item text-dark">
-                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">@Localizer["EventManagerArea"]</a>
+                                    <a class="esh-profile-status" asp-area="" asp-controller="EventManager" asp-action="Index">@_localizer["EventManagerArea"]</a>
                                 </li>
                             }
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">@Localizer["Profile"]</a>
+                                <a class="esh-profile-status" asp-area="" asp-controller="Profile" asp-action="Index">@_localizer["Profile"]</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> @Localizer["Basket"] </a>
+                                <a class="esh-basketstatus" asp-area="" asp-controller="Basket" asp-action="Index"> @_localizer["Basket"] </a>
                             </li>
                             <li class="nav-link nav-item text-dark">
-                                <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">@Localizer["PurchaseHistory"]</a>
+                                <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index">@_localizer["PurchaseHistory"]</a>
                             </li>
                             <li class="nav-link nav-item text-dark">
                                 @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Name).Value
                             </li>
                             <li class="nav-item">
                                 <form class="nav-link text-dark" asp-area="" method="post" asp-controller="Account" asp-action="Logout">
-                                    <input type="submit" value="@Localizer["Logout"]" />
+                                    <input type="submit" value="@_localizer["Logout"]" />
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@_localizer["Login"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@_localizer["Register"]</a>
                             </li>
                         }
                     </ul>

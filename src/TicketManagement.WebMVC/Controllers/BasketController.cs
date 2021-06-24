@@ -4,11 +4,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using TicketManagement.DataAccess.Enums;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Constants;
 using TicketManagement.WebMVC.Infrastructure.ExceptionsMessages;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
@@ -56,6 +57,9 @@ namespace TicketManagement.WebMVC.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get index action.
+        /// </summary>
         public async Task<IActionResult> IndexAsync()
         {
             var user = _identityParser.Parse(HttpContext.User);
@@ -65,12 +69,15 @@ namespace TicketManagement.WebMVC.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Post index action.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> IndexAsync(BasketViewModel model)
         {
             try
             {
-                var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
+                var userId = _identityParser.Parse(HttpContext.User).Id;
                 var basketModel = await _basketClient.GetAllByUserIdAsync(userId);
                 var vm = _mapper.Map<BasketModel, BasketViewModel>(basketModel);
 
@@ -89,12 +96,10 @@ namespace TicketManagement.WebMVC.Controllers
 
                     await _basketClient.DeleteAllByUserIdAsync(userId);
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction(BasketConst.Index);
                 }
-                else
-                {
-                    ViewData["NotEnoughMoney"] = _localizer["NotEnoughMoney"];
-                }
+
+                ViewData[LocalizerConst.NotEnoughMoney] = _localizer[LocalizerConst.NotEnoughMoney];
 
                 return View(vm);
             }
@@ -112,42 +117,48 @@ namespace TicketManagement.WebMVC.Controllers
             }
         }
 
+        /// <summary>
+        /// Add to basket action.
+        /// </summary>
         public async Task<IActionResult> AddToBasketAsync(EventAreaDto eventAreaDto, int itemId)
         {
             try
             {
-                var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
+                var userId = _identityParser.Parse(HttpContext.User).Id;
                 await _basketClient.AddToBasketAsync(userId, itemId);
 
-                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+                return RedirectToAction(EventAreaConst.Index, EventAreaConst.ControllerName, new EventDto { Id = eventAreaDto.Id });
             }
             catch (ValidationException ve)
             {
                 ModelState.AddModelError("", ve.Message);
                 _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
-                return RedirectToAction("Index", "EventHomePage");
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
             }
         }
 
+        /// <summary>
+        /// Remove from basket action.
+        /// </summary>
         public async Task<IActionResult> RemoveFromBasketAsync(EventAreaDto eventAreaDto, int itemId, States itemState)
         {
             if (itemState == States.Purchased)
             {
-                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+                return RedirectToAction(EventAreaConst.Index, EventAreaConst.ControllerName, new EventDto { Id = eventAreaDto.Id });
             }
 
             try
             {
-                var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
+                var userId = _identityParser.Parse(HttpContext.User).Id;
                 await _basketClient.RemoveFromBasketAsync(userId, itemId);
 
-                return RedirectToAction("Index", "EventArea", new EventDto { Id = eventAreaDto.Id });
+                return RedirectToAction(EventAreaConst.Index, EventAreaConst.ControllerName, new EventDto { Id = eventAreaDto.Id });
             }
             catch (ValidationException ve)
             {
                 ModelState.AddModelError("", ve.Message);
                 _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ve);
-                return RedirectToAction("Index", "EventHomePage");
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
             }
         }
     }

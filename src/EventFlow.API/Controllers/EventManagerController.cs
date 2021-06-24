@@ -31,7 +31,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// </summary>
         /// <param name="model">Event dto.</param>
         /// <returns>Return status code or validation exception.</returns>
-        [HttpPost("createEvent")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto model)

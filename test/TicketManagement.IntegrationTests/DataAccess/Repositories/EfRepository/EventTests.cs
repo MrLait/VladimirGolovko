@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class EventTests : TestDatabaseLoader
     {
-        private readonly List<Event> _events = new List<Event>();
+        private readonly List<Event> _events = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -25,9 +25,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
             var countAllEvents = repository.GetAllAsQueryable().AsEnumerable().Last().Id;
 
-            for (int i = 1; i <= countAllEvents; i++)
+            for (var i = 1; i <= countAllEvents; i++)
             {
-                _events.Add(await repository.GetByIDAsync(i));
+                _events.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -51,7 +51,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var dbContext = new EfDbContext(DefaultConnectionString);
             var repository = new EfRepositoryUsingStoredProcedure<Event>(dbContext);
             var lastItem = repository.GetAllAsQueryable().AsEnumerable().Last();
-            Event eventModel = new Event
+            var eventModel = new Event
             {
                 LayoutId = 2,
                 StartDateTime = DateTime.Today.AddDays(2),
@@ -95,7 +95,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             await repository.DeleteAsync(lastEvent);
 
             var actual = repository.GetAllAsQueryable();
-            int countEventWithoutLast = allEvents.ToList().Count - 1;
+            var countEventWithoutLast = allEvents.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allEvents.Take(countEventWithoutLast));
@@ -157,7 +157,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().AsEnumerable().LastOrDefault();
-            Event expectedEvent = new Event
+            var expectedEvent = new Event
             {
                 Id = lastEvent.Id,
                 StartDateTime = lastEvent.StartDateTime,
@@ -168,8 +168,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
                 ImageUrl = lastEvent.ImageUrl,
             };
 
-            int actualId = expectedEvent.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedEvent.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEvent);
@@ -179,16 +179,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistEvent_ShouldReturnNullAsync()
         {
             // Arrange
-            Event expected = null;
             var repository = new EfRepositoryUsingStoredProcedure<Event>(DbContext);
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().AsEnumerable().Last();
-            int nonExistId = lastEvent.Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastEvent.Id + 10;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Event) null);
         }
     }
 }

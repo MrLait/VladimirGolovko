@@ -2,7 +2,6 @@
 using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Basket;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
-using TicketManagement.WebMVC.Clients.IdentityClient;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
@@ -17,8 +16,14 @@ using ViewPurchaseHistoryItem = TicketManagement.WebMVC.ViewModels.PurchaseHisto
 
 namespace TicketManagement.WebMVC.Services
 {
+    /// <summary>
+    /// Mapping profile.
+    /// </summary>
     public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// </summary>
         public MappingProfile()
         {
             CreateMap<EventAreaDto, EventAreaItem>();

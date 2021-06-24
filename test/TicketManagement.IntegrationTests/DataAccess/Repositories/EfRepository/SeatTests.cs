@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class SeatTests : TestDatabaseLoader
     {
-        private readonly List<Seat> _seats = new List<Seat>();
+        private readonly List<Seat> _seats = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -25,9 +25,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var repository = new EfRepository<Seat>(DbContext);
             var countAllSeats = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
-            for (int i = 1; i <= countAllSeats; i++)
+            for (var i = 1; i <= countAllSeats; i++)
             {
-                _seats.Add(await repository.GetByIDAsync(i));
+                _seats.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -49,7 +49,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         {
             // Arrange
             var repository = new EfRepository<Seat>(DbContext);
-            Seat seat = new Seat { Row = 2, AreaId = 2, Number = 2 };
+            var seat = new Seat { Row = 2, AreaId = 2, Number = 2 };
             var expected = new List<Seat>(_seats)
             {
                 seat,
@@ -162,10 +162,10 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             // Act
             var lastSeat = repository.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault();
-            Seat expectedSeat = new Seat { Id = lastSeat.Id, Row = lastSeat.Row, AreaId = lastSeat.AreaId, Number = lastSeat.Number };
+            var expectedSeat = new Seat { Id = lastSeat.Id, Row = lastSeat.Row, AreaId = lastSeat.AreaId, Number = lastSeat.Number };
 
-            int actualId = expectedSeat.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedSeat.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedSeat);
@@ -175,16 +175,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistSeat_ShouldReturnNullAsync()
         {
             // Arrange
-            Seat expected = null;
             var repository = new EfRepository<Seat>(DbContext);
 
             // Act
             var lastSeat = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-            int nonExistId = lastSeat.Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastSeat.Id + 10;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Seat) null);
         }
 
         [Test]

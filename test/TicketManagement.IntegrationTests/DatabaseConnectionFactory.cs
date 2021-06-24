@@ -8,41 +8,38 @@ namespace TicketManagement.IntegrationTests
     /// </summary>
     public class DatabaseConnectionFactory : Startup
     {
+        private readonly string _integrationTestDefaultConnection;
+        private readonly string _integrationTestSnapshotConnection;
+        private readonly string _integrationTestMasterConnection;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseConnectionFactory"/> class.
         /// </summary>
         public DatabaseConnectionFactory()
-            : base()
         {
-            IntegrationTestDefaultConnection = Configuration.GetConnectionString("IntegrationTestDefaultConnection");
-            IntegrationTestSnapshotConnection = Configuration.GetConnectionString("IntegrationTestSnapshotConnection");
-            IntegrationTestMasterConnection = Configuration.GetConnectionString("IntegrationTestMasterConnection");
+            _integrationTestDefaultConnection = Configuration.GetConnectionString("IntegrationTestDefaultConnection");
+            _integrationTestSnapshotConnection = Configuration.GetConnectionString("IntegrationTestSnapshotConnection");
+            _integrationTestMasterConnection = Configuration.GetConnectionString("IntegrationTestMasterConnection");
 
-            DefaultDatabaseName = GetDatabaseName(IntegrationTestDefaultConnection);
-            SnapshotDatabaseName = GetDatabaseName(IntegrationTestSnapshotConnection);
+            DefaultDatabaseName = GetDatabaseName(_integrationTestDefaultConnection);
+            SnapshotDatabaseName = GetDatabaseName(_integrationTestSnapshotConnection);
         }
 
-        public string IntegrationTestDefaultConnection { get; }
+        public string DefaultDatabaseName { get; }
 
-        public string DefaultDatabaseName { get; private set; }
+        public string SnapshotDatabaseName { get; }
 
-        public string IntegrationTestSnapshotConnection { get; }
+        public string CreateIntegrationTestDefaultConnection() => _integrationTestDefaultConnection;
 
-        public string SnapshotDatabaseName { get; private set; }
+        public string CreateIntegrationTestSnapshotConnection() => _integrationTestSnapshotConnection;
 
-        public string IntegrationTestMasterConnection { get; }
-
-        public string CreateIntegrationTestDefaultConnection() => IntegrationTestDefaultConnection;
-
-        public string CreateIntegrationTestSnapshotConnection() => IntegrationTestSnapshotConnection;
-
-        public string CreateIntegrationTestMasterConnection() => IntegrationTestMasterConnection;
+        public string CreateIntegrationTestMasterConnection() => _integrationTestMasterConnection;
 
         private static string GetDatabaseName(string databaseConnection)
         {
             return databaseConnection.Split(';')
                                      .Where(x => x.Contains("Initial Catalog = "))
-                                     .Select(x => x.Substring("Initial Catalog = ".ToArray().Length))
+                                     .Select(x => x["Initial Catalog = ".ToArray().Length..])
                                      .FirstOrDefault();
         }
     }

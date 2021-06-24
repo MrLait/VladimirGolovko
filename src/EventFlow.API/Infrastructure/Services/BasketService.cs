@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Enums;
 using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
@@ -56,8 +56,8 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             };
             foreach (var item in basketItems.ToList())
             {
-                var seatItem = await _eventSeatService.GetByIDAsync(item.ProductId);
-                var areaItem = await _eventAreaService.GetByIDAsync(seatItem.EventAreaId);
+                var seatItem = await _eventSeatService.GetByIdAsync(item.ProductId);
+                var areaItem = await _eventAreaService.GetByIdAsync(seatItem.EventAreaId);
                 var eventItem = await _eventService.GetByIdAsync(areaItem.EventId);
                 basketModel.Items.Add(
                     new BasketItem
@@ -80,13 +80,13 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
         /// <inheritdoc/>
         public async Task DeleteAsync(string userId, int productId)
         {
-            var currentSeatState = (await _eventSeatService.GetByIDAsync(productId)).State;
+            var currentSeatState = (await _eventSeatService.GetByIdAsync(productId)).State;
             if (currentSeatState == States.Purchased)
             {
                 return;
             }
 
-            var products = GetAll().Where(x => x.ProductId == productId && x.UserId == userId);
+            var products = GetAll().Where(x => x.ProductId == productId && x.UserId == userId).ToList();
 
             var productInCurrentUserBasket = !products.Any();
             if (productInCurrentUserBasket)

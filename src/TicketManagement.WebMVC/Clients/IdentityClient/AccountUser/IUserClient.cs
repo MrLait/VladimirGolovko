@@ -58,8 +58,8 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
         public async Task<string> Register(RegisterModel userModel, CancellationToken cancellationToken = default)
         {
             var url = IdentityApiRequestUris.Register;
-            string json = JsonConvert.SerializeObject(userModel);
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(userModel);
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
 
             var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
 
@@ -78,8 +78,8 @@ namespace TicketManagement.WebMVC.Clients.IdentityClient.AccountUser
         public async Task<string> Login(LoginModel userModel, CancellationToken cancellationToken = default)
         {
             var url = IdentityApiRequestUris.Login;
-            string json = JsonConvert.SerializeObject(userModel);
-            StringContent queryString = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(userModel);
+            var queryString = new StringContent(json, Encoding.UTF8, "application/json");
 
             var result = await _httpClient.PostAsync(url, queryString, cancellationToken);
 

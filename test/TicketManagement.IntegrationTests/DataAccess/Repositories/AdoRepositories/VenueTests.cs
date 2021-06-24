@@ -17,9 +17,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             // Arrange
             var expected = new List<Venue>
             {
-                new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
-                new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
-                new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
+                new () { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
+                new () { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new () { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
             };
 
             // Act
@@ -43,13 +43,13 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task CreateAsync_WhenAddVenue_ShouldReturnVenueWithNewVenue()
         {
             // Arrange
-            Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var expected = new List<Venue>
             {
-                new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
-                new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
-                new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
-                new Venue { Id = 4, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new () { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
+                new () { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new () { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" },
+                new () { Id = 4, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
             };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
@@ -75,11 +75,11 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task DeleteAsync_WhenExistVenue_ShouldReturnVenueListWithoutDeletedVenue()
         {
             // Arrange
-            Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var expected = new List<Venue>
             {
-                new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
-                new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new () { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
+                new () { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
             };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
@@ -95,7 +95,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdEqualZerotVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
@@ -116,7 +116,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIncorrectConnectionStringVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 3, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
@@ -127,12 +127,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task UpdateAsync_WhenExistVenue_ShouldUpdateThirdVenue()
         {
             // Arrange
-            Venue venue = new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
+            var venue = new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
             var expected = new List<Venue>
             {
-                new Venue { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
-                new Venue { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
-                new Venue { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" },
+                new () { Id = 1, Description = "Luzhniki Stadium", Address = "st. Luzhniki, 24, Moscow, Russia, 119048", Phone = "+7 495 780-08-08" },
+                new () { Id = 2, Description = "Gomel Regional Drama Theater", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" },
+                new () { Id = 3, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" },
             };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
@@ -158,7 +158,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenIdEqualZeroVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
@@ -169,12 +169,12 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenExistVenue_ShouldReturnVenue()
         {
             // Arrange
-            Venue expectedVenue = new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" };
+            var expectedVenue = new Venue { Id = 3, Description = "The circus", Address = "pl. Lenin 1, Brest 246050", Phone = "+375442757763" };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
-            int actualId = expectedVenue.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedVenue.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedVenue);
@@ -184,45 +184,44 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenNonExistVenue_ShouldReturnNull()
         {
             // Arrange
-            Venue venue = new Venue { Id = 5, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
-            Venue expected = null;
+            var venue = new Venue { Id = 5, Description = "DescriptionUpdated", Address = "AddressUpdated", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act
-            int actualId = venue.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = venue.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Venue) null);
         }
 
         [Test]
         public void GetByIdAsync_WhenIdEqualZeroVenue_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Id = 0, Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(venue.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(venue.Id));
         }
 
         [Test]
         public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = -1 };
+            var venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(venue.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(venue.Id));
         }
 
         [Test]
         public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = -1 };
+            var venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert
@@ -233,7 +232,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Venue venue = new Venue { Id = -1 };
+            var venue = new Venue { Id = -1 };
             var repository = new AdoUsingParametersRepository<Venue>(DefaultConnectionString);
 
             // Act & Assert

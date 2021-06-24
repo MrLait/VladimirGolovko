@@ -11,6 +11,7 @@ using TicketManagement.Dto;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventArea;
 using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
+using TicketManagement.WebMVC.Constants;
 using TicketManagement.WebMVC.Infrastructure.ExceptionsMessages;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
@@ -70,7 +71,7 @@ namespace TicketManagement.WebMVC.Controllers
         }
 
         /// <summary>
-        /// Create event view.
+        /// Create event.
         /// </summary>
         [HttpGet]
         public IActionResult CreateEvent()
@@ -79,7 +80,7 @@ namespace TicketManagement.WebMVC.Controllers
         }
 
         /// <summary>
-        /// Create event view.
+        /// Create event.
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateEvent(EventViewModel model)
@@ -105,7 +106,7 @@ namespace TicketManagement.WebMVC.Controllers
 
                 var eventAreas = _mapper.Map<List<EventAreaItem>, List<EventAreaDto>>(model.EventAreaItems);
                 await _eventAreaClient.UpdatePricesAsync(eventAreas);
-                return RedirectToAction("Index", "EventManager");
+                return RedirectToAction(EventManagerConst.Index, EventManagerConst.ControllerName);
             }
             catch (ValidationException ve)
             {
@@ -146,10 +147,9 @@ namespace TicketManagement.WebMVC.Controllers
             try
             {
                 var eventDto = _mapper.Map<EventViewModel, EventDto>(model);
-                ////await _eventClient.UpdateEventAsync(eventDto);
 
                 await _eventClient.UpdateEventAsync(eventDto);
-                return RedirectToAction("Index", "EventManager");
+                return RedirectToAction(EventManagerConst.Index, EventManagerConst.ControllerName);
             }
             catch (ValidationException ve)
             {
@@ -168,17 +168,17 @@ namespace TicketManagement.WebMVC.Controllers
             try
             {
                 await _eventClient.DeleteByIdAsync(id);
-                return RedirectToAction("Index", "EventManager");
+                return RedirectToAction(EventManagerConst.Index, EventManagerConst.ControllerName);
             }
             catch (ValidationException ex)
             {
                 if (ex.Message == ExceptionMessages.SeatsHaveAlreadyBeenPurchased)
                 {
-                    return Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
+                    return Content(_localizer[ExceptionMessages.SeatsHaveAlreadyBeenPurchased]);
                 }
 
                 _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, ex);
-                return RedirectToAction("Index", "EventManager");
+                return RedirectToAction(EventManagerConst.Index, EventManagerConst.ControllerName);
             }
         }
 
@@ -187,28 +187,28 @@ namespace TicketManagement.WebMVC.Controllers
             switch (ve.Message)
             {
                 case ExceptionMessages.PriceIsZero:
-                    ViewData["PriceRequired"] = _localizer["Price can't equal zero."];
+                    ViewData[LocalizerConst.PriceRequired] = _localizer[ExceptionMessages.PriceIsZero];
                     break;
                 case ExceptionMessages.PriceIsNegative:
-                    ViewData["PriceRequired"] = _localizer["Price can't negative."];
+                    ViewData[LocalizerConst.PriceRequired] = _localizer[ExceptionMessages.PriceIsNegative];
                     break;
                 case ExceptionMessages.CantBeCreatedInThePast:
-                    ModelState.AddModelError("StartDateTime", _localizer["The event can't be created in the past."]);
+                    ModelState.AddModelError(string.Empty, _localizer[ExceptionMessages.CantBeCreatedInThePast]);
                     break;
                 case ExceptionMessages.StartDataTimeBeforeEndDataTime:
-                    ModelState.AddModelError("StartDateTime", _localizer["The beginning of the event cannot be after the end of the event."]);
+                    ModelState.AddModelError(string.Empty, _localizer[ExceptionMessages.StartDataTimeBeforeEndDataTime]);
                     break;
                 case ExceptionMessages.ThereIsNoSuchLayout:
-                    ModelState.AddModelError("StartDateTime", _localizer["There is no such Layout."]);
+                    ModelState.AddModelError(string.Empty, _localizer[ExceptionMessages.ThereIsNoSuchLayout]);
                     break;
                 case ExceptionMessages.ThereAreNoSeatsInTheEvent:
-                    ModelState.AddModelError(string.Empty, _localizer["There are no seats in the event."]);
+                    ModelState.AddModelError(string.Empty, _localizer[ExceptionMessages.ThereAreNoSeatsInTheEvent]);
                     break;
                 case ExceptionMessages.EventForTheSameVenueInTheSameDateTime:
-                    ModelState.AddModelError(string.Empty, _localizer["Event for the Venue with the dateTime already exist."]);
+                    ModelState.AddModelError(string.Empty, _localizer[ExceptionMessages.EventForTheSameVenueInTheSameDateTime]);
                     break;
                 case ExceptionMessages.SeatsHaveAlreadyBeenPurchased:
-                    Content(_localizer["SeatsHaveAlreadyBeenPurchased"]);
+                    Content(_localizer[ExceptionMessages.SeatsHaveAlreadyBeenPurchased]);
                     break;
                 default:
                     break;

@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Filters;
+using TicketManagement.Services.EventFlow.API.Infrastructure.JwtTokenAuth;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Swagger;
 
 namespace TicketManagement.Services.EventFlow.API.Extensions
 {
@@ -23,7 +25,8 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
         /// <param name="configuration">Configuration.</param>
         public static void AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            const string sectionName = "DefaultConnection";
+            var connectionString = configuration.GetConnectionString(sectionName);
             services.AddDbContext<EfDbContext>(options =>
             {
                 options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
@@ -39,23 +42,23 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
+                options.SwaggerDoc(SwaggerConstants.Version, new OpenApiInfo
                 {
-                    Title = "Internal lab Demo 2",
-                    Version = "v1",
+                    Title = SwaggerConstants.Title,
+                    Version = SwaggerConstants.Version,
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition(JwtAuthenticationConstants.Bearer, new OpenApiSecurityScheme
                 {
-                    Description = "Jwt Token is required to access the endpoints",
+                    Description = JwtAuthenticationConstants.Description,
                     In = ParameterLocation.Header,
-                    Name = "JWT Authentication",
+                    Name = JwtAuthenticationConstants.Name,
                     Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
+                    Scheme = JwtAuthenticationConstants.Scheme,
+                    BearerFormat = JwtAuthenticationConstants.BearerFormat,
                     Reference = new OpenApiReference
                     {
                         Id = JwtBearerDefaults.AuthenticationScheme,

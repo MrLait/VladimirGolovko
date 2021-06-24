@@ -9,6 +9,9 @@ using TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Purchase history controller.
+    /// </summary>
     [Authorize]
     public class PurchaseHistoryController : Controller
     {
@@ -16,6 +19,12 @@ namespace TicketManagement.WebMVC.Controllers
         private readonly IIdentityParser<ApplicationUser> _identityParser;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PurchaseHistoryController"/> class.
+        /// </summary>
+        /// <param name="purchaseHistoryClient">Purchase history client.</param>
+        /// <param name="identityParser">Identity parser.</param>
+        /// <param name="mapper">Mapper.</param>
         public PurchaseHistoryController(IPurchaseHistoryClient purchaseHistoryClient,
             IIdentityParser<ApplicationUser> identityParser, IMapper mapper)
         {
@@ -24,9 +33,12 @@ namespace TicketManagement.WebMVC.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// View index.
+        /// </summary>
         public async Task<IActionResult> Index()
         {
-            var userId = _identityParser.Parse(HttpContext.User).Id.ToString();
+            var userId = _identityParser.Parse(HttpContext.User).Id;
             var purchaseHistoryModel = await _purchaseHistoryClient.GetAllByUserIdAsync(userId);
             var vm = _mapper.Map<PurchaseHistoryModel, PurchaseHistoryViewModel>(purchaseHistoryModel);
 

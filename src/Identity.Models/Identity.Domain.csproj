@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>TicketManagement.Services.Identity.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
