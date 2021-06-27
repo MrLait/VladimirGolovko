@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class EventAreaTests : TestDatabaseLoader
     {
-        private readonly List<EventArea> _eventAreas = new List<EventArea>();
+        private readonly List<EventArea> _eventAreas = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -27,7 +27,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             for (int i = 1; i <= countAllEventAreas; i++)
             {
-                _eventAreas.Add(await repository.GetByIDAsync(i));
+                _eventAreas.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -49,7 +49,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         {
             // Arrange
             var repository = new EfRepository<EventArea>(DbContext);
-            EventArea eventArea = new EventArea { CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
+            var eventArea = new EventArea { CoordX = 2, CoordY = 2, Description = "Creaded", EventId = 2, Price = 10 };
             var expected = new List<EventArea>(_eventAreas)
             {
                 eventArea,
@@ -86,7 +86,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             await repository.DeleteAsync(lastEventArea);
 
             var actual = repository.GetAllAsQueryable();
-            int countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
+            var countEventAreaWithoutLast = allEventAreas.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allEventAreas.Take(countEventAreaWithoutLast));
@@ -162,7 +162,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             // Act
             var lastEventArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault();
-            EventArea expectedEventArea = new EventArea
+            var expectedEventArea = new EventArea
             {
                 Id = lastEventArea.Id,
                 CoordX = lastEventArea.CoordX,
@@ -172,8 +172,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
                 Price = lastEventArea.Price,
             };
 
-            int actualId = expectedEventArea.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedEventArea.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEventArea);
@@ -183,15 +183,14 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistEventArea_ShouldReturnNullAsync()
         {
             // Arrange
-            EventArea expected = null;
             var repository = new EfRepository<EventArea>(DbContext);
 
             // Act
             var nonExistId = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((EventArea) null);
         }
 
         [Test]

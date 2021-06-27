@@ -118,9 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PriceRequired" xml:space="preserve">
-    <value>Specify a price for this area</value>
+    <value>Specify a price for this area.</value>
   </data>
-  <data name="SeatsHaveAlreadyBeenPurchased" xml:space="preserve">
+  <data name="Unable to delete because seats have already been purchased for the event." xml:space="preserve">
     <value>Unable to delete because seats have already been purchased for the event.</value>
+  </data>
+  <data name="The beginning of the event cannot be after the end of the event." xml:space="preserve">
+    <value>The beginning of the event cannot be after the end of the event.</value>
+  </data>
+  <data name="The event can't be created in the past." xml:space="preserve">
+    <value>The event can't be created in the past.</value>
+  </data>
+  <data name="There is no such Layout." xml:space="preserve">
+    <value>There is no such layout.</value>
+  </data>
+  <data name="Price can't equal zero." xml:space="preserve">
+    <value>Price can't equal zero.</value>
+    <comment>Price can't equal zero.</comment>
+  </data>
+  <data name="Price can't negative." xml:space="preserve">
+    <value>Price can't negative.</value>
+    <comment>Price can't negative.</comment>
+  </data>
+  <data name="There are no seats in the event." xml:space="preserve">
+    <value>There are no seats in the event.</value>
+    <comment>There are no seats in the event</comment>
+  </data>
+  <data name="Event for the Venue with the dateTime already exist." xml:space="preserve">
+    <value>Event for the Venue with the dateTime already exist.</value>
+    <comment>Event for the Venue with the dateTime already exist</comment>
   </data>
 </root>

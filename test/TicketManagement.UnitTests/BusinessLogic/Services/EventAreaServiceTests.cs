@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
@@ -15,14 +15,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Event area service tests.
     /// </summary>
     [TestFixture]
-    public class EventAreaServiceTests : MockEntites
+    public class EventAreaServiceTests : MockEntities
     {
         [Test]
         public async Task UpdatePriceAsync_WhenEventAreaExist_ShouldUpdatePriceInLastEventArea()
         {
             // Arrange
             var eventAreaLast = EventAreas.Last();
-            EventArea expected = new EventArea
+            var expected = new EventArea
             {
                 Id = eventAreaLast.Id,
                 EventId = eventAreaLast.EventId,
@@ -35,9 +35,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            Action<EventArea> updateLastAction = venues => EventAreas.RemoveAt(eventAreaLast.Id - 1);
+            Action<EventArea> updateLastAction = _ => EventAreas.RemoveAt(eventAreaLast.Id - 1);
             updateLastAction += v => EventAreas.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.EventAreas.GetByIDAsync(eventAreaLast.Id)).ReturnsAsync(eventAreaLast);
+            Mock.Setup(x => x.EventAreas.GetByIdAsync(eventAreaLast.Id)).ReturnsAsync(eventAreaLast);
             Mock.Setup(x => x.EventAreas.UpdateAsync(It.IsAny<EventArea>())).Callback(updateLastAction);
 
             await eventAreaService.UpdatePriceAsync(new EventAreaDto
@@ -119,11 +119,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = EventAreas.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.EventAreas.GetByIDAsync(expectedId)).ReturnsAsync(EventAreas.Last());
+            Mock.Setup(x => x.EventAreas.GetByIdAsync(expectedId)).ReturnsAsync(EventAreas.Last());
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act
-            var actual = await eventAreaService.GetByIDAsync(expectedId);
+            var actual = await eventAreaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -136,7 +136,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new EventAreaService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventAreaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(-1));
         }
     }
 }

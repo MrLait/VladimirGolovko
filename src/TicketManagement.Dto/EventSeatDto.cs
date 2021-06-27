@@ -1,4 +1,4 @@
-﻿using TicketManagement.DataAccess.Enums;
+﻿using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto

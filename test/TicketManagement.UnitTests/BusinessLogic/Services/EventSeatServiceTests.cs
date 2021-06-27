@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
+using TicketManagement.DataAccess.Domain.Enums;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Enums;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
@@ -16,14 +16,14 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Event seat server tests.
     /// </summary>
     [TestFixture]
-    public class EventSeatServiceTests : MockEntites
+    public class EventSeatServiceTests : MockEntities
     {
         [Test]
         public async Task UpdateStateAsync_WhenEventSeatExist_ShouldUpdateStateInLastEventSeat()
         {
             // Arrange
             var eventSeatLast = EventSeats.Last();
-            EventSeat expected = new EventSeat
+            var expected = new EventSeat
             {
                 Id = eventSeatLast.Id,
                 EventAreaId = eventSeatLast.EventAreaId,
@@ -35,9 +35,9 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act
-            Action<EventSeat> updateLastAction = venues => EventSeats.RemoveAt(eventSeatLast.Id - 1);
+            Action<EventSeat> updateLastAction = _ => EventSeats.RemoveAt(eventSeatLast.Id - 1);
             updateLastAction += v => EventSeats.Insert(v.Id - 1, v);
-            Mock.Setup(x => x.EventSeats.GetByIDAsync(eventSeatLast.Id)).ReturnsAsync(eventSeatLast);
+            Mock.Setup(x => x.EventSeats.GetByIdAsync(eventSeatLast.Id)).ReturnsAsync(eventSeatLast);
             Mock.Setup(x => x.EventSeats.UpdateAsync(It.IsAny<EventSeat>())).Callback(updateLastAction);
 
             await eventSeatsService.UpdateStateAsync(new EventSeatDto
@@ -105,11 +105,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = EventSeats.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.EventSeats.GetByIDAsync(expectedId)).ReturnsAsync(EventSeats.Last());
+            Mock.Setup(x => x.EventSeats.GetByIdAsync(expectedId)).ReturnsAsync(EventSeats.Last());
             var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act
-            var actual = await eventSeatsService.GetByIDAsync(expectedId);
+            var actual = await eventSeatsService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -122,7 +122,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIdAsync(0));
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventSeatsService = new EventSeatService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventSeatsService.GetByIdAsync(-1));
         }
     }
 }

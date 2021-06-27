@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
-using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
 {
@@ -381,7 +380,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
             // Arrange
             var dbContext = new EfDbContext(connectionString: DefaultConnectionString);
             var eventLast = _eventRepository.GetAllAsQueryable().AsEnumerable().Last();
-            var layoutIdChanged = eventLast.Id + 1;
+            var layoutIdChanged = eventLast.LayoutId + 1;
             var expected = new Event
             {
                 Id = eventLast.Id,
@@ -392,7 +391,9 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(dbContext);
+            var eventArea = new EventAreaService(dbContext);
+            var eventSeat = new EventSeatService(dbContext);
+            var eventService = new EventService(dbContext, eventSeat, eventArea);
             var eventDto = new EventDto
             {
                 Id = expected.Id,

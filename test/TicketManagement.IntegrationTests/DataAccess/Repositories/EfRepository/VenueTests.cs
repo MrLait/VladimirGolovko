@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class VenueTests : TestDatabaseLoader
     {
-        private readonly List<Venue> _venues = new List<Venue>();
+        private readonly List<Venue> _venues = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -25,9 +25,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var repository = new EfRepository<Venue>(DbContext);
             var countAllVenues = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
-            for (int i = 1; i <= countAllVenues; i++)
+            for (var i = 1; i <= countAllVenues; i++)
             {
-                _venues.Add(await repository.GetByIDAsync(i));
+                _venues.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -49,7 +49,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         {
             // Arrange
             var repository = new EfRepository<Venue>(DbContext);
-            Venue venue = new Venue { Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
+            var venue = new Venue { Description = "New", Address = "pl. Lenin 1, Gomel 246050", Phone = "+375232757763" };
             var expected = new List<Venue>(_venues)
             {
                 venue,
@@ -86,7 +86,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             await repository.DeleteAsync(lastVenue);
 
             var actual = repository.GetAllAsQueryable().OrderBy(x=>x.Id);
-            int countVenueWithoutLast = allVenues.ToList().Count - 1;
+            var countVenueWithoutLast = allVenues.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allVenues.Take(countVenueWithoutLast));
@@ -164,8 +164,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var lastVenue = repository.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault();
             var expectedVenue = new Venue { Phone = lastVenue.Phone, Id = lastVenue.Id, Address = lastVenue.Address, Description = lastVenue.Description };
 
-            int actualId = expectedVenue.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedVenue.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedVenue);
@@ -175,16 +175,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistVenue_ShouldReturnNullAsync()
         {
             // Arrange
-            Venue expected = null;
             var repository = new EfRepository<Venue>(DbContext);
 
             // Act
             var lastVenue = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-            int nonExistId = lastVenue.Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastVenue.Id + 10;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Venue) null);
         }
 
         [Test]

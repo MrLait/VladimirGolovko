@@ -4,6 +4,9 @@ using TicketManagement.DataAccess.Domain.Interfaces;
 
 namespace TicketManagement.DataAccess.Domain.Models
 {
+    /// <summary>
+    /// Basket table.
+    /// </summary>
     [Table("Basket")]
     public class Basket : IEntity
     {

@@ -1,11 +1,11 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.IndexViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 @{ ViewData["Title"] = "Event manager area"; }
 @{ int rowNumber = 0; }
 
-@if (Model.EventItems.Count() > 0)
+@if (Model.EventItems.Any())
 {
     <table>
         @foreach (var item in Model.EventItems)
@@ -16,24 +16,21 @@
                 <td class="table-image">
                     <div> <img src="@item.ImageUrl" /> </div>
                 </td>
-                <td class="table-event-name">@Localizer["EventName"]: @item.Name</td>
-                <td class="table-event-description">@Localizer["Description"]: @item.Description</td>
-                <td class="table-event-date-time-start">@Localizer["TheEventStartsAt"] @item.StartDateTime</td>
-                <td class="table-event-date-time-end">@Localizer["TheEventEndsAt"] @item.EndDateTime</td>
-                <td class="table-availible-seats">@Localizer["AvailableSeats"]: @item.AvailableSeats</td>
+                <td class="table-event-name">@_localizer["EventName"]: @item.Name</td>
+                <td class="table-event-description">@_localizer["Description"]: @item.Description</td>
+                <td class="table-event-date-time-start">@_localizer["TheEventStartsAt"] @item.StartDateTime</td>
+                <td class="table-event-date-time-end">@_localizer["TheEventEndsAt"] @item.EndDateTime</td>
+                <td class="table-availible-seats">@_localizer["AvailableSeats"]: @item.AvailableSeats</td>
                 <td>
-                    <a class="btn btn-sm btn-primary" asp-action="UpdateEvent" asp-route-id="@item.Id">@Localizer["Update"]</a>
+                    <a class="btn btn-sm btn-primary" asp-action="UpdateEvent" asp-route-id="@item.Id">@_localizer["Update"]</a>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-primary" asp-action="DeleteEvent" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                    <a class="btn btn-sm btn-primary" asp-action="DeleteEvent" asp-route-id="@item.Id">@_localizer["Delete"]</a>
                 </td>
             </tr>
         }
     </table>
 }
 <td>
-    <a class="btn btn-sm btn-primary" asp-action="CreateEvent">@Localizer["CreateEvent"]</a>
-</td>
-<td>
-    <a class="btn btn-sm btn-primary" asp-action="ImportJson" asp-controller="Json">@Localizer["Import json"]</a>
+    <a class="btn btn-sm btn-primary" asp-action="CreateEvent">@_localizer["CreateEvent"]</a>
 </td>

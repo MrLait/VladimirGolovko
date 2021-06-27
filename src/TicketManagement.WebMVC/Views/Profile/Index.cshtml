@@ -1,18 +1,18 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.ProfileViewModels.ProfileViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 @{
     ViewBag.Title = "User profile";
 }
 
-<form asp-action="Deposite" asp-controller="Profile">
+<form asp-action="Deposit" asp-controller="Profile">
     <table class="table">
 
         <tr><th>@Model.FirstName</th></tr>
         <tr>
             <td>
-                @Localizer["Balance"] - @Model.Balance <span> @Localizer["Currency"]</span>
+                @_localizer["Balance"] - @Model.Balance <span> @_localizer["Currency"]</span>
             </td>
             <td>
                 <div class="form-group">
@@ -22,7 +22,7 @@
             </td>
             <td>
                 <div class="form-group">
-                    <input type="submit" value="@Localizer["Deposite"]" class="btn btn-sm btn-primary" />
+                    <input type="submit" value="@_localizer["Deposite"]" class="btn btn-sm btn-primary" />
                 </div>
             </td>
         </tr>
@@ -31,33 +31,33 @@
 
 <table class="table">
     <tr>
-        <td>@Localizer["FirstName"] - @Model.FirstName</td>
+        <td>@_localizer["FirstName"] - @Model.FirstName</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditFirstName" asp-route-id="@Model.Id">@Localizer["EditFirstName"]</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditFirstName" asp-route-id="@Model.Id">@_localizer["EditFirstName"]</a>
         </td>
     </tr>
     <tr>
-        <td>@Localizer["Surname"] - @Model.Surname</td>
+        <td>@_localizer["Surname"] - @Model.Surname</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditSurname" asp-route-id="@Model.Id">@Localizer["EditSurname"]</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditSurname" asp-route-id="@Model.Id">@_localizer["EditSurname"]</a>
         </td>
     </tr>
     <tr>
-        <td>@Localizer["Email"] - @Model.Email</td>
+        <td>@_localizer["Email"] - @Model.Email</td>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditEmail" asp-route-id="@Model.Id">@Localizer["EditEmail"]</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditEmail" asp-route-id="@Model.Id">@_localizer["EditEmail"]</a>
         </td>
     </tr>
     <tr>
         <td>
-            <a class="btn btn-sm btn-primary" asp-action="EditPassword" asp-route-id="@Model.Id">@Localizer["EditPassword"]</a>
+            <a class="btn btn-sm btn-primary" asp-action="EditPassword" asp-route-id="@Model.Id">@_localizer["EditPassword"]</a>
         </td>
     </tr>
 </table>
 
 <table class="table">
     <tr>
-        <td>@Localizer["Language"]</td>
+        <td>@_localizer["Language"]</td>
         <td>
             <div class="container">
                 @await Html.PartialAsync("_SelectLanguagePartial")
@@ -68,7 +68,7 @@
 
 <table class="table">
     <tr>
-        <td>@Localizer["TimeZone"]</td>
+        <td>@_localizer["TimeZone"]</td>
         <td>
             <div class="container">
                 <p>
@@ -79,6 +79,6 @@
     <tr>
 </table>
 
-<div class="esh-event-items row">
-    <a class="esh-basketstatus" asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> @Localizer["SeePurchaseHistory"]</a>
+<div>
+    <a asp-area="" asp-controller="PurchaseHistory" asp-action="Index"> @_localizer["SeePurchaseHistory"]</a>
 </div>

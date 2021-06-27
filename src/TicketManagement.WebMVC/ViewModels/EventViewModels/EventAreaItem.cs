@@ -4,6 +4,9 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
+    /// <summary>
+    /// Event area item.
+    /// </summary>
     public class EventAreaItem
     {
         /// <summary>
@@ -38,8 +41,14 @@ namespace TicketManagement.WebMVC.ViewModels.EventViewModels
         [Display(Name = "Price")]
         public decimal Price { get; init; }
 
+        /// <summary>
+        /// Gets or sets EvenSeatItems.
+        /// </summary>
         public IEnumerable<EventSeatItem> EvenSeatItems { get; set; }
 
+        /// <summary>
+        /// Gets or sets EvenSeats.
+        /// </summary>
         public List<EventSeatDto> EvenSeats { get; set; }
     }
 }

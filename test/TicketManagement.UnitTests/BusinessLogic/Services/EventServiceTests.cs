@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Event service tests.
     /// </summary>
     [TestFixture]
-    public class EventServiceTests : MockEntites
+    public class EventServiceTests : MockEntities
     {
         [Test]
         public async Task CreateAsync_WhenEventExist_ShouldCreateEvent()
@@ -133,7 +133,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Events.Last();
             Mock.Setup(x => x.Events.DeleteAsync(It.IsAny<Event>())).Callback<Event>(v => Events.RemoveAt(v.Id - 1));
-            Mock.Setup(x => x.Events.GetByIDAsync(expected.Id)).ReturnsAsync(expected);
+            Mock.Setup(x => x.Events.GetByIdAsync(expected.Id)).ReturnsAsync(expected);
             var eventService = new EventService(Mock.Object, new EventSeatService(Mock.Object), new EventAreaService(Mock.Object));
             var eventDto = new EventDto
             {
@@ -194,14 +194,17 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var expected = new Event
             {
                 Id = eventLast.Id,
-                StartDateTime = eventLast.StartDateTime,
-                EndDateTime = eventLast.EndDateTime,
+                StartDateTime = eventLast.EndDateTime.AddDays(3),
+                EndDateTime = eventLast.EndDateTime.AddDays(5),
                 Description = "Updated Description",
                 LayoutId = eventLast.LayoutId,
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(Mock.Object);
+
+            var eventArea = new EventAreaService(Mock.Object);
+            var eventSeat = new EventSeatService(Mock.Object);
+            var eventService = new EventService(Mock.Object, eventSeat, eventArea);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -214,10 +217,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 EndDateTime = expected.EndDateTime,
                 ImageUrl = expected.ImageUrl,
             };
-            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
+            Mock.Setup(x => x.Events.GetByIdAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act
-            Action<Event> updateLastAction = venues => Events.RemoveAt(eventLast.Id - 1);
+            Action<Event> updateLastAction = _ => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Events.UpdateAsync(It.IsAny<Event>())).Callback(updateLastAction);
 
@@ -273,18 +276,21 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
         {
             // Arrange
             var eventLast = Events.Last();
-            var layoutIdChanged = eventLast.Id + 1;
+            var layoutIdChanged = eventLast.LayoutId + 1;
             var expected = new Event
             {
                 Id = eventLast.Id,
-                StartDateTime = eventLast.StartDateTime,
-                EndDateTime = eventLast.EndDateTime,
+                StartDateTime = eventLast.EndDateTime.AddDays(3),
+                EndDateTime = eventLast.EndDateTime.AddDays(5),
                 Description = "Updated Description",
                 LayoutId = layoutIdChanged,
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(Mock.Object);
+
+            var eventArea = new EventAreaService(Mock.Object);
+            var eventSeat = new EventSeatService(Mock.Object);
+            var eventService = new EventService(Mock.Object, eventSeat, eventArea);
             var eventDto = new EventDto
             {
                 Id = expected.Id,
@@ -297,10 +303,10 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 EndDateTime = expected.EndDateTime,
                 ImageUrl = expected.ImageUrl,
             };
-            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
+            Mock.Setup(x => x.Events.GetByIdAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act
-            Action<Event> updateLastAction = events => Events.RemoveAt(eventLast.Id - 1);
+            Action<Event> updateLastAction = _ => Events.RemoveAt(eventLast.Id - 1);
             updateLastAction += v => Events.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Events.UpdateAsync(It.IsAny<Event>())).Callback(updateLastAction);
 
@@ -327,7 +333,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 PriceFrom = 100,
                 State = 0,
             };
-            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
+            Mock.Setup(x => x.Events.GetByIdAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
@@ -350,7 +356,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
                 State = 0,
             };
             var eventService = new EventService(Mock.Object);
-            Mock.Setup(x => x.Events.GetByIDAsync(eventFirst.Id)).ReturnsAsync(eventFirst);
+            Mock.Setup(x => x.Events.GetByIdAsync(eventFirst.Id)).ReturnsAsync(eventFirst);
             Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
 
             // Act & Assert
@@ -375,7 +381,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             };
             var eventService = new EventService(Mock.Object);
             Mock.Setup(x => x.Events.CreateAsync(It.IsAny<Event>())).Callback<Event>(v => Events.Add(v));
-            Mock.Setup(x => x.Events.GetByIDAsync(eventLast.Id)).ReturnsAsync(eventLast);
+            Mock.Setup(x => x.Events.GetByIdAsync(eventLast.Id)).ReturnsAsync(eventLast);
 
             // Act & Assert
             Assert.ThrowsAsync<ValidationException>(async () => await eventService.UpdateAsync(eventDto));
@@ -402,11 +408,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Events.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Events.GetByIDAsync(expectedId)).ReturnsAsync(Events.Last());
+            Mock.Setup(x => x.Events.GetByIdAsync(expectedId)).ReturnsAsync(Events.Last());
             var eventService = new EventService(Mock.Object);
 
             // Act
-            var actual = await eventService.GetByIDAsync(expectedId);
+            var actual = await eventService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -419,7 +425,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIdAsync(0));
         }
 
         [Test]
@@ -429,7 +435,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var eventService = new EventService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventService.GetByIdAsync(-1));
         }
     }
 }

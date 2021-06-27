@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Interfaces;
 
 namespace TicketManagement.DataAccess.Repositories.EfRepositories
@@ -14,7 +14,7 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             Context = context;
         }
 
-        protected EfDbContext Context { get; set; }
+        protected EfDbContext Context { get; }
 
         public async Task CreateAsync(T entity)
         {
@@ -33,15 +33,14 @@ namespace TicketManagement.DataAccess.Repositories.EfRepositories
             return Context.Set<T>().AsNoTracking().AsQueryable();
         }
 
-        public async Task<T> GetByIDAsync(int byId)
+        public async Task<T> GetByIdAsync(int byId)
         {
             return await Context.Set<T>().FindAsync(byId);
         }
 
         public async Task UpdateAsync(T entity)
         {
-            Context.Update<T>(entity);
-            ////Context.Entry(entity).State = EntityState.Modified;
+            Context.Update(entity);
             await Context.SaveChangesAsync();
         }
     }

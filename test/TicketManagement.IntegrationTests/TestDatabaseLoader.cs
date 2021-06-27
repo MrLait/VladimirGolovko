@@ -7,8 +7,8 @@ namespace TicketManagement.IntegrationTests
 {
     internal class TestDatabaseLoader
     {
-        private const string _scriptCreateDatabaseName = "TicketManagement.Database_Create.sql";
-        private readonly DatabaseHelper _databaseHelper = new DatabaseHelper();
+        private const string ScriptCreateDatabaseName = "TicketManagement.Database_Create.sql";
+        private readonly DatabaseHelper _databaseHelper = new ();
 
         public TestDatabaseLoader()
         {
@@ -35,7 +35,7 @@ namespace TicketManagement.IntegrationTests
         [OneTimeSetUp]
         public void Init()
         {
-            string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Scripts", _scriptCreateDatabaseName));
+            string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Scripts", ScriptCreateDatabaseName));
             _databaseHelper.CreateDatabase(scriptPath, MasterConnectionString);
             string snapshotsDirectoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Snapshots"));
             _databaseHelper.CreateSnapshot(SnapshotDatabaseName, DefaultDatabaseName, snapshotsDirectoryPath, DefaultConnectionString);

@@ -1,13 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TicketManagement.DataAccess.Enums
+﻿namespace TicketManagement.DataAccess.Domain.Enums
 {
+    /// <summary>
+    /// States.
+    /// </summary>
     public enum States
     {
+        /// <summary>
+        /// Available.
+        /// </summary>
         Available,
+
+        /// <summary>
+        /// Purchased.
+        /// </summary>
         Purchased,
+
+        /// <summary>
+        /// Booked.
+        /// </summary>
         Booked,
     }
 }

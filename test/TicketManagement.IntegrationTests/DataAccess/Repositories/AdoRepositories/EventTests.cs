@@ -12,7 +12,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
     [TestFixture]
     internal class EventTests : TestDatabaseLoader
     {
-        private readonly List<Event> _eventModels = new List<Event>();
+        private readonly List<Event> _eventModels = new ();
 
         [OneTimeSetUp]
         public async Task InitEventsAsync()
@@ -20,9 +20,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var eventModelRepository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
             var countAllEvents = eventModelRepository.GetAllAsQueryable().Last().Id;
 
-            for (int i = 1; i <= countAllEvents; i++)
+            for (var i = 1; i <= countAllEvents; i++)
             {
-                _eventModels.Add(await eventModelRepository.GetByIDAsync(i));
+                _eventModels.Add(await eventModelRepository.GetByIdAsync(i));
             }
         }
 
@@ -54,7 +54,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
-            Event eventModel = new Event
+            var eventModel = new Event
             {
                 Id = repository.GetAllAsQueryable().ToList().Count + 1,
                 LayoutId = 2,
@@ -64,7 +64,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 Name = "Test event",
                 EndDateTime = DateTime.Today.AddDays(1),
             };
-            List<Event> expected = new List<Event>(_eventModels)
+            var expected = new List<Event>(_eventModels)
             {
                 eventModel,
             };
@@ -99,7 +99,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             await repository.DeleteAsync(lastEvent);
 
             var actual = repository.GetAllAsQueryable();
-            int countEventWithoutLast = allEvents.ToList().Count - 1;
+            var countEventWithoutLast = allEvents.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allEvents.Take(countEventWithoutLast));
@@ -109,7 +109,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = 0 };
+            var eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
@@ -130,7 +130,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIncorrectConnectionStringEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = 3 };
+            var eventModel = new Event { Id = 3 };
             var repository = new AdoUsingStoredProcedureRepository<Event>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
@@ -178,7 +178,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = 0 };
+            var eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
@@ -193,7 +193,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().Last();
-            Event expectedEvent = new Event
+            var expectedEvent = new Event
             {
                 Id = lastEvent.Id,
                 StartDateTime = lastEvent.StartDateTime,
@@ -204,8 +204,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
                 ImageUrl = lastEvent.ImageUrl,
             };
 
-            int actualId = expectedEvent.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedEvent.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedEvent);
@@ -215,45 +215,44 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenNonExistEvent_ShouldReturnNull()
         {
             // Arrange
-            Event expected = null;
             var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act
             var lastEvent = repository.GetAllAsQueryable().Last();
-            int nonExistId = lastEvent.Id + 1;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastEvent.Id + 1;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Event) null);
         }
 
         [Test]
         public void GetByIdAsync_WhenIdEqualZeroEvent_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = 0 };
+            var eventModel = new Event { Id = 0 };
             var repository = new AdoUsingStoredProcedureRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(eventModel.Id));
         }
 
         [Test]
         public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = -1 };
+            var eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(eventModel.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(eventModel.Id));
         }
 
         [Test]
         public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = -1 };
+            var eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert
@@ -264,7 +263,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Event eventModel = new Event { Id = -1 };
+            var eventModel = new Event { Id = -1 };
             var repository = new AdoUsingParametersRepository<Event>(DefaultConnectionString);
 
             // Act & Assert

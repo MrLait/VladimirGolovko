@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TicketManagement.DataAccess.Domain.Interfaces;
-using TicketManagement.DataAccess.Exstension;
+using TicketManagement.DataAccess.Extensions;
 
 namespace TicketManagement.DataAccess.Repositories.AdoRepositories
 {
@@ -50,16 +50,16 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         /// <inheritdoc/>
         public override IQueryable<T> GetAllAsQueryable()
         {
-            string tableName = new T().GetType().Name;
-            string storedProcedure = $"GetAll{tableName}";
+            var tableName = new T().GetType().Name;
+            var storedProcedure = $"GetAll{tableName}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
             using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection);
-            SqlDataAdapter adpt = new SqlDataAdapter(sqlCommand);
+            var adpt = new SqlDataAdapter(sqlCommand);
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
                 adpt.Fill(ds);
                 return ds.Tables[0].ToEnumerable<T>().AsQueryable();
             }
@@ -70,12 +70,12 @@ namespace TicketManagement.DataAccess.Repositories.AdoRepositories
         }
 
         /// <inheritdoc/>
-        public override async Task<T> GetByIDAsync(int byId)
+        public override async Task<T> GetByIdAsync(int byId)
         {
-            await base.GetByIDAsync(byId);
+            await base.GetByIdAsync(byId);
 
-            string tableName = new T().GetType().Name;
-            string storedProcedure = $"GetById{tableName}";
+            var tableName = new T().GetType().Name;
+            var storedProcedure = $"GetById{tableName}";
 
             using SqlConnection sqlConnection = new SqlConnection(DbConString);
             using SqlCommand sqlCommand = SqlCommandInstance(storedProcedure, sqlConnection, new[] { new SqlParameter("Id", byId) });

@@ -4,12 +4,24 @@ using System.Linq;
 
 namespace TicketManagement.WebMVC.ViewModels.BasketViewModels
 {
+    /// <summary>
+    /// Basket view model.
+    /// </summary>
     public class BasketViewModel
     {
-        public List<BasketItem> Items { get; init; } = new List<BasketItem>();
+        /// <summary>
+        /// Gets or sets BasketItem.
+        /// </summary>
+        public List<BasketItem> Items { get; init; } = new ();
 
+        /// <summary>
+        /// Gets or sets UserId.
+        /// </summary>
         public string UserId { get; set; }
 
+        /// <summary>
+        /// Gets or sets TotalPrice.
+        /// </summary>
         public decimal TotalPrice => Math.Round(Items.Sum(x => x.Price), 2);
     }
 }

@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Layout service tests.
     /// </summary>
     [TestFixture]
-    public class LayoutServiceTests : MockEntites
+    public class LayoutServiceTests : MockEntities
     {
         [Test]
         public async Task CreateAsync_WhenLayoutExist_ShouldReturnCreatedLayout()
@@ -111,7 +111,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            Action<Layout> updateLastAction = venues => Layouts.RemoveAt(layoutLast.Id - 1);
+            Action<Layout> updateLastAction = _ => Layouts.RemoveAt(layoutLast.Id - 1);
             updateLastAction += v => Layouts.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Layouts.UpdateAsync(It.IsAny<Layout>())).Callback(updateLastAction);
 
@@ -186,11 +186,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Layouts.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Layouts.GetByIDAsync(expectedId)).ReturnsAsync(Layouts.Last());
+            Mock.Setup(x => x.Layouts.GetByIdAsync(expectedId)).ReturnsAsync(Layouts.Last());
             var layoutService = new LayoutService(Mock.Object);
 
             // Act
-            var actual = await layoutService.GetByIDAsync(expectedId);
+            var actual = await layoutService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -203,7 +203,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIdAsync(0));
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var layoutService = new LayoutService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await layoutService.GetByIdAsync(-1));
         }
     }
 }

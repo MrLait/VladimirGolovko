@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels
 {
+    /// <summary>
+    /// Purchase history view model.
+    /// </summary>
     public class PurchaseHistoryViewModel
     {
-        public List<PurchaseHistoryItem> Items { get; init; } = new List<PurchaseHistoryItem>();
+        /// <summary>
+        /// Gets or sets purchase history items.
+        /// </summary>
+        public List<PurchaseHistoryItem> Items { get; init; } = new ();
 
+        /// <summary>
+        /// Gets or sets user id.
+        /// </summary>
         public string UserId { get; set; }
     }
 }

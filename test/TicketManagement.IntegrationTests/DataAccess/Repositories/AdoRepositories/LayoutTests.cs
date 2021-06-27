@@ -12,7 +12,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
     [TestFixture]
     internal class LayoutTests : TestDatabaseLoader
     {
-        private readonly List<Layout> _layouts = new List<Layout>();
+        private readonly List<Layout> _layouts = new ();
 
         [OneTimeSetUp]
         public async Task InitLayoutsAsync()
@@ -20,9 +20,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             var layoutRepository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
             var countAllLayouts = layoutRepository.GetAllAsQueryable().Last().Id;
 
-            for (int i = 1; i <= countAllLayouts; i++)
+            for (var i = 1; i <= countAllLayouts; i++)
             {
-                _layouts.Add(await layoutRepository.GetByIDAsync(i));
+                _layouts.Add(await layoutRepository.GetByIdAsync(i));
             }
         }
 
@@ -54,8 +54,8 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         {
             // Arrange
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
-            Layout layout = new Layout { Id = repository.GetAllAsQueryable().ToList().Count + 1, VenueId = 2, Description = "Created layout" };
-            List<Layout> expected = new List<Layout>(_layouts)
+            var layout = new Layout { Id = repository.GetAllAsQueryable().ToList().Count + 1, VenueId = 2, Description = "Created layout" };
+            var expected = new List<Layout>(_layouts)
             {
                 layout,
             };
@@ -90,7 +90,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
             await repository.DeleteAsync(lastLayout);
 
             var actual = repository.GetAllAsQueryable();
-            int countLayoutWithoutLast = allLayouts.ToList().Count - 1;
+            var countLayoutWithoutLast = allLayouts.ToList().Count - 1;
 
             // Assert
             actual.Should().BeEquivalentTo(allLayouts.Take(countLayoutWithoutLast));
@@ -100,7 +100,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = 0 };
+            var layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert
@@ -121,7 +121,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIncorrectConnectionStringLayout_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = 3 };
+            var layout = new Layout { Id = 3 };
             var repository = new AdoUsingParametersRepository<Layout>("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
 
             // Act & Assert
@@ -161,7 +161,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void UpdateAsync_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = 0 };
+            var layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert
@@ -176,10 +176,10 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
 
             // Act
             var lastLayout = repository.GetAllAsQueryable().Last();
-            Layout expectedLayout = new Layout { Id = lastLayout.Id, VenueId = lastLayout.VenueId, Description = lastLayout.Description };
+            var expectedLayout = new Layout { Id = lastLayout.Id, VenueId = lastLayout.VenueId, Description = lastLayout.Description };
 
-            int actualId = expectedLayout.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedLayout.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedLayout);
@@ -189,45 +189,44 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public async Task GetByIdAsync_WhenNonExistLayout_ShouldReturnNull()
         {
             // Arrange
-            Layout expected = null;
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act
             var lastLayout = repository.GetAllAsQueryable().Last();
-            int nonExistId = lastLayout.Id + 1;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastLayout.Id + 1;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Layout) null);
         }
 
         [Test]
         public void GetByIdAsync_WhenIdEqualZeroLayout_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = 0 };
+            var layout = new Layout { Id = 0 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(layout.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(layout.Id));
         }
 
         [Test]
         public void GetByIdAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = -1 };
+            var layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIDAsync(layout.Id));
+            Assert.ThrowsAsync<ArgumentException>(async () => await repository.GetByIdAsync(layout.Id));
         }
 
         [Test]
         public void UpdateAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = -1 };
+            var layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert
@@ -238,7 +237,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.AdoRepositor
         public void DeleteAsync_WhenIdLessThenZero_ShouldThrowArgumentException()
         {
             // Arrange
-            Layout layout = new Layout { Id = -1 };
+            var layout = new Layout { Id = -1 };
             var repository = new AdoUsingParametersRepository<Layout>(DefaultConnectionString);
 
             // Act & Assert

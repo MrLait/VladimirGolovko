@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class LayoutTests : TestDatabaseLoader
     {
-        private readonly List<Layout> _layouts = new List<Layout>();
+        private readonly List<Layout> _layouts = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -25,9 +25,9 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var repository = new EfRepository<Layout>(DbContext);
             var countAllLayouts = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last().Id;
 
-            for (int i = 1; i <= countAllLayouts; i++)
+            for (var i = 1; i <= countAllLayouts; i++)
             {
-                _layouts.Add(await repository.GetByIDAsync(i));
+                _layouts.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -49,7 +49,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         {
             // Arrange
             var repository = new EfRepository<Layout>(DbContext);
-            Layout layout = new Layout { VenueId = 2, Description = "Created layout" };
+            var layout = new Layout { VenueId = 2, Description = "Created layout" };
             var expected = new List<Layout>(_layouts)
             {
                 layout,
@@ -162,10 +162,10 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             // Act
             var lastLayout = repository.GetAllAsQueryable().OrderBy(x => x.Id).LastOrDefault();
-            Layout expectedLayout = new Layout { Id = lastLayout.Id, VenueId = lastLayout.VenueId, Description = lastLayout.Description };
+            var expectedLayout = new Layout { Id = lastLayout.Id, VenueId = lastLayout.VenueId, Description = lastLayout.Description };
 
-            int actualId = expectedLayout.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actualId = expectedLayout.Id;
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedLayout);
@@ -175,16 +175,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistLayout_ShouldReturnNullAsync()
         {
             // Arrange
-            Layout expected = null;
             var repository = new EfRepository<Layout>(DbContext);
 
             // Act
             var lastLayout = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-            int nonExistId = lastLayout.Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastLayout.Id + 10;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Layout) null);
         }
 
         [Test]

@@ -3,8 +3,14 @@ using TicketManagement.Dto;
 
 namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
+    /// <summary>
+    /// Index view model.
+    /// </summary>
     public class IndexViewModel
     {
-        public IEnumerable<EventDto> EventItems { get; set; }
+        /// <summary>
+        /// Gets or sets EventItems.
+        /// </summary>
+        public IEnumerable<EventDto> EventItems { get; init; }
     }
 }

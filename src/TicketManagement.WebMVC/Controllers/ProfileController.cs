@@ -3,248 +3,233 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Constants;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
 using TicketManagement.WebMVC.ViewModels.ProfileViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
+    /// <summary>
+    /// Profile controller.
+    /// </summary>
     [Authorize]
     public class ProfileController : Controller
     {
-        private readonly UserManager<ApplicationUser> _applicationUserManager;
+        private readonly IProfileClient _profileClient;
         private readonly IIdentityParser<ApplicationUser> _identityParser;
         private readonly IMapper _mapper;
 
-        public ProfileController(UserManager<ApplicationUser> applicationUser,
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProfileController"/> class.
+        /// </summary>
+        /// <param name="profileClient">Profile client.</param>
+        /// <param name="identityParser">Identity parser.</param>
+        /// <param name="mapper">Mapper.</param>
+        public ProfileController(IProfileClient profileClient,
             IIdentityParser<ApplicationUser> identityParser,
             IMapper mapper)
         {
-            _applicationUserManager = applicationUser;
+            _profileClient = profileClient;
             _identityParser = identityParser;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// View index.
+        /// </summary>
         public async Task<IActionResult> IndexAsync()
         {
             var userId = _identityParser.Parse(HttpContext.User).Id;
-            var user = await _applicationUserManager.FindByIdAsync(userId);
+            var user = await _profileClient.GetUserProfileAsync(userId);
             var vm = _mapper.Map<ApplicationUser, ProfileViewModel>(user);
 
             return View(vm);
         }
 
+        /// <summary>
+        /// Edit first name.
+        /// </summary>
+        [HttpPost]
         public async Task<IActionResult> EditFirstName(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            ProfileViewModel model = new ProfileViewModel { Id = user.Id, FirstName = user.FirstName };
+            var model = new ProfileViewModel { Id = user.Id, FirstName = user.FirstName };
             return View(model);
         }
 
+        /// <summary>
+        /// Edit first name.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditFirstName(ProfileViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
-                if (user != null)
-                {
-                    user.FirstName = model.FirstName;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                return View(model);
             }
 
-            return View(model);
-        }
-
-        public async Task<IActionResult> EditSurname(string id)
-        {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(model.Id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            ProfileViewModel model = new ProfileViewModel { Id = user.Id, Surname = user.Surname };
+            await _profileClient.EditFirstNameAsync(model.Id, model.FirstName);
+            return RedirectToAction(ProfileConst.Index);
+        }
+
+        /// <summary>
+        /// Edit surname.
+        /// </summary>
+        public async Task<IActionResult> EditSurname(string id)
+        {
+            var user = await _profileClient.GetUserProfileAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new ProfileViewModel { Id = user.Id, Surname = user.Surname };
             return View(model);
         }
 
+        /// <summary>
+        /// Edit surname.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditSurname(ProfileViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
-                if (user != null)
-                {
-                    user.Surname = model.Surname;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                return View(model);
             }
 
-            return View(model);
+            var user = await _profileClient.GetUserProfileAsync(model.Id);
+            if (user == null)
+            {
+                return View(model);
+            }
+
+            await _profileClient.EditSurnameAsync(user.Id, model.Surname);
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit email.
+        /// </summary>
         public async Task<IActionResult> EditEmail(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            ProfileViewModel model = new ProfileViewModel { Id = user.Id, Email = user.Email };
+            var model = new ProfileViewModel { Id = user.Id, Email = user.Email };
             return View(model);
         }
 
+        /// <summary>
+        /// Edit email.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditEmail(ProfileViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
-                if (user != null)
-                {
-                    user.Email = model.Email;
-
-                    var result = await _applicationUserManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                return View(model);
             }
 
-            return View(model);
+            var user = await _profileClient.GetUserProfileAsync(model.Id);
+            if (user == null)
+            {
+                return View(model);
+            }
+
+            await _profileClient.EditEmailAsync(model.Id, model.Email);
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit password.
+        /// </summary>
         public async Task<IActionResult> EditPassword(string id)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            ProfileChangePasswordViewModel model = new ProfileChangePasswordViewModel { Id = user.Id, Email = user.Email };
+            var model = new ProfileChangePasswordViewModel { Id = user.Id, Email = user.Email };
             return View(model);
         }
 
+        /// <summary>
+        /// Edit password.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> EditPassword(ProfileChangePasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                ApplicationUser user = await _applicationUserManager.FindByIdAsync(model.Id);
-                if (user != null)
-                {
-                    IdentityResult result =
-                        await _applicationUserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-
-                ModelState.AddModelError(string.Empty, "User is not found");
+                return View(model);
             }
 
-            return View(model);
+            var user = await _profileClient.GetUserProfileAsync(model.Id);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, LocalizerConst.UserIsNotFound);
+                return View(model);
+            }
+
+            await _profileClient.EditPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Edit time zone offset.
+        /// </summary>
         public async Task<IActionResult> EditTimeZoneOffset(string id, string timeZoneOffset, string returnUrl)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                user.TimeZoneOffset = timeZoneOffset;
-
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
+            await _profileClient.EditTimeZoneOffsetAsync(id, timeZoneOffset);
             return LocalRedirect(returnUrl);
         }
 
+        /// <summary>
+        /// Deposit.
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Deposite(string id, decimal balance)
+        public async Task<IActionResult> Deposit(string id, decimal balance, string returnUrl)
         {
-            ApplicationUser user = await _applicationUserManager.FindByIdAsync(id);
+            var user = await _profileClient.GetUserProfileAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                user.Balance += balance;
-
-                var result = await _applicationUserManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
-            return View();
+            await _profileClient.DepositAsync(id, balance);
+            return RedirectToAction(ProfileConst.Index);
         }
 
+        /// <summary>
+        /// Set language.
+        /// </summary>
         [AllowAnonymous]
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)

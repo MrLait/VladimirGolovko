@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using TicketManagement.Dto.Interfaces;
+﻿using TicketManagement.Dto.Interfaces;
 
 namespace TicketManagement.Dto
 {
     /// <summary>
     /// Area data transfer object class.
     /// </summary>
-    internal class AreaDto : IDtoEntity
+    public class AreaDto : IDtoEntity
     {
         /// <summary>
         /// Gets or sets id.

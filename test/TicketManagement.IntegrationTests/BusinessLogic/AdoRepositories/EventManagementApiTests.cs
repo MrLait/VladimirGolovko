@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
 {
@@ -373,7 +373,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
         {
             // Arrange
             var eventLast = _eventRepository.GetAllAsQueryable().Last();
-            var layoutIdChanged = eventLast.Id + 1;
+            var layoutIdChanged = eventLast.LayoutId + 2;
             var expected = new Event
             {
                 Id = eventLast.Id,
@@ -384,7 +384,11 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
                 Name = "Updated name",
                 ImageUrl = eventLast.ImageUrl,
             };
-            var eventService = new EventService(_adoDbContext);
+
+            var eventArea = new EventAreaService(_adoDbContext);
+            var eventSeat = new EventSeatService(_adoDbContext);
+            var eventService = new EventService(_adoDbContext, eventSeat, eventArea);
+
             var eventDto = new EventDto
             {
                 Id = expected.Id,

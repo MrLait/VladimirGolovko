@@ -38,6 +38,9 @@ namespace TicketManagement.Dto
         /// </summary>
         public decimal Price { get; set; }
 
+        /// <summary>
+        /// Gets or sets even seats.
+        /// </summary>
         public IEnumerable<EventSeatDto> EvenSeats { get; set; }
     }
 }

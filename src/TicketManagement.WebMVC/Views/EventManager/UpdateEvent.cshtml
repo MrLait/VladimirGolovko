@@ -1,56 +1,49 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.EventViewModels.EventViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 <form method="post" asp-controller="EventManager" asp-action="UpdateEvent">
     <div asp-validation-summary="ModelOnly"></div>
-    <input type="hidden" asp-for="Id" />
+    @if (Model != null)
+    {
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+    }
     <div>
         <label asp-for="Name"></label><br />
         <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
     </div>
 
     <div>
         <label asp-for="Description"></label><br />
         <input asp-for="Description" />
+        <span asp-validation-for="Description"></span>
     </div>
 
-    <input type="hidden" asp-for="LayoutId" />
+    <div>
+        <label asp-for="LayoutId"></label><br />
+        <input asp-for="LayoutId" />
+        <span asp-validation-for="LayoutId"></span>
+    </div>
 
     <div>
         <label asp-for="StartDateTime"></label><br />
         <input asp-for="StartDateTime" />
+        <span asp-validation-for="StartDateTime"></span>
     </div>
 
     <div>
         <label asp-for="EndDateTime"></label><br />
         <input asp-for="EndDateTime" />
+        <span asp-validation-for="EndDateTime"></span>
     </div>
     <div>
         <label asp-for="ImageUrl"></label><br />
         <input asp-for="ImageUrl" />
+        <span asp-validation-for="ImageUrl"></span>
     </div>
 
     <div>
-        <input type="submit" value="@Localizer["UpdateEvent"]" />
+        <input type="submit" value="@_localizer["UpdateEvent"]" />
     </div>
 </form>
-
-<form method="post" asp-controller="EventManager" asp-action="UpdateLayoutId">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="Name" />
-    <input type="hidden" asp-for="Description" />
-    <input type="hidden" asp-for="StartDateTime" />
-    <input type="hidden" asp-for="EndDateTime" />
-    <input type="hidden" asp-for="ImageUrl" />
-
-    <div>
-        <label asp-for="LayoutId"></label><br />
-        <input asp-for="LayoutId" />
-    </div>
-
-    <div>
-        <input type="submit" value="@Localizer["UpdateLayout"]" />
-    </div>
-</form>
-

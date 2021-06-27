@@ -1,6 +1,6 @@
 ﻿@model TicketManagement.WebMVC.ViewModels.PurchaseHistoryViewModels.PurchaseHistoryViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@inject IViewLocalizer _localizer
 
 @{ ViewData["Title"] = "Purchase history"; }
 @{ int rowNumber = 0; }
@@ -8,7 +8,7 @@
 @if (Model == null)
 {
 <div class="esh-event-items row">
-    @Localizer["PurchaseHistiryIsEmpty"]
+    @_localizer["PurchaseHistoryIsEmpty"]
 </div>
 }
 else
@@ -24,13 +24,13 @@ else
                     <td class="table-image">
                         <div> <img src="@item.PictureUrl" /> </div>
                     </td>
-                    <td class="table-event-name">@Localizer["EventName"] @item.EventName</td>
-                    <td class="table-event-area-description">@Localizer["EventAreaDescription"] @item.EventAreaDescription</td>
-                    <td class="table-Row">@Localizer["RowNumber"] @item.Row</td>
-                    <td class="table-number-of-seat">@Localizer["NumberOfSeat"] @item.NumberOfSeat</td>
-                    <td class="table-event-date-time-start">@Localizer["TheEventStartsAt"] @item.EventDateTimeStart</td>
-                    <td class="table-event-date-time-end">@Localizer["TheEventEndsAt"] @item.EventDateTimeEnd</td>
-                    <td class="table-price">@Localizer["Price"] @item.Price</td>
+                    <td class="table-event-name">@_localizer["EventName"] @item.EventName</td>
+                    <td class="table-event-area-description">@_localizer["EventAreaDescription"] @item.EventAreaDescription</td>
+                    <td class="table-Row">@_localizer["RowNumber"] @item.Row</td>
+                    <td class="table-number-of-seat">@_localizer["NumberOfSeat"] @item.NumberOfSeat</td>
+                    <td class="table-event-date-time-start">@_localizer["TheEventStartsAt"] @item.EventDateTimeStart</td>
+                    <td class="table-event-date-time-end">@_localizer["TheEventEndsAt"] @item.EventDateTimeEnd</td>
+                    <td class="table-price">@_localizer["Price"] @item.Price</td>
                 </tr>
             }
         </table>
@@ -38,7 +38,7 @@ else
     else
     {
 <div class="esh-event-items row">
-    @Localizer["PurchaseHistiryIsEmpty"]
+    @_localizer["PurchaseHistoryIsEmpty"]
 </div>
     }
 }

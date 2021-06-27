@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
 {
@@ -30,7 +29,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
         {
             // Arrange
             var eventAreaLast = _eventAreaRepository.GetAllAsQueryable().Last();
-            EventArea expected = new EventArea
+            var expected = new EventArea
             {
                 Id = eventAreaLast.Id,
                 EventId = eventAreaLast.EventId,
@@ -121,7 +120,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act
-            var actual = await eventAreaService.GetByIDAsync(expectedId);
+            var actual = await eventAreaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -134,7 +133,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new EventAreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -144,7 +143,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var eventAreaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await eventAreaService.GetByIdAsync(-1));
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿body {
-}
-.esh-catalog-button.is-disabled {
+﻿.esh-catalog-button.is-disabled {
     position: relative; /* Относительное позиционирование */
     opacity: 0.5;
     pointer-events: none;
@@ -15,6 +13,7 @@
         background: #3989c9; /* Синий цвет фона */
         color: #fff; /* Цвет текста */
         padding: 0.5em; /* Поля вокруг текста */
+        box-shadow: 2px 2px 5px #000000;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Параметры тени */
         pointer-events: auto; /* Подсказка */
         opacity: 0; /* Подсказка невидима */
@@ -23,5 +22,5 @@
 
 .esh-catalog-button.is-disabled:hover::after {
     opacity: 1; /* Показываем подсказку */
-    top: 0em; /* Положение подсказки */
+    top: 0; /* Положение подсказки */
 }

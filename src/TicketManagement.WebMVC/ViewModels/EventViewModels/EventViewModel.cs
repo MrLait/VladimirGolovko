@@ -4,8 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TicketManagement.WebMVC.ViewModels.EventViewModels
 {
+    /// <summary>
+    /// Event view model.
+    /// </summary>
     public class EventViewModel
     {
+        /// <summary>
+        /// Gets or sets id property.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
@@ -46,9 +52,13 @@ namespace TicketManagement.WebMVC.ViewModels.EventViewModels
         /// <summary>
         /// Gets or sets image url column in table.
         /// </summary>
+        [Required(ErrorMessage = "ImageUrlRequired")]
         [Display(Name = "ImageUrl")]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; init; }
 
-        public List<EventAreaItem> EventAreaItems { get; set; } = new List<EventAreaItem>();
+        /// <summary>
+        /// Event area items.
+        /// </summary>
+        public List<EventAreaItem> EventAreaItems { get; set; } = new ();
     }
 }

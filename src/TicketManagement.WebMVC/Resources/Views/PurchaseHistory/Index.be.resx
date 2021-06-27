@@ -129,7 +129,7 @@
   <data name="Price" xml:space="preserve">
     <value>Цана</value>
   </data>
-  <data name="PurchaseHistiryIsEmpty" xml:space="preserve">
+  <data name="PurchaseHistoryIsEmpty" xml:space="preserve">
     <value>Гісторыя пакупак пустая</value>
   </data>
   <data name="RowNumber" xml:space="preserve">

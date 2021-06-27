@@ -118,9 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PriceRequired" xml:space="preserve">
-    <value>Пакажыце цану для гэтай галіне</value>
+    <value>Пакажыце цану для гэтай галіне.</value>
   </data>
-  <data name="SeatsHaveAlreadyBeenPurchased" xml:space="preserve">
+  <data name="Unable to delete because seats have already been purchased for the event." xml:space="preserve">
     <value>Немагчыма выдаліць, таму што месцы для мерапрыемства ўжо набыты.</value>
+  </data>
+  <data name="The beginning of the event cannot be after the end of the event." xml:space="preserve">
+    <value>Пачатак падзеі не можа быць пасля яго завяршэння.</value>
+  </data>
+  <data name="The event can't be created in the past." xml:space="preserve">
+    <value>Падзея не можа быць створана ў мінулым.</value>
+  </data>
+  <data name="There is no such Layout." xml:space="preserve">
+    <value>Такі ідэнтыфікатар макета ня існуюе.</value>
+  </data>
+  <data name="Price can't equal zero." xml:space="preserve">
+    <value>Кошт не можа раўняцца нулю.</value>
+    <comment>Price can't equal zero.</comment>
+  </data>
+  <data name="Price can't negative." xml:space="preserve">
+    <value>Кошт не можа быць адмоўнай.</value>
+    <comment>Price can't negative.</comment>
+  </data>
+  <data name="There are no seats in the event." xml:space="preserve">
+    <value>У мерапрыемстве няма месцаў.</value>
+    <comment>There are no seats in the event</comment>
+  </data>
+  <data name="Event for the Venue with the dateTime already exist." xml:space="preserve">
+    <value>Падзея для аб'екта з указаннем часам ўжо існуе.</value>
+    <comment>Event for the Venue with the dateTime already exist</comment>
   </data>
 </root>

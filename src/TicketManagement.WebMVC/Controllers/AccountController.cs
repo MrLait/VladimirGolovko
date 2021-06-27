@@ -1,124 +1,167 @@
 ﻿using System;
-using System.Security.Claims;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using TicketManagement.WebMVC.Models;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
+using TicketManagement.WebMVC.Constants;
+using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.ViewModels.AccountViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
 {
-    [AllowAnonymous]
+    /// <summary>
+    /// Account controller.
+    /// </summary>
+    [Route("[controller]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserClient _applicationUserClient;
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<AccountController> _localizer;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IMapper mapper, IStringLocalizer<AccountController> localizer)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="applicationUserClient">Application user client.</param>
+        /// <param name="mapper">Mapper.</param>
+        /// <param name="localizer">Localizer.</param>
+        /// <param name="logger">Logger.</param>
+        public AccountController(
+            IUserClient applicationUserClient,
+            IMapper mapper,
+            IStringLocalizer<AccountController> localizer,
+            ILogger<AccountController> logger)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _mapper = mapper;
+            _applicationUserClient = applicationUserClient;
             _localizer = localizer;
+            _logger = logger;
         }
 
+        /// <summary>
+        /// Get register action.
+        /// </summary>
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        /// <summary>
+        /// Post register action.
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromForm] RegisterViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = _mapper.Map<RegisterViewModel, ApplicationUser>(model);
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, UserRoles.User);
-                    await _signInManager.SignInAsync(user, false);
-                    await _userManager.AddClaimAsync(user, CreateClaim("TimeZoneOffset", user.TimeZoneOffset));
-                    await _userManager.AddClaimAsync(user, CreateClaim("Language", user.Language));
-                    return RedirectToAction("Index", "EventHomePage");
-                }
+                return View(vm);
+            }
 
-                foreach (var error in result.Errors)
+            try
+            {
+                var user = _mapper.Map<RegisterViewModel, RegisterModel>(vm);
+                var token = await _applicationUserClient.Register(user);
+
+                HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, token, new CookieOptions
                 {
-                    switch (error.Code)
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                });
+
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
+            }
+            catch (HttpRequestException e)
+            {
+                var errorMessages = e.Message.Split(',');
+                foreach (var error in errorMessages)
+                {
+                    switch (error)
                     {
-                        case "PasswordTooShort":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordTooShort"]);
+                        case IdentityErrorConst.PasswordTooShort:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordTooShort]);
                             continue;
-                        case "PasswordRequiresNonAlphanumeric":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresNonAlphanumeric"]);
+                        case IdentityErrorConst.PasswordRequiresNonAlphanumeric:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresNonAlphanumeric]);
                             continue;
-                        case "PasswordRequiresDigit":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresDigit"]);
+                        case IdentityErrorConst.PasswordRequiresDigit:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresDigit]);
                             continue;
-                        case "PasswordRequiresUpper":
-                            ModelState.AddModelError(string.Empty, _localizer["PasswordRequiresUpper"]);
+                        case IdentityErrorConst.PasswordRequiresUpper:
+                            ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.PasswordRequiresUpper]);
                             continue;
                         default:
                             break;
                     }
-
-                    ModelState.AddModelError(string.Empty, error.Description);
                 }
+
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, e);
             }
 
-            return View(model);
+            return View(vm);
         }
 
-        [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        /// <summary>
+        /// Get login action.
+        /// </summary>
+        [HttpGet("login")]
+        public IActionResult Login()
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        /// <summary>
+        /// Post login action.
+        /// </summary>
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromForm] LoginViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-
-                    return RedirectToAction("Index", "EventHomePage");
-                }
-
-                ModelState.AddModelError(string.Empty, _localizer["Incorrect username and(or) password"]);
+                return View(vm);
             }
 
-            return View(model);
+            try
+            {
+                var user = _mapper.Map<LoginViewModel, LoginModel>(vm);
+                var token = await _applicationUserClient.Login(user);
+                HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                });
+
+                return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
+            }
+            catch (HttpRequestException e)
+            {
+                var result = JsonConvert.DeserializeObject<Microsoft.AspNetCore.Identity.SignInResult>(e.Message);
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError(string.Empty, _localizer[IdentityErrorConst.IncorrectUsernameAndOrPassword]);
+                }
+
+                _logger.LogError("{DateTime} {Error} ", DateTime.UtcNow, e);
+            }
+
+            return View(vm);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Post logout action.
+        /// </summary>
+        [HttpPost("logout")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "EventHomePage");
-        }
-
-        private static Claim CreateClaim(string type, string value)
-        {
-            return new Claim(type, value, ClaimValueTypes.String, "RemoteClaims");
+            HttpContext.Response.Cookies.Append(JwtAuthenticationConstants.SecretJwtKey, "");
+            return RedirectToAction(EventHomePageConst.Index, EventHomePageConst.ControllerName);
         }
     }
 }

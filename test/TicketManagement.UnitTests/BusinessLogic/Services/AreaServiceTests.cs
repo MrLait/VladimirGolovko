@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.UnitTests.BusinessLogic.Services
 {
@@ -15,7 +15,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
     /// Area service tests.
     /// </summary>
     [TestFixture]
-    public class AreaServiceTests : MockEntites
+    public class AreaServiceTests : MockEntities
     {
         [Test]
         public async Task CreateAsync_WhenAreaExist_ShouldReturnCreatedArea()
@@ -111,7 +111,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            Action<Area> updateLastAction = venues => Areas.RemoveAt(areaLast.Id - 1);
+            Action<Area> updateLastAction = _ => Areas.RemoveAt(areaLast.Id - 1);
             updateLastAction += v => Areas.Insert(v.Id - 1, v);
             Mock.Setup(x => x.Areas.UpdateAsync(It.IsAny<Area>())).Callback(updateLastAction);
 
@@ -186,11 +186,11 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             // Arrange
             var expected = Areas.Last();
             var expectedId = expected.Id - 1;
-            Mock.Setup(x => x.Areas.GetByIDAsync(expectedId)).ReturnsAsync(Areas.Last());
+            Mock.Setup(x => x.Areas.GetByIdAsync(expectedId)).ReturnsAsync(Areas.Last());
             var areaService = new AreaService(Mock.Object);
 
             // Act
-            var actual = await areaService.GetByIDAsync(expectedId);
+            var actual = await areaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -203,7 +203,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace TicketManagement.UnitTests.BusinessLogic.Services
             var areaService = new AreaService(Mock.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(-1));
         }
     }
 }

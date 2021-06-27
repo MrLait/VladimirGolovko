@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TicketManagement.Dto;
 
 namespace TicketManagement.WebMVC.ViewModels.EventAreaViewModels
 {
+    /// <summary>
+    /// Index view model.
+    /// </summary>
     public record IndexViewModel
     {
-        public IEnumerable<EventAreaDto> EvenAreatItems { get; init; }
+        /// <summary>
+        /// Gets or sets EventAreasItems.
+        /// </summary>
+        public IEnumerable<EventAreaDto> EventAreasItems { get; init; }
     }
 }

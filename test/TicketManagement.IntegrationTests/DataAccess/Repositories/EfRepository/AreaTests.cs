@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
@@ -14,7 +14,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
     [TestFixture]
     internal class AreaTests : TestDatabaseLoader
     {
-        private readonly List<Area> _areas = new List<Area>();
+        private readonly List<Area> _areas = new ();
 
         public EfDbContext DbContext { get; set; }
 
@@ -27,7 +27,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
 
             for (int i = 1; i <= countAllAreas; i++)
             {
-                _areas.Add(await repository.GetByIDAsync(i));
+                _areas.Add(await repository.GetByIdAsync(i));
             }
         }
 
@@ -165,7 +165,7 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
             var expectedArea = new Area { Id = lastArea.Id, LayoutId = lastArea.LayoutId, CoordX = lastArea.CoordX, CoordY = lastArea.CoordY, Description = lastArea.Description };
 
             int actualId = expectedArea.Id;
-            var actual = await repository.GetByIDAsync(actualId);
+            var actual = await repository.GetByIdAsync(actualId);
 
             // Assert
             actual.Should().BeEquivalentTo(expectedArea);
@@ -175,16 +175,15 @@ namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
         public async Task GetByIdAsync_WhenNonExistArea_ShouldReturnNullAsync()
         {
             // Arrange
-            Area expected = null;
             var repository = new EfRepository<Area>(DbContext);
 
             // Act
             var lastArea = repository.GetAllAsQueryable().OrderBy(x => x.Id).Last();
-            int nonExistId = lastArea.Id + 10;
-            var actual = await repository.GetByIDAsync(nonExistId);
+            var nonExistId = lastArea.Id + 10;
+            var actual = await repository.GetByIdAsync(nonExistId);
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo((Area) null);
         }
 
         [Test]

@@ -23,6 +23,9 @@ namespace TicketManagement.Dto
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets Events.
+        /// </summary>
         public IEnumerable<EventDto> Events { get; set; }
     }
 }

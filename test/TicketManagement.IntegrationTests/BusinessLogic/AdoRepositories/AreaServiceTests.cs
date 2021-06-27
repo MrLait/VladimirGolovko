@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using TicketManagement.BusinessLogic.Infrastructure;
-using TicketManagement.BusinessLogic.Services;
-using TicketManagement.DataAccess.Ado;
+using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.AdoRepositories;
 using TicketManagement.Dto;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
 namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
 {
@@ -187,7 +187,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var areaService = new AreaService(_adoDbContext);
 
             // Act
-            var actual = await areaService.GetByIDAsync(expectedId);
+            var actual = await areaService.GetByIdAsync(expectedId);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -200,7 +200,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(0));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(0));
         }
 
         [Test]
@@ -210,7 +210,7 @@ namespace TicketManagement.IntegrationTests.BusinessLogic.AdoRepositories
             var areaService = new AreaService(_adoDbContext);
 
             // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIDAsync(-1));
+            Assert.ThrowsAsync<ValidationException>(async () => await areaService.GetByIdAsync(-1));
         }
     }
 }
