@@ -21,20 +21,20 @@ namespace ClassicMvc.Services
 
         public void Create(ThirdPartyEvent thirdPartyEvent)
         {
+            _mutexObj.WaitOne();
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             thirdPartyEvent.Id = deserThirdPartyEvent.LastOrDefault()?.Id + 1 ?? 1;
             deserThirdPartyEvent.Add(thirdPartyEvent);
-            _mutexObj.WaitOne();
             _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
             _mutexObj.ReleaseMutex();
         }
 
         public void Delete(int id)
         {
+            _mutexObj.WaitOne();
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == id);
             deserThirdPartyEvent.RemoveAt(thirdPartyEventIndex);
-            _mutexObj.WaitOne();
             _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
             _mutexObj.ReleaseMutex();
         }
@@ -47,10 +47,10 @@ namespace ClassicMvc.Services
 
         public void Update(ThirdPartyEvent thirdPartyEvent)
         {
+            _mutexObj.WaitOne();
             var deserThirdPartyEvent = _jsonSerializer.DeserializeObjectsFromJson(_filePath).ToList();
             var thirdPartyEventIndex = deserThirdPartyEvent.FindIndex(x => x.Id == thirdPartyEvent.Id);
             deserThirdPartyEvent[thirdPartyEventIndex] = thirdPartyEvent;
-            _mutexObj.WaitOne();
             _jsonSerializer.SerializeObjectsToJson(deserThirdPartyEvent, _filePath);
             _mutexObj.ReleaseMutex();
         }
