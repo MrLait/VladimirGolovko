@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>EventFlow.Database</Name>
+    <Name>TicketManagement.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{c78c51f5-fb6b-491d-a4d0-3841f1e14dab}</ProjectGuid>
+    <ProjectGuid>{91562ff3-2261-427d-a111-07b12a8116aa}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>EventFlow.Database</RootNamespace>
-    <AssemblyName>EventFlow.Database</AssemblyName>
+    <RootNamespace>TicketManagement.Database</RootNamespace>
+    <AssemblyName>TicketManagement.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -22,7 +22,6 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <GenerateCreateScript>True</GenerateCreateScript>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -63,6 +62,8 @@
     <Folder Include="StoredProcedure" />
     <Folder Include="StoredProcedure\Event" />
     <Folder Include="Tables" />
+    <Folder Include="Tables\EventFlow" />
+    <Folder Include="Tables\Identity" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ForeignKeys\FK_Area_EventSeat.sql" />
@@ -76,15 +77,22 @@
     <Build Include="StoredProcedure\Event\GetAllEvent.sql" />
     <Build Include="StoredProcedure\Event\GetByIdEvent.sql" />
     <Build Include="StoredProcedure\Event\UpdateEvent.sql" />
-    <Build Include="Tables\Area.sql" />
-    <Build Include="Tables\Basket.sql" />
-    <Build Include="Tables\Event.sql" />
-    <Build Include="Tables\EventArea.sql" />
-    <Build Include="Tables\EventSeat.sql" />
-    <Build Include="Tables\Layout.sql" />
-    <Build Include="Tables\PurchaseHistory.sql" />
-    <Build Include="Tables\Seat.sql" />
-    <Build Include="Tables\Venue.sql" />
+    <Build Include="Tables\EventFlow\Area.sql" />
+    <Build Include="Tables\EventFlow\Basket.sql" />
+    <Build Include="Tables\EventFlow\Event.sql" />
+    <Build Include="Tables\EventFlow\EventArea.sql" />
+    <Build Include="Tables\EventFlow\EventSeat.sql" />
+    <Build Include="Tables\EventFlow\Layout.sql" />
+    <Build Include="Tables\EventFlow\PurchaseHistory.sql" />
+    <Build Include="Tables\EventFlow\Seat.sql" />
+    <Build Include="Tables\EventFlow\Venue.sql" />
+    <Build Include="Tables\Identity\AspNetRoleClaims.sql" />
+    <Build Include="Tables\Identity\AspNetRoles.sql" />
+    <Build Include="Tables\Identity\AspNetUserClaims.sql" />
+    <Build Include="Tables\Identity\AspNetUserLogins.sql" />
+    <Build Include="Tables\Identity\AspNetUserRoles.sql" />
+    <Build Include="Tables\Identity\AspNetUsers.sql" />
+    <Build Include="Tables\Identity\AspNetUserTokens.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeploy\Script.PostDeployment.sql" />

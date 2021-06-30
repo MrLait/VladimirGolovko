@@ -35,6 +35,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         /// <returns>Returns events.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var events = _eventService.GetAll();
