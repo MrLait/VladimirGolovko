@@ -16,6 +16,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
     [Route("[controller]")]
     [Authorize]
     [ApiController]
+    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
