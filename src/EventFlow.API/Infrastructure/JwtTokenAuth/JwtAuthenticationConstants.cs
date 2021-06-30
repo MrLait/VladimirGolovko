@@ -49,5 +49,10 @@
         /// JwtSecurityScheme.
         /// </summary>
         public const string JwtSecurityScheme = "eventFlowApi";
+
+        /// <summary>
+        /// Secret jwt key.
+        /// </summary>
+        public const string SecretJwtKey = "secret_jwt_key";
     }
 }

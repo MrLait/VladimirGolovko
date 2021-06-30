@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
+using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
@@ -12,6 +14,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Event manager controller api.
     /// </summary>
     [Route("[controller]")]
+    [Authorize(Roles = UserRoles.EventManager)]
     [ApiController]
     public class EventManagerController : ControllerBase
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,7 @@ namespace TicketManagement.WebMVC.Controllers
     /// <summary>
     /// Basket controller.
     /// </summary>
+    [Authorize]
     public class BasketController : Controller
     {
         private readonly IBasketClient _basketClient;

@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
+using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
@@ -12,6 +14,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Event controller api.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -71,6 +74,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = UserRoles.EventManager)]
         public async Task<IActionResult> UpdateEvent([FromBody] EventDto eventDto)
         {
             try
@@ -93,6 +97,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = UserRoles.EventManager)]
         public async Task<IActionResult> DeleteById(int id)
         {
             try

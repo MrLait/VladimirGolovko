@@ -9,6 +9,7 @@ using TicketManagement.WebMVC.Clients.EventFlowClient.EventManager;
 using TicketManagement.WebMVC.Clients.EventFlowClient.PurchaseHistory;
 using TicketManagement.WebMVC.Clients.IdentityClient.AccountUser;
 using TicketManagement.WebMVC.Clients.IdentityClient.Profile;
+using TicketManagement.WebMVC.Infrastructure.Delegates;
 
 namespace TicketManagement.WebMVC.Extensions
 {
@@ -28,29 +29,33 @@ namespace TicketManagement.WebMVC.Extensions
         {
             services.AddHttpClient<IEventClient, EventClient>((provider, client) =>
             {
-                var eventFlowApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.EventFlowApiAddress;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
             services.AddHttpClient<IEventAreaClient, EventAreaClient>((provider, client) =>
             {
-                var eventFlowApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.EventFlowApiAddress;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
             services.AddHttpClient<IBasketClient, BasketClient>((provider, client) =>
             {
-                var eventFlowApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.EventFlowApiAddress;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
             services.AddHttpClient<IPurchaseHistoryClient, PurchaseHistoryClient>((provider, client) =>
             {
-                var eventFlowApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.EventFlowApiAddress;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
             services.AddHttpClient<IEventManagerClient, EventManagerClient>((provider, client) =>
             {
-                var eventFlowApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.EventFlowApiAddress;
+                var eventFlowApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.EventFlowApiAddress;
                 client.BaseAddress = new Uri(eventFlowApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         }
 
         /// <summary>
@@ -62,14 +67,15 @@ namespace TicketManagement.WebMVC.Extensions
         {
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.IdentityApiAddress;
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
             services.AddHttpClient<IProfileClient, ProfileClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<EventFlowApiOptions>>()?.Value.IdentityApiAddress;
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
-            });
+            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         }
     }
 }

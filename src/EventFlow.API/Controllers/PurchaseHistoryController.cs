@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketManagement.DataAccess.Domain.Enums;
@@ -12,6 +13,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Purchase history api controller.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class PurchaseHistoryController : ControllerBase
     {

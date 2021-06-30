@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
     /// User profile api controller.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class ProfileController : ControllerBase
     {

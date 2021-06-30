@@ -3,7 +3,7 @@
     /// <summary>
     /// Api options.
     /// </summary>
-    public class EventFlowApiOptions
+    public class ApiOptions
     {
         /// <summary>
         /// Event flow api address name in appsettings.

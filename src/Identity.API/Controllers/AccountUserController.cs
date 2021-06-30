@@ -20,7 +20,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
-        private readonly JwtTokenService _jwtTokenService;
+        private readonly IJwtTokenService _jwtTokenService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountUserController"/> class.
@@ -31,7 +31,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// <param name="jwtTokenService">Jwt token service.</param>
         public AccountUserController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper, JwtTokenService jwtTokenService)
+            IMapper mapper, IJwtTokenService jwtTokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

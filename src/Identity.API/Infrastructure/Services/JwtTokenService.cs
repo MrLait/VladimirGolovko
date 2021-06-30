@@ -13,7 +13,7 @@ namespace TicketManagement.Services.Identity.API.Infrastructure.Services
     /// <summary>
     /// Jwt token service.
     /// </summary>
-    public class JwtTokenService
+    public class JwtTokenService : IJwtTokenService
     {
         private readonly JwtTokenSettings _settings;
 
