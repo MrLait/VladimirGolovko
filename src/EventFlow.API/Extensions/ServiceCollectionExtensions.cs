@@ -7,8 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TicketManagement.DataAccess.DbContexts;
+using TicketManagement.DataAccess.Interfaces;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Filters;
 using TicketManagement.Services.EventFlow.API.Infrastructure.JwtTokenAuth;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
+using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Swagger;
 
 namespace TicketManagement.Services.EventFlow.API.Extensions
@@ -68,6 +71,21 @@ namespace TicketManagement.Services.EventFlow.API.Extensions
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
+        }
+
+        /// <summary>
+        /// Add scopes.
+        /// </summary>
+        /// <param name="services">Services.</param>
+        /// <param name="configuration">Configuration.</param>
+        public static void AddScopesCollection(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IEventSeatService, EventSeatService>();
+            services.AddScoped<IEventAreaService, EventAreaService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
+            services.AddScoped<IDbContext, EfDbContext>();
         }
     }
 }

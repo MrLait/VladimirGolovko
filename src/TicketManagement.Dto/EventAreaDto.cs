@@ -41,6 +41,6 @@ namespace TicketManagement.Dto
         /// <summary>
         /// Gets or sets even seats.
         /// </summary>
-        public IEnumerable<EventSeatDto> EvenSeats { get; set; }
+        public IEnumerable<EventSeatDto> EventSeats { get; set; }
     }
 }

@@ -1,0 +1,7 @@
+.events {
+    display: grid;
+}
+
+.eventsItems{
+    padding: 10px;
+}

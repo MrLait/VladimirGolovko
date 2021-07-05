@@ -8,10 +8,10 @@
 </div>
 
 <div class="container">
-    @if (Model.EvenSeats.Any())
+    @if (Model.EventSeats.Any())
     {
         <div class="esh-event-seat-item col-md-4">
-            @foreach (var item in Model.EvenSeats)
+            @foreach (var item in Model.EventSeats)
             {
                 @if (item.State == States.Available)
                 {

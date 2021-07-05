@@ -71,6 +71,12 @@ namespace TicketManagement.Services.Identity.API
         /// <param name="env">Web host environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder =>
+                builder.WithOrigins("http://localhost:3000")
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
             app.UseRewriter(new RewriteOptions().AddRedirect("^$", SwaggerConstants.Replacement));
             app.UseSwagger();
             app.UseSwaggerUI(options =>

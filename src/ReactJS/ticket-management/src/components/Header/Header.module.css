@@ -1,0 +1,11 @@
+.header {
+    grid-area: h;
+}
+
+.homeBlock{
+    float: left;
+}
+
+.loginBlock{
+    float: right;
+}
