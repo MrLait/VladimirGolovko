@@ -1,17 +1,20 @@
 import eventsReducer from "./events-reducer";
-import {combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
 import eventAreasReducer from "./eventAreas-reducer";
 import authReducer from "./auth-reducer";
+import thunkMiddleware from "redux-thunk";
+import {reducer as formReducer} from 'redux-form';
 
 let reducers =  combineReducers(
     {
         eventsPage: eventsReducer,
         eventAreasPage: eventAreasReducer,
-        authPage: authReducer
+        authPage: authReducer,
+        form : formReducer
     }
 )
 
-let store = createStore(reducers);
+let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 window.store = store;
 

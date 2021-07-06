@@ -6,8 +6,9 @@ let Events = (props) => {
         <div>
             {
                 props.events.map(e => <div key={e.id}>
-                    <Link to={"/eventArea/id=" + e.id }>
                         <div> {e.description}</div>
+                    <Link to={"/eventArea/id=" + e.id }>
+                        <button> click </button>
                     </Link >
                 </div>)
             }

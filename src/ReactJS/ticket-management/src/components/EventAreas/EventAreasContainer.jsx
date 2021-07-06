@@ -4,6 +4,7 @@ import * as axios from "axios";
 import {connect} from "react-redux";
 import {setEventAreas} from "../../redux/eventAreas-reducer";
 import  {withRouter} from "react-router";
+import {compose} from "redux";
 
 class EventAreasContainer extends React.Component {
     componentDidMount() {
@@ -21,9 +22,7 @@ let mapStateToProps = (state) => ({
     eventAreas: state.eventAreasPage.eventAreas
 });
 
-let WithUrlDataEventAreasContainer = withRouter(EventAreasContainer);
-
-export default connect(mapStateToProps,
-    {
-        setEventAreas
-    }) (WithUrlDataEventAreasContainer);
+export default compose(
+    connect(mapStateToProps,{setEventAreas}),
+    withRouter,
+)(EventAreasContainer)
