@@ -12,5 +12,14 @@
   "PasswordRequiresDigit": "Passwords must have at least one digit ('0'-'9')",
   "PasswordRequiresNonAlphanumeric" : "Passwords must have at least one non alphanumeric character",
   "PasswordRequiresUpper" : "Passwords must have at least one uppercase ('A'-'Z')",
-  "PasswordTooShort" : "Passwords must be at least 6 characters"
+  "PasswordTooShort" : "Passwords must be at least 6 characters",
+  "AvailableOfSeats": "Available seats to buy",
+  "ChooseTickets": "Choose tickets",
+  "Description": "Description",
+  "EventEndsAt": "Event ends at",
+  "EventName": "Event name",
+  "EventStartsAt": "The event starts at",
+  "PricesStartFrom": "Ticket prices start with",
+  "PricesTo": "Ticket prices to",
+  "Picture" : "Picture"
 }

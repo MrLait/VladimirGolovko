@@ -30,5 +30,14 @@
   "Logout": "Выйти",
   "Profile": "Профиль",
   "PurchaseHistory": "История покупок",
-  "Register": "Зарегистрироваться"
+  "Register": "Зарегистрироваться",
+  "AvailableOfSeats": "Количество  доступных мест",
+  "ChooseTickets": "Выбрать билеты",
+  "Description": "Описание",
+  "EventEndsAt": "Время завершения",
+  "EventName": "Название",
+  "EventStartsAt": "Начало события",
+  "PricesStartFrom": "Цены от",
+  "PricesTo": "Цены до",
+  "Picture" : "Картинка"
 }

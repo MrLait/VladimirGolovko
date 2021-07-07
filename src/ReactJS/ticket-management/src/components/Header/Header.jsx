@@ -11,28 +11,28 @@ const Header = (props) => {
     }
     return (
         <header className={s.header}>
-            <div className={s.homeBlock}>
+            <span className={s.homeBlock}>
                 <NavLink to={'/home'}>{t('Home')}</NavLink>
-            </div>
-            <div>
+            </span>
+            <span className={s.select}>
                 <select name={'language'} onChange={onChange}>
                     <option value='en'>English</option>
                     <option value='ru'>Русский</option>
                     <option value='be'>Белорусский</option>
                 </select>
-            </div>
-            <div className={s.loginBlock}>
+            </span>
+            <span className={s.authBlock}>
                 {
                     props.isAuth ?
-                        <div>
+                        <span>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
                                 <button onClick={props.logout}>
                                     {t('Logout')}
                                 </button>
                             </span>
-                        </div>
-                        : <div>
+                        </span>
+                        : <span>
                         <span className={s.span}>
                             <NavLink to={'/register'}>
                                 {t('Register')}
@@ -43,9 +43,9 @@ const Header = (props) => {
                                 {t('Login')}
                             </NavLink>
                         </span>
-                        </div>
+                        </span>
                 }
-            </div>
+            </span>
         </header>
     );
 }

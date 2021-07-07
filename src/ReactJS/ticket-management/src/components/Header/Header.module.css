@@ -5,8 +5,11 @@
 .homeBlock{
     float: left;
 }
+.select{
+    float: right;
+}
 
-.loginBlock{
+.authBlock{
     float: right;
 }
 

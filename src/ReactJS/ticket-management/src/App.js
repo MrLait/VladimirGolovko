@@ -8,15 +8,15 @@ import Register from "./components/Register/Register";
 
 const App = () => {
     return (
-            <div className='app-wrapper'>
-                    <HeaderContainer />
-                <div className='app-wrapper-content'>
-                    <Route path='/home' render={() => <EventsContainer/>}/>
-                    <Route path='/eventArea/:eventId' render={() => <EventAreasContainer/>}/>
-                    <Route path='/register' render={() => <Register/>}/>
-                    <Route path='/login' render={() => <Login/>}/>
-                </div>
+        <div className='app-wrapper'>
+            <header className= 'header'><HeaderContainer/></header>
+            <div className='content'>
+                <Route path='/register' render={() => <Register/>}/>
+                <Route path='/login' render={() => <Login/>}/>
+                <Route path='/home' render={() => <EventsContainer/>}/>
+                <Route path='/eventArea/:eventId' render={() => <EventAreasContainer/>}/>
             </div>
+        </div>
     );
 }
 

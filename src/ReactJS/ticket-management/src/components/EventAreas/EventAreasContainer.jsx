@@ -3,7 +3,7 @@ import EventAreas from "./EventAreas";
 import * as axios from "axios";
 import {connect} from "react-redux";
 import {setEventAreas} from "../../redux/eventAreas-reducer";
-import  {withRouter} from "react-router";
+import {Redirect, withRouter} from "react-router";
 import {compose} from "redux";
 
 class EventAreasContainer extends React.Component {
@@ -15,11 +15,15 @@ class EventAreasContainer extends React.Component {
         })
     }
     render () {
-        return <EventAreas {...this.props} eventAreas={this.props.eventAreas}/>
+        return <>
+            {this.props.isAuth ? <EventAreas {...this.props} eventAreas={this.props.eventAreas}/>
+            : <Redirect to={'/home'} />}
+            </>
     }
 }
 let mapStateToProps = (state) => ({
-    eventAreas: state.eventAreasPage.eventAreas
+    eventAreas: state.eventAreasPage.eventAreas,
+    isAuth:state.authPage.isAuth
 });
 
 export default compose(

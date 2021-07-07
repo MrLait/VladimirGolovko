@@ -16,8 +16,7 @@ class EventsContainer extends React.Component {
     render() {
         return <>
             {this.props.isFetching ? <Preloader /> : null}
-            <Events events={this.props.events}
-            />
+            <Events {...this.props}/>
         </>
     }
 }
@@ -25,7 +24,8 @@ class EventsContainer extends React.Component {
 let mapStateToProps = (state) => {
     return {
         events: state.eventsPage.events,
-        isFetching: state.eventsPage.isFetching
+        isFetching: state.eventsPage.isFetching,
+        isAuth: state.authPage.isAuth
     }
 }
 

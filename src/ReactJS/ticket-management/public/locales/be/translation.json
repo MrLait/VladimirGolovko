@@ -66,5 +66,14 @@
   "The beginning of the event cannot be after the end of the event" : "Начало событие не может быть посзе завершения события",
   "The event can't be created in the past" : "Падзея не можа быць створана ў мінулым",
   "There are no seats in the event" : "У мерапрыемстве няма месцаў",
-  "There is no such layout" : "Такі ідэнтыфікатар макета ня існуюе"
+  "There is no such layout" : "Такі ідэнтыфікатар макета ня існуюе",
+  "AvailableOfSeats": "Колькасць даступных месцаў",
+  "ChooseTickets": "Выбраць квіткі",
+  "Description": "Апісанне",
+  "EventEndsAt": "Час завяршэння",
+  "EventName": "Назва",
+  "EventStartsAt": "Пачатак падзеі",
+  "PricesStartFrom": "Цэны ад",
+  "PricesTo": "Цэны да",
+  "Picture" : "Карцінка"
 }
