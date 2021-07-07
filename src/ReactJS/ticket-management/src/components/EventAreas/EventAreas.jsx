@@ -1,24 +1,26 @@
 import React from "react";
 import Preloader from "../../common/Preloaders/Preloader";
+import style from "./EventsAreas.module.css"
 
 let EventAreas = (props) => {
-    if (!props.eventAreas){
+    if (!props.eventAreas) {
         return <Preloader/>
     }
     return (
-        <div>
-            {
-            props.eventAreas.map( e => <div key={e.id}>
-                <div>{e.description}</div>
-                <div>
-                    {
-                        e.eventSeats.map(s => <div key={s.id}>
-                        <div>{s.id}</div>
-                        </div>)
-                    }
-                </div>
-                </div>)
-            }
+        <div className={style.outer}>
+            {props.eventAreas.map(
+                e =>
+                    <div key={e.id}>
+                        <div>
+                            {e.description}
+                        </div>
+                        <span>{e.eventSeats.map(
+                            s =>
+                                <button className={style.seat} data-title={`Price ${e.price}`} key={s.id}>{s.id}</button>
+                        )}
+                        </span>
+                    </div>
+            )}
         </div>
     )
 }
