@@ -12,7 +12,7 @@ const Header = (props) => {
     return (
         <header className={s.header}>
             <div className={s.homeBlock}>
-                <NavLink to={'/home'}>Home</NavLink>
+                <NavLink to={'/home'}>{t('Home')}</NavLink>
             </div>
             <div>
                 <select name={'language'} onChange={onChange}>
@@ -27,16 +27,23 @@ const Header = (props) => {
                         <div>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
-                                <button>
-                                    {t('Login')}
-                            </button>
+                                <button onClick={props.logout}>
+                                    {t('Logout')}
+                                </button>
+                            </span>
+                        </div>
+                        : <div>
+                        <span className={s.span}>
+                            <NavLink to={'/register'}>
+                                {t('Register')}
+                            </NavLink>
+                        </span>
+                        <span className={s.span}>
+                            <NavLink to={'/login'}>
+                                {t('Login')}
+                            </NavLink>
                         </span>
                         </div>
-                        : <span className={s.span}>
-                    <NavLink to={'/login'}>
-                    {t('Logout')}
-                    </NavLink>
-                    </span>
                 }
             </div>
         </header>

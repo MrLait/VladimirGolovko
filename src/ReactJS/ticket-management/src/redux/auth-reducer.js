@@ -104,7 +104,47 @@ export const login = (email, password, rememberMe) => (dispatch) => {
             {
                 dispatch(stopSubmit('login', {_error: "Incorrect username and(or) password"}));
             }
+        console.log(error);
+    });
+}
 
+export const register = (userName, firstName, surname, email, password, passwordConfirm) => (dispatch) => {
+    authAPI.register(userName, firstName, surname, email, password, passwordConfirm)
+        .then(response => {
+            debugger;
+            if (response.data) {
+                let token = response.data;
+                dispatch(setToken(token));
+                setTokenToLocalStorage(token);
+                setUserLocalStorage(token);
+                const localUser = localStorage.getItem('user');
+                const parsedUser = JSON.parse(localUser);
+                let user = userCredential(parsedUser);
+                dispatch(setAuthData(user.id, user.name, user.email, user.role, true));
+            } else {
+                debugger;
+                dispatch(stopSubmit('login', {_error: response.data}));
+            }
+        }).catch(error =>  {
+            debugger;
+        if(error.response.data)
+        {
+            if (error.response.data.includes('PasswordTooShort')) {
+                dispatch(stopSubmit('register', {password: "PasswordTooShort"}));
+            }
+            if (error.response.data.includes('PasswordRequiresNonAlphanumeric')) {
+                dispatch(stopSubmit('register', {password: "PasswordRequiresNonAlphanumeric"}));
+            }
+            if (error.response.data.includes('PasswordRequiresDigit')) {
+                dispatch(stopSubmit('register', {password: "PasswordRequiresDigit"}));
+            }
+            if (error.response.data.includes('PasswordRequiresUpper')) {
+                dispatch(stopSubmit('register', {password: "PasswordRequiresUpper"}));
+            }
+            if (error.response.data.includes('PasswordConfirm')) {
+                dispatch(stopSubmit('register', {passwordConfirm: "PasswordConfirm"}));
+            }
+        }
         console.log(error);
     });
 }
@@ -112,6 +152,7 @@ export const login = (email, password, rememberMe) => (dispatch) => {
 export const logout = () => (dispatch) => {
     dispatch(setToken(null, null, null, null));
     dispatch(setAuthData(null));
-    localStorage.clear();
+    localStorage.setItem('token', null);
+    localStorage.setItem('user', null);
 }
 export default authReducer;

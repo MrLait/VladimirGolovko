@@ -14,28 +14,28 @@ const LoginForm = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={"Email"} name={"email"}
+                <Field placeholder={t("Email")} name={"email"}
                        validate={[required]}
                        component={Input}/>
             </div>
             <div>
-                <Field placeholder={"Password"} name={"password"}
+                <Field placeholder={t("Password")} name={"password"}
                        validate={[required]}
                        component={Input} type={'password'}/>
             </div>
             <div>
-                <Field component={"input"} name={"rememberMe"} type={"checkbox"}/> remember me
+                <Field component={"input"} name={"rememberMe"} type={"checkbox"}/> {t("RememberMe")}
             </div>
             {props.error && <div className={style.formSummaryError}>{t(props.error)}</div>}
             <div>
-                <button>Login</button>
+                <button>{t('Login')}</button>
             </div>
 
             <p>
-                eventManager: <b>eventManager@gmail.com</b> Password: <b>_Aa123456</b>
+                eventManager: <b>eventManager@gmail.com</b> {t("Password")}: <b>_Aa123456</b>
             </p>
             <p>
-                user: <b>firstUser@gmail.com</b> Password: <b>_Aa123456</b>
+                user: <b>firstUser@gmail.com</b> {t("Password")}: <b>_Aa123456</b>
             </p>
         </form>
     )
@@ -48,6 +48,7 @@ const LoginReduxForm = reduxForm(
 )(LoginForm)
 
 const Login = (props) => {
+    const {t} = useTranslation();
     const onSubmit = (formData) => {
         console.log(formData);
         props.login(formData.email, formData.password, formData.rememberMe);
@@ -56,7 +57,7 @@ const Login = (props) => {
         return <Redirect to={'home'}/>
     }
     return <div>
-        <h1>Login</h1>
+        <h1>{t('Login')}</h1>
         <LoginReduxForm onSubmit={onSubmit}/>
     </div>
 }

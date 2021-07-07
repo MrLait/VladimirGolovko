@@ -4,6 +4,7 @@ import EventsContainer from "./components/Events/EventsContainer";
 import EventAreasContainer from "./components/EventAreas/EventAreasContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 
 const App = () => {
     return (
@@ -12,6 +13,7 @@ const App = () => {
                 <div className='app-wrapper-content'>
                     <Route path='/home' render={() => <EventsContainer/>}/>
                     <Route path='/eventArea/:eventId' render={() => <EventAreasContainer/>}/>
+                    <Route path='/register' render={() => <Register/>}/>
                     <Route path='/login' render={() => <Login/>}/>
                 </div>
             </div>

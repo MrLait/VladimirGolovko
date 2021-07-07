@@ -1,13 +1,15 @@
 import React from "react";
 import styles from './FormsControls.module.css'
+import {useTranslation} from "react-i18next";
 
 const FormControl = ({input, meta, child, ...props}) =>
 {
+    const {t} = useTranslation();
     const hasError =meta.touched && meta.error;
     return(
         <div className={styles.formControl + " " + (hasError ? styles.error : "") }>
             {props.children}
-            {hasError && <span>{meta.error}</span>}
+            {hasError && <span> {t(meta.error)}</span>}
         </div>
     )
 }
