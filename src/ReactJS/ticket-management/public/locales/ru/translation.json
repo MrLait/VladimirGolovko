@@ -1,0 +1,32 @@
+{
+  "title": "Интернационализация с i18next",
+  "description": {
+    "part1": "Чтобы начать работу, отредактируйте и сохраните файл <1>src/App.js</1>.",
+    "part2": "С помощью кнопок переключайте язык между английским и русским."
+  },
+  "Incorrect username and(or) password": "Неправильный логин и (или) пароль",
+  "PasswordRequiresDigit": "Пароль должен состоять как минимум из одной цифры (0 - 9)",
+  "PasswordRequiresNonAlphanumeric" : "Пароль должен содержать хотя бы один не буквенно-цифровой символ",
+  "PasswordRequiresUpper" : "Пароль должен содержать хотя бы одну заглавную букву (A - Z)",
+  "PasswordTooShort" : "Пароль должен состоять не менее чем из 6 символов",
+  "AreaDescription": "Описание места",
+  "Buy" : "Купить",
+  "EventName": "Название события",
+  "GoToPurchase": "Перейти к покупке",
+  "GoToPurchaseHistory": "Перейти к истории покупок",
+  "NumberOfSeat": "Номер места",
+  "Price": "Цена",
+  "RowNumber": "Ряд",
+  "TheBasketIsEmpty": "Корзина пуста",
+  "TheEventEndsAt": "Событие заканчивается в",
+  "TheEventStartsAt": "Событие начинается в",
+  "TotalPrice": "Общая сумма",
+  "Basket": "Корзина",
+  "EventManagerArea": "Зона менеджер по событиям",
+  "Home": "Домой",
+  "Login":"Войти",
+  "Logout": "Выйти",
+  "Profile": "Профиль",
+  "PurchaseHistory": "История покупок",
+  "Register": "Зарегистрироваться"
+}

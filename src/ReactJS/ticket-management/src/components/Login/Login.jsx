@@ -6,8 +6,11 @@ import {Redirect} from "react-router";
 import {required} from "../Utils/validators";
 import {Input} from "../../common/FormsControls/FormsControls";
 import style from "./../../common/FormsControls/FormsControls.module.css"
+import {useTranslation} from "react-i18next";
+
 
 const LoginForm = (props) => {
+    const {t} = useTranslation();
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
@@ -23,24 +26,26 @@ const LoginForm = (props) => {
             <div>
                 <Field component={"input"} name={"rememberMe"} type={"checkbox"}/> remember me
             </div>
-            {props.error && <div className={style.formSummaryError}>
-                {props.error}
-            </div>}
+            {props.error && <div className={style.formSummaryError}>{t(props.error)}</div>}
             <div>
                 <button>Login</button>
             </div>
 
             <p>
-                eventManager:   <b>eventManager@gmail.com</b>   Password: <b>_Aa123456</b>
+                eventManager: <b>eventManager@gmail.com</b> Password: <b>_Aa123456</b>
             </p>
             <p>
-                user:           <b>firstUser@gmail.com</b>      Password: <b>_Aa123456</b>
+                user: <b>firstUser@gmail.com</b> Password: <b>_Aa123456</b>
             </p>
         </form>
     )
 }
 
-const LoginReduxForm = reduxForm({form: 'login'})(LoginForm)
+const LoginReduxForm = reduxForm(
+    {
+        form: 'login'
+    }
+)(LoginForm)
 
 const Login = (props) => {
     const onSubmit = (formData) => {
@@ -55,8 +60,14 @@ const Login = (props) => {
         <LoginReduxForm onSubmit={onSubmit}/>
     </div>
 }
-const mapStateToProps = (state) => ({
-    isAuth: state.authPage.isAuth
-});
+const mapStateToProps = (state) => (
+    {
+        isAuth: state.authPage.isAuth
+    }
+);
 
-export default connect(mapStateToProps,{login})(Login);
+export default connect(mapStateToProps,
+    {
+        login
+    }
+)(Login);
