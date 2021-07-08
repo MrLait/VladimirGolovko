@@ -3,7 +3,7 @@
     /// <summary>
     /// User api Options.
     /// </summary>
-    public class IdentityApiOptions
+    public class ApiOptions
     {
         /// <summary>
         /// Identity api address name in appsettings.

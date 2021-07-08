@@ -16,7 +16,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Event area controller api.
     /// </summary>
     [Route("[controller]")]
-    [Authorize]
+    ////[Authorize]
     [ApiController]
     public class EventAreaController : ControllerBase
     {
@@ -35,13 +35,14 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         }
 
         /// <summary>
-        /// Get all event are by event id.
+        /// Get all eventArea are by event id.
         /// </summary>
         /// <param name="id">Event id.</param>
         /// <returns>Returns event areas dto or <see cref="ValidationException"/>.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAllByEventId(int id)
         {
             try
@@ -50,7 +51,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
                 foreach (var item in eventAreaDtoList)
                 {
                     var eventSeatDto = _eventSeatService.GetByEventAreaId(item);
-                    item.EvenSeats = eventSeatDto;
+                    item.EventSeats = eventSeatDto;
                 }
 
                 return Ok(eventAreaDtoList);

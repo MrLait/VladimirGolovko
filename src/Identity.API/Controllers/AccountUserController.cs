@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Services.Identity.API.Extensions;
 using TicketManagement.Services.Identity.API.Infrastructure.Services;
+using TicketManagement.Services.Identity.API.Infrastructure.Validate;
 using TicketManagement.Services.Identity.API.Models;
 using TicketManagement.Services.Identity.Domain.Models;
 
@@ -57,6 +59,14 @@ namespace TicketManagement.Services.Identity.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                foreach (var item in ModelState)
+                {
+                    if (item.Key == ValidateMessages.PasswordConfirm)
+                    {
+                        return BadRequest(ValidateMessages.PasswordConfirm);
+                    }
+                }
+
                 return Forbid();
             }
 
