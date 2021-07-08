@@ -8,18 +8,19 @@ let EventAreas = (props) => {
     }
     return (
         <div className={style.outer}>
-            {props.eventAreas.map(
-                e =>
-                    <div key={e.id}>
-                        <div>
-                            {e.description}
-                        </div>
-                        <span>{e.eventSeats.map(
-                            s =>
-                                <button className={style.seat} data-title={`Price ${e.price}`} key={s.id}>{s.id}</button>
-                        )}
-                        </span>
+            {props.eventAreas.map(e =>
+                <div key={e.id}>
+                    <div>
+                        {e.description}
                     </div>
+                    <span>
+                        {e.eventSeats.map(s =>
+                            <button className={style.seat} data-title={`Price ${e.price}`} key={s.id}>
+                                {s.id}
+                            </button>
+                            )}
+                    </span>
+                </div>
             )}
         </div>
     )
