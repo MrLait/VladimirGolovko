@@ -2,6 +2,7 @@ import {authAPI} from "../API/api";
 import jwtDecode from "jwt-decode";
 import React from "react";
 import {stopSubmit} from "redux-form";
+import {userClaim} from "../components/Constants/userConst";
 
 const SET_USER_DATA = 'SET_USER_DATA';
 const IS_TOKEN_VALID = 'IS_TOKEN_VALID';
@@ -57,10 +58,10 @@ const setTokenToLocalStorage = (token) => {
 }
 
 let userCredential = (parsedUser) => ({
-    id: parsedUser["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
-    name: parsedUser["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
-    email: parsedUser["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
-    role: parsedUser["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+    id: parsedUser[userClaim.id],
+    name: parsedUser[userClaim.name],
+    email: parsedUser[userClaim.email],
+    role: parsedUser[userClaim.role],
 });
 
 export const initAuthDataFromLocalStorage = (token) => (dispatch) => {

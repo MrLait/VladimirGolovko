@@ -1,17 +1,13 @@
 import React from "react";
 import {connect} from "react-redux";
-import {setEvents, toggleIsFetching} from "../../redux/events-reducer";
-import * as axios from "axios";
+import {getEvents, setEvents, toggleIsFetching} from "../../redux/events-reducer";
 import Events from "./Events";
 import Preloader from "../../common/Preloaders/Preloader";
 
 class EventsContainer extends React.Component {
     componentDidMount() {
         this.props.toggleIsFetching(true);
-        axios.get("https://localhost:5003/Event").then(response => {
-            this.props.toggleIsFetching(false);
-            this.props.setEvents(response.data);
-        })
+        this.props.getEvents();
     }
     render() {
         return <>
@@ -33,5 +29,6 @@ export default connect(
     mapStateToProps,
     {
         setEvents: setEvents,
-        toggleIsFetching: toggleIsFetching
+        toggleIsFetching: toggleIsFetching,
+        getEvents: getEvents
         }) (EventsContainer);

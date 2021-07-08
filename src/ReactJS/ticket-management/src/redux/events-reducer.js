@@ -1,3 +1,5 @@
+import {eventAPI} from "../API/api";
+
 const SET_EVENTS = 'SET_EVENTS';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
@@ -21,5 +23,13 @@ const eventsReducer = (state = initialState, action) => {
 
 export const setEvents = (events) => ({type: SET_EVENTS, events})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
+
+export const getEvents = () => (dispatch) => {
+    eventAPI.getEvents()
+        .then(response => {
+           dispatch(toggleIsFetching(false));
+            dispatch(setEvents(response.data));
+        })
+    }
 
 export default eventsReducer;
