@@ -25,6 +25,11 @@ const Header = (props) => {
                 {
                     props.isAuth ?
                         <span>
+                        <span className={s.span}>
+                            <NavLink to={'/basket'}>
+                                {t('basket')}
+                            </NavLink>
+                        </span>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
                                 <button onClick={props.logout}>

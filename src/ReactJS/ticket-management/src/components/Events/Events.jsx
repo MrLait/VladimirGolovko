@@ -6,6 +6,7 @@ import basePath from "./../../assets/Pics/FootballPicOne.PNG";
 
 let Events = (props) => {
     const {t} = useTranslation();
+    debugger;
     return (
         <table>
             <tr>

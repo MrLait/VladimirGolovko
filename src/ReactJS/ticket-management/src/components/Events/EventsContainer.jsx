@@ -28,7 +28,6 @@ let mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     {
-        setEvents: setEvents,
         toggleIsFetching: toggleIsFetching,
         getEvents: getEvents
         }) (EventsContainer);

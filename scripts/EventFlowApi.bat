@@ -1,3 +1,3 @@
 cd ../src/EventFlow.API
 dotnet build
-dotnet run
+dotnet run --launch-profile "EventFlow.API.RunWithScript"

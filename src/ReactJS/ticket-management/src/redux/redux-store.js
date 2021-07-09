@@ -4,12 +4,14 @@ import eventAreasReducer from "./eventAreas-reducer";
 import authReducer from "./auth-reducer";
 import thunkMiddleware from "redux-thunk";
 import {reducer as formReducer} from 'redux-form';
+import basketReducer from "./basket-reducer";
 
 let reducers =  combineReducers(
     {
         eventsPage: eventsReducer,
         eventAreasPage: eventAreasReducer,
         authPage: authReducer,
+        basketPage: basketReducer,
         form : formReducer
     }
 )

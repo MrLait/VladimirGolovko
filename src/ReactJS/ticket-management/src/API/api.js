@@ -2,14 +2,9 @@ import * as axios from "axios";
 const identityBaseURL = 'https://localhost:5004/';
 const eventBaseURL = 'https://localhost:5003/';
 
-const accountInstance = axios.create({
+const identityInstance = axios.create({
     baseURL: identityBaseURL
 });
-
-const basketInstance = axios.create({
-    baseURL: eventBaseURL
-});
-
 const eventInstance = axios.create({
     baseURL: eventBaseURL
 });
@@ -19,13 +14,13 @@ const headerWithAuthStr = {headers: {Authorization: AuthStr}};
 
 export const authAPI = {
     validateToken(token = "") {
-        return accountInstance.get('AccountUser?token=' + token)
+        return identityInstance.get('AccountUser?token=' + token)
     },
     login(email, password, rememberMe = false) {
-        return accountInstance.post('AccountUser/login', {email, password, rememberMe});
+        return identityInstance.post('AccountUser/login', {email, password, rememberMe});
     },
     register(userName, firstName, surname, email, password, passwordConfirm, language = "asd", timeZoneOffset = "ads") {
-        return accountInstance.post('AccountUser/', {
+        return identityInstance.post('AccountUser/', {
             userName,
             firstName,
             surname,
@@ -43,18 +38,32 @@ export const eventAPI = {
         return eventInstance.get('Event')
     },
 }
+export const profileAPI = {
+    getBalance(id) {
+        return identityInstance.get(`/Profile/getBalance?userId=${id}`, headerWithAuthStr)
+    },
+    updateBalance(userId, balance) {
+        return identityInstance.put("Profile", {userId, balance}, headerWithAuthStr)
+    },
+}
+
+export const purchaseHistoryAPI = {
+    AddItem(userId = "", itemId = "0") {
+        return eventInstance.post('/PurchaseHistory', {userId, itemId}, headerWithAuthStr)
+    },
+}
 
 export const basketAPI = {
     getUserItems(id = "") {
-        return basketInstance.get('Basket?id' + id, headerWithAuthStr)
+        return eventInstance.get(`Basket?id=${id}`, headerWithAuthStr)
     },
     addItemToUserBasket(userId = "", itemId = "0") {
-        return basketInstance.post('Basket', {userId, itemId}, headerWithAuthStr)
+        return eventInstance.post('Basket', {userId, itemId}, headerWithAuthStr)
     },
     deleteItemFromUserBasket(userId = "", itemId = "0") {
-        return basketInstance.delete('Basket', {userId, itemId}, headerWithAuthStr)
+        return eventInstance.delete(`Basket?userId=${userId}&itemId=${itemId}`, headerWithAuthStr)
     },
-    deleteAllItemsFromUserBasket(userId = "", itemId = "0") {
-        return basketInstance.delete('Basket/delete-all-by-user-id', {userId, itemId}, headerWithAuthStr)
+    deleteAllItemsFromUserBasket(userId = "") {
+        return eventInstance.delete(`Basket/delete-all-by-user-id?id=${userId}`, headerWithAuthStr)
     },
 }
