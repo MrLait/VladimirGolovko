@@ -1,4 +1,5 @@
 import * as axios from "axios";
+
 const identityBaseURL = 'https://localhost:5004/';
 const eventBaseURL = 'https://localhost:5003/';
 
@@ -20,22 +21,20 @@ export const authAPI = {
         return identityInstance.post('AccountUser/login', {email, password, rememberMe});
     },
     register(userName, firstName, surname, email, password, passwordConfirm, language = "asd", timeZoneOffset = "ads") {
-        return identityInstance.post('AccountUser/', {
-            userName,
-            firstName,
-            surname,
-            language,
-            timeZoneOffset,
-            email,
-            password,
-            passwordConfirm
-        });
+        return identityInstance.post('AccountUser/',
+            {userName, firstName, surname, language, timeZoneOffset, email, password, passwordConfirm});
     }
 }
 
 export const eventAPI = {
     getEvents() {
         return eventInstance.get('Event')
+    },
+}
+
+export const eventAreaAPI = {
+    getEventAreas(eventId) {
+        return eventInstance.get(`EventArea?${eventId}`, headerWithAuthStr)
     },
 }
 export const profileAPI = {
@@ -48,11 +47,11 @@ export const profileAPI = {
 }
 
 export const purchaseHistoryAPI = {
+    getUserItems(id= "") {
+        return eventInstance.get(`PurchaseHistory?userId=${id}`, headerWithAuthStr)
+    },
     AddItem(userId = "", itemId = "0") {
         return eventInstance.post('/PurchaseHistory', {userId, itemId}, headerWithAuthStr)
-    },
-    getUserItems(id) {
-        return eventInstance.get(`PurchaseHistory?userId=${id}`, headerWithAuthStr)
     },
 }
 export const basketAPI = {

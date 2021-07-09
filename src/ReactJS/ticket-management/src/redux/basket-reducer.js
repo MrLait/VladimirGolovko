@@ -13,7 +13,7 @@ let initialState = {
     id: null,
     totalPrice: null,
     balance: null,
-    isFetching: true,
+    isFetching: false,
     isNotEnoughMoney: false,
     items: []
 }
@@ -93,15 +93,12 @@ export const buy = (totalPrice, balance, items) => (dispatch) => {
         (balance >= totalPrice) ?
             profileAPI.updateBalance(id, balance - totalPrice)
                 .then(response => {
-                    debugger;
                     items.map(i =>
                         purchaseHistoryAPI.AddItem(id, i.id)
                             .then(response => {
                                 debugger;
                             }))
-                    debugger;
                     basketAPI.deleteAllItemsFromUserBasket(id)
-                    debugger;
                 })
             : dispatch(setIsNotEnoughMoney(true))
     }

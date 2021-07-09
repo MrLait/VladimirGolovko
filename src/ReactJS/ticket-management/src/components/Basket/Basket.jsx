@@ -36,7 +36,6 @@ let Basket = (props) => {
                                 <td>{e.eventDateTimeStart}</td>
                                 <td>{e.eventDateTimeEnd}</td>
                                 <td>{e.price}</td>
-
                             </tr>
                     )}
                     <div> {(t)('TotalPrice')}: {props.totalPrice}</div>

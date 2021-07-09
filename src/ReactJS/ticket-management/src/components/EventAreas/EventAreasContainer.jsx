@@ -1,32 +1,49 @@
 import React from "react";
 import EventAreas from "./EventAreas";
-import * as axios from "axios";
 import {connect} from "react-redux";
-import {setEventAreas} from "../../redux/eventAreas-reducer";
-import {Redirect, withRouter} from "react-router";
+import {
+    addItem,
+    getEventAreas,
+    removeItem,
+    toggleClickingInProgress,
+    toggleIsFetching
+} from "../../redux/eventAreas-reducer";
+import {withRouter} from "react-router";
 import {compose} from "redux";
+import Preloader from "../../common/Preloaders/Preloader";
 
 class EventAreasContainer extends React.Component {
     componentDidMount() {
         let eventId = this.props.match.params.eventId;
-        axios.get("https://localhost:5003/EventArea?" + eventId)
-            .then(response => {
-            this.props.setEventAreas(response.data);
-        })
+        this.props.toggleIsFetching(true);
+        this.props.getEventAreas(eventId);
     }
-    render () {
+
+    onPageChanged = () => {
+        let eventId = this.props.match.params.eventId;
+        this.props.toggleIsFetching(true);
+        this.props.getEventAreas(eventId);
+    }
+
+    render() {
         return <>
-            {this.props.isAuth ? <EventAreas {...this.props} eventAreas={this.props.eventAreas}/>
-            : <Redirect to={'/home'} />}
-            </>
+            {this.props.isFetching
+                ? <Preloader/>
+                : null}
+            <EventAreas {...this.props}
+                            onPageChanged={this.onPageChanged}/>
+        </>
     }
 }
+
 let mapStateToProps = (state) => ({
+    isFetching: state.eventAreasPage.isFetching,
     eventAreas: state.eventAreasPage.eventAreas,
-    isAuth:state.authPage.isAuth
+    clickingInProgress: state.eventAreasPage.clickingInProgress,
+    isAuth: state.authPage.isAuth
 });
 
 export default compose(
-    connect(mapStateToProps,{setEventAreas}),
+    connect(mapStateToProps, {toggleClickingInProgress, toggleIsFetching, getEventAreas, addItem, removeItem}),
     withRouter,
 )(EventAreasContainer)

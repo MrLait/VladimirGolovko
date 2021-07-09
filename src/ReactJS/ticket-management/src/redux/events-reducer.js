@@ -27,8 +27,8 @@ export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFe
 export const getEvents = () => (dispatch) => {
     eventAPI.getEvents()
         .then(response => {
-           dispatch(toggleIsFetching(false));
             dispatch(setEvents(response.data));
+            dispatch(toggleIsFetching(false));
         })
     }
 

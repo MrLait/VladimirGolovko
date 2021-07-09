@@ -18,3 +18,18 @@
     padding: 5px 10px;
     border: 1px solid #333;
 }
+
+.available {
+    background-color: white;
+    color: black;
+}
+
+.purchased {
+    color: rgb(255,255,255);
+    background-color: rgb(0,0,0);
+}
+
+.booked {
+    color: rgb(255,255,255);
+    background-color: green;
+}

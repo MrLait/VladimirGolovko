@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {getEvents, setEvents, toggleIsFetching} from "../../redux/events-reducer";
+import {getEvents, toggleIsFetching} from "../../redux/events-reducer";
 import Events from "./Events";
 import Preloader from "../../common/Preloaders/Preloader";
 

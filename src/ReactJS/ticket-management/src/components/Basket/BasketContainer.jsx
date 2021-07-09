@@ -11,6 +11,7 @@ class BasketContainer extends React.Component {
         this.props.getUserItems();
         this.props.getBalance();
     }
+
     render() {
         return <>
             {this.props.isFetching ? <Preloader /> : null}

@@ -13,12 +13,18 @@ const App = () => {
         <div className='app-wrapper'>
             <header className= 'header'><HeaderContainer/></header>
             <div className='content'>
-                <Route path='/register' render={() => <Register/>}/>
-                <Route path='/login' render={() => <Login/>}/>
-                <Route path='/eventArea/:eventId' render={() => <EventAreasContainer/>}/>
-                <Route path='/home' render={() => <EventsContainer/>}/>
-                <Route path='/basket' render={() => <BasketContainer/>}/>
-                <Route path='/purchaseHistory' render={() => <PurchaseHistoryContainer/>}/>
+                <Route path='/register'
+                       render={() => <Register/>}/>
+                <Route path='/login'
+                       render={() => <Login/>}/>
+                <Route path='/eventArea/:eventId'
+                       render={() => <EventAreasContainer/>}/>
+                <Route path='/home'
+                       render={() => <EventsContainer/>}/>
+                <Route path='/basket'
+                       render={() => <BasketContainer/>}/>
+                <Route path='/purchaseHistory'
+                       render={() => <PurchaseHistoryContainer/>}/>
             </div>
         </div>
     );
