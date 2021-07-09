@@ -1,17 +1,13 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import "./Basket.module.css"
+import "./PurchaseHistory.module.css"
 import basePath from "../../assets/Pics/FootballPicOne.PNG";
-import {Link} from "react-router-dom";
 
-let Basket = (props) => {
+let PurchaseHistory = (props) => {
     const {t} = useTranslation();
-    const buyOnClick = () => {
-        props.buy(props.totalPrice, props.balance, props.items);
-    }
     return (
         <div>
-            {props.items && props.items.length  ?
+            {props.items && props.items.length ?
                 <table>
                     <tr>
                         <th>{t('Picture')}</th>
@@ -39,18 +35,10 @@ let Basket = (props) => {
 
                             </tr>
                     )}
-                    <div> {(t)('TotalPrice')}: {props.totalPrice}</div>
-                    {props.isAuth ?
-                        <button onClick={buyOnClick}>{t('Buy')} </button>
-                        :
-                        <Link to={"/login"}>
-                            <button>{t('Buy')} </button>
-                        </Link>
-                    }
-                    <div>{props.isNotEnoughMoney ? "NotEnoughMoney" : ""} </div>
                 </table>
-                : t('PurchaseHistoryIsEmpty')}
+                : t('PurchaseHistoryIsEmpty')
+            }
         </div>
     )
 }
-export default Basket;
+export default PurchaseHistory;

@@ -6,6 +6,7 @@ import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import BasketContainer from "./components/Basket/BasketContainer";
+import PurchaseHistoryContainer from "./components/PurchaseHistory/PurchaseHistoryContainer";
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
                 <Route path='/eventArea/:eventId' render={() => <EventAreasContainer/>}/>
                 <Route path='/home' render={() => <EventsContainer/>}/>
                 <Route path='/basket' render={() => <BasketContainer/>}/>
+                <Route path='/purchaseHistory' render={() => <PurchaseHistoryContainer/>}/>
             </div>
         </div>
     );

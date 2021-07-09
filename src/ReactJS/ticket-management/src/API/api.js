@@ -51,8 +51,10 @@ export const purchaseHistoryAPI = {
     AddItem(userId = "", itemId = "0") {
         return eventInstance.post('/PurchaseHistory', {userId, itemId}, headerWithAuthStr)
     },
+    getUserItems(id) {
+        return eventInstance.get(`PurchaseHistory?userId=${id}`, headerWithAuthStr)
+    },
 }
-
 export const basketAPI = {
     getUserItems(id = "") {
         return eventInstance.get(`Basket?id=${id}`, headerWithAuthStr)

@@ -25,10 +25,15 @@ const Header = (props) => {
                 {
                     props.isAuth ?
                         <span>
-                        <span className={s.span}>
-                            <NavLink to={'/basket'}>
-                                {t('basket')}
-                            </NavLink>
+                            <span className={s.span}>
+                                <NavLink to={'/purchaseHistory'}>
+                                    {t('PurchaseHistory')}
+                                </NavLink>
+                            </span>
+                            <span className={s.span}>
+                                <NavLink to={'/basket'}>
+                                    {t('basket')}
+                                </NavLink>
                         </span>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
