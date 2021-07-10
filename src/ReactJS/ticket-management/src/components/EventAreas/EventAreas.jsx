@@ -3,7 +3,6 @@ import style from "./EventsAreas.module.css"
 import {useTranslation} from "react-i18next";
 import {seatStates} from "../Constants/seatConst";
 import Preloader from "../../common/Preloaders/Preloader";
-import {removeItem} from "../../redux/eventAreas-reducer";
 
 let EventAreas = (props) => {
     const {t} = useTranslation();

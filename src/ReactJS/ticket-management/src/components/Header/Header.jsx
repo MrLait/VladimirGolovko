@@ -26,6 +26,11 @@ const Header = (props) => {
                     props.isAuth ?
                         <span>
                             <span className={s.span}>
+                                <NavLink to={'/profile'}>
+                                    {t('Profile')}
+                                </NavLink>
+                            </span>
+                            <span className={s.span}>
                                 <NavLink to={'/purchaseHistory'}>
                                     {t('PurchaseHistory')}
                                 </NavLink>

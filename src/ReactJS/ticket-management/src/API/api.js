@@ -38,11 +38,35 @@ export const eventAreaAPI = {
     },
 }
 export const profileAPI = {
+    getProfile(id = "") {
+        return eventInstance.get(`/Profile?id=${id}`, headerWithAuthStr)
+    },
     getBalance(id) {
         return identityInstance.get(`/Profile/getBalance?userId=${id}`, headerWithAuthStr)
     },
     updateBalance(userId, balance) {
         return identityInstance.put("Profile", {userId, balance}, headerWithAuthStr)
+    },
+    editFirstName(userId, firstName) {
+        return identityInstance.put("/Profile/edit-first-name", {userId, firstName}, headerWithAuthStr)
+    },
+    editSurname(userId, surname) {
+        return identityInstance.put("/Profile/edit-surname", {userId, surname}, headerWithAuthStr)
+    },
+    editEmail(userId, email) {
+        return identityInstance.put("/Profile/edit-email", {userId, email}, headerWithAuthStr)
+    },
+    editPassword(userId, password) {
+        return identityInstance.put("/Profile/edit-password", {userId, password}, headerWithAuthStr)
+    },
+    editTimeZoneOffset(userId, timeZoneOffset) {
+        return identityInstance.put("/Profile/edit-time-zone-offset", {userId, timeZoneOffset}, headerWithAuthStr)
+    },
+    deposite(userId, balance) {
+        return identityInstance.put("/Profile/deposit", {userId, balance}, headerWithAuthStr)
+    },
+    setLanguage(userId, culture) {
+        return identityInstance.put("/Profile/set-language", {userId, culture}, headerWithAuthStr)
     },
 }
 
@@ -54,6 +78,7 @@ export const purchaseHistoryAPI = {
         return eventInstance.post('/PurchaseHistory', {userId, itemId}, headerWithAuthStr)
     },
 }
+
 export const basketAPI = {
     getUserItems(id = "") {
         return eventInstance.get(`Basket?id=${id}`, headerWithAuthStr)

@@ -7,6 +7,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import BasketContainer from "./components/Basket/BasketContainer";
 import PurchaseHistoryContainer from "./components/PurchaseHistory/PurchaseHistoryContainer";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 
 const App = () => {
     return (
@@ -25,6 +26,8 @@ const App = () => {
                        render={() => <BasketContainer/>}/>
                 <Route path='/purchaseHistory'
                        render={() => <PurchaseHistoryContainer/>}/>
+                <Route path='/profile'
+                       render={() => <ProfileContainer/>}/>
             </div>
         </div>
     );

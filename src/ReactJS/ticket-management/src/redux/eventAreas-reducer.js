@@ -1,6 +1,6 @@
 import {basketAPI, eventAreaAPI} from "../API/api";
-import {userClaim} from "../components/Constants/userConst";
 import {seatStates} from "../components/Constants/seatConst";
+import {getCurUserId} from "../common/Services/UserService";
 
 const SET_EVENT_AREAS = 'SET_EVENT_AREAS';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -28,7 +28,7 @@ const eventAreasReducer = (state = initialState, action) => {
                                 ...ea,
                                 eventSeats: ea.eventSeats.map(s => {
                                     if (s.id === action.seatId) {
-                                        return {...s, state: "Booked"}
+                                        return {...s, state: seatStates.Booked}
                                     }
                                     return s;
                                 })
@@ -48,7 +48,7 @@ const eventAreasReducer = (state = initialState, action) => {
                                 ...ea,
                                 eventSeats: ea.eventSeats.map(s => {
                                     if (s.id === action.seatId) {
-                                        return {...s, state: "Available"}
+                                        return {...s, state: seatStates.Available}
                                     }
                                     return s;
                                 })
@@ -90,7 +90,7 @@ export const getEventAreas = (eventId) => (dispatch) => {
 
 export const addItem = (eventAreaId, itemId) => (dispatch) => {
     dispatch(toggleClickingInProgress(true, itemId))
-    const id = userId();
+    const id = getCurUserId();
     basketAPI.addItemToUserBasket(id, itemId)
         .then(response => {
             dispatch(addSeatItem(eventAreaId, itemId))
@@ -100,7 +100,7 @@ export const addItem = (eventAreaId, itemId) => (dispatch) => {
 
 export const removeItem = (eventAreaId, itemId) => (dispatch) => {
     dispatch(toggleClickingInProgress(true, itemId))
-    const id = userId();
+    const id = getCurUserId();
     basketAPI.deleteItemFromUserBasket(id, itemId)
         .then(response => {
             dispatch(removeSeatItem(eventAreaId, itemId))
@@ -108,17 +108,4 @@ export const removeItem = (eventAreaId, itemId) => (dispatch) => {
         })
 }
 
-const userId = () => {
-    const localUser = localStorage.getItem('user');
-    const parsedUser = JSON.parse(localUser);
-    let userCredential = (parsedUser) => ({
-        id: parsedUser[userClaim.id],
-        name: parsedUser[userClaim.name],
-        email: parsedUser[userClaim.email],
-        role: parsedUser[userClaim.role],
-    });
-    let id = userCredential(parsedUser).id;
-
-    return id;
-}
 export default eventAreasReducer;

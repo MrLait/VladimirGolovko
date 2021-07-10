@@ -6,6 +6,7 @@ import thunkMiddleware from "redux-thunk";
 import {reducer as formReducer} from 'redux-form';
 import basketReducer from "./basket-reducer";
 import purchaseHistoryReducer from "./purchaseHisory-reducer";
+import profileReducer from "./profile-reducer";
 
 let reducers =  combineReducers(
     {
@@ -14,6 +15,7 @@ let reducers =  combineReducers(
         authPage: authReducer,
         basketPage: basketReducer,
         purchaseHistoryPage: purchaseHistoryReducer,
+        profilePage: profileReducer,
         form : formReducer
     }
 )
