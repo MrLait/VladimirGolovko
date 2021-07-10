@@ -39,7 +39,7 @@ export const eventAreaAPI = {
 }
 export const profileAPI = {
     getProfile(id = "") {
-        return eventInstance.get(`/Profile?id=${id}`, headerWithAuthStr)
+        return identityInstance.get(`/Profile?userId=${id}`, headerWithAuthStr)
     },
     getBalance(id) {
         return identityInstance.get(`/Profile/getBalance?userId=${id}`, headerWithAuthStr)
@@ -56,13 +56,13 @@ export const profileAPI = {
     editEmail(userId, email) {
         return identityInstance.put("/Profile/edit-email", {userId, email}, headerWithAuthStr)
     },
-    editPassword(userId, password) {
-        return identityInstance.put("/Profile/edit-password", {userId, password}, headerWithAuthStr)
+    editPassword(userId, oldPassword, newPassword) {
+        return identityInstance.put("/Profile/edit-password", {userId, oldPassword, newPassword}, headerWithAuthStr)
     },
     editTimeZoneOffset(userId, timeZoneOffset) {
         return identityInstance.put("/Profile/edit-time-zone-offset", {userId, timeZoneOffset}, headerWithAuthStr)
     },
-    deposite(userId, balance) {
+    deposit(userId, balance) {
         return identityInstance.put("/Profile/deposit", {userId, balance}, headerWithAuthStr)
     },
     setLanguage(userId, culture) {

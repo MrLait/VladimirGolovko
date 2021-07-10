@@ -8,8 +8,6 @@ import style from "./../../common/FormsControls/FormsControls.module.css"
 import {useTranslation} from "react-i18next";
 import {register} from "../../redux/auth-reducer";
 
-const val = '12';
-const val2 = '12asd';
 const RegisterForm = (props) => {
     const {t} = useTranslation();
     return (

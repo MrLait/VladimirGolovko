@@ -1,50 +1,30 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Field, reduxForm} from "redux-form";
-import {required} from "../Utils/validators";
-import {Input} from "../../common/FormsControls/FormsControls";
+import BalanceForm from "./Forms/BalanceForm";
+import LanguageSelector from "../../common/Selectors/LanguageSelector";
+import TimeZoneOffSetSelector from "../../common/Selectors/TimeZoneOffSetSelector";
+import EditSurnameForm from "./Forms/EditSurnameForm";
+import EditFirstNameForm from "./Forms/EditFirstNameForm";
+import EditEmailForm from "./Forms/EditEmailForm";
+import EditPasswordForm from "./Forms/EditPasswordForm";
 
 let Profile = (props) => {
     const {t} = useTranslation();
-    const onSubmit = (formData) => {
-        console.log(formData);
-        props.deposit(formData.balance);
-    }
     return (
-        <BalanceReduxForm {...props} onSubmit={onSubmit}/>
+        <div>
+            <BalanceForm {...props} onSubmit = {(formData) => {props.deposit(formData.balance)}}/>
+            <EditSurnameForm {...props} onSubmit = {(formData) => {props.editSurname(formData.surname)}}/>
+            <EditFirstNameForm {...props} onSubmit = {(formData) => {props.editFirstName(formData.firstName)}}/>
+            <EditEmailForm {...props} onSubmit = {(formData) => {props.editEmail(formData.email)}}/>
+            <EditPasswordForm {...props} onSubmit = {(formData) => {props.editPassword(formData.oldPassword, formData.newPassword)}}/>
+            <div>
+                <LanguageSelector {...props}/>
+            </div>
+            <div>
+                <TimeZoneOffSetSelector {...props}/>
+            </div>
+        </div>
     )
 }
-
-const BalanceForm = (props) => {
-    const {t} = useTranslation();
-    return (
-        <form onSubmit={props.handleSubmit}>
-            <table>
-                <tr>
-                    <dt> {t('Balance')} - {props.balance} {t('Currency')} </dt>
-                    <td>
-                        <div>
-                            <Field placeholder={t("Deposit")} name={"balance"}
-                                   component={Input}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button disabled={props.clickingInProgress}>
-                                {t('Deposit')}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    )
-}
-
-const BalanceReduxForm = reduxForm(
-    {
-        form: 'balance'
-    }
-)(BalanceForm)
 
 export default Profile;

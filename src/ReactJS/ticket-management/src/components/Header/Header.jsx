@@ -3,6 +3,7 @@ import s from './Header.module.css';
 import {NavLink} from "react-router-dom";
 import i18n from "i18next";
 import {useTranslation} from "react-i18next";
+import LanguageSelector from "../../common/Selectors/LanguageSelector";
 
 const Header = (props) => {
     const {t} = useTranslation();
@@ -15,11 +16,7 @@ const Header = (props) => {
                 <NavLink to={'/home'}>{t('Home')}</NavLink>
             </span>
             <span className={s.select}>
-                <select name={'language'} onChange={onChange}>
-                    <option value='en'>English</option>
-                    <option value='ru'>Русский</option>
-                    <option value='be'>Белорусский</option>
-                </select>
+                <LanguageSelector {...props}/>
             </span>
             <span className={s.authBlock}>
                 {

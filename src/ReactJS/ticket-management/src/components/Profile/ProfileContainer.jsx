@@ -1,12 +1,17 @@
 import React from "react";
 import Preloader from "../../common/Preloaders/Preloader";
-import {deposit, getBalance, toggleIsFetching} from "../../redux/profile-reducer";
+import {
+    deposit, editEmail,
+    editFirstName, editLanguage, editPassword,
+    editSurname, editTimeZoneOffset,
+    getBalance, getUserProfile, toggleIsFetching
+} from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {connect} from "react-redux";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
-        this.props.getBalance()
+        this.props.getUserProfile()
     }
     render() {
         return <>
@@ -17,17 +22,23 @@ class ProfileContainer extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
+        isAuth: state.authPage.isAuth,
         clickingInProgress: state.profilePage.clickingInProgress,
         isFetching: state.profilePage.isFetching,
         balance: state.profilePage.balance,
-        isAuth: state.authPage.isAuth
+        firstName: state.profilePage.firstName,
+        surname: state.profilePage.surname,
+        email: state.profilePage.email,
+        timeZoneOffSet: state.profilePage.timeZoneOffSet,
+        isNewPassword: state.profilePage.isNewPassword,
+        language: state.profilePage.language,
     }
 }
 
 export default connect(
     mapStateToProps,
     {
-        toggleIsFetching,
-        getBalance,
-        deposit
+        toggleIsFetching, getBalance, deposit, editSurname,
+        getUserProfile, editFirstName, editEmail, editPassword,
+        editTimeZoneOffset, editLanguage
         }) (ProfileContainer);
