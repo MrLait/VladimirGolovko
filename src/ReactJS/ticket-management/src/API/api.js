@@ -33,8 +33,8 @@ export const eventAPI = {
     deleteEventById(id) {
         return eventInstance.delete(`Event?id=${id}`, headerWithAuthStr)
     },
-    updateEventById(event) {
-        return eventInstance.delete(`Event`, event, headerWithAuthStr)
+    updateEvent(event) {
+        return eventInstance.put(`Event`, event, headerWithAuthStr)
     },
     getLastEvent() {
         return eventInstance.get('/Event/get-last', headerWithAuthStr)

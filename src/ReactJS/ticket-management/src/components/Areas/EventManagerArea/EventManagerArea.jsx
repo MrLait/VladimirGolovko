@@ -33,7 +33,7 @@ const EventManagerArea = (props) => {
                             <td>{e.priceTo}</td>
                             <td>
                                 <button onClick={"delete"}>{t('Delete')} </button>
-                                <Link to={"update/event/id=" + e.id}>
+                                <Link to={"update/event/" + e.id}>
                                     <button>{t('Update')} </button>
                                 </Link>
                             </td>

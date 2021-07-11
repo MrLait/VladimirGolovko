@@ -10,6 +10,7 @@ import PurchaseHistoryContainer from "./components/PurchaseHistory/PurchaseHisto
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import EventManagerAreaContainer from "./components/Areas/EventManagerArea/EventManagerAreaContainer";
 import CreateEventContainer from "./components/Areas/EventManagerArea/Forms/CreateEventContainer";
+import UpdateEventContainer from "./components/Areas/EventManagerArea/Forms/UpdateEventContainer";
 
 const App = () => {
     return (
@@ -34,6 +35,8 @@ const App = () => {
                        render={() => <EventManagerAreaContainer/>}/>
                 <Route path='/create/event'
                        render={() => <CreateEventContainer/>}/>
+                <Route path='/update/event/:eventId'
+                       render={() => <UpdateEventContainer/>}/>
             </div>
         </div>
     );

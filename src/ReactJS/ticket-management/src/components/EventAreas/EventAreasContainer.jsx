@@ -18,7 +18,6 @@ class EventAreasContainer extends React.Component {
         this.props.toggleIsFetching(true);
         this.props.toggleIsFetching(true);
         this.props.getEventAreas(eventId);
-
     }
 
     onPageChanged = () => {
@@ -46,6 +45,7 @@ let mapStateToProps = (state) => ({
 });
 
 export default compose(
-    connect(mapStateToProps, {toggleClickingInProgress, toggleIsFetching, getEventAreas, addItem, removeItem}),
+    connect(mapStateToProps,
+        {toggleClickingInProgress, toggleIsFetching, getEventAreas, addItem, removeItem}),
     withRouter,
 )(EventAreasContainer)
