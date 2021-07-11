@@ -11,11 +11,12 @@ import ProfileContainer from "./components/Profile/ProfileContainer";
 import EventManagerAreaContainer from "./components/Areas/EventManagerArea/EventManagerAreaContainer";
 import CreateEventContainer from "./components/Areas/EventManagerArea/Forms/CreateEventContainer";
 import UpdateEventContainer from "./components/Areas/EventManagerArea/Forms/UpdateEventContainer";
+import {Redirect} from "react-router";
 
 const App = () => {
     return (
         <div className='app-wrapper'>
-            <header className= 'header'><HeaderContainer/></header>
+            <header className='header'><HeaderContainer/></header>
             <div className='content'>
                 <Route path='/register'
                        render={() => <Register/>}/>
@@ -37,6 +38,11 @@ const App = () => {
                        render={() => <CreateEventContainer/>}/>
                 <Route path='/update/event/:eventId'
                        render={() => <UpdateEventContainer/>}/>
+                <Route exact path="/"
+                       render={() => {
+                           return (<Redirect to="/home"/>)
+                       }}
+                />
             </div>
         </div>
     );
