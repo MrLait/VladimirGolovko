@@ -1,6 +1,7 @@
 import {basketAPI, profileAPI, purchaseHistoryAPI} from "../API/api";
 import {userClaim} from "../components/Constants/userConst";
 import {setEvents} from "./events-reducer";
+import {getCurUserId} from "../common/Services/UserService";
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_ITEMS = 'SET_ITEMS';
@@ -8,6 +9,8 @@ const SET_TOTAL_PRICE = 'SET_TOTAL_PRICE';
 const SET_BALANCE = 'SET_BALANCE';
 const SET_USER_ID = 'SET_SET_USER_ID';
 const set_isNotEnoughMoney = 'set_isNotEnoughMoney';
+const SET_IN_PROGRESS = 'SET_IN_PROGRESS';
+const SET_IS_BUY_SUCCESSFUL = 'SET_IS_BUY_SUCCESSFUL';
 
 let initialState = {
     id: null,
@@ -15,7 +18,9 @@ let initialState = {
     balance: null,
     isFetching: false,
     isNotEnoughMoney: false,
-    items: []
+    items: [],
+    isBuySuccessful: false,
+    inProgress: false,
 }
 
 const basketReducer = (state = initialState, action) => {
@@ -29,11 +34,19 @@ const basketReducer = (state = initialState, action) => {
         case TOGGLE_IS_FETCHING: {
             return {...state, isFetching: action.isFetching}
         }
+        case SET_IS_BUY_SUCCESSFUL: {
+            return {
+                ...state,
+                isBuySuccessful: action.isBuySuccessful
+            }
+        }
+        case SET_IN_PROGRESS: {
+            return {...state, inProgress: action.inProgress}
+        }
         case SET_ITEMS: {
             return {
                 ...state,
                 items: action.items,
-                isNotEnoughMoney: false
             }
         }
         case SET_TOTAL_PRICE: {
@@ -47,6 +60,8 @@ const basketReducer = (state = initialState, action) => {
     }
 }
 
+export const setIsBuySuccessful = (isBuySuccessful) => ({type: SET_IS_BUY_SUCCESSFUL, isBuySuccessful})
+export const setInProgress = (inProgress) => ({type: SET_IN_PROGRESS, inProgress})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
 export const setItems = (items) => ({type: SET_ITEMS, items})
 export const setTotalPrice = (totalPrice) => ({type: SET_TOTAL_PRICE, totalPrice})
@@ -54,22 +69,8 @@ export const setBalance = (balance) => ({type: SET_BALANCE, balance})
 export const setUserId = (id) => ({type: SET_USER_ID, id})
 export const setIsNotEnoughMoney = (isNotEnoughMoney) => ({type: set_isNotEnoughMoney, isNotEnoughMoney})
 
-const userId = () => {
-    const localUser = localStorage.getItem('user');
-    const parsedUser = JSON.parse(localUser);
-    let userCredential = (parsedUser) => ({
-        id: parsedUser[userClaim.id],
-        name: parsedUser[userClaim.name],
-        email: parsedUser[userClaim.email],
-        role: parsedUser[userClaim.role],
-    });
-    let id = userCredential(parsedUser).id;
-
-    return id;
-}
-
 export const getUserItems = () => (dispatch) => {
-    const id = userId();
+    const id = getCurUserId();
     basketAPI.getUserItems(id)
         .then(response => {
             dispatch(toggleIsFetching(false));
@@ -79,7 +80,7 @@ export const getUserItems = () => (dispatch) => {
 }
 
 export const getBalance = () => (dispatch) => {
-    const id = userId();
+    const id = getCurUserId();
     profileAPI.getBalance(id)
         .then(response => {
             dispatch(setBalance(response.data))
@@ -87,22 +88,24 @@ export const getBalance = () => (dispatch) => {
 }
 
 export const buy = (totalPrice, balance, items) => (dispatch) => {
-    const id = userId();
-    debugger;
+    const id = getCurUserId();
+    dispatch(setInProgress(true));
+    dispatch(setIsBuySuccessful(false));
     {
-        (balance >= totalPrice) ?
+        if (balance >= totalPrice) {
             profileAPI.updateBalance(id, balance - totalPrice)
-                .then(response => {
-                    items.map(i =>
-                        purchaseHistoryAPI.AddItem(id, i.id)
-                            .then(response => {
-                                debugger;
-                            }))
-                    basketAPI.deleteAllItemsFromUserBasket(id)
+                .then(() => {
+                    items.map(i => purchaseHistoryAPI.AddItem(id, i.id))
+                    basketAPI.deleteAllItemsFromUserBasket(id).then(() => {
+                        dispatch(setInProgress(false));
+                        dispatch(setIsBuySuccessful(true));
+                        dispatch(setItems([]));
+                    })
                 })
-            : dispatch(setIsNotEnoughMoney(true))
+        } else
+            dispatch(setIsNotEnoughMoney(true))
+        dispatch(setInProgress(false))
     }
-    debugger;
 }
 
 export default basketReducer;

@@ -21,7 +21,7 @@ let PurchaseHistory = (props) => {
                     </tr>
                     {props.items.map(
                         e =>
-                            <tr key={e.id}>
+                            <tr>
                                 <td>
                                     <div><img src={basePath}/></div>
                                 </td>

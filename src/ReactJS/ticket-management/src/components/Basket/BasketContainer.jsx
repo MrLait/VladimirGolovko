@@ -7,15 +7,13 @@ import Basket from "./Basket";
 
 class BasketContainer extends React.Component {
     componentDidMount() {
-        this.props.toggleIsFetching(true);
         this.props.getUserItems();
         this.props.getBalance();
     }
 
     render() {
         return <>
-            {this.props.isFetching ? <Preloader /> : null}
-            <Basket {...this.props}/>
+            {this.props.isFetching ? <Preloader /> : <Basket {...this.props}/>}
         </>
     }
 }
@@ -27,7 +25,9 @@ let mapStateToProps = (state) => {
         isFetching: state.basketPage.isFetching,
         totalPrice: state.basketPage.totalPrice,
         balance: state.basketPage.balance,
-        isNotEnoughMoney: state.basketPage.isNotEnoughMoney
+        isNotEnoughMoney: state.basketPage.isNotEnoughMoney,
+        inProgress: state.basketPage.inProgress,
+        isBuySuccessful: state.basketPage.isBuySuccessful
     }
 }
 
