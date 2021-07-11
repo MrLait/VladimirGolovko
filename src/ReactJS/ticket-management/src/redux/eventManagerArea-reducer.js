@@ -7,6 +7,7 @@ const SET_IN_PROGRESS = 'SET_IN_PROGRESS';
 const SET_EVENT_IN_PROGRESS = 'SET_EVENT_IN_PROGRESS';
 const SET_IS_CREATE_EVENT_SUCCESSFUL = 'SET_IS_CREATE_EVENT_SUCCESSFUL';
 const SET_IS_UPDATE_EVENT_SUCCESSFUL = 'SET_IS_UPDATE_EVENT_SUCCESSFUL';
+
 let initialState = {
     id: null,
     isFetching: false,
@@ -33,8 +34,10 @@ const eventManagerAreaReducer = (state = initialState, action) => {
             return {...state, inProgress: action.inProgress}
         }
         case SET_EVENT_IN_PROGRESS: {
-            return {...state, creteEventInProgress: action.creteEventInProgress,
-            isFetching: false}
+            return {
+                ...state, creteEventInProgress: action.creteEventInProgress,
+                isFetching: false
+            }
         }
         case SET_EVENTS: {
             return {...state, events: action.events}
@@ -42,15 +45,19 @@ const eventManagerAreaReducer = (state = initialState, action) => {
         case SET_EVENT: {
             return {...state, event: action.event}
         }
-
-
         default:
             return state;
     }
 }
 
-export const setIsUpdateEventSuccessful = (isUpdateEventSuccessful) => ({type: SET_IS_UPDATE_EVENT_SUCCESSFUL, isUpdateEventSuccessful})
-export const setIsCreateEventSuccessful = (isCreateEventSuccessful) => ({type: SET_IS_CREATE_EVENT_SUCCESSFUL, isCreateEventSuccessful})
+export const setIsUpdateEventSuccessful = (isUpdateEventSuccessful) => ({
+    type: SET_IS_UPDATE_EVENT_SUCCESSFUL,
+    isUpdateEventSuccessful
+})
+export const setIsCreateEventSuccessful = (isCreateEventSuccessful) => ({
+    type: SET_IS_CREATE_EVENT_SUCCESSFUL,
+    isCreateEventSuccessful
+})
 export const setEventInProgress = (creteEventInProgress) => ({type: SET_EVENT_IN_PROGRESS, creteEventInProgress})
 export const setInProgress = (inProgress) => ({type: SET_IN_PROGRESS, inProgress})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
@@ -62,7 +69,6 @@ export const getEvent = (id) => (dispatch) => {
     dispatch(toggleIsFetching(true));
     eventAPI.getEventById(id)
         .then(response => {
-            debugger;
             dispatch(setEvent(response.data));
             dispatch(toggleIsFetching(false));
         })
@@ -89,6 +95,7 @@ export const getEvents = () => (dispatch) => {
 }
 
 export const createEvent = (event) => (dispatch) => {
+    debugger;
     let createdEvent = null;
     dispatch(setInProgress(true));
     if (!event.eventAreas) {

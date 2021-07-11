@@ -8,6 +8,7 @@ class CreateEventContainer extends React.Component {
     componentDidMount() {
         this.props.toggleIsFetching(true);
         this.props.setEventInProgress(true);
+        debugger;
     }
 
     render() {

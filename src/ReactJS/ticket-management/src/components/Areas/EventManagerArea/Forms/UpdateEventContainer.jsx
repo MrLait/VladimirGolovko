@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import Preloader from "../../../../common/Preloaders/Preloader";
 import {
-    getEvent,
+    getEvent, toggleIsFetching,
     updateEvent
 } from "../../../../redux/eventManagerArea-reducer";
 import UpdateEventForm from "./UpdateEventForm";
@@ -11,11 +11,13 @@ import {withRouter} from "react-router";
 
 class UpdateEventContainer extends React.Component {
     componentDidMount() {
+        this.props.toggleIsFetching(true);
         let eventId = this.props.match.params.eventId;
-        this.props.getEvent(eventId);
-        debugger;
+        if(!this.props.event) {
+            debugger;
+            this.props.getEvent(eventId);
+        }
     }
-
     render() {
         return <>
             {this.props.isFetching ? <Preloader/>
@@ -33,7 +35,7 @@ let mapStateToProps = (state) => {
         event: state.eventManagerAreaPage.event,
         isFetching: state.eventManagerAreaPage.isFetching,
         isUpdateEventSuccessful: state.eventManagerAreaPage.isUpdateEventSuccessful,
-        initialValues: state.eventManagerAreaPage.event,
+      //  initialValues: state.eventManagerAreaPage.event,
     }
 }
 
@@ -41,6 +43,6 @@ export default compose(
     connect(
     mapStateToProps,
     {
-        getEvent, updateEvent}),
+        getEvent, updateEvent, toggleIsFetching}),
     withRouter,
 )(UpdateEventContainer);

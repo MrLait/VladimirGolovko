@@ -11,6 +11,7 @@ class EventManagerAreaContainer extends React.Component {
         this.props.getEvents();
         this.props.setIsCreateEventSuccessful(false);
         this.props.setIsUpdateEventSuccessful(false);
+        debugger;
     }
 
     render() {

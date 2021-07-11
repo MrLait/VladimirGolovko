@@ -2,13 +2,12 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {required} from "../../../Utils/validators";
-import {Input, renderDatePicker} from "../../../../common/FormsControls/FormsControls";
+import {Input} from "../../../../common/FormsControls/FormsControls";
 import {Redirect} from "react-router";
+import renderDatePicker from "../../../../common/FormsControls/renderDatePicker";
 
 const CreateEventForm = (props) => {
     const {t} = useTranslation();
-    debugger;
-    //if (props.event.eventAreas ) return <Redirect to={'/eventManagerArea'}/>
     return (
         <form onSubmit={props.handleSubmit}>
             <div>

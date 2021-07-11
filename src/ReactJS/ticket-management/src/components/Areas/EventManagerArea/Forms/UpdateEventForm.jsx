@@ -2,11 +2,14 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {required} from "../../../Utils/validators";
-import {Input, renderDatePicker} from "../../../../common/FormsControls/FormsControls";
+import {Input} from "../../../../common/FormsControls/FormsControls";
 import {Redirect} from "react-router";
+import Preloader from "../../../../common/Preloaders/Preloader";
+import renderDatePicker from "../../../../common/FormsControls/renderDatePicker";
 
 let UpdateEventForm = (props) => {
     const {t} = useTranslation();
+    if (!props.event) return <Preloader/>
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
