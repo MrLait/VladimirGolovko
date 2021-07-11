@@ -1,6 +1,7 @@
 import React from "react";
 import styles from './FormsControls.module.css'
 import {useTranslation} from "react-i18next";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const FormControl = ({input, meta, child, ...props}) => {
@@ -43,9 +44,9 @@ export const Input = (props) => {
 //     )
 // }
 
-// export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
-//     <div>
-//         <DatePicker {...input} dateForm="MM/DD/YYYY" selected={input.value ? (input.value) : null} />
-//         {touched && error && <span>{error}</span>}
-//     </div>
-// );
+export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
+    <div>
+        <DatePicker {...input} dateForm="MM/DD/YYYY" selected={input.value ? (input.value) : null} />
+        {touched && error && <span>{error}</span>}
+    </div>
+);

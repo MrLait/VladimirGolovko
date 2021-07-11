@@ -73,16 +73,31 @@ export const getEvent = (id) => (dispatch) => {
             dispatch(toggleIsFetching(false));
         })
 }
-
-export const updateEvent = (event) => (dispatch) => {
+export const deleteEvent = (id) => (dispatch) => {
     debugger;
+    dispatch(toggleIsFetching(true));
+    eventAPI.deleteEventById(id)
+        .then(response => {
+            dispatch(setEvent(response.data));
+            dispatch(toggleIsFetching(false));
+        })
+}
+
+export const updateEvent = (event, id) => (dispatch) => {
+    debugger;
+    event.id = id;
     dispatch(toggleIsFetching(true));
     eventAPI.updateEvent(event)
         .then(response => {
             debugger;
             dispatch(setEvent(response.data));
             dispatch(toggleIsFetching(false));
-        })
+        }).catch(error =>  {
+            debugger;
+        dispatch(toggleIsFetching(false));
+    })
+
+    debugger;
 }
 
 export const getEvents = () => (dispatch) => {

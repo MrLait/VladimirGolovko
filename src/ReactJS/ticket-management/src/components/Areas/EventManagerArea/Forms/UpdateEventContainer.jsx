@@ -23,7 +23,7 @@ class UpdateEventContainer extends React.Component {
             {this.props.isFetching ? <Preloader/>
                 : <UpdateEventForm {...this.props}
                                    onSubmit={(formData) => {
-                                       this.props.updateEvent(formData)}}/>
+                                       this.props.updateEvent(formData, this.props.match.params.eventId)}}/>
             }
         </>
     }
@@ -35,7 +35,7 @@ let mapStateToProps = (state) => {
         event: state.eventManagerAreaPage.event,
         isFetching: state.eventManagerAreaPage.isFetching,
         isUpdateEventSuccessful: state.eventManagerAreaPage.isUpdateEventSuccessful,
-      //  initialValues: state.eventManagerAreaPage.event,
+        //initialValues: state.eventManagerAreaPage.event.id,
     }
 }
 

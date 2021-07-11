@@ -2,6 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import basePath from "../../../assets/Pics/FootballPicOne.PNG";
 import {Link} from "react-router-dom";
+import {deleteEvent} from "../../../redux/eventManagerArea-reducer";
 
 const EventManagerArea = (props) => {
     const {t} = useTranslation();
@@ -32,7 +33,7 @@ const EventManagerArea = (props) => {
                             <td>{e.priceFrom}</td>
                             <td>{e.priceTo}</td>
                             <td>
-                                <button onClick={"delete"}>{t('Delete')} </button>
+                                <button onClick={() => {props.deleteEvent(e.id);}}>{t('Delete')} </button>
                                 <Link to={"update/event/" + e.id}>
                                     <button>{t('Update')} </button>
                                 </Link>

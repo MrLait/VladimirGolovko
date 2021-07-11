@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Preloader from "../../../common/Preloaders/Preloader";
 import EventManagerArea from "./EventManagerArea";
 import {
+    deleteEvent,
     getEvents, setIsCreateEventSuccessful, setIsUpdateEventSuccessful
 } from "../../../redux/eventManagerArea-reducer";
 
@@ -32,5 +33,6 @@ let mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     {
-        getEvents, setIsCreateEventSuccessful, setIsUpdateEventSuccessful
+        getEvents, setIsCreateEventSuccessful, setIsUpdateEventSuccessful,
+        deleteEvent
     })(EventManagerAreaContainer);
