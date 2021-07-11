@@ -12,7 +12,7 @@ using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services;
 
-namespace TicketManagement.IntegrationTests.BusinessLogic.EfRepository
+namespace TicketManagement.IntegrationTests.BusinessLogic
 {
     [TestFixture]
     internal class EventManagementApiTests : TestDatabaseLoader

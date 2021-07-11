@@ -9,7 +9,7 @@ using TicketManagement.DataAccess.DbContexts;
 using TicketManagement.DataAccess.Domain.Models;
 using TicketManagement.DataAccess.Repositories.EfRepositories;
 
-namespace TicketManagement.IntegrationTests.DataAccess.Repositories.EfRepository
+namespace TicketManagement.IntegrationTests.DataAccess.Repositories
 {
     [TestFixture]
     internal class EventAreaTests : TestDatabaseLoader
