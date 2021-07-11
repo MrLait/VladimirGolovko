@@ -9,7 +9,7 @@ import BasketContainer from "./components/Basket/BasketContainer";
 import PurchaseHistoryContainer from "./components/PurchaseHistory/PurchaseHistoryContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import EventManagerAreaContainer from "./components/Areas/EventManagerArea/EventManagerAreaContainer";
-import CreateEventForm from "./components/Areas/EventManagerArea/Forms/CreateEventForm";
+import CreateEventContainer from "./components/Areas/EventManagerArea/Forms/CreateEventContainer";
 
 const App = () => {
     return (
@@ -33,7 +33,7 @@ const App = () => {
                 <Route path='/eventManagerArea'
                        render={() => <EventManagerAreaContainer/>}/>
                 <Route path='/create/event'
-                       render={() => <CreateEventForm/>}/>
+                       render={() => <CreateEventContainer/>}/>
             </div>
         </div>
     );

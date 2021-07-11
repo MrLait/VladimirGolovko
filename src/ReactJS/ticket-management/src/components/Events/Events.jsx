@@ -34,7 +34,7 @@ let Events = (props) => {
                         <td>{e.priceTo}</td>
                         <td>
                             {props.isAuth ?
-                                <Link to={"/eventArea/id=" + e.id}>
+                                <Link to={"/eventArea/" + e.id}>
                                     <button>{t('ChooseTickets')} </button>
                                 </Link>
                                 :

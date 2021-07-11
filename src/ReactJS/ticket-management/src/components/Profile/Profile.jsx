@@ -1,5 +1,4 @@
 import React from "react";
-import {useTranslation} from "react-i18next";
 import BalanceForm from "./Forms/BalanceForm";
 import LanguageSelector from "../../common/Selectors/LanguageSelector";
 import TimeZoneOffSetSelector from "../../common/Selectors/TimeZoneOffSetSelector";
@@ -9,7 +8,6 @@ import EditEmailForm from "./Forms/EditEmailForm";
 import EditPasswordForm from "./Forms/EditPasswordForm";
 
 let Profile = (props) => {
-    const {t} = useTranslation();
     return (
         <div>
             <BalanceForm {...props} onSubmit = {(formData) => {props.deposit(formData.balance)}}/>

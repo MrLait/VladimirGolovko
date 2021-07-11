@@ -47,7 +47,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
             try
             {
                 await _eventService.CreateAsync(model);
-                return Ok();
+                return Ok(model);
             }
             catch (ValidationException e)
             {

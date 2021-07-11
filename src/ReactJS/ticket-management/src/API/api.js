@@ -1,7 +1,7 @@
 import * as axios from "axios";
 
-const identityBaseURL = 'https://localhost:5004/';
-const eventBaseURL = 'https://localhost:5003/';
+const identityBaseURL = 'https://localhost:44370/';
+const eventBaseURL = 'https://localhost:44300/';
 
 const identityInstance = axios.create({
     baseURL: identityBaseURL
@@ -30,11 +30,36 @@ export const eventAPI = {
     getEvents() {
         return eventInstance.get('Event')
     },
+    deleteEventById(id) {
+        return eventInstance.delete(`Event?id=${id}`, headerWithAuthStr)
+    },
+    updateEventById(event) {
+        return eventInstance.delete(`Event`, event, headerWithAuthStr)
+    },
+    getLastEvent() {
+        return eventInstance.get('/Event/get-last', headerWithAuthStr)
+    },
+    getEventById(id) {
+        return eventInstance.get(`/Event/get-by-id?id=${id}`, headerWithAuthStr)
+    },
+}
+export const eventManagerAPI = {
+    createEvent(event) {
+        return eventInstance.post('EventManager', event, headerWithAuthStr)
+    },
 }
 
 export const eventAreaAPI = {
     getEventAreas(eventId) {
-        return eventInstance.get(`EventArea?${eventId}`, headerWithAuthStr)
+        return eventInstance.get(`EventArea?id=${eventId}`, headerWithAuthStr)
+    },
+    updatePrices(id, price) {
+        let eventAreas = [{
+            id: id,
+            price: price
+        }]
+        debugger;
+        return eventInstance.put("EventArea", eventAreas, headerWithAuthStr)
     },
 }
 export const profileAPI = {
@@ -71,7 +96,7 @@ export const profileAPI = {
 }
 
 export const purchaseHistoryAPI = {
-    getUserItems(id= "") {
+    getUserItems(id = "") {
         return eventInstance.get(`PurchaseHistory?userId=${id}`, headerWithAuthStr)
     },
     AddItem(userId = "", itemId = "0") {

@@ -2,11 +2,12 @@ import React from "react";
 import {connect} from "react-redux";
 import Preloader from "../../../common/Preloaders/Preloader";
 import EventManagerArea from "./EventManagerArea";
-import {getEvents} from "../../../redux/eventManagerArea-reducer";
+import {getEvents, setIsCreateEventSuccessful} from "../../../redux/eventManagerArea-reducer";
 
 class EventManagerAreaContainer extends React.Component {
     componentDidMount() {
         this.props.getEvents();
+        this.props.setIsCreateEventSuccessful(false);
     }
     render() {
         return <>
@@ -26,5 +27,6 @@ let mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     {
-        getEvents
+        getEvents,
+        setIsCreateEventSuccessful
         }) (EventManagerAreaContainer);
