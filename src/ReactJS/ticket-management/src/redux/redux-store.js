@@ -7,6 +7,7 @@ import {reducer as formReducer} from 'redux-form';
 import basketReducer from "./basket-reducer";
 import purchaseHistoryReducer from "./purchaseHisory-reducer";
 import profileReducer from "./profile-reducer";
+import eventManagerAreaReducer from "./eventManagerArea-reducer";
 
 let reducers =  combineReducers(
     {
@@ -16,6 +17,7 @@ let reducers =  combineReducers(
         basketPage: basketReducer,
         purchaseHistoryPage: purchaseHistoryReducer,
         profilePage: profileReducer,
+        eventManagerAreaPage: eventManagerAreaReducer,
         form : formReducer
     }
 )

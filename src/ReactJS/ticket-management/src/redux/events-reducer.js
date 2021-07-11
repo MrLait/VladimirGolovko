@@ -25,6 +25,7 @@ export const setEvents = (events) => ({type: SET_EVENTS, events})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
 
 export const getEvents = () => (dispatch) => {
+    dispatch(toggleIsFetching(true));
     eventAPI.getEvents()
         .then(response => {
             dispatch(setEvents(response.data));

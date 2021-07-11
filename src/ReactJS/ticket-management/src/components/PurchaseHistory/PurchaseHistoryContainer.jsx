@@ -12,8 +12,7 @@ class PurchaseHistoryContainer extends React.Component {
     }
     render() {
         return <>
-            {this.props.isFetching ? <Preloader /> : null}
-            <PurchaseHistory {...this.props}/>
+            {this.props.isFetching ? <Preloader /> : <PurchaseHistory {...this.props}/>}
         </>
     }
 }

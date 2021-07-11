@@ -8,6 +8,8 @@ import Register from "./components/Register/Register";
 import BasketContainer from "./components/Basket/BasketContainer";
 import PurchaseHistoryContainer from "./components/PurchaseHistory/PurchaseHistoryContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
+import EventManagerAreaContainer from "./components/Areas/EventManagerArea/EventManagerAreaContainer";
+import CreateEventForm from "./components/Areas/EventManagerArea/Forms/CreateEventForm";
 
 const App = () => {
     return (
@@ -28,6 +30,10 @@ const App = () => {
                        render={() => <PurchaseHistoryContainer/>}/>
                 <Route path='/profile'
                        render={() => <ProfileContainer/>}/>
+                <Route path='/eventManagerArea'
+                       render={() => <EventManagerAreaContainer/>}/>
+                <Route path='/create/event'
+                       render={() => <CreateEventForm/>}/>
             </div>
         </div>
     );

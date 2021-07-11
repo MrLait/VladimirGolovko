@@ -6,13 +6,12 @@ import Preloader from "../../common/Preloaders/Preloader";
 
 class EventsContainer extends React.Component {
     componentDidMount() {
-        this.props.toggleIsFetching(true);
         this.props.getEvents();
     }
     render() {
         return <>
-            {this.props.isFetching ? <Preloader /> : null}
-            <Events {...this.props}/>
+            {this.props.isFetching ? <Preloader /> : <Events {...this.props}/>}
+
         </>
     }
 }
@@ -28,6 +27,5 @@ let mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     {
-        toggleIsFetching: toggleIsFetching,
-        getEvents: getEvents
+        toggleIsFetching, getEvents
         }) (EventsContainer);

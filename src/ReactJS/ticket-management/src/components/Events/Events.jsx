@@ -21,7 +21,7 @@ let Events = (props) => {
             </tr>
             {props.events.map(
                 e =>
-                    <tr key={e.id}>
+                    <tr >
                         <td>
                             <div><img src= {basePath}/></div>
                         </td>
