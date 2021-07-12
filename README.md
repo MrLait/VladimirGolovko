@@ -17,6 +17,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ## To run the whole solution, with all services necessary to correct application work.
 Run bat file \VladimirGolovko\scripts\RunTicketManagementUI.bat
 
+## Configuring the redirect flag from TicketManagement.WebMVC to React application
+1. Open \VladimirGolovko\src\TicketManagement.WebMVC\appsettings.json file 
+2. Сhange the "RedirectToReactApp" attribute from false to true.
+For example:
+"RedirectToReactApp": false - redirection is disabled.
+"RedirectToReactApp": true - redirection is enabled.
+
 Url addresses:
 TicketManagement.WebMVC : "https://localhost:5001",
 Identity.API : "https://localhost:44370",

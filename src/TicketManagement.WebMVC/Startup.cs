@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using TicketManagement.WebMVC.Extensions;
 using TicketManagement.WebMVC.Infrastructure.Delegates;
+using TicketManagement.WebMVC.Infrastructure.Filters;
 using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
@@ -40,6 +41,7 @@ namespace TicketManagement.WebMVC
         /// <param name="services">Service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<RedirectToReactAppAttribute>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
             services.AddOptions().Configure<ApiOptions>(binder => binder.IdentityApiAddress = Configuration[ApiOptions.IdentityApiAddressName]);

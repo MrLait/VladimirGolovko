@@ -6,6 +6,7 @@ using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using TicketManagement.WebMVC.Clients.EventFlowClient.Event;
 using TicketManagement.WebMVC.Constants;
+using TicketManagement.WebMVC.Infrastructure.Filters;
 using TicketManagement.WebMVC.ViewModels.EventViewModels;
 
 namespace TicketManagement.WebMVC.Controllers
@@ -36,6 +37,7 @@ namespace TicketManagement.WebMVC.Controllers
         /// <summary>
         /// Index view.
         /// </summary>
+        [ServiceFilter(typeof(RedirectToReactAppAttribute))]
         public async Task<IActionResult> IndexAsync()
         {
             var eventCatalog = await _eventClient.GetAllAsync();
@@ -43,10 +45,8 @@ namespace TicketManagement.WebMVC.Controllers
             {
                 EventItems = eventCatalog,
             };
-            var test = _appSettings?.Value.ReactAppAddress;
-            var isEnabled = await _featureManager.IsEnabledAsync(FeatureFlags.RedirectToReactApp);
 
-            return isEnabled ? Redirect(test) : View(vm);
+            return View(vm);
         }
     }
 }
