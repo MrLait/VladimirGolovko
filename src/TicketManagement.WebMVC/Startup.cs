@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 using TicketManagement.WebMVC.Extensions;
 using TicketManagement.WebMVC.Infrastructure.Delegates;
 using TicketManagement.WebMVC.JwtTokenAuth;
@@ -43,6 +44,7 @@ namespace TicketManagement.WebMVC
             services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
             services.AddOptions().Configure<ApiOptions>(binder => binder.IdentityApiAddress = Configuration[ApiOptions.IdentityApiAddressName]);
             services.AddOptions().Configure<ApiOptions>(binder => binder.EventFlowApiAddress = Configuration[ApiOptions.EventFlowApiAddressName]);
+            services.AddOptions().Configure<ApiOptions>(binder => binder.ReactAppAddress = Configuration[ApiOptions.ReactAppAddressName]);
             services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication(JwtAuthenticationConstants.SchemeName)
@@ -55,6 +57,7 @@ namespace TicketManagement.WebMVC
             services.AddControllersWithViews()
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
+            services.AddFeatureManagement();
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
