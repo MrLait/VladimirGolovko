@@ -15,7 +15,7 @@ let initialState = {
     role: null,
     token: null,
     isAuth: false,
-    isTokenValid: false
+    isTokenValid: false,
 }
 
 const authReducer = (state = initialState, action) => {

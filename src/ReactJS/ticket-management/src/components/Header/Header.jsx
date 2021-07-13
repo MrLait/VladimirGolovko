@@ -4,6 +4,7 @@ import {NavLink} from "react-router-dom";
 import i18n from "i18next";
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "../../common/Selectors/LanguageSelector";
+import {roles} from "../Constants/userConst";
 
 const Header = (props) => {
     const {t} = useTranslation();
@@ -23,9 +24,11 @@ const Header = (props) => {
                     props.isAuth ?
                         <span>
                             <span className={s.span}>
-                                <NavLink to={'/eventManagerArea'}>
-                                    {t('eventManagerArea')}
-                                </NavLink>
+                                {
+                                    props.role === roles.eventManager ?
+                                        <NavLink to={'/eventManagerArea'}> {t('eventManagerArea')}</NavLink>
+                                        : ""
+                                }
                             </span>
                             <span className={s.span}>
                                 <NavLink to={'/profile'}>
