@@ -1,8 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import basePath from "../../../assets/Pics/FootballPicOne.PNG";
 import {Link} from "react-router-dom";
-import {deleteEvent} from "../../../redux/eventManagerArea-reducer";
+import style from  "./EventManagerArea.module.css"
 
 const EventManagerArea = (props) => {
     const {t} = useTranslation();
@@ -23,7 +22,7 @@ const EventManagerArea = (props) => {
                     e =>
                         <tr>
                             <td>
-                                <div><img src={basePath}/></div>
+                                <div><img className={style.img} src={`${window.location.origin}/${e.imageUrl}`}/></div>
                             </td>
                             <td>{e.name}</td>
                             <td>{e.description}</td>

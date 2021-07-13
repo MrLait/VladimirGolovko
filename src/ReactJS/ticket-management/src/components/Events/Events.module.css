@@ -17,3 +17,7 @@ table {
     border-collapse: collapse;
     width: 100%;
 }
+
+.img{
+    width: 200px;
+}

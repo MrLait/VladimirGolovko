@@ -1,10 +1,10 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import "./PurchaseHistory.module.css"
-import basePath from "../../assets/Pics/FootballPicOne.PNG";
+import style from "./PurchaseHistory.module.css"
 
 let PurchaseHistory = (props) => {
     const {t} = useTranslation();
+    debugger;
     return (
         <div>
             {props.items && props.items.length ?
@@ -23,7 +23,7 @@ let PurchaseHistory = (props) => {
                         e =>
                             <tr>
                                 <td>
-                                    <div><img src={basePath}/></div>
+                                    <div><img className={style.img} src={`${window.location.origin}/${e.pictureUrl}`}/></div>
                                 </td>
                                 <td>{e.eventName}</td>
                                 <td>{e.eventAreaDescription}</td>

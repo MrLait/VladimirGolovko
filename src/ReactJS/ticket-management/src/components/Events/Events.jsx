@@ -1,11 +1,11 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import "./Events.module.css"
-import basePath from "./../../assets/Pics/FootballPicOne.PNG";
+import style from "./Events.module.css"
 
 let Events = (props) => {
     const {t} = useTranslation();
+    debugger;
     return (
         <table>
             <tr>
@@ -23,7 +23,7 @@ let Events = (props) => {
                 e =>
                     <tr >
                         <td>
-                            <div><img src= {basePath}/></div>
+                            <div><img className={style.img} src= {`${window.location.origin}/${e.imageUrl}`}/></div>
                         </td>
                         <td>{e.name}</td>
                         <td>{e.description}</td>

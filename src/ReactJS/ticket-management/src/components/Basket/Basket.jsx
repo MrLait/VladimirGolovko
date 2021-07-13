@@ -1,14 +1,15 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
 import "./Basket.module.css"
-import basePath from "../../assets/Pics/FootballPicOne.PNG";
 import {Link} from "react-router-dom";
+import style from "./Basket.module.css"
 
 let Basket = (props) => {
     const {t} = useTranslation();
     const buyOnClick = () => {
         props.buy(props.totalPrice, props.balance, props.items);
     }
+    debugger;
     return (
         <div>
             {props.items && props.items.length
@@ -26,7 +27,7 @@ let Basket = (props) => {
                     {props.items.map(e =>
                         <tr>
                             <td>
-                                <div><img src={basePath}/></div>
+                                <div><img className={style.img} src={`${window.location.origin}/${e.pictureUrl}`}/></div>
                             </td>
                             <td>{e.eventName}</td>
                             <td>{e.eventAreaDescription}</td>
