@@ -1,7 +1,7 @@
 import * as axios from "axios";
 
-const identityBaseURL = 'https://localhost:44370/';
-const eventBaseURL = 'https://localhost:44300/';
+const identityBaseURL = 'https://localhost:5004/';
+const eventBaseURL = 'https://localhost:5003/';
 
 const identityInstance = axios.create({
     baseURL: identityBaseURL

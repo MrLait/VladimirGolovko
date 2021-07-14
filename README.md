@@ -26,8 +26,8 @@ For example:
 
 Url addresses:
 TicketManagement.WebMVC : "https://localhost:5001",
-Identity.API : "https://localhost:44370",
-EventFlow.API :"https://localhost:44300",
+Identity.API : "https://localhost:5004",
+EventFlow.API :"https://localhost:5003"
 ReactJS/ticket-management :http://localhost:3000
 
 ## To run the whole solution in debug mode, you need to configure the project to run in <Multiple startup Projects> mode.
@@ -38,8 +38,8 @@ You should follow these steps
 
 Url addresses:
 TicketManagement.WebMVC : "https://localhost:5001",
-Identity.API : "https://localhost:5004",
-EventFlow.API :"https://localhost:5003"
+Identity.API : "https://localhost:44370",
+EventFlow.API :"https://localhost:44300",
 ReactJS/ticket-management :http://localhost:3000
 
 ## To run tests, you should follow these steps:
