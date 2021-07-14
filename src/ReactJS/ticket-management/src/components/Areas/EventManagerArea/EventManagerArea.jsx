@@ -2,11 +2,13 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import style from  "./EventManagerArea.module.css"
+import {array} from "prop-types";
 
 const EventManagerArea = (props) => {
     const {t} = useTranslation();
     return (
         <div>
+            <span>{props.isDeleteError ? t('Unable to delete because seats have already been purchased for the event.') : ""} </span>
             <table>
                 <tr>
                     <th>{t('Picture')}</th>
@@ -19,7 +21,7 @@ const EventManagerArea = (props) => {
                     <th>{t('PricesTo')}</th>
                 </tr>
                 {props.events.map(
-                    e =>
+                    (e, arrayIndex) =>
                         <tr>
                             <td>
                                 <div><img className={style.img} src={`${window.location.origin}/${e.imageUrl}`}/></div>
@@ -32,7 +34,7 @@ const EventManagerArea = (props) => {
                             <td>{e.priceFrom}</td>
                             <td>{e.priceTo}</td>
                             <td>
-                                <button onClick={() => {props.deleteEvent(e.id);}}>{t('Delete')} </button>
+                                <button onClick={() => {props.deleteEvent(e.id, arrayIndex);}}>{t('Delete')} </button>
                                 <Link to={"update/event/" + e.id}>
                                     <button>{t('Update')} </button>
                                 </Link>

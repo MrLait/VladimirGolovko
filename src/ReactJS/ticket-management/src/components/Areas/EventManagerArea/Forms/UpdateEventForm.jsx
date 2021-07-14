@@ -4,36 +4,40 @@ import {Field, reduxForm} from "redux-form";
 import {required} from "../../../Utils/validators";
 import {Input, renderDatePicker} from "../../../../common/FormsControls/FormsControls";
 import {Redirect} from "react-router";
+import {formNames} from "../../../Constants/formNames";
+import {fieldNames} from "../../../Constants/fieldConst";
+import style from "../../../../common/FormsControls/FormsControls.module.css";
 import Preloader from "../../../../common/Preloaders/Preloader";
 
 let UpdateEventForm = (props) => {
     const {t} = useTranslation();
-    //if (!props.event) return <Preloader/>
+    debugger;
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={t("Name")} name={'name'} validate={[required]} component={Input}/>
+                <Field placeholder={t("Name")} name={fieldNames.name} validate={[required]} component={Input}/>
             </div>
             <div>
-                <Field placeholder={t("Description")} name={"description"} validate={[required]} component={Input}/>
+                <Field placeholder={t("Description")} name={fieldNames.description} validate={[required]} component={Input}/>
             </div>
             <div>
-                <Field type={'number'} placeholder={t("LayoutId")} name={"layoutId"} validate={[required]}
+                <Field type={'number'} placeholder={t("LayoutId")} name={fieldNames.layoutId} validate={[required]}
                        component={Input}/>
             </div>
             <div>
-                <Field placeholder={t("StartDateTime")} name={"startDateTime"} validate={[required]}
+                <Field placeholder={t("StartDateTime")} name={fieldNames.startDateTime} validate={[required]}
                        component={renderDatePicker}/>
             </div>
             <div>
-                <Field placeholder={t("EndDateTime")} name={"endDateTime"} validate={[required]}
+                <Field placeholder={t("EndDateTime")} name={fieldNames.endDateTime} validate={[required]}
                        component={renderDatePicker}/>
             </div>
             <div>
-                <Field placeholder={t("ImageUrl")} name={"imageUrl"} validate={[required]} component={Input}/>
+                <Field placeholder={t("ImageUrl")} name={fieldNames.imageUrl} validate={[required]} component={Input}/>
             </div>
 
             <div>
+                {props.error && <div className={style.formSummaryError}>{t(props.error)}</div>}
                 <button disabled={props.inProgress}>
                     {t('UpdateEvent')}
                 </button>
@@ -45,10 +49,8 @@ let UpdateEventForm = (props) => {
     )
 }
 
-UpdateEventForm = reduxForm({
-    form: 'updateEvent',
-})(UpdateEventForm);
-
-
-export default UpdateEventForm;
-
+export default reduxForm(
+    {
+        form: formNames.UpdateEvent
+    }
+)(UpdateEventForm)

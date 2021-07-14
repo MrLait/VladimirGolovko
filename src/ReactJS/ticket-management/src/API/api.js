@@ -58,7 +58,6 @@ export const eventAreaAPI = {
             id: id,
             price: price
         }]
-        debugger;
         return eventInstance.put("EventArea", eventAreas, headerWithAuthStr)
     },
 }

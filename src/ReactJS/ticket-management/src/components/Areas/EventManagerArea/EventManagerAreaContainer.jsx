@@ -12,7 +12,6 @@ class EventManagerAreaContainer extends React.Component {
         this.props.getEvents();
         this.props.setIsCreateEventSuccessful(false);
         this.props.setIsUpdateEventSuccessful(false);
-        debugger;
     }
 
     render() {
@@ -27,6 +26,7 @@ let mapStateToProps = (state) => {
         isAuth: state.authPage.isAuth,
         events: state.eventManagerAreaPage.events,
         isFetching: state.eventManagerAreaPage.isFetching,
+        isDeleteError: state.eventManagerAreaPage.isDeleteError,
     }
 }
 
