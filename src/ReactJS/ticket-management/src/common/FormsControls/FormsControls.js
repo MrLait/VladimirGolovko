@@ -25,25 +25,6 @@ export const Input = (props) => {
     return <FormControl {...props}><input {...input}{...restProps}/> </FormControl>
 }
 
-// export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
-//     <div>
-//         <DatePicker {...input} dateForm="MM/DD/YYYY" selected={input.value ? moment(input.value, 'YYYY-MM-DD') : null} />
-//         {touched && error && <span>{error}</span>}
-//     </div>
-// );
-
-
-// export const renderDatePicker = ({input, meta, ...props}) => {
-//     debugger;
-//     const hasError = meta.touched && meta.error;
-//     return (
-//         <div className={styles.formControl + " " + (hasError ? styles.error : "")}>
-//             <DatePicker {...input} selected = {input.value} {...props}/>
-//             {hasError && <span>{meta.error}</span>}
-//         </div>
-//     )
-// }
-
 export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
     <div>
         <DatePicker {...input} dateForm="MM/DD/YYYY" selected={input.value ? (input.value) : null} />

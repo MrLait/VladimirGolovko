@@ -19,20 +19,12 @@ class EventAreasContainer extends React.Component {
         this.props.toggleIsFetching(true);
         this.props.getEventAreas(eventId);
     }
-
-    onPageChanged = () => {
-        let eventId = this.props.match.params.eventId;
-        this.props.toggleIsFetching(true);
-        this.props.getEventAreas(eventId);
-    }
-
     render() {
         return <>
             {this.props.isFetching
                 ? <Preloader/>
                 : null}
-            <EventAreas {...this.props}
-                            onPageChanged={this.onPageChanged}/>
+            <EventAreas {...this.props}/>
         </>
     }
 }

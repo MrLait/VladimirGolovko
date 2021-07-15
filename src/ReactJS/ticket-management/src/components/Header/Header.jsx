@@ -1,11 +1,11 @@
 import React from "react";
 import s from './Header.module.css';
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import i18n from "i18next";
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "../../common/Selectors/LanguageSelector";
 import {roles} from "../Constants/userConst";
-import {Redirect} from "react-router";
+import {routes} from "../Constants/routes";
 
 const Header = (props) => {
     const {t} = useTranslation();
@@ -15,7 +15,7 @@ const Header = (props) => {
     return (
         <header className={s.header}>
             <span className={s.homeBlock}>
-                <NavLink to={'/home'}>{t('Home')}</NavLink>
+                <NavLink to={routes.home.href}>{t('Home')}</NavLink>
             </span>
             <span className={s.authBlock}>
                 {
@@ -24,30 +24,30 @@ const Header = (props) => {
                             <span className={s.span}>
                                 {
                                     props.role === roles.eventManager ?
-                                        <NavLink to={'/eventManagerArea'}> {t('Event manager area')}</NavLink>
+                                        <NavLink to={routes.eventManagerArea.href}> {t('Event manager area')}</NavLink>
                                         : ""
                                 }
                             </span>
                             <span className={s.span}>
-                                <NavLink to={'/profile'}>
+                                <NavLink to={routes.profile.href}>
                                     {t('Profile')}
                                 </NavLink>
                             </span>
                             <span className={s.span}>
-                                <NavLink to={'/purchaseHistory'}>
+                                <NavLink to={routes.purchaseHistory.href}>
                                     {t('Purchase history')}
                                 </NavLink>
                             </span>
                             <span className={s.span}>
-                                <NavLink to={'/basket'}>
+                                <NavLink to={routes.basket.href}>
                                     {t('Basket')}
                                 </NavLink>
                             </span>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
-                                <button onClick={props.logout}>
+                                <Link to={routes.home.href} onClick={props.logout}>
                                     {t('Logout')}
-                                </button>
+                                </Link >
                             </span>
 
                             <span className={s.select}>
@@ -57,12 +57,12 @@ const Header = (props) => {
                         :
                         <span>
                         <span className={s.span}>
-                            <NavLink to={'/register'}>
+                            <NavLink to={routes.register.href}>
                                 {t('Register')}
                             </NavLink>
                         </span>
                         <span className={s.span}>
-                            <NavLink to={'/login'}>
+                            <NavLink to={routes.login.href}>
                                 {t('Login')}
                             </NavLink>
                         </span>
