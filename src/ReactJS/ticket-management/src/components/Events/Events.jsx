@@ -23,7 +23,7 @@ let Events = (props) => {
                 e =>
                     <tr >
                         <td>
-                            <div><img className={style.img} src= {`${window.location.origin}/${e.imageUrl}`}/></div>
+                            <div><img className={style.img} src= {`${window.location.origin}/${e.imageUrl}`} alt/></div>
                         </td>
                         <td>{e.name}</td>
                         <td>{e.description}</td>

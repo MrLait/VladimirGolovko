@@ -2,11 +2,12 @@ import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {connect} from "react-redux";
 import {Redirect} from "react-router";
-import {emailShouldContainАt, required} from "../Utils/validators";
+import {emailShouldContainAt, required} from "../Utils/validators";
 import {Input} from "../../common/FormsControls/FormsControls";
 import style from "./../../common/FormsControls/FormsControls.module.css"
 import {useTranslation} from "react-i18next";
 import {register} from "../../redux/auth-reducer";
+import {formNames} from "../Constants/formNames";
 
 const RegisterForm = (props) => {
     const {t} = useTranslation();
@@ -22,7 +23,7 @@ const RegisterForm = (props) => {
                 <Field placeholder={t("Surname")} name={"surname"} validate={[required]} component={Input}/>
             </div>
             <div>
-                <Field placeholder={t("Email")} name={"email"} validate={[required, emailShouldContainАt]} component={Input}/>
+                <Field placeholder={t("Email")} name={"email"} validate={[required, emailShouldContainAt]} component={Input}/>
             </div>
             <div>
                 <Field placeholder={t("Password")} name={"password"} validate={[required]} component={Input}
@@ -43,7 +44,7 @@ const RegisterForm = (props) => {
 
 const RegisterReduxForm = reduxForm(
     {
-        form: 'register'
+        form: formNames.Register
     }
 )(RegisterForm)
 

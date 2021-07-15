@@ -2,7 +2,6 @@ import {eventAPI, eventAreaAPI, eventManagerAPI} from "../API/api";
 import {stopSubmit} from "redux-form";
 import {messages as validateExceptionMessages} from "../components/Constants/validateExceptionMessages";
 import {formNames} from "../components/Constants/formNames";
-import {fieldNames} from "../components/Constants/fieldConst"
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_EVENTS = 'SET_EVENTS';

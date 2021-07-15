@@ -1,6 +1,4 @@
 import {basketAPI, profileAPI, purchaseHistoryAPI} from "../API/api";
-import {userClaim} from "../components/Constants/userConst";
-import {setEvents} from "./events-reducer";
 import {getCurUserId} from "../common/Services/UserService";
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';

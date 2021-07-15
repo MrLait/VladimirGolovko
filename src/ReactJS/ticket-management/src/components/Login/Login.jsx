@@ -7,6 +7,7 @@ import {required} from "../Utils/validators";
 import {Input} from "../../common/FormsControls/FormsControls";
 import style from "./../../common/FormsControls/FormsControls.module.css"
 import {useTranslation} from "react-i18next";
+import {formNames} from "../Constants/formNames";
 
 
 const LoginForm = (props) => {
@@ -43,7 +44,7 @@ const LoginForm = (props) => {
 
 const LoginReduxForm = reduxForm(
     {
-        form: 'login'
+        form: formNames.Login
     }
 )(LoginForm)
 

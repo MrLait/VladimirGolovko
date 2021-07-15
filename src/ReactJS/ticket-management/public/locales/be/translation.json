@@ -84,6 +84,9 @@
   "Edit surname": "Змяніць пароль",
   "RowNumber": "Нумар радка",
   "AreaDescription": "Апісанне вобласці",
-  "NumberOfSeat": "Нумар месца"
-
+  "NumberOfSeat": "Нумар месца",
+  "Basket is empty": "Кошык пусты",
+  "The purchase was successful": "Пакупка прайшла паспяхова",
+  "Total price": "Агульная цана",
+  "Buy" : "Купіць"
 }

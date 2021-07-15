@@ -1,9 +1,5 @@
 {
   "title": "Internationalizing with i18next",
-  "description": {
-    "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
-    "part2": "Switch language between english and russian using buttons above."
-  },
   "Invalid mail format, example user@gmail.com" : "Invalid mail format, example user@gmail.com",
   "PasswordConfirm" : "Password mismatch",
   "Logout": "Logout",
@@ -16,13 +12,10 @@
   "AvailableOfSeats": "Available seats to buy",
   "ChooseTickets": "Choose tickets",
   "Description": "Description",
-  "EventEndsAt": "Event ends at",
   "EventName": "Event name",
-  "EventStartsAt": "The event starts at",
   "PricesStartFrom": "Ticket prices start with",
   "PricesTo": "Ticket prices to",
   "Picture" : "Picture",
-
   "Home" : "Home",
   "Purchase history": "Purchase history",
   "Register": "Register",
@@ -86,7 +79,10 @@
   "Edit password": "Edit password",
   "Old password": "Old password",
   "New password": "New password",
-  "Edit surname": "Edit surname"
-
-
+  "Edit surname": "Edit surname",
+  "RowNumber": "Row number",
+  "NumberOfSeat": "Number of seat",
+  "EventStartsAt": "The event starts at",
+  "EventEndsAt": "The event ends at",
+  "AreaDescription": "Area description"
 }

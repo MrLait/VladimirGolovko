@@ -38,21 +38,20 @@ let Basket = (props) => {
                             <td>{e.price}</td>
                         </tr>
                     )}
-                    <div> {(t)('TotalPrice')}: {props.totalPrice}</div>
+                    <div>{`${t("Total price")}: ${props.totalPrice}`}</div>
                     {props.isAuth ?
                         <button disabled={props.inProgress} onClick={buyOnClick}>{t('Buy')} </button>
                         :
                         <Link to={"/login"}>
-                            <button>{t('Buy')} </button>
+                            <button>{t('Buy')}</button>
                         </Link>
                     }
-                    <div>{props.isNotEnoughMoney ? "NotEnoughMoney" : ""} </div>
+                    <div>{props.isNotEnoughMoney ? t('NotEnoughMoney') : ""} </div>
                 </table>
-                : t('Basket is Empty')}
+                : t('Basket is empty')}
             <div>
                 {props.isBuySuccessful ? t('The purchase was successful') : "" }
             </div>
-
         </div>
     )
 }

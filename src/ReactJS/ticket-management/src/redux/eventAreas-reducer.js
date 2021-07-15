@@ -67,7 +67,7 @@ const eventAreasReducer = (state = initialState, action) => {
                 ...state,
                 clickingInProgress: action.isFetching
                     ? [...state.clickingInProgress, action.id]
-                    : state.clickingInProgress.filter(id => id != action.id)
+                    : state.clickingInProgress.filter(id => id !== action.id)
             }
         }
         default:
@@ -92,7 +92,7 @@ export const addItem = (eventAreaId, itemId) => (dispatch) => {
     dispatch(toggleClickingInProgress(true, itemId))
     const id = getCurUserId();
     basketAPI.addItemToUserBasket(id, itemId)
-        .then(response => {
+        .then(() => {
             dispatch(addSeatItem(eventAreaId, itemId))
             dispatch(toggleClickingInProgress(false, itemId));
         })
@@ -102,7 +102,7 @@ export const removeItem = (eventAreaId, itemId) => (dispatch) => {
     dispatch(toggleClickingInProgress(true, itemId))
     const id = getCurUserId();
     basketAPI.deleteItemFromUserBasket(id, itemId)
-        .then(response => {
+        .then(() => {
             dispatch(removeSeatItem(eventAreaId, itemId))
             dispatch(toggleClickingInProgress(false, itemId));
         })

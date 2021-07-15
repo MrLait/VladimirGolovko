@@ -12,35 +12,36 @@ import EventManagerAreaContainer from "./components/Areas/EventManagerArea/Event
 import CreateEventContainer from "./components/Areas/EventManagerArea/Forms/CreateEventContainer";
 import UpdateEventContainer from "./components/Areas/EventManagerArea/Forms/UpdateEventContainer";
 import {Redirect} from "react-router";
+import { routes } from "./components/Constants/routes";
 
 const App = () => {
     return (
         <div className='app-wrapper'>
             <header className='header'><HeaderContainer/></header>
             <div className='content'>
-                <Route path='/register'
+                <Route path= {routes.register.href}
                        render={() => <Register/>}/>
-                <Route path='/login'
+                <Route path={routes.login.href}
                        render={() => <Login/>}/>
-                <Route path='/eventArea/:eventId'
+                <Route path={routes.eventArea.href}
                        render={() => <EventAreasContainer/>}/>
-                <Route path='/home'
+                <Route path={routes.home.href}
                        render={() => <EventsContainer/>}/>
-                <Route path='/basket'
+                <Route path={routes.basket.href}
                        render={() => <BasketContainer/>}/>
-                <Route path='/purchaseHistory'
+                <Route path={routes.purchaseHistory.href}
                        render={() => <PurchaseHistoryContainer/>}/>
-                <Route path='/profile'
+                <Route path={routes.profile.href}
                        render={() => <ProfileContainer/>}/>
-                <Route path='/eventManagerArea'
+                <Route path={routes.eventManagerArea.href}
                        render={() => <EventManagerAreaContainer/>}/>
-                <Route path='/create/event'
+                <Route path={routes.createEvent.href}
                        render={() => <CreateEventContainer/>}/>
-                <Route path='/update/event/:eventId'
+                <Route path={routes.updateEvent.href}
                        render={() => <UpdateEventContainer/>}/>
                 <Route exact path="/"
                        render={() => {
-                           return (<Redirect to="/home"/>)
+                           return (<Redirect to={routes.home.href}/>)
                        }}
                 />
             </div>

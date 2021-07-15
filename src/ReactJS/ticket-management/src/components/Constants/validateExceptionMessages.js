@@ -11,4 +11,10 @@ export const messages = {
     ThereIsNoSuchLayout : "There is no such Layout.",
     SeatsHaveAlreadyBeenPurchased : "Unable to delete because seats have already been purchased for the event.",
     ProductInAnotherUserBasket : "Product in another user busket.",
+    PasswordTooShort : "PasswordTooShort",
+    PasswordRequiresNonAlphanumeric : "PasswordRequiresNonAlphanumeric",
+    PasswordRequiresDigit : "PasswordRequiresDigit",
+    PasswordRequiresUpper : "PasswordRequiresUpper",
+    PasswordConfirm : "PasswordConfirm",
+    PasswordMismatch : "PasswordMismatch"
 };

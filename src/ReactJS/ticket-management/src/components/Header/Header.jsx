@@ -5,6 +5,7 @@ import i18n from "i18next";
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "../../common/Selectors/LanguageSelector";
 import {roles} from "../Constants/userConst";
+import {Redirect} from "react-router";
 
 const Header = (props) => {
     const {t} = useTranslation();
@@ -15,9 +16,6 @@ const Header = (props) => {
         <header className={s.header}>
             <span className={s.homeBlock}>
                 <NavLink to={'/home'}>{t('Home')}</NavLink>
-            </span>
-            <span className={s.select}>
-                <LanguageSelector {...props}/>
             </span>
             <span className={s.authBlock}>
                 {
@@ -37,22 +35,27 @@ const Header = (props) => {
                             </span>
                             <span className={s.span}>
                                 <NavLink to={'/purchaseHistory'}>
-                                    {t('PurchaseHistory')}
+                                    {t('Purchase history')}
                                 </NavLink>
                             </span>
                             <span className={s.span}>
                                 <NavLink to={'/basket'}>
                                     {t('Basket')}
                                 </NavLink>
-                        </span>
+                            </span>
                             <span className={s.span}>{props.email}</span>
                             <span className={s.span}>
                                 <button onClick={props.logout}>
                                     {t('Logout')}
                                 </button>
                             </span>
+
+                            <span className={s.select}>
+                                <LanguageSelector {...props}/>
+                            </span>
                         </span>
-                        : <span>
+                        :
+                        <span>
                         <span className={s.span}>
                             <NavLink to={'/register'}>
                                 {t('Register')}
@@ -63,6 +66,11 @@ const Header = (props) => {
                                 {t('Login')}
                             </NavLink>
                         </span>
+                        <select id={props.language} name={'language'} onChange={onChange} value={props.language}>
+                            <option value='en'>English</option>
+                            <option value='ru'>Русский</option>
+                            <option value='be'>Белорусский</option>
+                        </select>
                         </span>
                 }
             </span>

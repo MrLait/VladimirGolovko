@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../../common/FormsControls/FormsControls";
 import style from "./Form.module.css"
+import {formNames} from "../../Constants/formNames";
 
 const EditFirstNameForm = (props) => {
     const {t} = useTranslation();
@@ -27,5 +28,5 @@ const EditFirstNameForm = (props) => {
 }
 
 export default reduxForm({
-    form: 'firstName'
+    form: formNames.FirstName
 })(EditFirstNameForm)

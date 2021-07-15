@@ -2,8 +2,9 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../../common/FormsControls/FormsControls";
-import {emailShouldContainАt} from "../../Utils/validators";
+import {emailShouldContainAt} from "../../Utils/validators";
 import style from "./Form.module.css"
+import {formNames} from "../../Constants/formNames";
 
 const EditEmailForm = (props) => {
     const {t} = useTranslation();
@@ -15,7 +16,7 @@ const EditEmailForm = (props) => {
                     <td>
                         <span>
                             <Field placeholder={t("Edit email")} name={"email"}
-                                   validate={[emailShouldContainАt]} component={Input}/>
+                                   validate={[emailShouldContainAt]} component={Input}/>
                             <button disabled={props.clickingInProgress}>
                                 {t('Edit email')}
                             </button>
@@ -28,5 +29,5 @@ const EditEmailForm = (props) => {
 }
 
 export default reduxForm({
-    form: 'email'
+    form: formNames.Email
 })(EditEmailForm)

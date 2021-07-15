@@ -1,9 +1,5 @@
 {
   "title": "Интернационализация с i18next",
-  "description": {
-    "part1": "Чтобы начать работу, отредактируйте и сохраните файл <1>src/App.js</1>.",
-    "part2": "С помощью кнопок переключайте язык между английским и русским."
-  },
   "Invalid mail format, example user@gmail.com" : "Неверный формат почты. Пример: user@gmail.com",
   "PasswordConfirm" : "Пароли не совпадают",
   "Incorrect username and(or) password": "Неправильный логин и (или) пароль",
@@ -18,11 +14,10 @@
   "GoToPurchaseHistory": "Перейти к истории покупок",
   "NumberOfSeat": "Номер места",
   "Price": "Цена",
-  "RowNumber": "Ряд",
+  "RowNumber": "Номер ряд",
   "TheBasketIsEmpty": "Корзина пуста",
   "TheEventEndsAt": "Событие заканчивается в",
   "TheEventStartsAt": "Событие начинается в",
-  "TotalPrice": "Общая сумма",
   "Basket": "Корзина",
   "EventManagerArea": "Зона менеджер по событиям",
   "Home": "Домой",
@@ -98,4 +93,7 @@
   "Old password": "Старый пароль",
   "New password": "Новый пароль",
   "Edit surname": "Изменить фамилию",
+  "Basket is empty": "Корзина пуста",
+  "The purchase was successful": "Покупка прошла успешно",
+  "Total price": "Общая цена"
 }

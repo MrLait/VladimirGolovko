@@ -12,7 +12,7 @@ export const priceValidation = value => {
     if (value < 0) return messages.PriceIsNegative;
 }
 
-export const emailShouldContainАt = value => {
+export const emailShouldContainAt = value => {
     if (!value) return undefined;
     const emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     if (emailValid) return undefined;

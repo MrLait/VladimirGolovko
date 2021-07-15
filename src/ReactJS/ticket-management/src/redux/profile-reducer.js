@@ -1,7 +1,9 @@
 import {getCurUserId} from "../common/Services/UserService";
 import {profileAPI} from "../API/api";
 import {stopSubmit} from "redux-form";
-import i18n from "i18next";
+import {formNames} from "../components/Constants/formNames";
+import {messages as validateExceptionMessages} from "../components/Constants/validateExceptionMessages";
+import {localStorageItems} from "../components/Constants/localStorageItems";
 
 const SET_BALANCE = 'SET_BALANCE';
 const SET_SURNAME = 'SET_SURNAME';
@@ -81,7 +83,6 @@ export const getUserProfile = () => (dispatch) => {
             dispatch(setTimeZoneOffSet(response.data.timeZoneOffset));
             dispatch(setFirstName(response.data.firstName));
             dispatch(setBalance(Number(response.data.balance)));
-            i18n.changeLanguage(response.data.language);
             dispatch(toggleIsFetching(false));
         })
 }
@@ -100,7 +101,6 @@ export const editSurname = (surname) => (dispatch) => {
     const userId = getCurUserId();
     profileAPI.editSurname(userId, surname)
         .then(response => {
-            debugger;
             dispatch(setSurname(response.data));
             dispatch(toggleClickingInProgress(false))
         })
@@ -111,7 +111,6 @@ export const editFirstName = (firstName) => (dispatch) => {
     const userId = getCurUserId();
     profileAPI.editFirstName(userId, firstName)
         .then(response => {
-            debugger;
             dispatch(setFirstName(response.data));
             dispatch(toggleClickingInProgress(false))
         })
@@ -121,7 +120,6 @@ export const editEmail = (email) => (dispatch) => {
     const userId = getCurUserId();
     profileAPI.editEmail(userId, email)
         .then(response => {
-            debugger;
             dispatch(setEmail(response.data));
             dispatch(toggleClickingInProgress(false))
         })
@@ -130,34 +128,31 @@ export const editEmail = (email) => (dispatch) => {
 export const editPassword = (oldPassword, newPassword) => (dispatch) => {
     dispatch(toggleClickingInProgress(true))
     dispatch(setNewPassword(false));
-    debugger;
     const userId = getCurUserId();
     profileAPI.editPassword(userId, oldPassword, newPassword)
         .then(response => {
-            debugger;
             dispatch(setNewPassword(response.data));
             dispatch(toggleClickingInProgress(false))
         }).catch(error =>  {
-        debugger;
         if(error.response.data)
         {
-            if (error.response.data.includes('PasswordMismatch')) {
-                dispatch(stopSubmit('editPassword', {oldPassword: "PasswordMismatch"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordMismatch)) {
+                dispatch(stopSubmit(formNames.EditPassword, {oldPassword: validateExceptionMessages.PasswordMismatch}));
             }
-            if (error.response.data.includes('PasswordTooShort')) {
-                dispatch(stopSubmit('editPassword', {newPassword: "PasswordTooShort"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordTooShort)) {
+                dispatch(stopSubmit(formNames.EditPassword, {newPassword: validateExceptionMessages.PasswordTooShort}));
             }
-            if (error.response.data.includes('PasswordRequiresNonAlphanumeric')) {
-                dispatch(stopSubmit('editPassword', {newPassword: "PasswordRequiresNonAlphanumeric"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordRequiresNonAlphanumeric)) {
+                dispatch(stopSubmit(formNames.EditPassword, {newPassword: validateExceptionMessages.PasswordRequiresNonAlphanumeric}));
             }
-            if (error.response.data.includes('PasswordRequiresDigit')) {
-                dispatch(stopSubmit('editPassword', {newPassword: "PasswordRequiresDigit"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordRequiresDigit)) {
+                dispatch(stopSubmit(formNames.EditPassword, {newPassword: validateExceptionMessages.PasswordRequiresDigit}));
             }
-            if (error.response.data.includes('PasswordRequiresUpper')) {
-                dispatch(stopSubmit('editPassword', {newPassword: "PasswordRequiresUpper"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordRequiresUpper)) {
+                dispatch(stopSubmit(formNames.EditPassword, {newPassword: validateExceptionMessages.PasswordRequiresUpper}));
             }
-            if (error.response.data.includes('PasswordConfirm')) {
-                dispatch(stopSubmit('editPassword', {newPassword: "PasswordConfirm"}));
+            if (error.response.data.includes(validateExceptionMessages.PasswordConfirm)) {
+                dispatch(stopSubmit(formNames.EditPassword, {newPassword: validateExceptionMessages.PasswordConfirm}));
             }
             dispatch(toggleClickingInProgress(false))
         }
@@ -169,8 +164,7 @@ export const editTimeZoneOffset = (timeZoneOffset) => (dispatch) => {
     const userId = getCurUserId();
     debugger;
     profileAPI.editTimeZoneOffset(userId, timeZoneOffset)
-        .then(response => {
-            debugger;
+        .then(() => {
             dispatch(setTimeZoneOffSet(timeZoneOffset));
             dispatch(toggleClickingInProgress(false))
         })
@@ -180,9 +174,8 @@ export const editLanguage = (culture) => (dispatch) => {
     dispatch(toggleClickingInProgress(true))
     const userId = getCurUserId();
     profileAPI.setLanguage(userId, culture)
-        .then(response => {
-            debugger;
-            localStorage.setItem('i18nextLng', culture);
+        .then(() => {
+            localStorage.setItem(localStorageItems.I18nextLng, culture);
             dispatch(setLanguage(culture));
             dispatch(toggleClickingInProgress(false))
         })

@@ -2,7 +2,6 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import style from  "./EventManagerArea.module.css"
-import {array} from "prop-types";
 
 const EventManagerArea = (props) => {
     const {t} = useTranslation();
