@@ -26,18 +26,17 @@ class UpdateEventContainer extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        isAuth: state.authPage.isAuth,
         event: state.eventManagerAreaPage.event,
         events: state.eventManagerAreaPage.events,
         isFetching: state.eventManagerAreaPage.isFetching,
         isUpdateEventSuccessful: state.eventManagerAreaPage.isUpdateEventSuccessful,
     }
 }
-let AuthRedirectComponent = ifNotAuthRedirectToHome(UpdateEventContainer)
 export default compose(
     connect(
     mapStateToProps,
     {
         getEvent, updateEvent, toggleIsFetching}),
     withRouter,
-)(AuthRedirectComponent);
+    ifNotAuthRedirectToHome
+)(UpdateEventContainer);

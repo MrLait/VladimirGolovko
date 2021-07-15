@@ -9,6 +9,7 @@ import style from "./../../common/FormsControls/FormsControls.module.css"
 import {useTranslation} from "react-i18next";
 import {formNames} from "../Constants/formNames";
 import {ifAuthRedirectToHome} from "../../hoc/ifAuthRedirectToHome";
+import {compose} from "redux";
 
 
 const LoginForm = (props) => {
@@ -63,9 +64,7 @@ const Login = (props) => {
 }
 const mapStateToProps = (state) => ({});
 
-let AuthRedirectComponent = ifAuthRedirectToHome(Login)
-export default connect(mapStateToProps,
-    {
-        login
-    }
-)(AuthRedirectComponent);
+export default compose(
+    connect(mapStateToProps,{login}),
+    ifAuthRedirectToHome
+)(Login)

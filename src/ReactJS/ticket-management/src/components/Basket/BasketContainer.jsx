@@ -5,6 +5,7 @@ import Preloader from "../../common/Preloaders/Preloader";
 import {buy, getBalance, getUserItems} from "../../redux/basket-reducer";
 import Basket from "./Basket";
 import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
+import {compose} from "redux";
 
 class BasketContainer extends React.Component {
     componentDidMount() {
@@ -21,7 +22,6 @@ class BasketContainer extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        isAuth: state.authPage.isAuth,
         items: state.basketPage.items,
         isFetching: state.basketPage.isFetching,
         totalPrice: state.basketPage.totalPrice,
@@ -31,9 +31,12 @@ let mapStateToProps = (state) => {
         isBuySuccessful: state.basketPage.isBuySuccessful
     }
 }
-let AuthRedirectComponent = ifNotAuthRedirectToHome(BasketContainer)
-export default connect(
-    mapStateToProps,
-    {
-        toggleIsFetching, getUserItems, buy, getBalance
-        }) (AuthRedirectComponent);
+
+export default compose(
+    connect(
+        mapStateToProps,
+        {
+            toggleIsFetching, getUserItems, buy, getBalance
+        }),
+    ifNotAuthRedirectToHome
+)(BasketContainer);

@@ -9,6 +9,8 @@ import {
 import Profile from "./Profile";
 import {connect} from "react-redux";
 import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
+import {compose} from "redux";
+import {withRouter} from "react-router";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
@@ -23,7 +25,6 @@ class ProfileContainer extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        isAuth: state.authPage.isAuth,
         clickingInProgress: state.profilePage.clickingInProgress,
         isFetching: state.profilePage.isFetching,
         balance: state.profilePage.balance,
@@ -35,11 +36,14 @@ let mapStateToProps = (state) => {
         language: state.profilePage.language,
     }
 }
-let AuthRedirectComponent = ifNotAuthRedirectToHome(ProfileContainer)
-export default connect(
-    mapStateToProps,
-    {
-        toggleIsFetching, getBalance, deposit, editSurname,
-        getUserProfile, editFirstName, editEmail, editPassword,
-        editTimeZoneOffset, editLanguage
-        }) (AuthRedirectComponent);
+
+export default compose(
+    connect(
+        mapStateToProps,
+        {
+            toggleIsFetching, getBalance, deposit, editSurname,
+            getUserProfile, editFirstName, editEmail, editPassword,
+            editTimeZoneOffset, editLanguage
+        }),
+    ifNotAuthRedirectToHome
+)(ProfileContainer);

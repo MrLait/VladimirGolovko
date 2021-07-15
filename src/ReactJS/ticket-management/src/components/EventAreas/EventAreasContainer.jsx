@@ -37,10 +37,9 @@ let mapStateToProps = (state) => ({
     isAuth: state.authPage.isAuth
 });
 
-let AuthRedirectComponent = ifNotAuthRedirectToHome(EventAreasContainer)
-
 export default compose(
     connect(mapStateToProps,
         {toggleClickingInProgress, toggleIsFetching, getEventAreas, addItem, removeItem}),
     withRouter,
-)(AuthRedirectComponent)
+    ifNotAuthRedirectToHome
+)(EventAreasContainer)
