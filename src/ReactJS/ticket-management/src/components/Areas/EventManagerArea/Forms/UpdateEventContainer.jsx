@@ -5,14 +5,13 @@ import {getEvent, toggleIsFetching, updateEvent} from "../../../../redux/eventMa
 import UpdateEventForm from "./UpdateEventForm";
 import {compose} from "redux";
 import {withRouter} from "react-router";
+import {ifNotAuthRedirectToHome} from "../../../../hoc/ifNotAuthRedirectToHome";
 
 class UpdateEventContainer extends React.Component {
     componentDidMount() {
         this.props.toggleIsFetching(true);
         let eventId = this.props.match.params.eventId;
-        if(!this.props.event) {
-            this.props.getEvent(eventId);
-        }
+        this.props.getEvent(eventId);
     }
     render() {
         return <>
@@ -34,11 +33,11 @@ let mapStateToProps = (state) => {
         isUpdateEventSuccessful: state.eventManagerAreaPage.isUpdateEventSuccessful,
     }
 }
-
+let AuthRedirectComponent = ifNotAuthRedirectToHome(UpdateEventContainer)
 export default compose(
     connect(
     mapStateToProps,
     {
         getEvent, updateEvent, toggleIsFetching}),
     withRouter,
-)(UpdateEventContainer);
+)(AuthRedirectComponent);

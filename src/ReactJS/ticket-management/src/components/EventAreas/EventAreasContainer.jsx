@@ -11,6 +11,7 @@ import {
 import {withRouter} from "react-router";
 import {compose} from "redux";
 import Preloader from "../../common/Preloaders/Preloader";
+import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
 
 class EventAreasContainer extends React.Component {
     componentDidMount() {
@@ -36,8 +37,10 @@ let mapStateToProps = (state) => ({
     isAuth: state.authPage.isAuth
 });
 
+let AuthRedirectComponent = ifNotAuthRedirectToHome(EventAreasContainer)
+
 export default compose(
     connect(mapStateToProps,
         {toggleClickingInProgress, toggleIsFetching, getEventAreas, addItem, removeItem}),
     withRouter,
-)(EventAreasContainer)
+)(AuthRedirectComponent)

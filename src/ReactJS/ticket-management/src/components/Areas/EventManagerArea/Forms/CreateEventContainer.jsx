@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import CreateEventForm from "./CreateEventForm";
 import Preloader from "../../../../common/Preloaders/Preloader";
 import {createEvent, setEventInProgress, toggleIsFetching} from "../../../../redux/eventManagerArea-reducer";
+import {ifNotAuthRedirectToHome} from "../../../../hoc/ifNotAuthRedirectToHome";
 
 class CreateEventContainer extends React.Component {
     componentDidMount() {
@@ -31,11 +32,11 @@ let mapStateToProps = (state) => {
         isCreateEventSuccessful: state.eventManagerAreaPage.isCreateEventSuccessful,
     }
 }
-
+let AuthRedirectComponent = ifNotAuthRedirectToHome(CreateEventContainer)
 export default connect(
     mapStateToProps,
     {
         createEvent,
         setEventInProgress,
         toggleIsFetching
-    })(CreateEventContainer);
+    })(AuthRedirectComponent);

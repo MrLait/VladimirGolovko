@@ -6,12 +6,14 @@ import {
     deleteEvent,
     getEvents, setIsCreateEventSuccessful, setIsUpdateEventSuccessful
 } from "../../../redux/eventManagerArea-reducer";
+import {ifNotAuthRedirectToHome} from "../../../hoc/ifNotAuthRedirectToHome";
 
 class EventManagerAreaContainer extends React.Component {
     componentDidMount() {
         this.props.getEvents();
         this.props.setIsCreateEventSuccessful(false);
         this.props.setIsUpdateEventSuccessful(false);
+        debugger;
     }
 
     render() {
@@ -30,9 +32,11 @@ let mapStateToProps = (state) => {
     }
 }
 
+let AuthRedirectComponent = ifNotAuthRedirectToHome(EventManagerAreaContainer)
+
 export default connect(
     mapStateToProps,
     {
         getEvents, setIsCreateEventSuccessful, setIsUpdateEventSuccessful,
         deleteEvent
-    })(EventManagerAreaContainer);
+    })(AuthRedirectComponent);

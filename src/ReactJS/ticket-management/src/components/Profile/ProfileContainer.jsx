@@ -8,6 +8,7 @@ import {
 } from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {connect} from "react-redux";
+import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
@@ -34,11 +35,11 @@ let mapStateToProps = (state) => {
         language: state.profilePage.language,
     }
 }
-
+let AuthRedirectComponent = ifNotAuthRedirectToHome(ProfileContainer)
 export default connect(
     mapStateToProps,
     {
         toggleIsFetching, getBalance, deposit, editSurname,
         getUserProfile, editFirstName, editEmail, editPassword,
         editTimeZoneOffset, editLanguage
-        }) (ProfileContainer);
+        }) (AuthRedirectComponent);

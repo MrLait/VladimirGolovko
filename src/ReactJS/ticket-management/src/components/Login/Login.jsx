@@ -8,6 +8,7 @@ import {Input} from "../../common/FormsControls/FormsControls";
 import style from "./../../common/FormsControls/FormsControls.module.css"
 import {useTranslation} from "react-i18next";
 import {formNames} from "../Constants/formNames";
+import {ifAuthRedirectToHome} from "../../hoc/ifAuthRedirectToHome";
 
 
 const LoginForm = (props) => {
@@ -54,22 +55,17 @@ const Login = (props) => {
         console.log(formData);
         props.login(formData.email, formData.password, formData.rememberMe);
     }
-    if (props.isAuth) {
-        return <Redirect to={'home'}/>
-    }
+
     return <div>
         <h1>{t('Login')}</h1>
         <LoginReduxForm onSubmit={onSubmit}/>
     </div>
 }
-const mapStateToProps = (state) => (
-    {
-        isAuth: state.authPage.isAuth
-    }
-);
+const mapStateToProps = (state) => ({});
 
+let AuthRedirectComponent = ifAuthRedirectToHome(Login)
 export default connect(mapStateToProps,
     {
         login
     }
-)(Login);
+)(AuthRedirectComponent);

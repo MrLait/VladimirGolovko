@@ -82,7 +82,6 @@ export const setEvents = (events) => ({type: SET_EVENTS, events})
 export const setEvent = (event) => ({type: SET_EVENT, event})
 
 export const getEvent = (id) => (dispatch) => {
-    debugger;
     dispatch(toggleIsFetching(true));
     eventAPI.getEventById(id)
         .then(response => {
@@ -113,8 +112,7 @@ export const updateEvent = (event, id) => (dispatch) => {
     event.id = id;
     dispatch(toggleIsFetching(true));
     eventAPI.updateEvent(event)
-        .then(response => {
-            debugger;
+        .then(() => {
             dispatch(toggleIsFetching(false));
             dispatch(setIsUpdateEventSuccessful(true));
             dispatch(setEvent(null));

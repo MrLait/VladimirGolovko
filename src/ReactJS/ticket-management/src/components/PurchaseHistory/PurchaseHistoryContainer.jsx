@@ -4,6 +4,7 @@ import {toggleIsFetching} from "../../redux/events-reducer";
 import Preloader from "../../common/Preloaders/Preloader";
 import PurchaseHistory from "./PurchaseHistory";
 import {getUserItems} from "../../redux/purchaseHisory-reducer";
+import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
 
 class PurchaseHistoryContainer extends React.Component {
     componentDidMount() {
@@ -24,9 +25,9 @@ let mapStateToProps = (state) => {
         isFetching: state.basketPage.isFetching,
     }
 }
-
+let AuthRedirectComponent = ifNotAuthRedirectToHome(PurchaseHistoryContainer)
 export default connect(
     mapStateToProps,
     {
         toggleIsFetching, getUserItems
-        }) (PurchaseHistoryContainer);
+        }) (AuthRedirectComponent);

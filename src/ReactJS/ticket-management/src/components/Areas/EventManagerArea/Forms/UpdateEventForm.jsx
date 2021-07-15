@@ -7,7 +7,6 @@ import {Redirect} from "react-router";
 import {formNames} from "../../../Constants/formNames";
 import {fieldNames} from "../../../Constants/fieldConst";
 import style from "../../../../common/FormsControls/FormsControls.module.css";
-import Preloader from "../../../../common/Preloaders/Preloader";
 
 let UpdateEventForm = (props) => {
     const {t} = useTranslation();
