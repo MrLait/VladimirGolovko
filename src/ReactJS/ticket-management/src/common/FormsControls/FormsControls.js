@@ -8,10 +8,10 @@ const FormControl = ({input, meta, child, ...props}) => {
     const {t} = useTranslation();
     const hasError = meta.touched && meta.error;
     return (
-        <div className={styles.formControl + " " + (hasError ? styles.error : "")}>
+        <span className={styles.formControl + " " + (hasError ? styles.error : "")}>
             {props.children}
             {hasError && <span> {t(meta.error)}</span>}
-        </div>
+        </span>
     )
 }
 

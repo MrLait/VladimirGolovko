@@ -2,6 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../../common/FormsControls/FormsControls";
+import style from "./Form.module.css"
 
 const BalanceForm = (props) => {
     const {t} = useTranslation();
@@ -9,19 +10,13 @@ const BalanceForm = (props) => {
         <form onSubmit={props.handleSubmit}>
             <table>
                 <tr>
-                    <td> {t('Balance')} - {props.balance} {t('Currency')} </td>
+                    <td className={style.td}> {t('Balance')} - {props.balance} {t('Currency')} </td>
                     <td>
-                        <div>
+                        <span>
                             <Field type="number" placeholder={t("Deposit")} name={"balance"}
                                    component={Input}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button disabled={props.clickingInProgress}>
-                                {t('Deposit')}
-                            </button>
-                        </div>
+                            <button disabled={props.clickingInProgress}>{t('Deposit')} </button>
+                        </span>
                     </td>
                 </tr>
             </table>

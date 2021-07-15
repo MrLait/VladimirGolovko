@@ -11,7 +11,6 @@ import Preloader from "../../../../common/Preloaders/Preloader";
 
 let UpdateEventForm = (props) => {
     const {t} = useTranslation();
-    debugger;
     return (
         <form onSubmit={props.handleSubmit}>
             <div>

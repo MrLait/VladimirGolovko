@@ -3,3 +3,13 @@
     padding: 5px;
     color: red;
 }
+
+.td{
+    width: 800px;
+    padding-left: 10px;
+}
+
+.password{
+    margin-left: 150px;
+    padding-left: 10px;
+}

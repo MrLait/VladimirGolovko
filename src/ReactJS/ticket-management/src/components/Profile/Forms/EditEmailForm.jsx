@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../../common/FormsControls/FormsControls";
 import {emailShouldContainАt} from "../../Utils/validators";
+import style from "./Form.module.css"
 
 const EditEmailForm = (props) => {
     const {t} = useTranslation();
@@ -10,19 +11,15 @@ const EditEmailForm = (props) => {
         <form onSubmit={props.handleSubmit}>
             <table>
                 <tr>
-                    <td> {t('Email')} - {props.email} </td>
+                    <td className={style.td}> {t('Email')} - {props.email} </td>
                     <td>
-                        <div>
+                        <span>
                             <Field placeholder={t("Edit email")} name={"email"}
                                    validate={[emailShouldContainАt]} component={Input}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
                             <button disabled={props.clickingInProgress}>
                                 {t('Edit email')}
                             </button>
-                        </div>
+                        </span>
                     </td>
                 </tr>
             </table>

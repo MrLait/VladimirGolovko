@@ -2,6 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../../common/FormsControls/FormsControls";
+import style from "./Form.module.css"
 
 const EditSurnameForm = (props) => {
     const {t} = useTranslation();
@@ -9,19 +10,15 @@ const EditSurnameForm = (props) => {
         <form onSubmit={props.handleSubmit}>
             <table>
                 <tr>
-                    <td> {t('Surname')} - {props.surname} </td>
+                    <td className={style.td}> {t('Surname')} - {props.surname} </td>
                     <td>
-                        <div>
+                        <span>
                             <Field placeholder={t("Edit surname")} name={"surname"}
                                    component={Input}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
                             <button disabled={props.clickingInProgress}>
                                 {t('Edit surname')}
                             </button>
-                        </div>
+                        </span>
                     </td>
                 </tr>
             </table>

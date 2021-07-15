@@ -10,6 +10,7 @@ const EventManagerArea = (props) => {
         <div>
             <span>{props.isDeleteError ? t('Unable to delete because seats have already been purchased for the event.') : ""} </span>
             <table>
+                <tbody>
                 <tr>
                     <th>{t('Picture')}</th>
                     <th>{t('EventName')}</th>
@@ -22,7 +23,7 @@ const EventManagerArea = (props) => {
                 </tr>
                 {props.events.map(
                     (e, arrayIndex) =>
-                        <tr>
+                        <tr key={e.id}>
                             <td>
                                 <div><img className={style.img} src={`${window.location.origin}/${e.imageUrl}`}/></div>
                             </td>
@@ -41,6 +42,7 @@ const EventManagerArea = (props) => {
                             </td>
                         </tr>
                 )}
+                </tbody>
             </table>
             <div>
                 <Link to={"create/event"}>

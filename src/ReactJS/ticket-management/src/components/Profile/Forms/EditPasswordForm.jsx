@@ -10,20 +10,12 @@ const EditPasswordForm = (props) => {
         <form onSubmit={props.handleSubmit}>
             <table>
                 <tr>
-                    <td>
+                    <td className={style.password}>
                         <div>
                             <Field placeholder={t("Old password")} name={"oldPassword"}
                                    component={Input} type={'password'}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
                             <Field placeholder={t("New password")} name={"newPassword"}
                                    component={Input} type={'password'}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
                             <button disabled={props.clickingInProgress}>
                                 {t('Edit password')}
                             </button>

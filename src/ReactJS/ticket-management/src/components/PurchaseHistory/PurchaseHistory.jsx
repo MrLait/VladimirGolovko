@@ -32,7 +32,6 @@ let PurchaseHistory = (props) => {
                                 <td>{e.eventDateTimeStart}</td>
                                 <td>{e.eventDateTimeEnd}</td>
                                 <td>{e.price}</td>
-
                             </tr>
                     )}
                 </table>

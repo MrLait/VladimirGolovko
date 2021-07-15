@@ -1,9 +1,5 @@
 {
   "title": "Internationalizing with i18next",
-  "description": {
-    "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
-    "part2": "Switch language between english and russian using buttons above."
-  },
   "Invalid mail format, example user@gmail.com" : "Няправільны фармат пошты. Прыклад: user@gmail.com",
   "PasswordConfirm" : "Паролі не супадаюць",
   "Login" : "Увайсці",
@@ -12,7 +8,7 @@
   "Purchase history": "Гісторыя пакупак",
   "Register": "Зарэгістравацца",
   "Profile": "Профіль",
-  "Event manager area": "",
+  "Event manager area": "Менеджэр мерапрыемства",
   "Basket": "Кошык",
   "RememberMe" : "Запамятай мяне?",
   "Confirm the password" : "Пацвердзіце пароль",
@@ -25,7 +21,6 @@
   "User name" : "Імя карыстальніка",
   "UserNameRequired" : "Патрабуецца імя карыстальніка",
   "Price" : "Цена билета",
-  "Description" : "Апісанне",
   "DescriptionRequired" : "Патрабуецца апісанне",
   "EndDateTime" : "Час завяршэння мерапрыемства",
   "EndTimeRequired" : "Патрабуецца пазначыць час канца мерапрыемства",
@@ -75,5 +70,20 @@
   "EventStartsAt": "Пачатак падзеі",
   "PricesStartFrom": "Цэны ад",
   "PricesTo": "Цэны да",
-  "Picture" : "Карцінка"
+  "Update": "Абнавіць",
+  "Picture" : "Карцінка",
+  "Create event": "Стварыць падзею",
+  "Delete": "Выдаліць",
+  "Currency": "BYR",
+  "Deposit": "Дэпазіт",
+  "Edit email": "Змяніць пошту",
+  "Edit first name": "Змяніць імя",
+  "Edit password": "Змяніць пароль",
+  "Old password": "Змяніць пароль",
+  "New password": "Змяніць пароль",
+  "Edit surname": "Змяніць пароль",
+  "RowNumber": "Нумар радка",
+  "AreaDescription": "Апісанне вобласці",
+  "NumberOfSeat": "Нумар месца"
+
 }

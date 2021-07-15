@@ -6,6 +6,7 @@ import EditSurnameForm from "./Forms/EditSurnameForm";
 import EditFirstNameForm from "./Forms/EditFirstNameForm";
 import EditEmailForm from "./Forms/EditEmailForm";
 import EditPasswordForm from "./Forms/EditPasswordForm";
+import style from "./Profile.module.css"
 
 let Profile = (props) => {
     return (
@@ -15,10 +16,10 @@ let Profile = (props) => {
             <EditFirstNameForm {...props} onSubmit = {(formData) => {props.editFirstName(formData.firstName)}}/>
             <EditEmailForm {...props} onSubmit = {(formData) => {props.editEmail(formData.email)}}/>
             <EditPasswordForm {...props} onSubmit = {(formData) => {props.editPassword(formData.oldPassword, formData.newPassword)}}/>
-            <div>
-                <LanguageSelector {...props}/>
+            <div className={style.selector}>
+                <LanguageSelector  {...props}/>
             </div>
-            <div>
+            <div className={style.selector}>
                 <TimeZoneOffSetSelector {...props}/>
             </div>
         </div>

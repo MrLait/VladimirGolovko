@@ -26,7 +26,7 @@ const Header = (props) => {
                             <span className={s.span}>
                                 {
                                     props.role === roles.eventManager ?
-                                        <NavLink to={'/eventManagerArea'}> {t('eventManagerArea')}</NavLink>
+                                        <NavLink to={'/eventManagerArea'}> {t('Event manager area')}</NavLink>
                                         : ""
                                 }
                             </span>
@@ -42,7 +42,7 @@ const Header = (props) => {
                             </span>
                             <span className={s.span}>
                                 <NavLink to={'/basket'}>
-                                    {t('basket')}
+                                    {t('Basket')}
                                 </NavLink>
                         </span>
                             <span className={s.span}>{props.email}</span>
