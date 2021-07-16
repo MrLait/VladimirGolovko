@@ -44,7 +44,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.JwtTokenAuth
                 return AuthenticateResult.Fail(JwtAuthenticationConstants.Unauthorized);
             }
 
-            var token = Request.Headers[JwtAuthenticationConstants.Authorization].ToString()[JwtAuthenticationConstants.Bearer.Length..];
+            var token = Request.Headers[JwtAuthenticationConstants.Authorization].ToString()[$"{JwtAuthenticationConstants.Bearer} ".Length..];
             try
             {
                 await _userClient.ValidateToken(token);

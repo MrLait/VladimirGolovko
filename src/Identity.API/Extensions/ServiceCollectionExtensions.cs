@@ -83,7 +83,10 @@ namespace TicketManagement.Services.Identity.API.Extensions
         /// <param name="configuration">Configuration.</param>
         public static void JwtTokenAuthService(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
             var tokenSettings = configuration.GetSection(nameof(JwtTokenSettings));
+            services.Configure<JwtTokenSettings>(tokenSettings);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -104,8 +107,6 @@ namespace TicketManagement.Services.Identity.API.Extensions
                         ValidateLifetime = false,
                     };
                 });
-            services.Configure<JwtTokenSettings>(tokenSettings);
-            services.AddScoped<JwtTokenService>();
         }
     }
 }

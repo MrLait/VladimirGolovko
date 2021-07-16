@@ -1,0 +1,38 @@
+.outer {
+    text-align: center;
+}
+.seat {
+    display: inline-block;
+    position: relative;
+    padding: 15px;
+    margin: 5px;
+}
+.seat:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 20%; top: 30%;
+    z-index: 1;
+    background: rgba(255,255,230,0.9);
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    padding: 5px 10px;
+    border: 1px solid #333;
+}
+
+.available {
+    background-color: white;
+    color: black;
+}
+
+.purchased {
+    color: rgb(255,255,255);
+    background-color: rgb(0,0,0);
+}
+
+.booked {
+    color: rgb(255,255,255);
+    background-color: green;
+}
+.img{
+    width: 200px;
+}

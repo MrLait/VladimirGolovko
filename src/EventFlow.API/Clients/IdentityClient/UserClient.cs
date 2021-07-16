@@ -31,7 +31,7 @@ namespace TicketManagement.Services.EventFlow.API.Clients.IdentityClient
         /// <inheritdoc/>
         public async Task ValidateToken(string token, CancellationToken cancellationToken = default)
         {
-            var address = $"AccountUser/validate?token={token}";
+            var address = string.Format(IdentityApiRequestUris.ValidateToken, token);
             var message = await _httpClient.GetAsync(address, cancellationToken);
             message.EnsureSuccessStatusCode();
         }

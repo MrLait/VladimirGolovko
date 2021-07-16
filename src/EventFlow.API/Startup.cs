@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -45,26 +46,22 @@ namespace TicketManagement.Services.EventFlow.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks().AddCheck<UserApiHealthCheck>(UserApiHealthCheck.UserApiHealthCheckName, tags: new[] { UserApiHealthCheckStatus.Ready });
-            services.AddScoped<IEventSeatService, EventSeatService>();
-            services.AddScoped<IEventAreaService, EventAreaService>();
-            services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IBasketService, BasketService>();
-            services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
-            services.AddScoped<IDbContext, EfDbContext>();
-
+            services.AddScopesCollection(Configuration);
             services.AddCustomDbContext(Configuration);
 
-            services.AddOptions().Configure<IdentityApiOptions>(binder => binder.IdentityApiAddress = Configuration[IdentityApiOptions.IdentityApiAddressName]);
+            services.AddOptions().Configure<ApiOptions>(binder => binder.IdentityApiAddress = Configuration[ApiOptions.IdentityApiAddressName]);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthentication(JwtAuthenticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAuthenticationConstants.SchemeName, null);
 
             services.AddHttpClient<IUserClient, UserClient>((provider, client) =>
             {
-                var userApiAddress = provider.GetService<IOptions<IdentityApiOptions>>()?.Value.IdentityApiAddress;
+                var userApiAddress = provider.GetService<IOptions<ApiOptions>>()?.Value.IdentityApiAddress;
                 client.BaseAddress = new Uri(userApiAddress ?? string.Empty);
             });
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             services.AddCustomSwagger(Configuration);
         }
@@ -75,6 +72,12 @@ namespace TicketManagement.Services.EventFlow.API
         /// <param name="app">Application builder.</param>
         public void Configure(IApplicationBuilder app)
         {
+            app.UseCors(builder =>
+            builder.WithOrigins("http://localhost:3000")
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+
             app.UseRewriter(new RewriteOptions().AddRedirect("^$", SwaggerConstants.Replacement));
             app.UseSwagger();
             app.UseSwaggerUI(options =>

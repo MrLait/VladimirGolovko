@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Services.Identity.API.Extensions;
 using TicketManagement.Services.Identity.API.Infrastructure.Services;
+using TicketManagement.Services.Identity.API.Infrastructure.Validate;
 using TicketManagement.Services.Identity.API.Models;
 using TicketManagement.Services.Identity.Domain.Models;
 
@@ -20,7 +22,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
-        private readonly JwtTokenService _jwtTokenService;
+        private readonly IJwtTokenService _jwtTokenService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountUserController"/> class.
@@ -31,7 +33,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
         /// <param name="jwtTokenService">Jwt token service.</param>
         public AccountUserController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper, JwtTokenService jwtTokenService)
+            IMapper mapper, IJwtTokenService jwtTokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -57,6 +59,14 @@ namespace TicketManagement.Services.Identity.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                foreach (var item in ModelState)
+                {
+                    if (item.Key == ValidateMessages.PasswordConfirm)
+                    {
+                        return BadRequest(ValidateMessages.PasswordConfirm);
+                    }
+                }
+
                 return Forbid();
             }
 

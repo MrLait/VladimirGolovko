@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 using TicketManagement.WebMVC.Extensions;
+using TicketManagement.WebMVC.Infrastructure.Delegates;
+using TicketManagement.WebMVC.Infrastructure.Filters;
 using TicketManagement.WebMVC.JwtTokenAuth;
 using TicketManagement.WebMVC.Models;
 using TicketManagement.WebMVC.Services;
@@ -38,10 +41,13 @@ namespace TicketManagement.WebMVC
         /// <param name="services">Service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions().Configure<EventFlowApiOptions>(binder => binder.IdentityApiAddress = Configuration[EventFlowApiOptions.IdentityApiAddressName]);
-            services.AddOptions().Configure<EventFlowApiOptions>(binder => binder.EventFlowApiAddress = Configuration[EventFlowApiOptions.EventFlowApiAddressName]);
-            services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
+            services.AddScoped<RedirectToReactAppAttribute>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+            services.AddOptions().Configure<ApiOptions>(binder => binder.IdentityApiAddress = Configuration[ApiOptions.IdentityApiAddressName]);
+            services.AddOptions().Configure<ApiOptions>(binder => binder.EventFlowApiAddress = Configuration[ApiOptions.EventFlowApiAddressName]);
+            services.AddOptions().Configure<ApiOptions>(binder => binder.ReactAppAddress = Configuration[ApiOptions.ReactAppAddressName]);
+            services.AddScoped<IIdentityParser<ApplicationUser>, IdentityParser>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication(JwtAuthenticationConstants.SchemeName)
                 .AddScheme<JwtAuthenticationOptions, JwtAuthenticationHandler>(JwtAuthenticationConstants.SchemeName, null);
@@ -53,6 +59,7 @@ namespace TicketManagement.WebMVC
             services.AddControllersWithViews()
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
+            services.AddFeatureManagement();
 
             services.Configure<RequestLocalizationOptions>(options =>
             {

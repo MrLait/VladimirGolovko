@@ -1,0 +1,18 @@
+.header {
+    grid-area: h;
+}
+
+.homeBlock{
+    float: left;
+}
+.select{
+    float: right;
+}
+
+.authBlock{
+    float: right;
+}
+
+.span{
+    padding: 5px;
+}

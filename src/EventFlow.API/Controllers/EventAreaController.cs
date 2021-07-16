@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketManagement.Dto;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Exceptions;
 using TicketManagement.Services.EventFlow.API.Infrastructure.Services.Interfaces;
+using TicketManagement.Services.Identity.Domain.Models;
 
 namespace TicketManagement.Services.EventFlow.API.Controllers
 {
@@ -14,6 +16,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Event area controller api.
     /// </summary>
     [Route("[controller]")]
+    ////[Authorize]
     [ApiController]
     public class EventAreaController : ControllerBase
     {
@@ -32,13 +35,14 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         }
 
         /// <summary>
-        /// Get all event are by event id.
+        /// Get all eventArea are by event id.
         /// </summary>
         /// <param name="id">Event id.</param>
         /// <returns>Returns event areas dto or <see cref="ValidationException"/>.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAllByEventId(int id)
         {
             try
@@ -47,7 +51,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
                 foreach (var item in eventAreaDtoList)
                 {
                     var eventSeatDto = _eventSeatService.GetByEventAreaId(item);
-                    item.EvenSeats = eventSeatDto;
+                    item.EventSeats = eventSeatDto;
                 }
 
                 return Ok(eventAreaDtoList);
@@ -67,6 +71,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = UserRoles.EventManager)]
         public async Task<IActionResult> UpdatePrices([FromBody] List<EventAreaDto> eventAreaDto)
         {
             try

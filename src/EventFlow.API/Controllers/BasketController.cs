@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Basket api Controller.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class BasketController : ControllerBase
     {

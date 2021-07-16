@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TicketManagement.Services.Identity.API.Extensions;
 using TicketManagement.Services.Identity.API.Models;
 using TicketManagement.Services.Identity.Domain.Models;
 
@@ -11,6 +13,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
     /// User profile api controller.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class ProfileController : ControllerBase
     {
@@ -104,7 +107,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             var result = await _applicationUserManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(user.FirstName);
             }
 
             return BadRequest();
@@ -130,7 +133,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             var result = await _applicationUserManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(user.Surname);
             }
 
             return BadRequest();
@@ -157,7 +160,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             var result = await _applicationUserManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(user.Email);
             }
 
             return BadRequest();
@@ -175,18 +178,16 @@ namespace TicketManagement.Services.Identity.API.Controllers
         public async Task<IActionResult> EditPassword([FromBody] PasswordModel model)
         {
             var user = await _applicationUserManager.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
 
             var result = await _applicationUserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok("true");
             }
 
-            return BadRequest();
+            var resultError = string.Empty;
+            resultError = resultError.ConvertIdentityResultErrorToString(result);
+            return BadRequest(resultError);
         }
 
         /// <summary>
@@ -210,7 +211,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             var result = await _applicationUserManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(user.TimeZoneOffset);
             }
 
             return BadRequest();
@@ -264,7 +265,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
             var result = await _applicationUserManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(user.Language);
             }
 
             return BadRequest();

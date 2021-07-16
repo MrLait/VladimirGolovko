@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace TicketManagement.Services.Identity.API.Controllers
     /// User api controller.
     /// </summary>
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     [Produces("application/json")]
     public class UserController : ControllerBase
