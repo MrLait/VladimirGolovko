@@ -16,7 +16,7 @@ namespace TicketManagement.Services.EventFlow.API.Controllers
     /// Event area controller api.
     /// </summary>
     [Route("[controller]")]
-    ////[Authorize]
+    [Authorize]
     [ApiController]
     public class EventAreaController : ControllerBase
     {

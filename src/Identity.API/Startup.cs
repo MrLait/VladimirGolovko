@@ -72,10 +72,10 @@ namespace TicketManagement.Services.Identity.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:3000")
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
+            builder.WithOrigins(Configuration[ApiOptions.ReactAppAddressName])
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 
             app.UseRewriter(new RewriteOptions().AddRedirect("^$", SwaggerConstants.Replacement));
             app.UseSwagger();

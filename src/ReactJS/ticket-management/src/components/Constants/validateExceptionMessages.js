@@ -10,7 +10,7 @@ export const messages = {
     LayoutForTheVenueExist : "The Layout for this Venue with the description: '{0}' - already exists.",
     ThereIsNoSuchLayout : "There is no such Layout.",
     SeatsHaveAlreadyBeenPurchased : "Unable to delete because seats have already been purchased for the event.",
-    ProductInAnotherUserBasket : "Product in another user busket.",
+    ProductInAnotherUserBasket : "Product in another user basket.",
     PasswordTooShort : "PasswordTooShort",
     PasswordRequiresNonAlphanumeric : "PasswordRequiresNonAlphanumeric",
     PasswordRequiresDigit : "PasswordRequiresDigit",

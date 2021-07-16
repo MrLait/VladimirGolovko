@@ -10,7 +10,6 @@ import Profile from "./Profile";
 import {connect} from "react-redux";
 import {ifNotAuthRedirectToHome} from "../../hoc/ifNotAuthRedirectToHome";
 import {compose} from "redux";
-import {withRouter} from "react-router";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {

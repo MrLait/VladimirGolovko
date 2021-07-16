@@ -4,7 +4,7 @@ import {getCurUserId} from "../common/Services/UserService";
 
 const SET_EVENT_AREAS = 'SET_EVENT_AREAS';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const toggleIsClickingInProgress = 'toggleIsClickingInProgress';
+const TOGGLE_IS_CLICKING_IN_PROGRESS = 'TOGGLE_IS_CLICKING_IN_PROGRESS';
 const ADD_SUCCESS = 'ADD_SUCCESS';
 const REMOVE_SUCCESS = 'REMOVE_SUCCESS';
 
@@ -62,7 +62,7 @@ const eventAreasReducer = (state = initialState, action) => {
         case TOGGLE_IS_FETCHING: {
             return {...state, isFetching: action.isFetching}
         }
-        case toggleIsClickingInProgress: {
+        case TOGGLE_IS_CLICKING_IN_PROGRESS: {
             return {
                 ...state,
                 clickingInProgress: action.isFetching
@@ -79,7 +79,7 @@ export const addSeatItem = (eventAreaId, seatId) => ({type: ADD_SUCCESS, eventAr
 export const removeSeatItem = (eventAreaId, seatId) => ({type: REMOVE_SUCCESS, eventAreaId, seatId})
 export const setEventAreas = (eventAreas) => ({type: SET_EVENT_AREAS, eventAreas})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
-export const toggleClickingInProgress = (isFetching, id) => ({type: toggleIsClickingInProgress, isFetching, id})
+export const toggleClickingInProgress = (isFetching, id) => ({type: TOGGLE_IS_CLICKING_IN_PROGRESS, isFetching, id})
 
 export const getEventAreas = (eventId) => (dispatch) => {
     eventAreaAPI.getEventAreas(eventId).then(response => {

@@ -91,7 +91,7 @@ namespace TicketManagement.Services.EventFlow.API.Infrastructure.Services
             var productInCurrentUserBasket = !products.Any();
             if (productInCurrentUserBasket)
             {
-                throw new ValidationException(ExceptionMessages.ProductInAnotherUserBusket);
+                throw new ValidationException(ExceptionMessages.ProductInAnotherUserBasket);
             }
 
             var basketId = products.FirstOrDefault().Id;

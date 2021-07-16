@@ -73,7 +73,7 @@ namespace TicketManagement.Services.EventFlow.API
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors(builder =>
-            builder.WithOrigins("http://localhost:3000")
+            builder.WithOrigins(Configuration[ApiOptions.ReactAppAddressName])
             .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod());

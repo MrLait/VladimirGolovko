@@ -13,7 +13,7 @@ const SET_TIME_ZONE_OFFSET = 'SET_TIME_ZONE_OFFSET';
 const SET_FIRST_NAME = 'SET_FIRST_NAME';
 const SET_NEW_PASSWORD = 'SET_NEW_PASSWORD';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const toggleIsClickingInProgress = 'toggleIsClickingInProgress';
+const TOGGLE_IS_CLICKING_IN_PROGRESS = 'TOGGLE_IS_CLICKING_IN_PROGRESS';
 
 let initialState = {
     balance: null,
@@ -54,7 +54,7 @@ const profileReducer = (state = initialState, action) => {
         case TOGGLE_IS_FETCHING: {
             return {...state, isFetching: action.isFetching}
         }
-        case toggleIsClickingInProgress: {
+        case TOGGLE_IS_CLICKING_IN_PROGRESS: {
             return {...state, clickingInProgress: action.clickingInProgress}
         }
         default:
@@ -70,7 +70,7 @@ export const setFirstName = (firstName) => ({type: SET_FIRST_NAME, firstName})
 export const setNewPassword = (isNewPassword) => ({type: SET_NEW_PASSWORD, isNewPassword})
 export const setBalance = (balance) => ({type: SET_BALANCE, balance})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
-export const toggleClickingInProgress = (clickingInProgress) => ({type: toggleIsClickingInProgress, clickingInProgress})
+export const toggleClickingInProgress = (clickingInProgress) => ({type: TOGGLE_IS_CLICKING_IN_PROGRESS, clickingInProgress})
 
 export const getUserProfile = () => (dispatch) => {
     dispatch(toggleIsFetching(true));

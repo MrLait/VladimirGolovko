@@ -92,8 +92,8 @@
         public const string ThereIsNoSuchLayout = "There is no such Layout.";
 
         /// <summary>
-        /// Product in another user busket.
+        /// Product in another user basket.
         /// </summary>
-        public const string ProductInAnotherUserBusket = "Product in another user busket.";
+        public const string ProductInAnotherUserBasket = "Product in another user basket.";
     }
 }

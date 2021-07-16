@@ -6,10 +6,9 @@ const SET_ITEMS = 'SET_ITEMS';
 const SET_TOTAL_PRICE = 'SET_TOTAL_PRICE';
 const SET_BALANCE = 'SET_BALANCE';
 const SET_USER_ID = 'SET_SET_USER_ID';
-const set_isNotEnoughMoney = 'set_isNotEnoughMoney';
+const SET_IS_NOT_ENOUGH_MONEY = 'SET_IS_NOT_ENOUGH_MONEY';
 const SET_IN_PROGRESS = 'SET_IN_PROGRESS';
 const SET_IS_BUY_SUCCESSFUL = 'SET_IS_BUY_SUCCESSFUL';
-
 let initialState = {
     id: null,
     totalPrice: null,
@@ -26,7 +25,7 @@ const basketReducer = (state = initialState, action) => {
         case SET_USER_ID: {
             return {...state, id: action.id}
         }
-        case set_isNotEnoughMoney: {
+        case SET_IS_NOT_ENOUGH_MONEY: {
             return {...state, isNotEnoughMoney: action.isNotEnoughMoney}
         }
         case TOGGLE_IS_FETCHING: {
@@ -65,7 +64,7 @@ export const setItems = (items) => ({type: SET_ITEMS, items})
 export const setTotalPrice = (totalPrice) => ({type: SET_TOTAL_PRICE, totalPrice})
 export const setBalance = (balance) => ({type: SET_BALANCE, balance})
 export const setUserId = (id) => ({type: SET_USER_ID, id})
-export const setIsNotEnoughMoney = (isNotEnoughMoney) => ({type: set_isNotEnoughMoney, isNotEnoughMoney})
+export const setIsNotEnoughMoney = (isNotEnoughMoney) => ({type: SET_IS_NOT_ENOUGH_MONEY, isNotEnoughMoney})
 
 export const getUserItems = () => (dispatch) => {
     const id = getCurUserId();
